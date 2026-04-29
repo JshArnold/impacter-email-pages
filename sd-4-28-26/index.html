@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMPACTER: MTSS Restorative Module Overview + Sample Student Reflections</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #f0f2f5;
+      font-family: 'DM Sans', Arial, sans-serif;
+      font-size: 15px;
+      color: #2d2d2d;
+      line-height: 1.75;
+      padding: 32px 16px 48px;
+    }
+    .email-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+    }
+
+    /* ── Header ── */
+    .header {
+      background: #111827;
+      padding: 22px 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-logo-mark {
+      width: 34px;
+      height: 34px;
+      background: #638EC5;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .header-wordmark {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.08em;
+    }
+    .header-wordmark span { color: #638EC5; }
+
+    /* ── Meta ── */
+    .meta-bar {
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 20px 40px;
+    }
+    .meta-subject {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+    .meta-row {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 3px;
+    }
+    .meta-row strong { color: #374151; }
+
+    /* ── Body ── */
+    .email-body { padding: 36px 40px 40px; }
+
+    .fwd-intro {
+      margin-bottom: 24px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid #e5e7eb;
+      color: #374151;
+    }
+    .fwd-intro p { margin-bottom: 6px; }
+
+    .fwd-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #9ca3af;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .fwd-meta {
+      background: #f5f7fa;
+      border-left: 3px solid #638EC5;
+      border-radius: 0 6px 6px 0;
+      padding: 14px 18px;
+      margin-bottom: 30px;
+    }
+    .fwd-meta p { font-size: 13px; color: #555; margin-bottom: 3px; }
+    .fwd-meta p:last-child { margin-bottom: 0; }
+    .fwd-meta strong { color: #1f2937; }
+
+    p { margin-bottom: 16px; }
+    a { color: #638EC5; text-decoration: underline; }
+    a:hover { color: #4a70a8; }
+
+    h2 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #638EC5;
+      margin: 32px 0 14px;
+      padding-top: 4px;
+    }
+
+    /* Images */
+    .email-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 20px 0;
+      border: 1px solid #e5e7eb;
+    }
+
+    /* Reflection list */
+    .reflection-list { list-style: none; margin: 16px 0 24px; }
+    .reflection-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+      padding: 11px 16px;
+      background: #f5f7fa;
+      border-radius: 7px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #1f2937;
+      transition: background 0.15s;
+    }
+    .reflection-list li:hover { background: #eef2f8; }
+    .reflection-list li a {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      width: 100%;
+    }
+    .reflection-list li a:hover { color: #638EC5; }
+    .num {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      background: #638EC5;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Science bullets */
+    .science-list { list-style: none; margin: 6px 0 20px; }
+    .science-list li {
+      padding: 11px 16px;
+      margin-bottom: 8px;
+      border-left: 3px solid #F37163;
+      background: #fff8f7;
+      border-radius: 0 6px 6px 0;
+      font-size: 14px;
+      color: #374151;
+    }
+    .science-list li strong { color: #111827; }
+
+    /* Closing / sig */
+    .closing {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .sig-name { font-size: 16px; font-weight: 700; color: #111827; margin-bottom: 2px; }
+    .sig-title { font-size: 14px; color: #638EC5; margin-bottom: 2px; }
+    .sig-org { font-size: 14px; color: #6b7280; margin-bottom: 6px; }
+    .sig-url a { font-size: 14px; font-weight: 600; color: #638EC5; }
+
+    /* Footer */
+    .footer-banner {
+      background: #111827;
+      padding: 26px 40px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .footer-banner strong {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+    .footer-banner a { color: #638EC5; }
+
+    @media (max-width: 600px) {
+      .email-body { padding: 24px 20px 28px; }
+      .header { padding: 18px 20px; }
+      .meta-bar { padding: 16px 20px; }
+      .footer-banner { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="email-wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-logo-mark">I</div>
+    <div class="header-wordmark">IMPACTER <span>PATHWAY</span></div>
+  </div>
+
+  <!-- Meta -->
+  <div class="meta-bar">
+    <div class="meta-subject">IMPACTER: MTSS Restorative Module Overview + Sample Student Reflections</div>
+    <div class="meta-row"><strong>From:</strong> Joshua Arnold &lt;josh@impacterpathway.com&gt;</div>
+    <div class="meta-row"><strong>Date:</strong> Tuesday, April 28, 2026</div>
+    <div class="meta-row"><strong>To:</strong> Del Rosario Roman &lt;rdelrosario@sandi.net&gt;</div>
+    <div class="meta-row"><strong>Cc:</strong> Daniel Byun &lt;danny@impacterpathway.com&gt;, Rodney Jones &lt;rodney@impacterpathway.com&gt;</div>
+  </div>
+
+  <!-- Body -->
+  <div class="email-body">
+
+    <!-- FYI intro -->
+    <div class="fwd-intro">
+      <p>FYI.</p>
+      <p>Re: Restorative Justice Return-To-School Reflection</p>
+      <p>— IMPACTER</p>
+    </div>
+
+    <!-- Forwarded header -->
+    <div class="fwd-label">Forwarded Message</div>
+    <div class="fwd-meta">
+      <p><strong>From:</strong> Joshua Arnold &lt;josh@impacterpathway.com&gt;</p>
+      <p><strong>Date:</strong> Wednesday, October 22, 2025 at 3:12 PM</p>
+      <p><strong>Subject:</strong> IMPACTER: MTSS Restorative Module Overview + Sample Student Reflections</p>
+      <p><strong>To:</strong> Cooke Ricardo &lt;rcooke@sandi.net&gt;, Derige Akoni &lt;rderige@sandi.net&gt;</p>
+      <p><strong>Cc:</strong> Daniel Byun &lt;danny@impacterpathway.com&gt;, Rodney Jones &lt;rodney@impacterpathway.com&gt;</p>
+    </div>
+
+    <p>Dr. Cooke &amp; Mr. Derige,</p>
+
+    <p>
+      As Rodney sets-up IMPACTER Sandbox access for the district's MTSS team, we're excited to share a first look at
+      <a href="https://hshmc.impacterpathway.com/fg98zeq4g#contact_email=X%2540XXXX.com&unit_id=XXXX">IMPACTER's Restorative Reflection Module</a>
+      — a workflow designed to leverage authentic student voice as a restorative tool within the MTSS framework. This module enables schools to create
+      <a href="https://report.impacterpathway.com/rj">Restorative Scholar Profiles</a>
+      for students returning to class following behavioral incidents such as detention, Saturday school, suspension, or expulsion.
+    </p>
+
+    <img src="images/restorative-scholar-profile.png" alt="Restorative Scholar Profile" class="email-img" />
+
+    <p>
+      Developed in collaboration with
+      <a href="https://hshmc.org/">Health Sciences High &amp; Middle College (HSHMC)</a>
+      here in San Diego, this model reframes disciplinary moments as opportunities for reflection and growth.
+    </p>
+
+    <p>
+      Through six guided prompts, students respond by audio or video, expressing what happened, exploring intent vs. impact, and identifying supports for change. Each response is analyzed using Natural Language Processing (NLP) and Machine Learning (ML) to surface growth patterns across non-cognitive competencies validated by
+      <a href="https://static1.squarespace.com/static/5b7c56e255b02c683659fe43/t/5f32fd295ad02c690d319477/1723734772299/MCC_Definitions+of+Key+Character+Non-Cognitive+Terms+and+Skills_v20200811.pdf">Harvard's Making Caring Common Project</a>
+      — including Self-Control, Perspective-Taking, Compassion, and Purpose.
+    </p>
+
+    <p>
+      The result is a data-rich, restorative narrative that teachers and counselors can view before re-entry conversations — strengthening trust, empathy, and connection.
+    </p>
+
+    <h2><a href="https://hshmc.impacterpathway.com/cjo1rdssmstlikommefsh9fcxfgf8pt5psz67t9e" style="color:#638EC5;text-decoration:none;">Restorative Reflection Survey</a></h2>
+
+    <p>Students complete a six-question reflection series designed to mirror the restorative process. Each prompt captures a different aspect of restorative growth:</p>
+
+    <ul class="reflection-list">
+      <li><a href="https://hshmc.impacterpathway.com/fgzybw68r#contact_email=X%2540XXXX.com&unit_id=XXXX"><div class="num">1</div>Restorative Reflection #1 — Ownership &amp; Transformation</a></li>
+      <li><a href="https://hshmc.impacterpathway.com/fjskkko4f#contact_email=X%2540XXXX.com&unit_id=XXXX"><div class="num">2</div>Restorative Reflection #2 — Intent vs. Impact</a></li>
+      <li><a href="https://hshmc.impacterpathway.com/fithd1oay#contact_email=X%2540XXXX.com&unit_id=XXXX"><div class="num">3</div>Restorative Reflection #3 — Impact On Relationships</a></li>
+      <li><a href="https://hshmc.impacterpathway.com/fr6i42flk#contact_email=X%2540XXXX.com&unit_id=XXXX"><div class="num">4</div>Restorative Reflection #4 — Natural Consequences &amp; Restoration</a></li>
+      <li><a href="https://hshmc.impacterpathway.com/f3sm87jf8#contact_email=X%2540XXXX.com&unit_id=XXXX"><div class="num">5</div>Restorative Reflection #5 — Barriers &amp; Support</a></li>
+      <li><a href="https://hshmc.impacterpathway.com/foq406fe3#contact_email=X%2540XXXX.com&unit_id=XXXX"><div class="num">6</div>Restorative Reflection #6 — Growth &amp; Feedback</a></li>
+    </ul>
+
+    <img src="images/rj-question.gif" alt="RJ Question" class="email-img" />
+
+    <p>These reflections generate student-specific Restorative Reflection Analyses that evolve as responses accumulate.</p>
+
+    <h2>The Science Behind the Signal</h2>
+
+    <p>
+      Like all applications of IMPACTER, every student reflection is processed through IMPACTER's NLP/ML pipeline, trained on billions of parameters of student responses aligned to our eight Anchor Attributes.
+    </p>
+
+    <p>
+      Using a DistilBERT-based transformer, our system identifies linguistic markers of empathy, accountability, and perspective-taking, assigning
+      <a href="https://impacterpathway.com/wp-content/uploads/2025/04/The-Impact-Potential-Score-%E2%80%94-An-Elo-Inspired-Growth-Model.pdf">calibrated scores</a>
+      validated through:
+    </p>
+
+    <ul class="science-list">
+      <li><strong>Inter-Rater Reliability (IRR):</strong> Weighted Kappa values exceeding 0.84 (benchmark: human-to-human IRR in psychological research typically ranges 0.60–0.76)</li>
+      <li><strong>97.2% Adjacent Agreement</strong> with expert human scorers (±1 point on 5-point rubric; 82.4% exact match accuracy)</li>
+      <li><strong>Mean Absolute Error (MAE):</strong> 0.18 points on 5-point scale — outperforming traditional automated scoring systems (85–92% adjacent accuracy) on the harder task of measuring character competencies</li>
+      <li><strong>Ensemble scoring architecture:</strong> 70% embedding similarity + 20% lexical/syntactic features + 10% response sophistication sigmoid — preventing gaming via length or keyword stuffing</li>
+    </ul>
+
+    <p>
+      To prevent model drift, we maintain a locked "canary" dataset of 100 expertly-scored responses representing the full spectrum of competency levels and demographic contexts. Every week, we re-score the canary set with the current model; if accuracy drops below 95% adjacent agreement, an alert triggers human review.
+    </p>
+
+    <p><strong>In short, the science here is strong.</strong></p>
+
+    <h2>Supporting Tools</h2>
+
+    <p>
+      If you get a chance, we encourage you to check out how our
+      <a href="https://drive.google.com/file/d/1f2AGk5-jRHfe3vJ2QNGR2YP5KsPWck1R/view">Restorative Reflection Rubric</a>
+      provides a six-stage progression from Disrupting → Driving, giving teachers clear language to assess growth in restorative competencies across the full developmental spectrum.
+    </p>
+
+    <img src="images/rj-rubric.png" alt="RJ Rubric" class="email-img" />
+
+    <p>
+      Additionally, the
+      <a href="https://drive.google.com/file/d/1Yb-WxFsLmylXlt2_qxlRzxPyFAMFOfsG/view">Competency Crosswalk</a>
+      we use for this RJ protocol maps how restorative pillars connect to concrete behaviors and measurable outcomes on the California Dashboard, demonstrating the through-line from reflection to accountability metrics.
+    </p>
+
+    <img src="images/rj-crosswalk.png" alt="RJ Competency Crosswalk" class="email-img" />
+
+    <p>
+      We've also included this
+      <a href="https://drive.google.com/file/d/1501sycDbvQxVj1uGCyHk3JzhIPm_Hj5x/view">sample student response</a>
+      — a series of reflections that capture authentic student voice in action. This is what vulnerability, accountability, and growth sound like when students are given space to reflect rather than defend.
+    </p>
+
+    <img src="images/rj-student-response.png" alt="RJ Student Response" class="email-img" />
+
+    <h2>Next Steps</h2>
+
+    <p>
+      Along with San Diego Unified's current GSPP implementation of IMPACTER focused on Career &amp; College Readiness through CTE Calibration, if the district is interested in adding an MTSS Restorative Module, IMPACTER can deploy our out-of-the-box MTSS package or co-develop a bespoke "SDUSD Restorative Re-entry Protocol" in partnership with your MTSS team — tailored to district language, equity priorities, and existing Tier structures.
+    </p>
+
+    <p>
+      Either path can be scoped as an add-on to the GSPP engagement, with flexible options to match your implementation timeline.
+    </p>
+
+    <p>—</p>
+
+    <p>Thank you again for your leadership and continued partnership.</p>
+
+    <p>
+      Please feel free to click through the resources above, and if you'd like a walkthrough, Rodney and Danny will be happy to coordinate some time next week or in early November with your staff.
+    </p>
+
+    <p>
+      In the meantime, our team at IMPACTER is deeply appreciative of the district's investment in GSPP and look forward to aligning this restorative expansion with SDUSD's MTSS framework.
+    </p>
+
+    <p>With Gratitude,</p>
+
+    <div class="closing">
+      <div class="sig-name">Joshua Arnold</div>
+      <div class="sig-title">Co-Founder &amp; Co-CEO</div>
+      <div class="sig-org">Impacter Education Corp</div>
+      <div class="sig-url"><a href="https://www.impacterpathway.com">www.impacterpathway.com</a></div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-banner">
+    <strong>Shape The Future &bull; Transform K-12 Education</strong>
+    Find out how soft skill data-tracking can impact your school or community in deep and meaningful ways. Drive change and empower the next generation of mindful learners and compassionate leaders in your local context.
+    <br /><br />
+    <a href="https://www.impacterpathway.com">impacterpathway.com</a>
+  </div>
+
+</div>
+
+</body>
+</html>

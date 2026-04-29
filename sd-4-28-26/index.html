@@ -7,13 +7,15 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; }
     body {
       background: #f0f2f5;
       font-family: 'DM Sans', Arial, sans-serif;
       font-size: 15px;
       color: #2d2d2d;
       line-height: 1.75;
-      padding: 32px 16px 48px;
+      padding: 24px 16px 48px;
+      -webkit-text-size-adjust: 100%;
     }
     .email-wrap {
       max-width: 680px;
@@ -207,10 +209,19 @@
     .footer-banner a { color: #638EC5; }
 
     @media (max-width: 600px) {
-      .email-body { padding: 24px 20px 28px; }
-      .header { padding: 18px 20px; }
-      .meta-bar { padding: 16px 20px; }
-      .footer-banner { padding: 20px; }
+      body { padding: 0; }
+      .email-wrap { border-radius: 0; box-shadow: none; }
+      .email-body { padding: 22px 18px 28px; }
+      .header { padding: 16px 18px; }
+      .header-wordmark { font-size: 16px; }
+      .meta-bar { padding: 14px 18px; }
+      .meta-subject { font-size: 14px; }
+      .fwd-meta { padding: 12px 14px; }
+      h2 { font-size: 17px; }
+      .reflection-list li { padding: 10px 12px; font-size: 13px; }
+      .science-list li { font-size: 13px; }
+      .footer-banner { padding: 20px 18px; }
+      .email-img { border-radius: 4px; }
     }
   </style>
 </head>

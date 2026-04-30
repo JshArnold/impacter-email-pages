@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Behavioral Health Screener — IMPACTER Pathway</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+/* ── NAV — floating pill ── */
+.nav-outer {
+  position: sticky; top: 16px; z-index: 100;
+  padding: 0 var(--gutter);
+  pointer-events: none;
+}
+nav {
+  max-width: var(--max-page); margin: 0 auto;
+  background: rgba(250,250,249,0.82); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-pill);
+  padding: 12px 20px 12px 28px;
+  display: flex; align-items: center; gap: 24;
+  box-shadow: var(--shadow-md);
+  pointer-events: all;
+}
+nav img.logo { height: 26px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 4px; margin-left: 16px; }
+.nav-links a {
+  font-family: var(--font-body); font-weight: 500; font-size: 14px;
+  color: var(--fg-2); text-decoration: none;
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  transition: background var(--dur-base) var(--ease-standard), color var(--dur-base) var(--ease-standard);
+}
+.nav-links a:hover { background: var(--surface-container-low); color: var(--fg-1); text-decoration: none; }
+nav .cta-pill {
+  margin-left: auto;
+  background: var(--color-coral);
+  color: #fff; border: none; padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  cursor: pointer; text-decoration: none; display: inline-block;
+  box-shadow: 0 8px 22px rgba(243,113,99,0.32);
+  transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+nav .cta-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(243,113,99,0.45); color: #fff; text-decoration: none; }
+
+/* ── HERO ── */
+.hero-wrap {
+  background: var(--surface-inverse);
+  min-height: min(88vh, 840px);
+  display: flex; align-items: center;
+  padding: 0 var(--gutter);
+  position: relative; overflow: hidden;
+}
+.hero-bg-motif {
+  position: absolute; right: -80px; top: -80px;
+  width: 600px; height: 600px;
+  background-image: url('images/impacter-circle-icon.png');
+  background-size: contain; background-repeat: no-repeat;
+  opacity: 0.04; pointer-events: none;
+}
+.hero-inner {
+  max-width: var(--max-page); margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px;
+  align-items: center; padding: 100px 0 80px;
+}
+.hero-left { position: relative; z-index: 2; }
+.hero-eyebrow {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: var(--type-eyebrow); letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase; color: rgba(214,231,241,0.7);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 28px;
+}
+.hero-eyebrow::before {
+  content: ''; width: 24px; height: 2px;
+  background: var(--color-coral); display: block; flex-shrink: 0;
+}
+.hero-h1 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(42px, 5.5vw, 76px);
+  line-height: 1.04; letter-spacing: -0.03em;
+  color: #fff;
+}
+.hero-h1 em { font-style: normal; color: var(--color-coral); }
+.hero-sub {
+  font-family: var(--font-body); font-weight: 300; font-size: 19px;
+  line-height: 1.6; color: rgba(255,255,255,0.65);
+  margin-top: 24px; max-width: 52ch;
+}
+.hero-ctas { display: flex; gap: 14px; margin-top: 40px; flex-wrap: wrap; }
+.btn-hero-primary {
+  background: var(--color-coral);
+  color: #fff; border: none; padding: 16px 30px;
+  border-radius: var(--radius-xl);
+  font-family: var(--font-display); font-weight: 700; font-size: 16px;
+  cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 12px 32px rgba(243,113,99,0.38);
+  transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+.btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(243,113,99,0.45); color: #fff; text-decoration: none; }
+.btn-hero-ghost {
+  background: transparent; color: rgba(255,255,255,0.75);
+  padding: 16px 4px; border: none;
+  font-family: var(--font-display); font-weight: 700; font-size: 16px;
+  cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+  border-bottom: 1.5px solid rgba(255,255,255,0.3);
+  transition: color var(--dur-base) var(--ease-standard), border-color var(--dur-base) var(--ease-standard);
+}
+.btn-hero-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.8); text-decoration: none; }
+.hero-right { position: relative; }
+.hero-dashboard-wrap {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.08);
+  transform: perspective(1200px) rotateY(-3deg) rotateX(2deg);
+  transition: transform var(--dur-slow) var(--ease-standard);
+  cursor: pointer;
+}
+.hero-dashboard-wrap:hover { transform: perspective(1200px) rotateY(0deg) rotateX(0deg); }
+.hero-dashboard-wrap a { display: block; }
+.hero-dashboard-wrap img { width: 100%; display: block; }
+.hero-dashboard-badge {
+  position: absolute; top: 16px; right: 16px;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(12px);
+  color: rgba(255,255,255,0.9); font-family: var(--font-body); font-size: 12px; font-weight: 600;
+  padding: 6px 12px; border-radius: var(--radius-pill);
+  display: flex; align-items: center; gap: 6px;
+}
+.live-dot { width: 7px; height: 7px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+
+/* Stats strip */
+.stats-strip {
+  background: var(--surface-inverse-deep);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 28px var(--gutter);
+}
+.stats-inner {
+  max-width: var(--max-page); margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 0;
+}
+.stat-item { padding: 8px 24px; border-right: 1px solid rgba(255,255,255,0.08); text-align: center; }
+.stat-item:first-child { padding-left: 0; text-align: left; }
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 36px; line-height: 1; color: #fff;
+  letter-spacing: -0.03em;
+}
+.stat-label { font-family: var(--font-body); font-size: 13px; color: rgba(255,255,255,0.45); margin-top: 5px; }
+
+/* ── LOGO STRIP ── */
+.logo-strip { padding: 48px var(--gutter); background: var(--surface); }
+.logo-strip-inner { max-width: var(--max-page); margin: 0 auto; }
+.logo-strip-eyebrow {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: var(--type-eyebrow); letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase; color: var(--fg-4); text-align: center; margin-bottom: 24px;
+}
+.logo-strip-names {
+  display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap;
+  opacity: 0.5;
+}
+.logo-name {
+  font-family: var(--font-display); font-weight: 800; font-size: 14px;
+  letter-spacing: 0.04em; color: var(--fg-2); white-space: nowrap;
+}
+
+/* ── SHARED SECTION ── */
+.section { padding: 96px var(--gutter); }
+.section-inner { max-width: var(--max-page); margin: 0 auto; }
+.eyebrow { color: var(--color-primary-deep); margin-bottom: 16px; display: block; }
+.eyebrow.coral { color: var(--color-coral-deep); }
+.section-h2 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.08; letter-spacing: -0.025em; color: var(--fg-1);
+}
+.section-body {
+  font-family: var(--font-body); font-weight: 300; font-size: 18px;
+  line-height: 1.65; color: var(--fg-2); max-width: 60ch; margin-top: 16px;
+}
+
+/* ── VIDEO SECTION ── */
+.video-section { background: var(--surface-container-low); }
+.video-wrap { max-width: 800px; margin: 40px auto 0; }
+.video-embed {
+  position: relative; padding-bottom: 56.25%; height: 0;
+  border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+.video-embed iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:none; }
+.video-caption { text-align: center; margin-top: 16px; font-size: var(--type-label); color: var(--fg-3); }
+
+/* ── RUBRIC ROW (right after video) ── */
+.rubric-row { background: var(--surface); padding: 64px var(--gutter); }
+.rubric-inner { max-width: var(--max-page); margin: 0 auto; }
+.rubric-cards {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-top: 36px;
+}
+.rubric-card {
+  border-radius: var(--radius-lg); padding: 28px 24px;
+  position: relative; overflow: hidden;
+  transition: transform var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard);
+}
+.rubric-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.rubric-card.foundational { background: #F5F0FF; }
+.rubric-card.developing   { background: #EFF6FF; }
+.rubric-card.competent    { background: #F0FDF4; }
+.rubric-card.advanced     { background: #FFF7ED; }
+.rubric-level {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: var(--type-eyebrow); letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.rubric-card.foundational .rubric-level { color: #7C3AED; }
+.rubric-card.developing   .rubric-level { color: #1D4ED8; }
+.rubric-card.competent    .rubric-level { color: #15803D; }
+.rubric-card.advanced     .rubric-level { color: #C2410C; }
+.rubric-score {
+  font-family: var(--font-display); font-weight: 800; font-size: 42px;
+  line-height: 1; letter-spacing: -0.04em; margin-bottom: 10px;
+}
+.rubric-card.foundational .rubric-score { color: #8B5CF6; }
+.rubric-card.developing   .rubric-score { color: var(--color-primary); }
+.rubric-card.competent    .rubric-score { color: #16A34A; }
+.rubric-card.advanced     .rubric-score { color: #EA580C; }
+.rubric-desc { font-family: var(--font-body); font-size: 14px; line-height: 1.6; }
+.rubric-card.foundational .rubric-desc { color: #6D28D9; }
+.rubric-card.developing   .rubric-desc { color: #1E40AF; }
+.rubric-card.competent    .rubric-desc { color: #166534; }
+.rubric-card.advanced     .rubric-desc { color: #9A3412; }
+.rubric-num {
+  position: absolute; right: 16px; bottom: 12px;
+  font-family: var(--font-display); font-weight: 900; font-size: 64px; line-height: 1;
+  opacity: 0.08; letter-spacing: -0.04em;
+}
+.rubric-card.foundational .rubric-num { color: #7C3AED; }
+.rubric-card.developing   .rubric-num { color: #1D4ED8; }
+.rubric-card.competent    .rubric-num { color: #15803D; }
+.rubric-card.advanced     .rubric-num { color: #C2410C; }
+
+/* ── CONTRAST SPLIT (Likert vs Authentic) ── */
+.contrast-section { background: var(--surface-container-low); }
+.contrast-split {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border-radius: var(--radius-2xl); overflow: hidden;
+  box-shadow: var(--shadow-xl); margin-top: 48px;
+  align-items: stretch;
+}
+.contrast-left {
+  background: #F0F0EF; padding: 48px 40px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.contrast-left .fake-survey { flex: 1; }
+.contrast-right {
+  background: var(--surface-inverse); padding: 48px 40px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.contrast-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-weight: 900;
+  font-size: var(--type-eyebrow); letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase; padding: 5px 12px; border-radius: var(--radius-sm);
+}
+.contrast-tag.old { background: #E0DFDE; color: #6A6F76; }
+.contrast-tag.new { background: rgba(243,113,99,0.18); color: var(--color-coral); }
+.contrast-left h3 {
+  font-family: var(--font-display); font-weight: 800; font-size: 28px;
+  line-height: 1.1; letter-spacing: -0.025em; color: #9BA0A8;
+}
+.contrast-right h3 {
+  font-family: var(--font-display); font-weight: 800; font-size: 28px;
+  line-height: 1.1; letter-spacing: -0.025em; color: #fff;
+}
+/* Interactive fake Likert survey */
+.fake-survey {
+  background: #E8E7E6; border-radius: 10px; padding: 24px;
+  font-family: monospace; font-size: 13px; color: #9BA0A8;
+  margin-top: 8px; display: flex; flex-direction: column; gap: 18px;
+}
+.fake-survey-header {
+  font-size: 10px; color: #C0C4C9; letter-spacing: 0.08em; text-transform: uppercase;
+  display: flex; justify-content: space-between; padding-bottom: 10px;
+  border-bottom: 1px solid #DDDCDA;
+}
+.fake-q-block { display: flex; flex-direction: column; gap: 10px; }
+.fake-question { font-size: 12px; color: #A8ADB5; line-height: 1.5; }
+.likert-row { display: flex; gap: 6px; align-items: center; }
+.likert-label { font-size: 10px; color: #C0C4C9; margin: 0 4px; flex-shrink: 0; }
+.likert-dot {
+  width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #D0CECC;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: #C0C4C9; cursor: pointer; flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.likert-dot:hover { border-color: #B8B5B2; background: #DDDCDA; }
+.likert-dot.selected { background: #C8C5C2; border-color: #C8C5C2; color: #8A8F97; }
+.fake-scale-labels {
+  display: flex; justify-content: space-between;
+  font-size: 9px; color: #C8CBD0; letter-spacing: 0.04em;
+  padding: 0 2px;
+}
+.fake-submit {
+  margin-top: 4px; width: 100%; padding: 10px;
+  background: #DDDCDA; border: none; border-radius: 6px;
+  font-family: monospace; font-size: 12px; color: #A8ADB5;
+  cursor: pointer; transition: background 0.15s;
+}
+.fake-submit:hover { background: #D5D3D1; }
+.fake-submit.submitted { background: #D0CECC; color: #9BA0A8; cursor: default; }
+.fake-note { font-size: 11px; color: #B0B5BC; margin-top: 4px; font-style: italic; }
+/* Flip card — student voice right side */
+.flip-card-wrap {
+  margin-top: 8px; perspective: 1000px;
+  cursor: pointer; position: relative;
+}
+.flip-card-inner {
+  position: relative; width: 100%;
+  transition: transform 0.65s cubic-bezier(0.4,0.2,0.2,1);
+  transform-style: preserve-3d;
+}
+.flip-card-wrap.flipped .flip-card-inner { transform: rotateY(180deg); }
+.flip-card-front, .flip-card-back {
+  border-radius: 12px; overflow: hidden;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.flip-card-front { position: relative; }
+.flip-card-back {
+  position: absolute; top: 0; left: 0; width: 100%;
+  transform: rotateY(180deg);
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  padding: 20px;
+}
+.flip-card-front img { width: 100%; display: block; }
+.flip-hint {
+  position: absolute; bottom: 10px; right: 10px;
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(8px);
+  color: rgba(255,255,255,0.85); font-family: var(--font-display); font-weight: 700; font-size: 11px;
+  padding: 5px 12px; border-radius: var(--radius-pill);
+  pointer-events: none;
+}
+/* Annotated transcript (flip back) */
+.transcript-block {
+  background: rgba(255,255,255,0.05); border-radius: 10px; padding: 20px;
+  font-family: var(--font-body); font-size: 15px; line-height: 1.8; color: rgba(255,255,255,0.75);
+  margin-top: 0; position: relative;
+}
+.phrase {
+  display: inline; padding: 2px 0; border-radius: 3px;
+  position: relative; cursor: default;
+  border-bottom: 2px solid transparent;
+  transition: all var(--dur-fast) var(--ease-standard);
+}
+.phrase.resilience { color: #6EE7B7; border-bottom-color: #6EE7B7; }
+.phrase.insight    { color: #FCD34D; border-bottom-color: #FCD34D; }
+.phrase.growth     { color: #93C5FD; border-bottom-color: #93C5FD; }
+.phrase-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-display); font-weight: 700; font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 2px 7px; border-radius: var(--radius-pill);
+  vertical-align: middle; margin-left: 4px;
+}
+.phrase-pill.resilience { background: rgba(110,231,183,0.15); color: #6EE7B7; }
+.phrase-pill.insight    { background: rgba(252,211,77,0.15);  color: #FCD34D; }
+.phrase-pill.growth     { background: rgba(147,197,253,0.15); color: #93C5FD; }
+/* legacy color aliases still used in voice section */
+.phrase.purpose { color: #FDA4AF; border-bottom-color: #FDA4AF; }
+.phrase.grit    { color: #FCD34D; border-bottom-color: #FCD34D; }
+.phrase.persp   { color: #93C5FD; border-bottom-color: #93C5FD; }
+.phrase-pill.purpose { background: rgba(253,164,175,0.15); color: #FDA4AF; }
+.phrase-pill.grit    { background: rgba(252,211,77,0.15);  color: #FCD34D; }
+.phrase-pill.persp   { background: rgba(147,197,253,0.15); color: #93C5FD; }
+
+/* ── CYBHI ── */
+.cybhi-section { background: var(--surface-inverse); padding: 96px var(--gutter); }
+.cybhi-section .eyebrow { color: rgba(214,231,241,0.6); }
+.cybhi-section .section-h2 { color: #fff; }
+.cybhi-section .section-body { color: rgba(255,255,255,0.55); }
+.cybhi-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 48px;
+}
+.cybhi-card {
+  background: rgba(255,255,255,0.05); border-radius: var(--radius-lg);
+  padding: 32px; border: 1px solid rgba(255,255,255,0.06);
+}
+.cybhi-num {
+  font-family: var(--font-display); font-weight: 800; font-size: 52px;
+  line-height: 1; letter-spacing: -0.04em; color: var(--color-coral); margin-bottom: 10px;
+}
+.cybhi-card h4 { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: #fff; margin-bottom: 8px; }
+.cybhi-card p  { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.65; }
+.cybhi-note {
+  margin-top: 36px; background: rgba(255,255,255,0.04);
+  border-left: 3px solid var(--color-coral); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 20px 24px; font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.7;
+}
+.cybhi-note a { color: var(--color-light-blue); }
+
+/* ── HOW IT WORKS ── */
+.how-section { background: var(--surface); }
+.how-steps {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 56px; margin-top: 56px; align-items: start;
+}
+.how-step {}
+.step-eyebrow {
+  font-family: var(--font-display); font-weight: 900; font-size: var(--type-eyebrow);
+  letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--color-primary-deep);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.step-num {
+  width: 28px; height: 28px; border-radius: var(--radius-sm);
+  background: var(--color-primary); color: #fff;
+  font-family: var(--font-display); font-weight: 800; font-size: 13px;
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.how-step h3 {
+  font-family: var(--font-display); font-weight: 800; font-size: 24px;
+  line-height: 1.15; letter-spacing: -0.02em; color: var(--fg-1); margin-bottom: 14px;
+}
+.how-step p { font-size: var(--type-body-md); color: var(--fg-2); line-height: var(--leading-relaxed); }
+.how-img {
+  width: 100%; border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md); margin-top: 20px;
+}
+.domains-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px;
+}
+.domain-chip {
+  background: var(--surface-blue-low); border-radius: var(--radius-sm);
+  padding: 8px 12px; display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--color-primary-deep);
+}
+.domain-chip::before { content: ''; width: 6px; height: 6px; background: var(--color-primary); border-radius: 50%; flex-shrink: 0; }
+
+/* ── LIVE DEMO (Dashboard image) ── */
+.demo-section { background: var(--surface-container-low); }
+.demo-img-wrap {
+  position: relative; margin-top: 40px; border-radius: var(--radius-2xl); overflow: hidden;
+  box-shadow: var(--shadow-xl); cursor: pointer;
+  transition: transform var(--dur-slow) var(--ease-standard);
+}
+.demo-img-wrap:hover { transform: translateY(-4px); }
+.demo-img-wrap img { width: 100%; display: block; }
+.demo-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(20,40,80,0.75) 0%, transparent 50%);
+  display: flex; align-items: flex-end; padding: 40px;
+  transition: opacity var(--dur-base) var(--ease-standard);
+}
+.demo-overlay-content {
+  display: flex; align-items: center; gap: 20px;
+}
+.demo-launch-btn {
+  background: var(--color-coral); color: #fff; border: none;
+  padding: 14px 26px; border-radius: var(--radius-xl);
+  font-family: var(--font-display); font-weight: 700; font-size: 15px;
+  display: inline-flex; align-items: center; gap: 8px;
+  cursor: pointer; text-decoration: none;
+  box-shadow: 0 8px 24px rgba(243,113,99,0.4);
+}
+.demo-label {
+  font-family: var(--font-body); font-size: 14px; color: rgba(255,255,255,0.7);
+}
+
+/* ── STUDENT VOICE / NC GIRL ── */
+.voice-section { background: var(--surface-inverse-deep); padding: 96px var(--gutter); }
+.voice-section .section-h2 { color: #fff; }
+.voice-section .section-body { color: rgba(255,255,255,0.5); }
+.voice-player-wrap {
+  display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px;
+  margin-top: 48px; align-items: stretch;
+}
+.video-player-card {
+  border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+  background: #000; position: relative;
+  display: flex; flex-direction: column;
+}
+.video-player-card video {
+  width: 100%; display: block; flex: 1; min-height: 0;
+  object-fit: cover; object-position: top center;
+}
+/* ML annotation card overlaid on video */
+.ml-card-overlay {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(11,31,58,0.95); border-radius: 10px;
+  padding: 10px 14px; max-width: 200px;
+  border: 1px solid rgba(99,142,197,0.35);
+  font-family: var(--font-body); pointer-events: none;
+  transition: opacity 0.3s;
+}
+.ml-card-label {
+  font-family: var(--font-display); font-weight: 800; font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: #6EE7B7;
+  margin-bottom: 5px;
+}
+.ml-card-text { font-size: 11px; color: rgba(255,255,255,0.78); line-height: 1.5; }
+.ml-card-quote { font-size: 11px; color: #6EE7B7; font-style: italic; margin-top: 4px; }
+/* recording pill */
+.rec-pill {
+  position: absolute; top: 12px; left: 12px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(0,0,0,0.55); border-radius: 6px; padding: 4px 10px;
+  font-family: var(--font-display); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.8);
+}
+.rec-dot { width: 6px; height: 6px; border-radius: 50%; background: #F37163; animation: recpulse 1.2s ease-in-out infinite; }
+@keyframes recpulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.transcript-panel {
+  background: rgba(255,255,255,0.04); border-radius: var(--radius-lg);
+  padding: 28px; border: 1px solid rgba(255,255,255,0.06);
+  max-height: 420px; overflow-y: auto;
+}
+.transcript-panel::-webkit-scrollbar { width: 4px; }
+.transcript-panel::-webkit-scrollbar-track { background: transparent; }
+.transcript-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+.tp-eyebrow {
+  font-family: var(--font-display); font-weight: 900; font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.35);
+  margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+}
+.tp-eyebrow::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+.transcript-word {
+  font-family: var(--font-body); font-size: 16px; line-height: 2.1;
+  color: rgba(255,255,255,0.28); display: inline;
+  transition: color 0.06s, background 0.06s;
+  cursor: default;
+}
+.transcript-word.active {
+  color: #fff; background: rgba(99,142,197,0.25);
+  border-radius: 3px; padding: 1px 3px;
+}
+.transcript-word.resilience-word.active { background: rgba(110,231,183,0.22); color: #6EE7B7; }
+.transcript-word.insight-word.active    { background: rgba(252,211,77,0.22);  color: #FCD34D; }
+.transcript-word.rgrowth-word.active    { background: rgba(147,197,253,0.22); color: #93C5FD; }
+.transcript-word + .transcript-word { margin-left: 4px; }
+.voice-analysis {
+  grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+}
+.analysis-card {
+  background: rgba(255,255,255,0.04); border-radius: var(--radius-lg);
+  padding: 24px; border: 1px solid rgba(255,255,255,0.06);
+}
+.analysis-card h5 {
+  font-family: var(--font-display); font-weight: 700; font-size: 15px; color: #fff; margin-bottom: 8px;
+}
+.analysis-card p { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+.ac-pill {
+  display: inline-block; padding: 3px 10px; border-radius: var(--radius-pill);
+  font-family: var(--font-display); font-weight: 800; font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px;
+}
+.ac-pill.resilience { background: rgba(110,231,183,0.15); color: #6EE7B7; }
+.ac-pill.insight    { background: rgba(252,211,77,0.15);  color: #FCD34D; }
+.ac-pill.rgrowth    { background: rgba(147,197,253,0.15); color: #93C5FD; }
+
+/* ── VOICE INTELLIGENCE ENHANCEMENTS ── */
+/* Custom progress bar */
+.vi-progress-wrap {
+  position: relative; padding: 0 14px; height: 32px;
+  background: rgba(0,0,0,0.55); display: flex; align-items: center;
+  cursor: pointer; user-select: none;
+}
+.vi-progress-track {
+  position: relative; height: 3px; background: rgba(255,255,255,0.12);
+  border-radius: 2px; flex: 1;
+}
+.vi-progress-fill {
+  position: absolute; left: 0; top: 0; height: 100%;
+  background: var(--color-coral); border-radius: 2px;
+  pointer-events: none; width: 0%;
+}
+.vi-dot {
+  position: absolute; top: 50%; width: 11px; height: 11px;
+  border-radius: 50%; border: 2px solid rgba(0,0,0,0.7);
+  transform: translate(-50%, -50%);
+  transition: box-shadow 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+.vi-dot.dot-active {
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 0 10px currentColor;
+  transform: translate(-50%, -50%) scale(1.3);
+}
+.vi-time-label {
+  font-family: var(--font-display); font-weight: 700; font-size: 10px;
+  color: rgba(255,255,255,0.35); margin-left: 10px; white-space: nowrap;
+}
+
+/* Next insight button */
+.next-insight-btn {
+  margin-left: auto;
+  background: rgba(99,142,197,0.15); border: 1px solid rgba(99,142,197,0.25);
+  border-radius: 5px; padding: 3px 9px;
+  font-family: var(--font-display); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.06em; text-transform: uppercase; color: rgba(214,231,241,0.6);
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.next-insight-btn:hover { background: rgba(99,142,197,0.3); color: #fff; border-color: rgba(99,142,197,0.5); }
+
+/* Right column: transcript + score stacked */
+.voice-right-col { display: flex; flex-direction: column; gap: 16px; }
+.voice-right-col .transcript-panel { flex: 1; min-height: 0; max-height: 300px; }
+
+/* Live BH Score Panel */
+.live-score-panel {
+  background: rgba(255,255,255,0.04); border-radius: var(--radius-lg);
+  padding: 18px 20px; border: 1px solid rgba(255,255,255,0.06);
+}
+.lsp-eyebrow {
+  font-family: var(--font-display); font-weight: 900; font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.3);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.lsp-eyebrow::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+.lsp-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.lsp-bar-label { font-size: 10px; color: rgba(255,255,255,0.38); width: 118px; flex-shrink: 0; letter-spacing: 0.01em; }
+.lsp-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+.lsp-bar-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.lsp-bar-val { font-family: var(--font-display); font-weight: 700; font-size: 11px; color: rgba(255,255,255,0.3); width: 20px; text-align: right; flex-shrink: 0; transition: color 0.4s; }
+.lsp-bar-val.scored { color: rgba(255,255,255,0.7); }
+.lsp-footer { display: flex; align-items: flex-end; justify-content: space-between; margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; }
+.lsp-total-num { font-family: var(--font-display); font-weight: 800; font-size: 26px; color: #fff; line-height: 1; }
+.lsp-total-denom { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.3); margin-left: 2px; }
+.lsp-tier-badge {
+  padding: 4px 12px; border-radius: var(--radius-pill);
+  font-family: var(--font-display); font-weight: 800; font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.4s;
+}
+.lsp-tier-badge.pending { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.2); }
+.lsp-tier-badge.t1 { background: rgba(16,185,129,0.18); color: #34D399; }
+.lsp-tier-badge.t2 { background: rgba(245,158,11,0.18); color: #FCD34D; }
+.lsp-tier-badge.t3 { background: rgba(239,68,68,0.18); color: #FCA5A5; }
+
+/* Analysis card active glow */
+.analysis-card { transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s; }
+.analysis-card.card-active { animation: cardpulse 2s ease-in-out infinite; }
+.analysis-card.card-active.resilience-card { border-color: rgba(110,231,183,0.45); box-shadow: 0 0 24px rgba(110,231,183,0.1); }
+.analysis-card.card-active.insight-card    { border-color: rgba(252,211,77,0.45);  box-shadow: 0 0 24px rgba(252,211,77,0.1); }
+.analysis-card.card-active.rgrowth-card    { border-color: rgba(147,197,253,0.45); box-shadow: 0 0 24px rgba(147,197,253,0.1); }
+@keyframes cardpulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.015)} }
+
+/* ── MTSS ── */
+.mtss-section { background: var(--surface-container-low); }
+.mtss-pyramid-wrap {
+  margin-top: 40px; text-align: center; position: relative;
+}
+.mtss-pyramid-wrap img { max-width: 600px; width: 100%; }
+.tier-cards {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 40px;
+}
+.tier-card {
+  border-radius: var(--radius-lg); padding: 24px;
+  transition: transform var(--dur-base) var(--ease-standard);
+}
+.tier-card:hover { transform: translateY(-3px); }
+.tier-card.t3 { background: #FFF1F2; }
+.tier-card.t2 { background: #FFFBEB; }
+.tier-card.t1 { background: #F0FDF4; }
+.tier-badge {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: var(--radius-pill); margin-bottom: 14px; display: inline-block;
+}
+.t3 .tier-badge { background: #FFE4E6; color: #BE123C; }
+.t2 .tier-badge { background: #FEF3C7; color: #92400E; }
+.t1 .tier-badge { background: #DCFCE7; color: #14532D; }
+.tier-score {
+  font-family: var(--font-display); font-weight: 800; font-size: 38px;
+  line-height: 1; letter-spacing: -0.04em; margin-bottom: 8px;
+}
+.t3 .tier-score { color: #E11D48; }
+.t2 .tier-score { color: #D97706; }
+.t1 .tier-score { color: #16A34A; }
+.tier-card h4 { font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+.t3 h4 { color: #9F1239; } .t2 h4 { color: #78350F; } .t1 h4 { color: #14532D; }
+.tier-card p { font-size: 14px; line-height: 1.6; }
+.t3 p { color: #BE123C; } .t2 p { color: #92400E; } .t1 p { color: #166534; }
+
+/* ── SAMPLE PROMPTS ── */
+.prompts-section { background: var(--surface); }
+.tab-row { display: flex; gap: 8px; margin-bottom: 32px; }
+.tab-btn {
+  padding: 10px 22px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--outline-variant);
+  background: transparent; color: var(--fg-3);
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all var(--dur-base) var(--ease-standard);
+}
+.tab-btn.active { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.tab-btn:hover:not(.active) { border-color: var(--color-primary); color: var(--color-primary-deep); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+/* Featured + secondary for TK-2 */
+.prompts-featured { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; }
+.prompt-featured-tile iframe { width: 100%; height: 480px; border: none; border-radius: var(--radius-md) var(--radius-md) 0 0; display: block; }
+.prompt-secondary-col { display: flex; flex-direction: column; gap: 16px; }
+.prompt-secondary-tile iframe { width: 100%; height: 220px; border: none; border-radius: var(--radius-md) var(--radius-md) 0 0; display: block; }
+.prompt-tile-outer {
+  border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background: var(--surface-container-low);
+  transition: transform var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard);
+}
+.prompt-tile-outer:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.prompt-label {
+  background: var(--surface-lowest); padding: 12px 16px;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--fg-1);
+}
+.prompt-label a {
+  margin-left: auto; font-size: 12px; font-weight: 500; color: var(--color-primary); text-decoration: none;
+}
+.prompt-label a:hover { text-decoration: underline; }
+.prompt-dot { width: 7px; height: 7px; background: var(--color-coral); border-radius: 50%; flex-shrink: 0; }
+/* 3-12 grade grid */
+.prompts-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.prompts-grid .prompt-tile-outer iframe { width: 100%; height: 440px; border: none; display: block; }
+
+/* ── PLAYBOOK ── */
+.playbook-section { background: var(--surface-container-low); }
+.playbook-inner {
+  display: grid; grid-template-columns: 300px 1fr; gap: 56px; align-items: start; margin-top: 48px;
+}
+.playbook-cover-img {
+  width: 100%; border-radius: var(--radius-lg);
+  box-shadow: 0 24px 56px rgba(31,63,102,0.2);
+}
+.model-list { display: flex; flex-direction: column; gap: 12px; }
+.model-item {
+  background: var(--surface-lowest); border-radius: var(--radius-lg);
+  padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--dur-base) var(--ease-standard), transform var(--dur-base) var(--ease-standard);
+}
+.model-item:hover { box-shadow: var(--shadow-md); transform: translateX(3px); }
+.model-badge {
+  width: 32px; height: 32px; border-radius: var(--radius-sm); flex-shrink: 0;
+  background: var(--color-primary); color: #fff;
+  font-family: var(--font-display); font-weight: 800; font-size: 14px;
+  display: flex; align-items: center; justify-content: center; margin-top: 2px;
+}
+.model-item h4 { font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--fg-1); margin-bottom: 4px; }
+.model-item p  { font-size: 13px; color: var(--fg-3); line-height: 1.55; }
+.playbook-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-deep));
+  color: #fff; padding: 14px 26px; border-radius: var(--radius-xl);
+  font-family: var(--font-display); font-weight: 700; font-size: 15px;
+  text-decoration: none; box-shadow: 0 10px 28px rgba(99,142,197,0.32);
+  transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(99,142,197,0.4); color: #fff; text-decoration: none; }
+.btn-outline-dark {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--fg-1); padding: 14px 26px;
+  border-radius: var(--radius-xl); border: 1.5px solid var(--outline-variant);
+  font-family: var(--font-display); font-weight: 700; font-size: 15px; text-decoration: none;
+  transition: all var(--dur-base) var(--ease-standard);
+}
+.btn-outline-dark:hover { border-color: var(--color-primary); color: var(--color-primary-deep); text-decoration: none; }
+
+/* ── BHSSA WIN BANNER ── */
+.bhssa-banner {
+  background: linear-gradient(135deg, #0B1F3A 0%, #1a2f52 100%);
+  padding: 40px var(--gutter);
+  border-top: 3px solid var(--color-coral);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.bhssa-inner {
+  max-width: var(--max-page); margin: 0 auto;
+  display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+}
+.bhssa-gif {
+  flex-shrink: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  height: 120px;
+  width: auto;
+}
+.bhssa-badge {
+  background: var(--color-coral); color: #fff;
+  font-family: var(--font-display); font-weight: 900; font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 5px 14px; border-radius: var(--radius-pill); flex-shrink: 0; white-space: nowrap;
+}
+.bhssa-text {
+  font-family: var(--font-body); font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.6;
+}
+.bhssa-text strong { font-weight: 700; color: #fff; }
+
+/* ── RESOURCES ── */
+.resources-section { background: var(--surface); }
+.resources-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 40px;
+}
+.resource-card {
+  background: var(--surface-container-low); border-radius: var(--radius-lg);
+  padding: 24px; text-decoration: none; color: var(--fg-1);
+  display: flex; flex-direction: column; gap: 10px;
+  transition: transform var(--dur-base) var(--ease-standard), box-shadow var(--dur-base) var(--ease-standard);
+}
+.resource-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); color: var(--fg-1); text-decoration: none; }
+.rc-icon {
+  width: 40px; height: 40px; border-radius: var(--radius-sm);
+  background: var(--surface-blue); display: flex; align-items: center; justify-content: center;
+  color: var(--color-primary-deep); flex-shrink: 0;
+}
+.resource-card h4 { font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--fg-1); }
+.resource-card p  { font-size: 13px; color: var(--fg-3); line-height: 1.55; }
+.resource-card .rc-arrow {
+  margin-top: auto; font-family: var(--font-display); font-weight: 700;
+  font-size: 13px; color: var(--color-primary-deep);
+  display: flex; align-items: center; gap: 4px;
+}
+
+/* ── RESOURCE MODAL ── */
+.rm-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(11,22,44,0.82); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.rm-overlay.open { opacity: 1; pointer-events: all; }
+.rm-box {
+  background: var(--surface-lowest); border-radius: var(--radius-xl);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.45);
+  width: 100%; max-width: 900px; max-height: 88vh;
+  display: flex; flex-direction: column;
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.25s ease;
+}
+.rm-overlay.open .rm-box { transform: translateY(0) scale(1); }
+.rm-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px 24px; border-bottom: 1px solid var(--outline-variant);
+  flex-shrink: 0;
+}
+.rm-title {
+  font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--fg-1);
+  flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rm-close {
+  width: 32px; height: 32px; border-radius: 50%; border: none;
+  background: var(--surface-container-low); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--fg-2); transition: background 0.15s;
+  font-size: 18px; line-height: 1; flex-shrink: 0;
+}
+.rm-close:hover { background: var(--surface-container); color: var(--fg-1); }
+.rm-open-link {
+  font-family: var(--font-display); font-weight: 700; font-size: 12px;
+  color: var(--color-primary-deep); text-decoration: none; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.rm-open-link:hover { text-decoration: underline; }
+.rm-body { flex: 1; min-height: 0; overflow: hidden; border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+.rm-body iframe { width: 100%; height: 100%; border: none; display: block; min-height: 500px; }
+.rm-body video { width: 100%; max-height: 70vh; display: block; background: #000; border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+.resource-card { cursor: pointer; }
+
+/* ── CTA ── */
+.cta-section {
+  background: linear-gradient(135deg, #1E3A5F 0%, #2D1B4E 40%, #C0392B 100%);
+  padding: 112px var(--gutter); text-align: center;
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: url('images/impacter-logo-waveform.png');
+  background-size: 680px; background-repeat: no-repeat; background-position: center;
+  opacity: 0.06; filter: brightness(2);
+}
+.cta-section::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(243,113,99,0.22) 0%, transparent 70%);
+  pointer-events: none;
+}
+/* Grain texture overlay — hero + CTA */
+.hero-wrap::after, .cta-section .grain {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.035; mix-blend-mode: overlay;
+}
+.cta-section h2 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(32px, 5vw, 56px); line-height: 1.08;
+  letter-spacing: -0.025em; color: #fff; position: relative; z-index: 1;
+}
+.cta-section p {
+  font-family: var(--font-body); font-size: 18px; line-height: 1.6;
+  color: rgba(255,255,255,0.78); max-width: 52ch; margin: 20px auto 40px; position: relative; z-index: 1;
+}
+.btn-cta-white {
+  background: #fff; color: var(--color-coral);
+  padding: 18px 40px; border-radius: var(--radius-xl);
+  font-family: var(--font-display); font-weight: 800; font-size: 17px;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.2); position: relative; z-index: 1;
+  transition: transform var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard);
+}
+.btn-cta-white:hover { transform: translateY(-2px); box-shadow: 0 22px 48px rgba(0,0,0,0.28); color: var(--color-coral); text-decoration: none; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--surface-inverse-deep); padding: 40px var(--gutter);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+}
+footer img { height: 24px; opacity: 0.7; }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-family: var(--font-body); font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; }
+.footer-links a:hover { color: rgba(255,255,255,0.8); }
+.footer-note { font-size: 12px; color: rgba(255,255,255,0.2); text-align: right; max-width: 360px; line-height: 1.5; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .hero-inner { grid-template-columns: 1fr; padding: 80px 0 48px; }
+  .hero-right { display: none; }
+  .stats-inner { grid-template-columns: 1fr 1fr; }
+  .contrast-split { grid-template-columns: 1fr; }
+  .cybhi-grid, .how-steps, .tier-cards, .resources-grid, .playbook-inner { grid-template-columns: 1fr; }
+  .prompts-featured { grid-template-columns: 1fr; }
+  .prompts-grid { grid-template-columns: 1fr; }
+  .voice-player-wrap { grid-template-columns: 1fr; }
+  .voice-analysis { grid-template-columns: 1fr; }
+  .rubric-cards { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav-outer">
+<nav>
+  <img class="logo" src="images/impacter-pathway-black.svg" alt="Impacter Pathway">
+  <div class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#demo">See the platform</a>
+    <a href="#prompts">Sample prompts</a>
+    <a href="#playbook">Playbook</a>
+    <a href="#resources">Resources</a>
+  </div>
+  <a href="#contact" class="cta-pill">Get started</a>
+</nav>
+</div>
+
+<!-- HERO -->
+<div class="hero-wrap">
+  <div class="hero-bg-motif"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Behavioral Health Screener</div>
+      <h1 class="hero-h1">
+        Student Wellness<br>
+        Starts With<br>
+        <em>Authentic Voice.</em>
+      </h1>
+      <p class="hero-sub">IMPACTER's Natural Language Screener replaces checkbox surveys with real student conversation — and California pays for it at scale through CYBHI.</p>
+      <div class="hero-ctas">
+        <a href="#demo" class="btn-hero-primary">
+          <i data-lucide="play" style="width:16px;height:16px;stroke-width:2.5"></i>
+          See the platform
+        </a>
+        <a href="playbook.pdf" target="_blank" class="btn-hero-ghost">
+          Download playbook
+          <i data-lucide="arrow-right" style="width:16px;height:16px;stroke-width:2.5"></i>
+        </a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-dashboard-wrap">
+        <a href="https://screener.impacterpathway.com" target="_blank">
+          <img src="images/dashboard-percy.png" alt="Student Behavioral Health Screener platform">
+        </a>
+        <div class="hero-dashboard-badge">
+          <div class="live-dot"></div> Platform live
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-num">97%</div>
+      <div class="stat-label">Student participation rate</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">1.4 days</div>
+      <div class="stat-label">Average time to support connection</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">$0</div>
+      <div class="stat-label">Net cost after CYBHI reimbursement</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">.918</div>
+      <div class="stat-label">QWK score vs. human expert raters</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST STRIP -->
+<div class="logo-strip">
+  <div class="logo-strip-inner">
+    <div class="logo-strip-eyebrow">Trusted by districts and county offices</div>
+    <div class="logo-strip-names">
+      <div class="logo-name">San Diego COE</div>
+      <div class="logo-name">El Dorado COE</div>
+      <div class="logo-name">Santa Clara COE</div>
+      <div class="logo-name">San Diego USD</div>
+      <div class="logo-name">Vista USD</div>
+      <div class="logo-name">CA BHSOAC</div>
+    </div>
+  </div>
+</div>
+
+<!-- BHSSA WIN BANNER -->
+<div class="bhssa-banner">
+  <div class="bhssa-inner">
+    <img src="images/bhssa-announcement.gif" alt="BHSSA contract win announcement" class="bhssa-gif">
+    <div class="bhssa-badge">New — April 2026</div>
+    <p class="bhssa-text"><strong>Selected by California BHSOAC + Santa Clara County Office of Education</strong> for statewide behavioral health performance management evaluation — BHSSA-002, prime-subbed with SCCOE.</p>
+  </div>
+</div>
+
+<!-- VIDEO -->
+<section class="section video-section" id="video">
+  <div class="section-inner">
+    <span class="eyebrow">See it in action</span>
+    <h2 class="section-h2" style="text-align:center;margin:0 auto 0">90-second overview</h2>
+    <div class="video-wrap">
+      <div class="video-embed">
+        <iframe src="https://www.youtube.com/embed/HXtIlzYY3hg?rel=0"
+          title="IMPACTER Behavioral Health Screener"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+      <p class="video-caption">No forced-choice scales. No Likert grids. Just authentic student conversation — and a score that arrives in real time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RUBRIC ROW -->
+<div class="rubric-row">
+  <div class="rubric-inner">
+    <span class="eyebrow">Research-validated rubric</span>
+    <h2 class="section-h2">Four levels. One coherent picture.</h2>
+    <div class="rubric-cards">
+      <div class="rubric-card foundational">
+        <div class="rubric-level">Foundational</div>
+        <div class="rubric-score">1</div>
+        <p class="rubric-desc">Minimal or inaccurate understanding. May actively resist, avoid, or withdraw. Lacks self-reflection — may show patterns of disengagement.</p>
+        <div class="rubric-num">1</div>
+      </div>
+      <div class="rubric-card developing">
+        <div class="rubric-level">Developing</div>
+        <div class="rubric-score">2</div>
+        <p class="rubric-desc">Some awareness. Practice is inconsistent or surface-level. May hesitate to engage. Occasional reflection, but insight and positive change are limited.</p>
+        <div class="rubric-num">2</div>
+      </div>
+      <div class="rubric-card competent">
+        <div class="rubric-level">Competent</div>
+        <div class="rubric-score">3</div>
+        <p class="rubric-desc">Clear understanding. Regularly participates and puts skills into practice. Reflects on personal well-being. Actively engaged in supporting self and others.</p>
+        <div class="rubric-num">3</div>
+      </div>
+      <div class="rubric-card advanced">
+        <div class="rubric-level">Advanced</div>
+        <div class="rubric-score">4</div>
+        <p class="rubric-desc">Deep understanding and application. Proactively leads, inspires, and supports others. Reflects deeply on well-being. Drives positive change for self and community.</p>
+        <div class="rubric-num">4</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTRAST SPLIT -->
+<section class="section contrast-section" id="why">
+  <div class="section-inner">
+    <span class="eyebrow coral">The difference</span>
+    <h2 class="section-h2">What surveys miss. What voice reveals.</h2>
+    <p class="section-body">A Likert scale compresses a student's entire motivational architecture into a single number. Authentic voice preserves the causal mechanisms that make that motivation real.</p>
+    <div class="contrast-split">
+      <div class="contrast-left">
+        <div class="contrast-tag old">
+          <i data-lucide="x-circle" style="width:14px;height:14px;stroke-width:2"></i>
+          Traditional survey
+        </div>
+        <h3>Rate your feelings 1 to 5.</h3>
+        <div class="fake-survey" id="fakeSurvey">
+          <div class="fake-survey-header">
+            <span>Student Wellness Check-In</span>
+            <span>4 of 4</span>
+          </div>
+          <div class="fake-q-block">
+            <div class="fake-question">Q1. I am motivated to succeed in school.</div>
+            <div class="likert-row" data-q="1">
+              <span class="likert-label">SD</span>
+              <div class="likert-dot" data-v="1">1</div>
+              <div class="likert-dot" data-v="2">2</div>
+              <div class="likert-dot selected" data-v="3">3</div>
+              <div class="likert-dot" data-v="4">4</div>
+              <div class="likert-dot" data-v="5">5</div>
+              <span class="likert-label">SA</span>
+            </div>
+          </div>
+          <div class="fake-q-block">
+            <div class="fake-question">Q2. I feel connected to people at my school.</div>
+            <div class="likert-row" data-q="2">
+              <span class="likert-label">SD</span>
+              <div class="likert-dot" data-v="1">1</div>
+              <div class="likert-dot" data-v="2">2</div>
+              <div class="likert-dot" data-v="3">3</div>
+              <div class="likert-dot selected" data-v="4">4</div>
+              <div class="likert-dot" data-v="5">5</div>
+              <span class="likert-label">SA</span>
+            </div>
+          </div>
+          <div class="fake-q-block">
+            <div class="fake-question">Q3. I have access to support when I need it.</div>
+            <div class="likert-row" data-q="3">
+              <span class="likert-label">SD</span>
+              <div class="likert-dot" data-v="1">1</div>
+              <div class="likert-dot selected" data-v="2">2</div>
+              <div class="likert-dot" data-v="3">3</div>
+              <div class="likert-dot" data-v="4">4</div>
+              <div class="likert-dot" data-v="5">5</div>
+              <span class="likert-label">SA</span>
+            </div>
+          </div>
+          <div class="fake-q-block">
+            <div class="fake-question">Q4. I feel safe expressing how I really feel.</div>
+            <div class="likert-row" data-q="4">
+              <span class="likert-label">SD</span>
+              <div class="likert-dot" data-v="1">1</div>
+              <div class="likert-dot" data-v="2">2</div>
+              <div class="likert-dot selected" data-v="3">3</div>
+              <div class="likert-dot" data-v="4">4</div>
+              <div class="likert-dot" data-v="5">5</div>
+              <span class="likert-label">SA</span>
+            </div>
+          </div>
+          <button class="fake-submit" id="fakeSubmit">Submit responses →</button>
+          <div class="fake-note" id="fakeNote">Student answered in ~8 seconds. No qualitative signal captured.</div>
+        </div>
+        <p style="font-size:14px;color:#9BA0A8;line-height:1.7">A score of "3" tells you nothing about <em>why</em> a student is motivated — or whether they're one bad week away from disengaging entirely.</p>
+      </div>
+      <div class="contrast-right">
+        <div class="contrast-tag new">
+          <i data-lucide="check-circle" style="width:14px;height:14px;stroke-width:2"></i>
+          Authentic voice
+        </div>
+        <h3><a href="https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" style="color:inherit;text-decoration:none;border-bottom:2px solid rgba(243,113,99,0.5)">Tell us what drives you. ↗</a></h3>
+        <!-- Flip card: front = student gif, back = annotated transcript -->
+        <div class="flip-card-wrap" id="contrastFlip" onclick="this.classList.toggle('flipped')" title="Click to see what the model detected">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="images/bh-student.gif" alt="Student responding to behavioral health screener prompt">
+              <div class="flip-hint">Click to see what was detected →</div>
+            </div>
+            <div class="flip-card-back">
+              <div class="transcript-block" style="margin-top:0;font-size:14px">
+                "When given some thought to this question, I realize that I don't have <span class="phrase resilience">as much failures as I would have expected to have<span class="phrase-pill resilience">Emotional Resilience</span></span>... I think my answer would be <span class="phrase insight">not taking enough risk to experience true failure<span class="phrase-pill insight">Self-Insight</span></span>. I feel like I've always been so afraid of facing someone saying no... I tend to kind of <span class="phrase insight">stay in my comfort zone and stand behind the yellow caution tape<span class="phrase-pill insight">Self-Awareness</span></span>... every day I'm trying to <span class="phrase growth">expand the barriers of my comfort zone<span class="phrase-pill growth">Reflective Growth</span></span>."
+              </div>
+              <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:12px;line-height:1.6">3 behavioral health domains detected. Comfort zone avoidance named explicitly. Growth orientation confirmed. Zero checkboxes. 82 seconds of authentic voice.</p>
+              <p style="font-size:11px;color:rgba(243,113,99,0.7);margin-top:8px;cursor:pointer">← Click to flip back</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CYBHI -->
+<section class="cybhi-section" id="cybhi">
+  <div class="section-inner">
+    <span class="eyebrow">CYBHI reimbursement model</span>
+    <h2 class="section-h2">Zero net cost for school districts.</h2>
+    <p class="section-body">California's multi-payer fee schedule turns behavioral health screening from a budget line into a sustainable funding mechanism. Universal screening generates revenue rather than consuming it.</p>
+    <div class="cybhi-grid">
+      <div class="cybhi-card">
+        <div class="cybhi-num">$4.81</div>
+        <h4>Per administration</h4>
+        <p>CPT Code 96127 with diagnosis code Z13.89 through CYBHI's multi-payer fee schedule — reimbursed in full through third-party administrators.</p>
+      </div>
+      <div class="cybhi-card">
+        <div class="cybhi-num">$0</div>
+        <h4>Net cost to districts</h4>
+        <p>Full reimbursement means the screening pays for itself. For districts running universal screening at scale, this generates surplus revenue.</p>
+      </div>
+      <div class="cybhi-card">
+        <div class="cybhi-num">3</div>
+        <h4>Eligible practitioner types</h4>
+        <p>School Psychologists, School Social Workers, and School Counselors can administer and generate reimbursement. No new hires required.</p>
+      </div>
+    </div>
+    <div class="cybhi-note">
+      Eligible practitioners administer the screener, districts receive full reimbursement through third-party administrators.
+      <a href="https://www.dhcs.ca.gov/CYBHI/Documents/CYBHI-Fee-Schedule-Scope-of-Services-Rates-and-Codes.pdf" target="_blank">View the official CYBHI fee schedule →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-section" id="how-it-works">
+  <div class="section-inner">
+    <span class="eyebrow">How it works</span>
+    <h2 class="section-h2">From prompt to support plan — in one session.</h2>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="step-eyebrow"><div class="step-num">1</div> Student intake</div>
+        <h3>Authentic voice, not forced choice</h3>
+        <p>Students engage with a brief series of open-ended, spoken language prompts — no Likert scales, no checkboxes. Developed in partnership with the South County SELPA through SDCOE. Each prompt targets one of six behavioral health domains, delivered one at a time via an intuitive carousel interface.</p>
+        <div class="domains-grid">
+          <div class="domain-chip">Self-Insight</div>
+          <div class="domain-chip">Emotional Resilience</div>
+          <div class="domain-chip">Relational Awareness</div>
+          <div class="domain-chip">Conflict Resolution</div>
+          <div class="domain-chip">Effective Help-Seeking</div>
+          <div class="domain-chip">Reflective Growth</div>
+        </div>
+        <img src="images/carousel-ui.png" alt="IMPACTER prompt carousel interface" class="how-img">
+      </div>
+      <div class="how-step">
+        <div class="step-eyebrow"><div class="step-num">2</div> NLP scoring</div>
+        <h3>Real-time scoring against a validated rubric</h3>
+        <p>Student audio or video responses are automatically transcribed and scored by IMPACTER's proprietary ML pipeline. Responses are evaluated against a research-validated four-point rubric grounded in engagement science (Amy Berry). Total score out of 24. Immediate MTSS tier assignment — no lag, no manual review required.</p>
+        <img src="images/scoring-ui.png" alt="IMPACTER scoring interface" class="how-img">
+      </div>
+      <div class="how-step">
+        <div class="step-eyebrow"><div class="step-num">3</div> MTSS assignment</div>
+        <h3>Evidence-based tier mapping at the moment of screening</h3>
+        <p>Each score maps automatically to an MTSS support tier, with specific recommended next steps generated in real time. Tier 3 flags go directly to counselors. No bottleneck between screening and support connection.</p>
+        <img src="images/mtss-pyramid.png" alt="MTSS support tier pyramid" class="how-img">
+      </div>
+      <div class="how-step">
+        <div class="step-eyebrow"><div class="step-num">4</div> Administrator dashboard</div>
+        <h3>Individual review and schoolwide needs assessment</h3>
+        <p>Guidance counselors and site admins access a dashboard surfacing all screener results, individual and aggregate trends, flagged responses for urgent review, and MTSS tier recommendations with suggested actions.</p>
+        <img src="images/dashboard.png" alt="IMPACTER administrator dashboard" class="how-img">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE PLATFORM DEMO -->
+<section class="section demo-section" id="demo">
+  <div class="section-inner">
+    <span class="eyebrow">Live platform</span>
+    <h2 class="section-h2">Built, deployed, and ready for your district.</h2>
+    <p class="section-body">This isn't a prototype. The full platform is live. Click through to experience exactly what students and counselors see.</p>
+    <a href="https://screener.impacterpathway.com" target="_blank" style="display:block;text-decoration:none">
+      <div class="demo-img-wrap">
+        <img src="images/dashboard-percy.png" alt="Student Behavioral Health Screener — Percy Purpose, Tier 2 dashboard">
+        <div class="demo-overlay">
+          <div class="demo-overlay-content">
+            <a href="https://screener.impacterpathway.com" target="_blank" class="demo-launch-btn">
+              <i data-lucide="external-link" style="width:16px;height:16px;stroke-width:2"></i>
+              Launch live platform
+            </a>
+            <span class="demo-label">screener.impacterpathway.com</span>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- NC GIRL — VOICE INTELLIGENCE EXEMPLAR -->
+<section class="voice-section" id="exemplar">
+  <div class="section-inner">
+    <span class="eyebrow" style="color:rgba(214,231,241,0.6)">Voice Intelligence Analysis</span>
+    <h2 class="section-h2" style="color:#fff;max-width:22ch">What Authentic Language Reveals That Numbers Can't.</h2>
+    <p class="section-body" style="color:rgba(255,255,255,0.5)">NC Portrait Assessment. Adaptability competency. Watch the transcript sync word-for-word as she speaks — and watch the model surface three behavioral health signals no survey could capture.</p>
+    <div class="voice-player-wrap">
+      <div class="video-player-card">
+        <video id="ncgirl" controls preload="metadata" src="images/nc-girl.mp4">
+          Your browser does not support video.
+        </video>
+        <div class="rec-pill"><div class="rec-dot"></div> Live scoring</div>
+        <div class="ml-card-overlay" id="mlOverlay" style="opacity:0">
+          <div class="ml-card-label" id="mlLabel">—</div>
+          <div class="ml-card-text" id="mlText">—</div>
+          <div class="ml-card-quote" id="mlQuote"></div>
+        </div>
+        <!-- Custom progress bar with insight dots -->
+        <div class="vi-progress-wrap" id="viProgress">
+          <div class="vi-progress-track" id="viTrack">
+            <div class="vi-progress-fill" id="viFill"></div>
+            <div class="vi-dot" id="viDot0" style="left:11.4%;background:#6EE7B7;color:#6EE7B7" title="Emotional Resilience — 9s"></div>
+            <div class="vi-dot" id="viDot1" style="left:24.2%;background:#FCD34D;color:#FCD34D" title="Self-Insight — 20s"></div>
+            <div class="vi-dot" id="viDot2" style="left:66.5%;background:#93C5FD;color:#93C5FD" title="Reflective Growth — 55s"></div>
+          </div>
+          <span class="vi-time-label" id="viTimeLabel">0:00</span>
+        </div>
+      </div>
+      <div class="voice-right-col">
+        <div class="transcript-panel">
+          <div class="tp-eyebrow">Whisper-synced transcript <button class="next-insight-btn" id="nextInsightBtn">⟶ Next insight</button></div>
+          <div id="transcript-words"></div>
+        </div>
+        <!-- Live BH Score Panel -->
+        <div class="live-score-panel">
+          <div class="lsp-eyebrow">Live BH domain score</div>
+          <div class="lsp-bar-row">
+            <span class="lsp-bar-label">Emotional Resilience</span>
+            <div class="lsp-bar-track"><div class="lsp-bar-fill" id="barResilience" style="background:#6EE7B7"></div></div>
+            <span class="lsp-bar-val" id="valResilience">—</span>
+          </div>
+          <div class="lsp-bar-row">
+            <span class="lsp-bar-label">Self-Insight</span>
+            <div class="lsp-bar-track"><div class="lsp-bar-fill" id="barInsight" style="background:#FCD34D"></div></div>
+            <span class="lsp-bar-val" id="valInsight">—</span>
+          </div>
+          <div class="lsp-bar-row">
+            <span class="lsp-bar-label">Reflective Growth</span>
+            <div class="lsp-bar-track"><div class="lsp-bar-fill" id="barRgrowth" style="background:#93C5FD"></div></div>
+            <span class="lsp-bar-val" id="valRgrowth">—</span>
+          </div>
+          <div class="lsp-footer">
+            <div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-bottom:4px;letter-spacing:0.08em;text-transform:uppercase;font-family:var(--font-display);font-weight:700">Total score</div>
+              <span class="lsp-total-num" id="lspScore">0</span><span class="lsp-total-denom">/12</span>
+            </div>
+            <div class="lsp-tier-badge pending" id="lspTier">Scoring…</div>
+          </div>
+        </div>
+      </div>
+      <div class="voice-analysis">
+        <div class="analysis-card resilience-card" id="card-resilience">
+          <div class="ac-pill resilience">Emotional Resilience</div>
+          <h5>Failure reframing</h5>
+          <p>"My biggest failure would be not taking enough risk to experience true failure." The model flags this as a resilience marker: failure is recast as an unmet aspiration — not a catastrophe. There is no self-blame. The causal arrow runs forward, not backward.</p>
+        </div>
+        <div class="analysis-card insight-card" id="card-insight">
+          <div class="ac-pill insight">Self-Insight</div>
+          <h5>Avoidance pattern named</h5>
+          <p>"I tend to stay in my comfort zone and stand behind the yellow caution tape." A spontaneous, original metaphor for her own avoidance behavior. The encoder isn't looking for key words — it's looking for the naming precision that signals genuine self-awareness. This is it.</p>
+        </div>
+        <div class="analysis-card rgrowth-card" id="card-rgrowth">
+          <div class="ac-pill rgrowth">Reflective Growth</div>
+          <h5>Present-tense growth commitment</h5>
+          <p>"Every day I'm trying to expand the barriers of my comfort zone... I'd like to experience a lot more failures." Present-tense growth orientation fused with a desire to increase risk exposure. She isn't describing past growth — she's narrating an active, ongoing process.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MTSS -->
+<section class="section mtss-section" id="mtss">
+  <div class="section-inner">
+    <span class="eyebrow">MTSS integration</span>
+    <h2 class="section-h2">Automatic tier assignment at the moment of screening.</h2>
+    <div class="mtss-pyramid-wrap">
+      <img src="images/mtss-pyramid.png" alt="MTSS support tier pyramid">
+    </div>
+    <div class="tier-cards">
+      <div class="tier-card t3">
+        <div class="tier-badge">Tier 3 — Intensive</div>
+        <div class="tier-score">6–9</div>
+        <h4>Intensive / Individualized</h4>
+        <p>One or more Foundational domains. Immediate flag for 1:1 counseling or wraparound services.</p>
+      </div>
+      <div class="tier-card t2">
+        <div class="tier-badge">Tier 2 — Targeted</div>
+        <div class="tier-score">10–14</div>
+        <h4>Targeted / Strategic</h4>
+        <p>Developing level. Small-group intervention, wellness workshops, or scheduled check-ins.</p>
+      </div>
+      <div class="tier-card t1">
+        <div class="tier-badge">Tier 1 — Universal</div>
+        <div class="tier-score">15–24</div>
+        <h4>Universal / Preventative</h4>
+        <p>Competent or Advanced. Continued encouragement, enrichment, and peer leadership opportunities.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAMPLE PROMPTS -->
+<section class="section prompts-section" id="prompts">
+  <div class="section-inner">
+    <span class="eyebrow">Sample prompts</span>
+    <h2 class="section-h2">Experience the authentic voice difference.</h2>
+    <p class="section-body">Click any prompt to see how IMPACTER captures student perspectives through conversation — not clinical questionnaires.</p>
+    <div class="tab-row" style="margin-top:32px">
+      <button class="tab-btn active" onclick="switchTab('tk2',this)">TK–2 prompts</button>
+      <button class="tab-btn" onclick="switchTab('g312',this)">Grades 3–12 prompts</button>
+    </div>
+
+    <div class="tab-pane active" id="tab-tk2">
+      <div class="prompts-featured">
+        <div class="prompt-tile-outer prompt-featured-tile">
+          <iframe src="https://flex.impacterpathway.com/f96z46iz7?preview" title="Effective Help-Seeking #1" loading="lazy"></iframe>
+          <div class="prompt-label"><div class="prompt-dot"></div> Effective Help-Seeking #1 <a href="https://flex.impacterpathway.com/f96z46iz7?preview" target="_blank">Open ↗</a></div>
+        </div>
+        <div class="prompt-secondary-col">
+          <div class="prompt-tile-outer prompt-secondary-tile">
+            <iframe src="https://flex.impacterpathway.com/fi4mgwelx?preview" title="Emotional Resilience" loading="lazy"></iframe>
+            <div class="prompt-label"><div class="prompt-dot"></div> Emotional Resilience <a href="https://flex.impacterpathway.com/fi4mgwelx?preview" target="_blank">Open ↗</a></div>
+          </div>
+          <div class="prompt-tile-outer prompt-secondary-tile">
+            <iframe src="https://flex.impacterpathway.com/fqn60zgac?preview" title="Effective Help-Seeking #2" loading="lazy"></iframe>
+            <div class="prompt-label"><div class="prompt-dot"></div> Effective Help-Seeking #2 <a href="https://flex.impacterpathway.com/fqn60zgac?preview" target="_blank">Open ↗</a></div>
+          </div>
+          <div class="prompt-tile-outer prompt-secondary-tile">
+            <iframe src="https://flex.impacterpathway.com/fjzzdvxk8?preview" title="Relational Awareness" loading="lazy"></iframe>
+            <div class="prompt-label"><div class="prompt-dot"></div> Relational Awareness <a href="https://flex.impacterpathway.com/fjzzdvxk8?preview" target="_blank">Open ↗</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="tab-g312">
+      <div class="prompts-grid">
+        <div class="prompt-tile-outer">
+          <iframe src="https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX" title="Self-Insight" loading="lazy"></iframe>
+          <div class="prompt-label"><div class="prompt-dot"></div> Self-Insight Reflection <a href="https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank">Open ↗</a></div>
+        </div>
+        <div class="prompt-tile-outer">
+          <iframe src="https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX" title="Emotional Resilience" loading="lazy"></iframe>
+          <div class="prompt-label"><div class="prompt-dot"></div> Emotional Resilience <a href="https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank">Open ↗</a></div>
+        </div>
+        <div class="prompt-tile-outer">
+          <iframe src="https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX" title="Relational Awareness" loading="lazy"></iframe>
+          <div class="prompt-label"><div class="prompt-dot"></div> Relational Awareness <a href="https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank">Open ↗</a></div>
+        </div>
+        <div class="prompt-tile-outer">
+          <iframe src="https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX" title="Conflict Resolution" loading="lazy"></iframe>
+          <div class="prompt-label"><div class="prompt-dot"></div> Conflict Resolution <a href="https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank">Open ↗</a></div>
+        </div>
+        <div class="prompt-tile-outer">
+          <iframe src="https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX" title="Help-Seeking" loading="lazy"></iframe>
+          <div class="prompt-label"><div class="prompt-dot"></div> Help-Seeking Strategies <a href="https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank">Open ↗</a></div>
+        </div>
+        <div class="prompt-tile-outer">
+          <iframe src="https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX" title="Reflective Growth" loading="lazy"></iframe>
+          <div class="prompt-label"><div class="prompt-dot"></div> Reflective Growth <a href="https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank">Open ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLAYBOOK -->
+<section class="section playbook-section" id="playbook">
+  <div class="section-inner">
+    <span class="eyebrow">Implementation playbook</span>
+    <h2 class="section-h2">Seven battle-tested deployment models.</h2>
+    <p class="section-body">Every recommendation comes from real implementation experience. These aren't theoretical frameworks — they're approaches that work in actual schools with real constraints and staffing realities.</p>
+    <div class="playbook-inner">
+      <div>
+        <img src="images/playbook-cover.png" alt="Behavioral Health Screener Implementation Playbook" class="playbook-cover-img">
+        <div class="playbook-ctas" style="margin-top:20px">
+          <a href="playbook.pdf" target="_blank" class="btn-primary">
+            <i data-lucide="download" style="width:16px;height:16px;stroke-width:2"></i>
+            Download playbook (PDF)
+          </a>
+        </div>
+      </div>
+      <div class="model-list">
+        <div class="model-item">
+          <div class="model-badge">1</div>
+          <div><h4>Class Period Block — Homeroom / Advisory / SEL</h4><p>The Classroom Champion. Universal coverage in 20–30 min. Grades 6–12. Consistent 1:1 device access. Minimal schedule disruption.</p></div>
+        </div>
+        <div class="model-item">
+          <div class="model-badge">2</div>
+          <div><h4>Mobile Assessment Cart — Indoor / Outdoor Pop-Up</h4><p>The Flexibility Champion. Turn limited devices into an asset — roll a cart to any space. Works K–12. Elementary schools love this model.</p></div>
+        </div>
+        <div class="model-item">
+          <div class="model-badge">3</div>
+          <div><h4>Small-Group Testing Center — Wellness / Library / Lab</h4><p>The Structured Sanctuary. Quiet, controlled environment. Groups of 10–20. Ideal for students who need calmer settings for authentic sharing.</p></div>
+        </div>
+        <div class="model-item">
+          <div class="model-badge">4</div>
+          <div><h4>Push-In Classroom Mini-Stations — Support / IEP-Friendly</h4><p>The Seamless Support. Support staff arrives with 4–6 devices. Students rotate in small groups. No instructional time lost.</p></div>
+        </div>
+        <div class="model-item">
+          <div class="model-badge">5</div>
+          <div><h4>Pull-Out Targeted Sessions — Case Carrier / Support Team</h4><p>The Personalized Care. ~15–20 min per student. Ideal for IEP/504 accommodations, ELL support, and students who work better in very small groups.</p></div>
+        </div>
+        <div class="model-item">
+          <div class="model-badge">6</div>
+          <div><h4>Family-Assisted Remote — Home Connection</h4><p>The Home Connection. For absent students, hospital/homebound learners, or families who want to support participation. Flexible submission window.</p></div>
+        </div>
+        <div class="model-item">
+          <div class="model-badge">7</div>
+          <div><h4>Student-Guided Window — Self-Paced Completion</h4><p>The Empowerment Approach. Students choose when, where, and how within a defined multi-day window. Ideal for large secondary campuses.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section class="section resources-section" id="resources">
+  <div class="section-inner">
+    <span class="eyebrow">Resources</span>
+    <h2 class="section-h2">Everything you need to move forward.</h2>
+    <div class="resources-grid">
+      <a href="https://drive.google.com/file/d/1s-WRCtYtdwlfEj4UaprgxzPSIiFpMfSU/view?usp=sharing" target="_blank" class="resource-card">
+        <div class="rc-icon"><i data-lucide="bar-chart-2" style="width:20px;height:20px;stroke-width:1.75"></i></div>
+        <h4>EDCOE Behavioral Health Pilot Report</h4>
+        <p>Full data report from the El Dorado County pilot — results, trends, and district-level insights.</p>
+        <div class="rc-arrow">View report <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2.5"></i></div>
+      </a>
+      <a href="https://docs.google.com/document/d/14Dmw3CXe5Eiygg8O90GsuH_O1RyQXDgh8abr8A-0rlM/edit?usp=sharing" target="_blank" class="resource-card">
+        <div class="rc-icon"><i data-lucide="file-text" style="width:20px;height:20px;stroke-width:1.75"></i></div>
+        <h4>Parent Notification Example</h4>
+        <p>Sample parent notification and opt-out documentation for district implementation and FERPA compliance.</p>
+        <div class="rc-arrow">View document <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2.5"></i></div>
+      </a>
+      <a href="images/purpose-exemplar.mp4" target="_blank" class="resource-card">
+        <div class="rc-icon"><i data-lucide="mic" style="width:20px;height:20px;stroke-width:1.75"></i></div>
+        <h4>Student Exemplar — Purpose</h4>
+        <p>Voice Intelligence Analysis showing how linguistic architecture surfaces behavioral health insight a survey can't capture.</p>
+        <div class="rc-arrow">Watch exemplar <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2.5"></i></div>
+      </a>
+      <a href="cybhi-fee-schedule.pdf" target="_blank" class="resource-card">
+        <div class="rc-icon"><i data-lucide="landmark" style="width:20px;height:20px;stroke-width:1.75"></i></div>
+        <h4>CYBHI Fee Schedule</h4>
+        <p>Official DHCS document — CPT Code 96127 rates and scope of services for behavioral health screening reimbursement.</p>
+        <div class="rc-arrow">View schedule <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2.5"></i></div>
+      </a>
+      <a href="playbook.pdf" target="_blank" class="resource-card">
+        <div class="rc-icon"><i data-lucide="book-open" style="width:20px;height:20px;stroke-width:1.75"></i></div>
+        <h4>Implementation Playbook — Full PDF</h4>
+        <p>22 pages. All 7 deployment models, 30-minute quick-launch blueprint, accessibility supports, student framing scripts.</p>
+        <div class="rc-arrow">Download PDF <i data-lucide="download" style="width:13px;height:13px;stroke-width:2.5"></i></div>
+      </a>
+      <a href="https://sdcoe.impacterpathway.com/fu58vkone#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" class="resource-card">
+        <div class="rc-icon" style="background:var(--surface-coral-low)"><i data-lucide="play-circle" style="width:20px;height:20px;stroke-width:1.75;color:var(--color-coral-deep)"></i></div>
+        <h4>Live Screener — Full Experience</h4>
+        <p>The complete behavioral health screener — built, deployed, and ready for district partners to experience today.</p>
+        <div class="rc-arrow" style="color:var(--color-coral-deep)">Launch screener <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2.5"></i></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="grain"></div>
+  <h2>Ready to Start Listening?</h2>
+  <p>Your students have something important to say. IMPACTER creates the conditions where they can say it — and the infrastructure to act on what you hear.</p>
+  <a href="mailto:info@impacterpathway.com?subject=Behavioral Health Screener Interest&body=Hi Team IMPACTER,%0A%0AI'm interested in learning more about the IMPACTER Behavioral Health Screener.%0A%0ADistrict%2FOrg:%0ARole:%0ABest time to connect:" class="btn-cta-white">
+    <i data-lucide="mail" style="width:18px;height:18px;stroke-width:2"></i>
+    Contact Team IMPACTER
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="images/impacter-pathway-white.svg" alt="Impacter Pathway">
+  <div class="footer-links">
+    <a href="https://www.impacterpathway.com" target="_blank">impacterpathway.com</a>
+    <a href="mailto:info@impacterpathway.com">info@impacterpathway.com</a>
+    <a href="playbook.pdf" target="_blank">Implementation Playbook</a>
+  </div>
+  <div class="footer-note">Developed in partnership with South County SELPA / San Diego County Office of Education. CYBHI reimbursement through CPT Code 96127.</div>
+</footer>
+
+<script>
+// ── Init Lucide icons
+lucide.createIcons();
+
+// ── Tab switcher
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Fake Likert interactivity ──────────────────────────────────────────────
+document.querySelectorAll('.fake-survey .likert-row').forEach(row => {
+  row.querySelectorAll('.likert-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      row.querySelectorAll('.likert-dot').forEach(d => d.classList.remove('selected'));
+      dot.classList.add('selected');
+    });
+  });
+});
+document.getElementById('fakeSubmit').addEventListener('click', function() {
+  this.textContent = 'Response recorded.';
+  this.classList.add('submitted');
+  document.getElementById('fakeNote').textContent = 'Submitted. Score: 12/20. No qualitative signal captured.';
+});
+
+// ── NC Girl — Real Whisper word-level timestamps ──────────────────────────────
+// Source: pitch/src/slides/06-product.tsx WORD_TS array
+// resilience = 9.32–19.14 | insight = 19.86–53.98 | rgrowth = 54.52–82.0
+const NC_WORDS = [
+  {w:"When",s:0.74},{w:"given",s:1.38},{w:"some",s:1.58},{w:"thought",s:1.8},{w:"to",s:2.12},{w:"this",s:2.3},{w:"question,",s:2.44},
+  {w:"I",s:3.52},{w:"realize",s:3.52},{w:"that",s:3.8},{w:"I",s:4.14},{w:"don't",s:4.48},{w:"have",s:4.7},{w:"any",s:4.88},{w:"as",s:5.14},{w:"much",s:5.86},{w:"failures",s:6.36},{w:"as",s:6.72},{w:"I",s:7.14},{w:"would",s:7.24},{w:"have",s:7.44},{w:"expected",s:7.7},{w:"to",s:8.26},{w:"have,",s:8.54},
+  // resilience segment starts 9.32
+  {w:"and",s:9.32,cls:"resilience"},{w:"when",s:10.02,cls:"resilience"},{w:"given",s:10.5,cls:"resilience"},{w:"the",s:10.74,cls:"resilience"},{w:"question,",s:10.92,cls:"resilience"},{w:"what's",s:11.94,cls:"resilience"},{w:"your",s:12.62,cls:"resilience"},{w:"biggest",s:12.68,cls:"resilience"},{w:"failure?",s:12.86,cls:"resilience"},
+  {w:"I",s:13.86,cls:"resilience"},{w:"think",s:13.98,cls:"resilience"},{w:"my",s:14.12,cls:"resilience"},{w:"answer",s:14.3,cls:"resilience"},{w:"would",s:14.58,cls:"resilience"},{w:"be",s:14.8,cls:"resilience"},{w:"not",s:15.06,cls:"resilience"},{w:"taking",s:15.88,cls:"resilience"},{w:"enough",s:16.2,cls:"resilience"},{w:"risk",s:16.64,cls:"resilience"},{w:"to",s:16.96,cls:"resilience"},{w:"experience",s:17.52,cls:"resilience"},{w:"true",s:18.1,cls:"resilience"},{w:"failure.",s:18.72,cls:"resilience"},
+  // insight segment starts 19.86
+  {w:"I",s:19.86,cls:"insight"},{w:"feel",s:20.14,cls:"insight"},{w:"like",s:20.3,cls:"insight"},{w:"I've",s:20.52,cls:"insight"},{w:"always",s:21.2,cls:"insight"},{w:"been",s:21.44,cls:"insight"},{w:"so",s:21.66,cls:"insight"},{w:"afraid",s:21.88,cls:"insight"},{w:"of",s:22.26,cls:"insight"},{w:"facing",s:22.8,cls:"insight"},{w:"someone",s:23.56,cls:"insight"},{w:"saying",s:24.82,cls:"insight"},{w:"no",s:25.06,cls:"insight"},{w:"or",s:25.34,cls:"insight"},{w:"facing",s:25.6,cls:"insight"},{w:"failures",s:25.88,cls:"insight"},{w:"that",s:26.38,cls:"insight"},
+  {w:"I",s:27.28,cls:"insight"},{w:"tend",s:27.88,cls:"insight"},{w:"to",s:28.12,cls:"insight"},{w:"kind",s:28.36,cls:"insight"},{w:"of",s:29.24,cls:"insight"},{w:"stay",s:29.4,cls:"insight"},{w:"in",s:29.7,cls:"insight"},{w:"my",s:29.94,cls:"insight"},{w:"comfort",s:30.08,cls:"insight"},{w:"zone",s:30.34,cls:"insight"},{w:"and",s:30.84,cls:"insight"},{w:"stand",s:31.16,cls:"insight"},{w:"behind",s:31.38,cls:"insight"},{w:"the",s:31.82,cls:"insight"},{w:"yellow",s:33.56,cls:"insight"},{w:"caution",s:33.76,cls:"insight"},{w:"tape",s:34.14,cls:"insight"},{w:"and",s:34.46,cls:"insight"},{w:"not",s:34.64,cls:"insight"},{w:"let",s:34.82,cls:"insight"},{w:"myself",s:35.62,cls:"insight"},{w:"explore",s:36.12,cls:"insight"},{w:"the",s:37.04,cls:"insight"},{w:"world",s:37.24,cls:"insight"},{w:"or",s:37.48,cls:"insight"},{w:"explore",s:37.72,cls:"insight"},{w:"niche",s:38.66,cls:"insight"},{w:"challenges,",s:39.32,cls:"insight"},{w:"new",s:40.08,cls:"insight"},{w:"experiences",s:40.08,cls:"insight"},{w:"because",s:40.8,cls:"insight"},{w:"I'm",s:41.4,cls:"insight"},{w:"afraid",s:41.7,cls:"insight"},{w:"of",s:42.02,cls:"insight"},{w:"someone",s:42.72,cls:"insight"},{w:"saying",s:42.94,cls:"insight"},{w:"no",s:43.16,cls:"insight"},{w:"to",s:43.38,cls:"insight"},{w:"me.",s:43.56,cls:"insight"},
+  {w:"I",s:44.52,cls:"insight"},{w:"feel",s:44.6,cls:"insight"},{w:"like",s:44.76,cls:"insight"},{w:"that's",s:44.88,cls:"insight"},{w:"a",s:45.14,cls:"insight"},{w:"constant",s:45.22,cls:"insight"},{w:"battle",s:45.54,cls:"insight"},{w:"that",s:45.92,cls:"insight"},{w:"I'm",s:46.22,cls:"insight"},{w:"always",s:46.62,cls:"insight"},{w:"trying",s:47.04,cls:"insight"},{w:"to",s:47.42,cls:"insight"},{w:"combat,",s:47.78,cls:"insight"},
+  {w:"and",s:49.04,cls:"insight"},{w:"I",s:49.24,cls:"insight"},{w:"feel",s:49.32,cls:"insight"},{w:"like",s:49.48,cls:"insight"},{w:"that's",s:49.62,cls:"insight"},{w:"always",s:49.9,cls:"insight"},{w:"going",s:50.12,cls:"insight"},{w:"to",s:50.3,cls:"insight"},{w:"be",s:50.38,cls:"insight"},{w:"something",s:50.46,cls:"insight"},{w:"that's",s:50.74,cls:"insight"},{w:"going",s:51.06,cls:"insight"},{w:"to",s:51.16,cls:"insight"},{w:"be",s:51.24,cls:"insight"},{w:"present",s:51.4,cls:"insight"},{w:"throughout",s:51.92,cls:"insight"},{w:"the",s:52.26,cls:"insight"},{w:"whole",s:52.56,cls:"insight"},{w:"of",s:52.76,cls:"insight"},{w:"my",s:53.02,cls:"insight"},{w:"entire",s:53.16,cls:"insight"},{w:"life.",s:53.5,cls:"insight"},
+  // reflective growth segment starts 54.52
+  {w:"And",s:54.52,cls:"rgrowth"},{w:"even",s:54.8,cls:"rgrowth"},{w:"taking",s:55.08,cls:"rgrowth"},{w:"this",s:55.28,cls:"rgrowth"},{w:"course",s:55.5,cls:"rgrowth"},{w:"was",s:55.8,cls:"rgrowth"},{w:"me",s:56.08,cls:"rgrowth"},{w:"kind",s:56.26,cls:"rgrowth"},{w:"of",s:56.38,cls:"rgrowth"},{w:"stepping",s:56.52,cls:"rgrowth"},{w:"out",s:56.7,cls:"rgrowth"},{w:"of",s:56.92,cls:"rgrowth"},{w:"my",s:56.96,cls:"rgrowth"},{w:"comfort",s:57.1,cls:"rgrowth"},{w:"zone",s:57.4,cls:"rgrowth"},{w:"and",s:57.76,cls:"rgrowth"},{w:"letting",s:58.26,cls:"rgrowth"},{w:"myself",s:58.46,cls:"rgrowth"},{w:"learn",s:58.86,cls:"rgrowth"},{w:"with",s:59.2,cls:"rgrowth"},{w:"other",s:59.38,cls:"rgrowth"},{w:"people",s:59.56,cls:"rgrowth"},{w:"and",s:60.0,cls:"rgrowth"},{w:"letting",s:60.26,cls:"rgrowth"},{w:"myself",s:60.76,cls:"rgrowth"},{w:"kind",s:61.22,cls:"rgrowth"},{w:"of",s:61.9,cls:"rgrowth"},{w:"expose",s:62.28,cls:"rgrowth"},{w:"myself",s:63.06,cls:"rgrowth"},{w:"and",s:63.58,cls:"rgrowth"},{w:"talk",s:64.04,cls:"rgrowth"},{w:"about",s:64.68,cls:"rgrowth"},{w:"my",s:64.9,cls:"rgrowth"},{w:"feelings",s:65.06,cls:"rgrowth"},{w:"like",s:65.34,cls:"rgrowth"},{w:"I",s:65.64,cls:"rgrowth"},{w:"am",s:65.8,cls:"rgrowth"},{w:"right",s:65.94,cls:"rgrowth"},{w:"now.",s:66.1,cls:"rgrowth"},
+  {w:"So",s:66.98,cls:"rgrowth"},{w:"I",s:67.24,cls:"rgrowth"},{w:"feel",s:67.44,cls:"rgrowth"},{w:"like",s:67.62,cls:"rgrowth"},{w:"every",s:67.92,cls:"rgrowth"},{w:"day",s:69.44,cls:"rgrowth"},{w:"I'm",s:69.64,cls:"rgrowth"},{w:"trying",s:69.92,cls:"rgrowth"},{w:"to",s:70.08,cls:"rgrowth"},{w:"expand",s:70.3,cls:"rgrowth"},{w:"the",s:71.66,cls:"rgrowth"},{w:"barriers",s:71.92,cls:"rgrowth"},{w:"of",s:72.3,cls:"rgrowth"},{w:"my",s:72.62,cls:"rgrowth"},{w:"comfort",s:72.82,cls:"rgrowth"},{w:"zone.",s:73.14,cls:"rgrowth"},
+  {w:"And",s:74.24,cls:"rgrowth"},{w:"I",s:74.62,cls:"rgrowth"},{w:"like",s:76.84,cls:"rgrowth"},{w:"to",s:77.78,cls:"rgrowth"},{w:"experience",s:78.0,cls:"rgrowth"},{w:"a",s:78.68,cls:"rgrowth"},{w:"lot",s:79.16,cls:"rgrowth"},{w:"more",s:79.3,cls:"rgrowth"},{w:"failures",s:79.48,cls:"rgrowth"},{w:"than",s:79.8,cls:"rgrowth"},{w:"I",s:80.08,cls:"rgrowth"},{w:"am",s:80.2,cls:"rgrowth"},{w:"right",s:80.46,cls:"rgrowth"},{w:"now.",s:80.8,cls:"rgrowth"}
+];
+
+// ML annotation cards mapped to time segments
+const NC_ML = [
+  { start:9.32, end:19.14, label:"EMOTIONAL RESILIENCE", color:"#6EE7B7",
+    text:"Reframing failure as unmet risk appetite — not a catastrophic event. Ownership without self-blame. The causal arrow points forward.",
+    quote:'"not taking enough risk to experience true failure"' },
+  { start:19.86, end:53.98, label:"SELF-INSIGHT", color:"#FCD34D",
+    text:'"Yellow caution tape" is a spontaneous, original metaphor for her own avoidance behavior. The model identifies this naming precision as explicit behavioral self-awareness.',
+    quote:'"yellow caution tape"' },
+  { start:54.52, end:82.0, label:"REFLECTIVE GROWTH", color:"#93C5FD",
+    text:"Present-tense commitment to growth fused with a desire to increase risk exposure. 'Expand the barriers' is a high-signal growth orientation phrase.",
+    quote:'"expand the barriers of my comfort zone"' },
+];
+
+const container = document.getElementById('transcript-words');
+NC_WORDS.forEach((w, i) => {
+  const span = document.createElement('span');
+  span.className = 'transcript-word' + (w.cls ? ` ${w.cls}-word` : '');
+  span.dataset.start = w.s;
+  span.dataset.idx = i;
+  span.textContent = w.w;
+  container.appendChild(span);
+  if (i < NC_WORDS.length - 1) container.appendChild(document.createTextNode(' '));
+});
+
+const vid        = document.getElementById('ncgirl');
+const wordSpans  = container.querySelectorAll('.transcript-word');
+const mlOverlay  = document.getElementById('mlOverlay');
+const mlLabel    = document.getElementById('mlLabel');
+const mlText     = document.getElementById('mlText');
+const mlQuote    = document.getElementById('mlQuote');
+
+// Progress bar elements
+const viFill      = document.getElementById('viFill');
+const viTimeLabel = document.getElementById('viTimeLabel');
+const viTrack     = document.getElementById('viTrack');
+const viProgress  = document.getElementById('viProgress');
+const viDots      = [document.getElementById('viDot0'), document.getElementById('viDot1'), document.getElementById('viDot2')];
+const TOTAL_DUR   = 82.0;
+// dot timestamps matching NC_ML start times
+const DOT_TIMES   = [9.32, 19.86, 54.52];
+
+// Score panel elements
+const barResilience = document.getElementById('barResilience');
+const barInsight    = document.getElementById('barInsight');
+const barRgrowth    = document.getElementById('barRgrowth');
+const valResilience = document.getElementById('valResilience');
+const valInsight    = document.getElementById('valInsight');
+const valRgrowth    = document.getElementById('valRgrowth');
+const lspScore      = document.getElementById('lspScore');
+const lspTier       = document.getElementById('lspTier');
+
+// Analysis card elements
+const cardResilience = document.getElementById('card-resilience');
+const cardInsight    = document.getElementById('card-insight');
+const cardRgrowth    = document.getElementById('card-rgrowth');
+
+// Score targets (out of 4 each, total /12)
+const SCORES = { resilience: 3, insight: 4, rgrowth: 4 };
+// Track which domains have been scored
+const scored = { resilience: false, insight: false, rgrowth: false };
+
+function fmt(s) {
+  const m = Math.floor(s/60), sec = Math.floor(s%60);
+  return m + ':' + String(sec).padStart(2,'0');
+}
+
+function animateBar(fillEl, valEl, pct, numVal, color) {
+  fillEl.style.width = pct + '%';
+  valEl.textContent = numVal + '/4';
+  valEl.classList.add('scored');
+}
+
+function updateTier(total) {
+  lspScore.textContent = total;
+  lspTier.className = 'lsp-tier-badge';
+  if (total >= 10) {
+    lspTier.textContent = 'Tier 1 — Universal';
+    lspTier.classList.add('t1');
+  } else if (total >= 7) {
+    lspTier.textContent = 'Tier 2 — Targeted';
+    lspTier.classList.add('t2');
+  } else if (total > 0) {
+    lspTier.textContent = 'Tier 3 — Intensive';
+    lspTier.classList.add('t3');
+  } else {
+    lspTier.textContent = 'Scoring…';
+    lspTier.classList.add('pending');
+  }
+}
+
+const VI_PAD = 14; // matches vi-progress-wrap padding
+
+function updateProgressBar(t) {
+  const pct = Math.min(t / TOTAL_DUR * 100, 100);
+  viFill.style.width = pct + '%';
+  viTimeLabel.textContent = fmt(t) + ' / ' + fmt(TOTAL_DUR);
+  DOT_TIMES.forEach((dt, i) => {
+    const active = t >= dt && t < (NC_ML[i] ? NC_ML[i].end : TOTAL_DUR);
+    viDots[i].classList.toggle('dot-active', active);
+  });
+}
+
+vid.addEventListener('seeking', () => updateProgressBar(vid.currentTime));
+vid.addEventListener('seeked',  () => updateProgressBar(vid.currentTime));
+
+vid.addEventListener('timeupdate', () => {
+  const t = vid.currentTime;
+
+  updateProgressBar(t);
+
+  // — Word highlighting —
+  wordSpans.forEach((span, i) => {
+    const start = parseFloat(span.dataset.start);
+    const nextStart = i < wordSpans.length - 1 ? parseFloat(wordSpans[i+1].dataset.start) : 999;
+    if (t >= start && t < nextStart) {
+      span.classList.add('active');
+      span.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    } else {
+      span.classList.remove('active');
+    }
+  });
+
+  // — ML overlay card —
+  const card = NC_ML.find(c => t >= c.start && t < c.end);
+  if (card) {
+    mlLabel.textContent = '+ ' + card.label;
+    mlLabel.style.color = card.color;
+    mlText.textContent = card.text;
+    mlQuote.textContent = card.quote;
+    mlQuote.style.color = card.color;
+    mlOverlay.style.borderColor = card.color + '55';
+    mlOverlay.style.opacity = '1';
+  } else {
+    mlOverlay.style.opacity = '0';
+  }
+
+  // — Analysis card glow —
+  cardResilience.classList.toggle('card-active', t >= NC_ML[0].start && t < NC_ML[0].end);
+  cardInsight.classList.toggle('card-active',    t >= NC_ML[1].start && t < NC_ML[1].end);
+  cardRgrowth.classList.toggle('card-active',    t >= NC_ML[2].start && t < NC_ML[2].end);
+
+  // — Live score bars (animate once when each segment first plays) —
+  if (!scored.resilience && t >= NC_ML[0].start) {
+    scored.resilience = true;
+    animateBar(barResilience, valResilience, (SCORES.resilience/4)*100, SCORES.resilience, '#6EE7B7');
+  }
+  if (!scored.insight && t >= NC_ML[1].start) {
+    scored.insight = true;
+    animateBar(barInsight, valInsight, (SCORES.insight/4)*100, SCORES.insight, '#FCD34D');
+  }
+  if (!scored.rgrowth && t >= NC_ML[2].start) {
+    scored.rgrowth = true;
+    animateBar(barRgrowth, valRgrowth, (SCORES.rgrowth/4)*100, SCORES.rgrowth, '#93C5FD');
+  }
+
+  // — Running total —
+  const total = (scored.resilience ? SCORES.resilience : 0)
+              + (scored.insight    ? SCORES.insight    : 0)
+              + (scored.rgrowth    ? SCORES.rgrowth    : 0);
+  updateTier(total);
+});
+
+// — Progress bar scrub (mousedown + drag) —
+function seekToEvent(e) {
+  const rect   = viProgress.getBoundingClientRect();
+  const trackW = rect.width - VI_PAD * 2;
+  const pct    = Math.max(0, Math.min(1, (e.clientX - rect.left - VI_PAD) / trackW));
+  vid.currentTime = pct * TOTAL_DUR;
+  updateProgressBar(pct * TOTAL_DUR);
+}
+
+viProgress.addEventListener('mousedown', e => {
+  e.preventDefault(); // stop browser selecting text / other weirdness
+  seekToEvent(e);
+  const onMove = ev => { if (ev.buttons & 1) seekToEvent(ev); };
+  const onUp   = ()  => {
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup',   onUp);
+  };
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup',   onUp);
+});
+
+// touch scrub
+viProgress.addEventListener('touchstart', e => {
+  e.preventDefault();
+  seekToEvent(e.touches[0]);
+}, { passive: false });
+viProgress.addEventListener('touchmove', e => {
+  e.preventDefault();
+  seekToEvent(e.touches[0]);
+}, { passive: false });
+
+// — Next insight button —
+document.getElementById('nextInsightBtn').addEventListener('click', () => {
+  const t = vid.currentTime;
+  const next = NC_ML.find(c => c.start > t + 0.5);
+  if (next) {
+    vid.currentTime = next.start;
+    if (vid.paused) vid.play();
+  } else {
+    vid.currentTime = NC_ML[0].start;
+    if (vid.paused) vid.play();
+  }
+});
+</script>
+
+</body>
+</html>

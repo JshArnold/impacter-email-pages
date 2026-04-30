@@ -56,11 +56,11 @@ nav .cta-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(
   position: relative; overflow: hidden;
 }
 .hero-bg-motif {
-  position: absolute; right: -60px; top: 50%; transform: translateY(-50%);
-  width: 640px; height: 320px;
-  background-image: url('images/impacter-logo-waveform.png');
+  position: absolute; right: -80px; top: -80px;
+  width: 600px; height: 600px;
+  background-image: url('images/impacter-circle-icon.png');
   background-size: contain; background-repeat: no-repeat;
-  opacity: 0.07; pointer-events: none; filter: brightness(2);
+  opacity: 0.04; pointer-events: none;
 }
 .hero-inner {
   max-width: var(--max-page); margin: 0 auto; width: 100%;
@@ -851,14 +851,21 @@ nav .cta-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(
 }
 .cta-section::before {
   content: ''; position: absolute; inset: 0;
-  background-image: url('images/impacter-circle-icon.png');
-  background-size: 560px; background-repeat: no-repeat; background-position: center;
-  opacity: 0.05;
+  background-image: url('images/impacter-logo-waveform.png');
+  background-size: 680px; background-repeat: no-repeat; background-position: center;
+  opacity: 0.06; filter: brightness(2);
 }
 .cta-section::after {
   content: ''; position: absolute; inset: 0;
   background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(243,113,99,0.22) 0%, transparent 70%);
   pointer-events: none;
+}
+/* Grain texture overlay — hero + CTA */
+.hero-wrap::after, .cta-section .grain {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.035; mix-blend-mode: overlay;
 }
 .cta-section h2 {
   font-family: var(--font-display); font-weight: 800;
@@ -1481,6 +1488,7 @@ footer img { height: 24px; opacity: 0.7; }
 
 <!-- CTA -->
 <section class="cta-section" id="contact">
+  <div class="grain"></div>
   <h2>Ready to Start Listening?</h2>
   <p>Your students have something important to say. IMPACTER creates the conditions where they can say it — and the infrastructure to act on what you hear.</p>
   <a href="mailto:info@impacterpathway.com?subject=Behavioral Health Screener Interest&body=Hi Team IMPACTER,%0A%0AI'm interested in learning more about the IMPACTER Behavioral Health Screener.%0A%0ADistrict%2FOrg:%0ARole:%0ABest time to connect:" class="btn-cta-white">

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Districts Are Discovering — IMPACTER Pathway</title>
+<meta name="description" content="Behavioral health data can now be drawn from student voice. School boards across California are presenting it, acting on it, and holding themselves accountable to it.">
+<link rel="stylesheet" href="../bh/colors_and_type.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+/* ── LAYOUT SCAFFOLDING ── */
+body { background: #FAFAF9; }
+
+.masthead {
+  padding: 28px var(--gutter) 0;
+  max-width: var(--max-page);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.masthead img { height: 22px; }
+.masthead-date {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-4);
+}
+
+/* ── PROSE CONTAINER (narrow editorial column) ── */
+.prose {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ── WIDE CONTAINER (videos, pull quotes) ── */
+.wide {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ── OPENING ── */
+.opening {
+  padding: 72px var(--gutter) 0;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.opening-kicker {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.opening-kicker::before {
+  content: '';
+  width: 32px;
+  height: 1.5px;
+  background: var(--color-primary);
+  flex-shrink: 0;
+}
+.opening h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--fg-1);
+  text-wrap: balance;
+  margin-bottom: 32px;
+}
+.opening h1 em {
+  font-style: normal;
+  color: var(--color-primary);
+}
+.lede {
+  font-family: var(--font-body);
+  font-size: clamp(17px, 2vw, 20px);
+  line-height: 1.65;
+  font-weight: 300;
+  color: var(--fg-2);
+  border-left: 3px solid var(--color-primary-deep);
+  padding-left: 20px;
+}
+
+/* ── RULE ── */
+.rule {
+  border: none;
+  border-top: 1px solid rgba(25,28,32,0.10);
+  margin: 64px auto;
+  max-width: 680px;
+  padding: 0 var(--gutter);
+}
+/* scoped rule inside prose section */
+.chapter-rule {
+  border: none;
+  border-top: 1px solid rgba(25,28,32,0.10);
+  margin: 56px 0 48px;
+}
+
+/* ── CHAPTER ── */
+.chapter { padding: 0 0 72px; }
+
+.chapter-eyebrow {
+  max-width: 680px;
+  margin: 0 auto 20px;
+  padding: 0 var(--gutter);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.chapter-eyebrow .dist {
+  color: var(--fg-1);
+}
+.chapter-eyebrow .dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--fg-4);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.chapter-context {
+  max-width: 680px;
+  margin: 0 auto 32px;
+  padding: 0 var(--gutter);
+}
+.chapter-context p {
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--fg-2);
+}
+.chapter-context p + p { margin-top: 14px; }
+
+/* ── VIDEO EMBED ── */
+.video-wrap {
+  max-width: 960px;
+  margin: 0 auto 36px;
+  padding: 0 var(--gutter);
+}
+.video-frame {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #0f0f0f;
+}
+.video-frame iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+.video-caption {
+  margin-top: 10px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--fg-4);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.video-caption a {
+  color: var(--fg-4);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(25,28,32,0.15);
+  transition: color 140ms;
+}
+.video-caption a:hover { color: var(--color-primary); border-color: var(--color-primary); text-decoration: none; }
+
+/* ── PULL QUOTE ── */
+.pull-quote {
+  max-width: 680px;
+  margin: 0 auto 12px;
+  padding: 0 var(--gutter);
+}
+.pull-quote blockquote {
+  border-left: 3px solid var(--color-primary);
+  padding: 4px 0 4px 24px;
+  margin: 0;
+}
+.pull-quote blockquote p {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.5vw, 27px);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--fg-1);
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
+.pull-quote .attribution {
+  margin-top: 14px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-3);
+  letter-spacing: 0.02em;
+  padding-left: 27px;
+}
+.pull-quote .attribution strong {
+  color: var(--fg-1);
+  font-weight: 700;
+}
+
+/* ── SECOND QUOTE (smaller, inline) ── */
+.inline-quote {
+  max-width: 680px;
+  margin: 28px auto 0;
+  padding: 0 var(--gutter);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-style: italic;
+  color: var(--fg-3);
+  line-height: 1.6;
+  padding-left: calc(var(--gutter) + 27px);
+  border-left: none;
+  position: relative;
+}
+
+/* ── WHAT BECOMES POSSIBLE ── */
+.possible-section {
+  background: var(--surface-inverse);
+  padding: 80px var(--gutter);
+  margin: 0;
+}
+.possible-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+.possible-section .eyebrow-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(214,231,241,0.5);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.possible-section .eyebrow-label::before {
+  content: '';
+  width: 24px;
+  height: 1.5px;
+  background: rgba(214,231,241,0.4);
+  flex-shrink: 0;
+}
+.possible-section h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 44px;
+  text-wrap: balance;
+}
+.possible-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.possible-list li {
+  padding: 24px 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.possible-list li:last-child {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.possible-num {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--color-primary);
+  padding-top: 3px;
+}
+.possible-text strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 5px;
+}
+.possible-text span {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.55;
+}
+
+/* ── DATA CALLOUT ── */
+.data-strip {
+  padding: 60px var(--gutter);
+  background: var(--surface-blue-low);
+}
+.data-strip-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.data-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.data-num {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--color-primary-deep);
+  line-height: 1;
+}
+.data-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-3);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.data-src {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--fg-4);
+  margin-top: 2px;
+}
+
+/* ── ABOUT / FOOTER ── */
+.about-section {
+  padding: 80px var(--gutter) 96px;
+}
+.about-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+.about-inner .eyebrow-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-4);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.about-inner .eyebrow-label::before {
+  content: '';
+  width: 24px;
+  height: 1.5px;
+  background: var(--fg-4);
+  flex-shrink: 0;
+}
+.about-inner h2 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--fg-1);
+  margin-bottom: 20px;
+  text-wrap: balance;
+}
+.about-inner p {
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--fg-2);
+  font-weight: 300;
+  margin-bottom: 16px;
+}
+.about-inner p:last-child { margin-bottom: 0; }
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary-deep);
+  text-decoration: none;
+  border-bottom: 1.5px solid var(--color-primary-deep);
+  padding-bottom: 2px;
+  transition: color 140ms, border-color 140ms;
+}
+.contact-link:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  text-decoration: none;
+}
+.site-footer {
+  padding: 28px var(--gutter) 40px;
+  border-top: 1px solid rgba(25,28,32,0.08);
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.site-footer img { height: 18px; opacity: 0.5; }
+.site-footer span {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--fg-4);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .data-strip-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+  .data-strip-inner .data-item:last-child {
+    grid-column: span 2;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <img src="../bh/images/impacter-pathway-black.svg" alt="IMPACTER Pathway">
+  <span class="masthead-date">April 2026</span>
+</header>
+
+<!-- OPENING -->
+<section class="opening">
+  <div class="opening-kicker">What districts are discovering</div>
+  <h1>Behavioral health data has always been <em>in the room.</em> Now we can hear it.</h1>
+  <p class="lede">
+    For the first time, the behavioral health of a student can be drawn from how they naturally express themselves — in voice, in writing, in their own language. Scored against research-based competencies. Structured enough to act on. Districts across California are already using this data, presenting it to their boards, and holding themselves accountable to what they find.
+  </p>
+</section>
+
+<div style="max-width:680px; margin:0 auto; padding:40px var(--gutter) 0;">
+  <p style="font-family:var(--font-body); font-size:15px; line-height:1.7; color:var(--fg-3);">
+    For decades, the primary instrument for measuring student wellness was a survey with a five-point scale — anonymous, aggregated, useful at the district level but silent about the student in front of you. What follows are four public board meetings where California districts grappled openly with what comes next.
+  </p>
+</div>
+
+<!-- DATA STRIP -->
+<div class="data-strip" style="margin-top:56px;">
+  <div class="data-strip-inner">
+    <div class="data-item">
+      <div class="data-num">31,469</div>
+      <div class="data-label">student responses captured in year one</div>
+      <div class="data-src">San Diego Unified, April 2026</div>
+    </div>
+    <div class="data-item">
+      <div class="data-num">1M+</div>
+      <div class="data-label">words of authentic student speech analyzed</div>
+      <div class="data-src">SDUSD Board Monitoring Report</div>
+    </div>
+    <div class="data-item">
+      <div class="data-num">127 hrs</div>
+      <div class="data-label">of student voice gathered across 10 pilot schools</div>
+      <div class="data-src">SDUSD Board Monitoring Report</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 1 — SDUSD Governance Workshop
+     ═══════════════════════════════════════════ -->
+<div style="max-width:680px; margin:72px auto 0; padding:0 var(--gutter);">
+  <div style="border-top:1px solid rgba(25,28,32,0.10);"></div>
+</div>
+
+<div class="chapter" style="margin-top:48px;">
+
+  <div class="chapter-eyebrow">
+    <span class="dist">San Diego Unified</span>
+    <span class="dot"></span>
+    <span>Governance Workshop</span>
+    <span class="dot"></span>
+    <span>2025</span>
+  </div>
+
+  <div class="chapter-context">
+    <p>Superintendent Lamont Jackson came out of a meeting with the IMPACTER team and went straight to a colleague's office. The meeting was part of SDUSD's work to build a district wellness goal — and the question on the table was whether any tool could actually measure it.</p>
+    <p>In this governance workshop, Superintendent Jackson described what she saw — and why it was different from everything else they'd looked at.</p>
+  </div>
+
+  <div class="video-wrap">
+    <div class="video-frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/ErE6NDFtIww?start=1494&rel=0&modestbranding=1" title="SDUSD Governance Workshop — Superintendent Lamont Jackson" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <div class="video-caption">
+      Public board meeting · San Diego Unified ·
+      <a href="https://www.youtube.com/live/ErE6NDFtIww?t=1494" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <blockquote>
+      <p>"I left really jazzed. I came straight into your office and said: I can't wait till you see this. I think this is a really important opportunity to completely transform how we think about counseling — in service of social emotional wellness, but also academics."</p>
+    </blockquote>
+    <div class="attribution"><strong>Superintendent Lamont Jackson</strong> · San Diego Unified School District</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 2 — Central Union High School District
+     ═══════════════════════════════════════════ -->
+<div style="max-width:680px; margin:0 auto; padding:0 var(--gutter);">
+  <div style="border-top:1px solid rgba(25,28,32,0.10);"></div>
+</div>
+
+<div class="chapter" style="margin-top:48px;">
+
+  <div class="chapter-eyebrow">
+    <span class="dist">Central Union High School District</span>
+    <span class="dot"></span>
+    <span>Imperial Valley</span>
+    <span class="dot"></span>
+    <span>Board Presentation</span>
+  </div>
+
+  <div class="chapter-context">
+    <p>Before the board presentation, a teacher flagged something to the mental health specialist. A student had revealed, through their IMPACTER response, something they hadn't said to anyone in person. The family was contacted. What the board heard next was that this wasn't a one-off — it was what becomes possible when students have a way to express themselves outside of a face-to-face interaction, at any hour.</p>
+  </div>
+
+  <div class="video-wrap">
+    <div class="video-frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/V9Qwb_TAio4?start=13005&rel=0&modestbranding=1" title="Central Union High School District Board Presentation" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <div class="video-caption">
+      Public board meeting · Central Union High School District ·
+      <a href="https://www.youtube.com/live/V9Qwb_TAio4?t=13005s" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <blockquote>
+      <p>"It was only because the student was able to express themselves through this program. Not in person — because this is available 24 hours a day, 7 days a week, whenever they want. We were able to involve a lot of people and help the family."</p>
+    </blockquote>
+    <div class="attribution"><strong>Board Presentation</strong> · Central Union High School District</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 3 — San Mateo-Foster City
+     ═══════════════════════════════════════════ -->
+<div style="max-width:680px; margin:0 auto; padding:0 var(--gutter);">
+  <div style="border-top:1px solid rgba(25,28,32,0.10);"></div>
+</div>
+
+<div class="chapter" style="margin-top:48px;">
+
+  <div class="chapter-eyebrow">
+    <span class="dist">San Mateo-Foster City School District</span>
+    <span class="dot"></span>
+    <span>Board Meeting</span>
+  </div>
+
+  <div class="chapter-context">
+    <p>The board asked to hear actual student voice. A student — a Spanish-speaking elementary student who had changed schools to escape bullying — described what belonging felt like, and named a teacher who had changed his path. The room went quiet. Then a trustee spoke.</p>
+  </div>
+
+  <div class="video-wrap">
+    <div class="video-frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/lY_P4MK9Tqk?start=9406&rel=0&modestbranding=1" title="San Mateo-Foster City School District Board Meeting" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <div class="video-caption">
+      Public board meeting · San Mateo-Foster City School District ·
+      <a href="https://www.youtube.com/watch?t=9406&v=lY_P4MK9Tqk" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <blockquote>
+      <p>"Your voice is making me cry."</p>
+    </blockquote>
+    <div class="attribution"><strong>Trustee</strong> · San Mateo-Foster City School District</div>
+  </div>
+
+  <div style="max-width:680px; margin:20px auto 0; padding:0 var(--gutter);">
+    <p style="font-family:var(--font-body); font-size:15px; line-height:1.7; color:var(--fg-3); font-style:italic;">
+      "We're going beyond what 99.9% of other school districts do — we're opening up the floodgates to hear what students really think, and using machine learning to find the themes that can actually dictate what we do next."
+    </p>
+    <p style="font-family:var(--font-body); font-size:12px; color:var(--fg-4); margin-top:8px; font-style:normal;">— Superintendent, San Mateo-Foster City School District</p>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 4 — SDUSD April 29 Board Meeting
+     ═══════════════════════════════════════════ -->
+<div style="max-width:680px; margin:0 auto; padding:0 var(--gutter);">
+  <div style="border-top:1px solid rgba(25,28,32,0.10);"></div>
+</div>
+
+<div class="chapter" style="margin-top:48px;">
+
+  <div class="chapter-eyebrow">
+    <span class="dist">San Diego Unified</span>
+    <span class="dot"></span>
+    <span>Board Meeting</span>
+    <span class="dot"></span>
+    <span>April 29, 2026</span>
+  </div>
+
+  <div class="chapter-context">
+    <p>San Diego Unified's board convened for a formal progress monitoring report on student motivation — a governance guardrail the board had adopted three years earlier. The cabinet presented voice intelligence data from 31,469 students across 10 schools. They played a student's audio response live. Then they made a proposal: that the motivation guardrail be folded into the district's wellness goal — because the data had revealed that the two were the same thing.</p>
+    <p>Board President Barrera: <em>"We need better tools than the California Healthy Kids Survey. This tool that you're demonstrating — everybody up here has said it's a breakthrough."</em></p>
+  </div>
+
+  <div class="video-wrap">
+    <div class="video-frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/NUoew6sMy6w?start=4452&rel=0&modestbranding=1" title="San Diego Unified Board Meeting — April 29, 2026" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <div class="video-caption">
+      Public board meeting · San Diego Unified · April 29, 2026 ·
+      <a href="https://www.youtube.com/live/NUoew6sMy6w?t=4452s" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <blockquote>
+      <p>"We can't answer 'why' with a five-point Likert. We can begin to answer 'why' with student voice. That is the direction this work is going."</p>
+    </blockquote>
+    <div class="attribution"><strong>Dr. Roman Del Rosario</strong> · Cabinet Presenter, San Diego Unified School District</div>
+  </div>
+
+  <div style="max-width:680px; margin:20px auto 0; padding:0 var(--gutter);">
+    <p style="font-family:var(--font-body); font-size:15px; line-height:1.7; color:var(--fg-3); font-style:italic;">
+      "We asked him to talk, and in talking, he told us things our survey instrument was not designed to capture — including the harder, more complicated truth that some of his motivation comes from fear and love. There's no analytics that turns one student into a system, but Christopher tells us something important about what the system needs to be able to hear."
+    </p>
+    <p style="font-family:var(--font-body); font-size:12px; color:var(--fg-4); margin-top:8px; font-style:normal;">— Dr. Roman Del Rosario · San Diego Unified, April 29, 2026</p>
+  </div>
+
+</div>
+
+<!-- WHAT BECOMES POSSIBLE -->
+<section class="possible-section">
+  <div class="possible-inner">
+    <div class="eyebrow-label">What this makes possible</div>
+    <h2>A new layer of student data — in the hands of teachers, principals, and boards.</h2>
+    <ul class="possible-list">
+      <li>
+        <div class="possible-num">01</div>
+        <div class="possible-text">
+          <strong>Board-level accountability with real data</strong>
+          <span>Boards adopting student outcomes focused governance frameworks finally have behavioral health metrics worth monitoring — drawn from student voice, scored against competency rubrics, structured for governance reporting.</span>
+        </div>
+      </li>
+      <li>
+        <div class="possible-num">02</div>
+        <div class="possible-text">
+          <strong>Behavioral health data that informs academic intervention</strong>
+          <span>A student struggling with reading may have a gap in persistence — not phonics. A student disengaged from math may have low curiosity scores. This data now reaches teachers and principals, not just counselors.</span>
+        </div>
+      </li>
+      <li>
+        <div class="possible-num">03</div>
+        <div class="possible-text">
+          <strong>A replacement for aggregated, anonymous surveys</strong>
+          <span>California's leading districts are moving beyond instruments that tell you how a district feels to instruments that tell you how a student feels — actionable, individual, and gathered in the student's own words.</span>
+        </div>
+      </li>
+      <li>
+        <div class="possible-num">04</div>
+        <div class="possible-text">
+          <strong>A foundation for behavioral health screening</strong>
+          <span>California mandated dyslexia screening. A math screener is coming. The same logic — early identification, actionable data, tied to academic outcomes — applies to behavioral health. The infrastructure now exists to do it.</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ABOUT IMPACTER -->
+<section class="about-section">
+  <div class="about-inner">
+    <div class="eyebrow-label">The tool behind what you just watched</div>
+    <h2>IMPACTER Pathway</h2>
+    <p>
+      IMPACTER is a voice intelligence platform built for K–12. Students respond to structured prompts in their own words — spoken, written, or in any of several languages. Every response is scored against eight research-based competencies: purpose, grit, growth mindset, curiosity, self-control, gratitude, compassion, and perspective-taking.
+    </p>
+    <p>
+      The resulting data lives in district and teacher dashboards — structured, searchable, and designed to inform both wellness goals and academic intervention. It is currently deployed in school districts across California, including the ones featured in this collection.
+    </p>
+    <p>
+      All of the board meetings above are public record. The links go directly to the archived video at the timestamps shown.
+    </p>
+    <a href="https://impacterpathway.com" class="contact-link" target="_blank" rel="noopener">
+      Learn more about IMPACTER ↗
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top:1px solid rgba(25,28,32,0.08); padding:28px var(--gutter) 48px; max-width:680px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+  <img src="../bh/images/impacter-pathway-black.svg" alt="IMPACTER Pathway" style="height:18px; opacity:0.35;">
+  <span style="font-family:var(--font-body); font-size:12px; color:var(--fg-4);">impacterpathway.com</span>
+</footer>
+
+</body>
+</html>

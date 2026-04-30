@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Behavioral Health Screener — IMPACTER Pathway</title>
+<link rel="stylesheet" href="tokens.css?v=2" />
+<link rel="stylesheet" href="styles.css?v=2" />
+<style>
+/* ============================================================
+   BH/2 CINEMATIC ADDITIONS — layered on top of v3 styles
+   ============================================================ */
+
+/* Film grain overlay */
+.film-grain {
+  position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  animation: grain 0.4s steps(1) infinite;
+}
+@keyframes grain {
+  0%  { background-position: 0 0; }
+  20% { background-position: -48px -24px; }
+  40% { background-position: 32px -64px; }
+  60% { background-position: -16px 48px; }
+  80% { background-position: 64px 16px; }
+  100%{ background-position: 0 0; }
+}
+
+/* ============================================================
+   STREAMER OVERLAY — slides in when Voice Intel is visible
+   ============================================================ */
+.streamer {
+  position: fixed; bottom: 32px; right: 32px; z-index: 200;
+  width: 280px;
+  background: rgba(10,14,20,0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px;
+  transform: translateX(340px);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1), opacity 0.4s ease;
+  box-shadow: 0 24px 56px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.04);
+}
+.streamer.visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+.streamer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.streamer-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.4); text-transform: uppercase;
+}
+.streamer-live {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 700; color: #4ade80; letter-spacing: 0.1em;
+}
+.streamer-live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #4ade80;
+  animation: pulse-green 1.4s ease-in-out infinite;
+}
+@keyframes pulse-green {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+.streamer-rows { display: flex; flex-direction: column; gap: 10px; }
+.streamer-row { display: flex; flex-direction: column; gap: 4px; }
+.streamer-row-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.streamer-domain { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 500; }
+.streamer-val {
+  font-size: 13px; font-weight: 800; color: #fff;
+  transition: color 0.3s;
+}
+.streamer-val.detected { color: #F37163; }
+.streamer-bar-track {
+  height: 3px; background: rgba(255,255,255,0.07); border-radius: 99px; overflow: hidden;
+}
+.streamer-bar-fill {
+  height: 100%; width: 0%; border-radius: 99px;
+  background: linear-gradient(90deg, #638EC5, #F37163);
+  transition: width 0.6s cubic-bezier(0.2,0.8,0.2,1);
+}
+.streamer-total {
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.streamer-total-lbl { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.streamer-total-val { font-size: 22px; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; }
+.streamer-footnote {
+  margin-top: 10px;
+  font-size: 10px; color: rgba(255,255,255,0.25); font-style: italic;
+}
+
+/* ============================================================
+   VOICE INTEL — real video player
+   ============================================================ */
+.vi-video-wrap {
+  position: relative;
+  width: 100%; max-width: 420px;
+  border-radius: 16px; overflow: hidden;
+  background: #000;
+  aspect-ratio: 9/16;
+}
+.vi-video-wrap video {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.vi-play-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.35);
+  cursor: pointer; transition: opacity 0.2s;
+}
+.vi-play-overlay.hidden { opacity: 0; pointer-events: none; }
+.vi-play-btn {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: rgba(243,113,99,0.9);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; color: #fff;
+  box-shadow: 0 0 0 12px rgba(243,113,99,0.18), 0 0 0 24px rgba(243,113,99,0.07);
+  transition: transform 0.2s;
+}
+.vi-play-overlay:hover .vi-play-btn { transform: scale(1.08); }
+.vi-live-badge {
+  position: absolute; top: 14px; left: 14px;
+  background: rgba(10,14,20,0.8); backdrop-filter: blur(12px);
+  border: 1px solid rgba(74,222,128,0.3);
+  border-radius: 99px; padding: 4px 10px 4px 8px;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 700; color: #4ade80; letter-spacing: 0.1em;
+}
+.vi-live-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #4ade80;
+  animation: pulse-green 1.4s ease-in-out infinite;
+}
+.vi-signal-badge {
+  position: absolute; bottom: 14px; right: 14px;
+  background: rgba(10,14,20,0.8); backdrop-filter: blur(12px);
+  border: 1px solid rgba(243,113,99,0.3);
+  border-radius: 8px; padding: 8px 12px;
+  font-size: 11px; font-weight: 700; color: #F37163;
+}
+
+/* voice stage layout */
+.vi-stage-2 {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 48px;
+  align-items: start;
+  margin-top: 48px;
+}
+@media (max-width: 900px) {
+  .vi-stage-2 { grid-template-columns: 1fr; gap: 32px; }
+  .vi-video-wrap { max-width: 100%; aspect-ratio: 9/16; max-height: 60vw; }
+}
+.vi-right { display: flex; flex-direction: column; gap: 24px; }
+
+/* domain score bars (right side) */
+.vi-domain-bars { display: flex; flex-direction: column; gap: 16px; }
+.vi-domain-row { display: flex; flex-direction: column; gap: 6px; }
+.vi-domain-head { display: flex; justify-content: space-between; align-items: baseline; }
+.vi-domain-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); }
+.vi-domain-score {
+  font-size: 15px; font-weight: 900; color: rgba(255,255,255,0.25);
+  transition: color 0.5s ease, transform 0.3s ease;
+  font-variant-numeric: tabular-nums;
+}
+.vi-domain-score.lit { color: #F37163; transform: scale(1.1); }
+.vi-bar-track {
+  height: 4px; background: rgba(255,255,255,0.07); border-radius: 99px; overflow: hidden;
+}
+.vi-bar-fill {
+  height: 100%; width: 0%; border-radius: 99px;
+  background: linear-gradient(90deg, #638EC5, #F37163);
+  transition: width 0.8s cubic-bezier(0.2,0.8,0.2,1);
+}
+.vi-total-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.vi-total-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+.vi-total-val { font-size: 32px; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; }
+
+/* Attribute callout rotating */
+.vi-callout {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; padding: 16px 20px;
+  min-height: 80px;
+  position: relative; overflow: hidden;
+}
+.vi-callout-item {
+  position: absolute; inset: 16px 20px;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.vi-callout-item.active { opacity: 1; transform: translateY(0); }
+.vi-callout-time { font-size: 10px; font-weight: 700; color: #F37163; letter-spacing: 0.1em; text-transform: uppercase; }
+.vi-callout-text { font-size: 14px; color: rgba(255,255,255,0.8); font-weight: 500; line-height: 1.4; }
+.vi-callout-dots { display: flex; gap: 6px; margin-top: 8px; }
+.vi-callout-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.15); transition: background 0.3s; }
+.vi-callout-dot.active { background: #F37163; }
+
+/* BHSSA real gif */
+.bhssa-gif { width: 100%; max-width: 440px; border-radius: 16px; overflow: hidden; }
+.bhssa-gif img { width: 100%; display: block; }
+
+/* surveys scene 2 with real gif */
+.scene-gif {
+  width: 100%; max-width: 340px;
+  border-radius: 12px; overflow: hidden;
+  border: 2px solid rgba(243,113,99,0.3);
+  box-shadow: 0 0 32px rgba(243,113,99,0.12);
+}
+.scene-gif img { width: 100%; display: block; }
+
+/* scroll-triggered score bars */
+.score-bar-section .vi-bar-fill,
+.score-bar-section .streamer-bar-fill {
+  transition-delay: 0.1s;
+}
+</style>
+</head>
+<body>
+
+<!-- Film grain -->
+<div class="film-grain" aria-hidden="true"></div>
+
+<!-- custom cursor -->
+<div class="cursor-ring"></div>
+<div class="cursor-dot"></div>
+
+<!-- scroll progress -->
+<div class="scroll-rail"><div class="scroll-rail-fill" id="scrollFill"></div></div>
+
+<!-- ============================================================
+     STREAMER OVERLAY (fixed, slides in when voice section visible)
+     ============================================================ -->
+<div class="streamer" id="streamer" role="complementary" aria-label="Live BH scoring">
+  <div class="streamer-header">
+    <span class="streamer-label">Live BH Domain Score</span>
+    <span class="streamer-live"><span class="streamer-live-dot"></span>ACTIVE</span>
+  </div>
+  <div class="streamer-rows">
+    <div class="streamer-row">
+      <div class="streamer-row-head">
+        <span class="streamer-domain">Emotional Resilience</span>
+        <span class="streamer-val" id="st-er">—</span>
+      </div>
+      <div class="streamer-bar-track"><div class="streamer-bar-fill" id="stb-er"></div></div>
+    </div>
+    <div class="streamer-row">
+      <div class="streamer-row-head">
+        <span class="streamer-domain">Self-Insight</span>
+        <span class="streamer-val" id="st-si">—</span>
+      </div>
+      <div class="streamer-bar-track"><div class="streamer-bar-fill" id="stb-si"></div></div>
+    </div>
+    <div class="streamer-row">
+      <div class="streamer-row-head">
+        <span class="streamer-domain">Reflective Growth</span>
+        <span class="streamer-val" id="st-rg">—</span>
+      </div>
+      <div class="streamer-bar-track"><div class="streamer-bar-fill" id="stb-rg"></div></div>
+    </div>
+    <div class="streamer-row">
+      <div class="streamer-row-head">
+        <span class="streamer-domain">Relational Awareness</span>
+        <span class="streamer-val" id="st-ra">—</span>
+      </div>
+      <div class="streamer-bar-track"><div class="streamer-bar-fill" id="stb-ra"></div></div>
+    </div>
+    <div class="streamer-row">
+      <div class="streamer-row-head">
+        <span class="streamer-domain">Help-Seeking</span>
+        <span class="streamer-val" id="st-hs">—</span>
+      </div>
+      <div class="streamer-bar-track"><div class="streamer-bar-fill" id="stb-hs"></div></div>
+    </div>
+  </div>
+  <div class="streamer-total">
+    <span class="streamer-total-lbl">Total</span>
+    <span class="streamer-total-val" id="st-total">— / 20</span>
+  </div>
+  <div class="streamer-footnote">NC Portrait · Adaptability · Auto-scored</div>
+</div>
+
+<!-- ========== NAV ========== -->
+<header class="nav" id="nav">
+  <a href="#top" data-cursor="hover"><img class="nav-logo" src="assets/logos/impacter-pathway-black.svg" alt="IMPACTER Pathway" /></a>
+  <nav class="nav-links">
+    <a href="#how" data-cursor="hover">How it works</a>
+    <a href="#voice" data-cursor="hover">Voice intelligence</a>
+    <a href="#prompts" data-cursor="hover">Prompts</a>
+    <a href="#playbook" data-cursor="hover">Playbook</a>
+    <a href="#resources" data-cursor="hover">Resources</a>
+    <a href="#contact" class="btn-cta" data-cursor="hover">Book a demo →</a>
+  </nav>
+</header>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="top">
+  <div class="hero-mesh"></div>
+  <div class="hero-grain"></div>
+  <div class="wrap hero-stage">
+    <div class="hero-copy">
+      <div class="eyebrow hero-eyebrow">Behavioral Health Screener · CYBHI-aligned</div>
+      <h1 class="hero-headline">
+        <span class="word">Stop</span>
+        <span class="word">surveying.</span><br/>
+        <span class="word">Start</span>
+        <span class="word accent">listening.</span>
+      </h1>
+      <p class="hero-lede">
+        IMPACTER replaces checkbox SEL screeners with real student conversation —
+        rubric-aligned ML scoring, MTSS-ready in one session, and reimbursed at scale through California's CYBHI fee schedule.
+      </p>
+      <div class="hero-ctas">
+        <a class="btn-cta" href="https://screener.impacterpathway.com" target="_blank" rel="noopener" data-cursor="hover">
+          Launch the live screener <span class="arrow">→</span>
+        </a>
+        <a class="btn-ghost" href="#voice" data-cursor="hover">See what it reveals</a>
+      </div>
+      <div class="hero-ticker">
+        <div class="stat"><div class="num">97%</div><div class="lbl">Participation rate</div></div>
+        <div class="stat"><div class="num">1.4d</div><div class="lbl">Time to support</div></div>
+        <div class="stat"><div class="num coral">$0</div><div class="lbl">Net cost · CYBHI</div></div>
+        <div class="stat"><div class="num">.918</div><div class="lbl">QWK vs. raters</div></div>
+      </div>
+    </div>
+    <div class="hero-visual" id="heroVisual">
+      <div class="hero-visual-tilt" id="heroTilt">
+        <div class="hero-floater live">Live · screener.impacterpathway.com</div>
+        <div class="hero-dashboard">
+          <img src="assets/screens/dashboard-percy.png" alt="IMPACTER Behavioral Health Screener — administrator dashboard" />
+        </div>
+        <div class="hero-floater qwk">
+          <div class="num">.918</div>
+          <div class="lbl">QWK · expert raters</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MARQUEE ========== -->
+<section class="marquee-band">
+  <div class="marquee-eyebrow">In the field with</div>
+  <div class="marquee">
+    <span class="marquee-item">San Diego COE</span>
+    <span class="marquee-item">El Dorado COE</span>
+    <span class="marquee-item">Santa Clara COE</span>
+    <span class="marquee-item">San Diego USD</span>
+    <span class="marquee-item">Vista USD</span>
+    <span class="marquee-item">CA BHSOAC</span>
+    <span class="marquee-item">South County SELPA</span>
+    <span class="marquee-item">San Diego COE</span>
+    <span class="marquee-item">El Dorado COE</span>
+    <span class="marquee-item">Santa Clara COE</span>
+    <span class="marquee-item">San Diego USD</span>
+    <span class="marquee-item">Vista USD</span>
+    <span class="marquee-item">CA BHSOAC</span>
+    <span class="marquee-item">South County SELPA</span>
+  </div>
+</section>
+
+<!-- ========== BHSSA BAND ========== -->
+<section class="bhssa">
+  <div class="wrap bhssa-grid">
+    <div class="reveal">
+      <div class="bhssa-tag">New · April 2026</div>
+      <h2>Selected by California <span class="high">BHSOAC</span> for statewide evaluation.</h2>
+      <p class="lede">
+        California's Behavioral Health Services Oversight &amp; Accountability Commission selected IMPACTER's
+        screener for statewide BHSSA evaluation — placing authentic-voice methodology at the center of California's
+        behavioral health policy infrastructure.
+      </p>
+      <div class="bhssa-meta">
+        <div class="item"><strong>BHSOAC</strong><span>Statewide commission</span></div>
+        <div class="item"><strong>K–12</strong><span>Multi-grade scope</span></div>
+        <div class="item"><strong>2026</strong><span>Evaluation cohort</span></div>
+      </div>
+    </div>
+    <div class="bhssa-visual reveal">
+      <div class="bhssa-gif">
+        <img src="assets/screens/bhssa-announcement.gif" alt="BHSSA selection announcement" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== KINETIC DIVIDER ========== -->
+<section class="kinetic-divider" aria-hidden="true">
+  <div class="kinetic-text">
+    <span>Authentic</span><span class="coral">voice.</span><span class="solid">Rubric</span><span>aligned.</span><span class="coral">MTSS</span><span class="solid">ready.</span>
+    <span>Authentic</span><span class="coral">voice.</span><span class="solid">Rubric</span><span>aligned.</span><span class="coral">MTSS</span><span class="solid">ready.</span>
+  </div>
+</section>
+
+<!-- ========== FOUR LEVELS RUBRIC ========== -->
+<section class="rubric-section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">The Four-Level Engagement Rubric</div>
+      <h2>One scoring frame. <em>Four</em> levels of authentic voice.</h2>
+      <p class="lede">Every prompt is scored 1–4 against a validated engagement rubric. Total out of 24 across six domains. Tier mapping is automatic.</p>
+    </div>
+    <div class="rubric-stage reveal">
+      <div class="rubric-cell lvl-1" data-cursor="hover">
+        <div class="num">01</div>
+        <div class="lvl">Minimal</div>
+        <h4>Off-topic or refusal</h4>
+        <p>No engagement with the prompt. Routes to immediate counselor outreach where score patterns indicate concern.</p>
+        <div class="progress"></div>
+      </div>
+      <div class="rubric-cell lvl-2" data-cursor="hover">
+        <div class="num">02</div>
+        <div class="lvl">Surface</div>
+        <h4>Brief, generic, low-detail</h4>
+        <p>Minimal personal narrative. Likely Tier 2 territory — needs follow-up to determine support needs.</p>
+        <div class="progress"></div>
+      </div>
+      <div class="rubric-cell lvl-3" data-cursor="hover">
+        <div class="num">03</div>
+        <div class="lvl">Engaged</div>
+        <h4>Personal, specific, named</h4>
+        <p>Student names a real situation, emotion, or strategy. Tier 1 universal supports — student is using internal resources.</p>
+        <div class="progress"></div>
+      </div>
+      <div class="rubric-cell lvl-4" data-cursor="hover">
+        <div class="num">04</div>
+        <div class="lvl">Reflective</div>
+        <h4>Insight, reframing, growth</h4>
+        <p>Student demonstrates self-insight, reframes, or names ongoing growth. Tier 1 — strength-based support and peer-leadership pathways.</p>
+        <div class="progress"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WHAT SURVEYS MISS — pinned scenes ========== -->
+<section class="surveys-pin" id="surveys">
+  <div class="surveys-stage" id="surveysStage">
+    <div class="surveys-pin-inner">
+      <div class="surveys-headline">
+        <span class="label">What surveys miss</span>
+        <span class="switcher" id="surveysSwitcher"><span id="surveysWord">A scale of 1 to 5.</span></span>
+      </div>
+
+      <!-- Scene 1 — Likert dies -->
+      <div class="scene-pane active" data-scene="0">
+        <div class="scene-likert" id="likertCard">
+          <div class="head"><span>Question 12 of 47</span><span>↺ Restart</span></div>
+          <h4>I feel hopeful about my future.</h4>
+          <div class="q">
+            <div class="scale">
+              <span class="end">Strongly disagree</span>
+              <span class="opt">1</span>
+              <span class="opt">2</span>
+              <span class="opt selected">3</span>
+              <span class="opt">4</span>
+              <span class="opt">5</span>
+              <span class="end">Strongly agree</span>
+            </div>
+          </div>
+          <div class="q">
+            <div class="q-text">My friends understand me.</div>
+            <div class="scale">
+              <span class="opt">1</span>
+              <span class="opt">2</span>
+              <span class="opt selected">3</span>
+              <span class="opt">4</span>
+              <span class="opt">5</span>
+            </div>
+          </div>
+          <div class="q">
+            <div class="q-text">I have someone to talk to when I'm sad.</div>
+            <div class="scale">
+              <span class="opt">1</span>
+              <span class="opt selected">2</span>
+              <span class="opt">3</span>
+              <span class="opt">4</span>
+              <span class="opt">5</span>
+            </div>
+          </div>
+          <div class="foot">"3" tells you nothing about why.</div>
+        </div>
+        <div class="scene-callout">
+          <div class="num">47</div>
+          <h3>Likert items.<br/>Zero stories.</h3>
+          <p>Forced-choice surveys collapse a student's actual experience into a number that no counselor can act on. The middle of the scale is where the truth gets buried.</p>
+        </div>
+      </div>
+
+      <!-- Scene 2 — voice replaces it -->
+      <div class="scene-pane" data-scene="1">
+        <div class="scene-voice-media">
+          <div class="scene-gif">
+            <img src="assets/screens/bh-student.gif" alt="Student responding to behavioral health prompt" />
+          </div>
+          <div class="label">26 seconds. One prompt.</div>
+        </div>
+        <div class="scene-voice-text">
+          <div class="stat">→ One spoken response</div>
+          <blockquote>
+            <span class="hl">"I tend to stay in my comfort zone and stand behind the yellow caution tape."</span>
+            <br/><br/>
+            Three signals. Six domains.<br/>
+            <span class="pill er">Emotional Resilience</span>
+            <span class="pill si">Self-Insight</span>
+            <span class="pill rg">Reflective Growth</span>
+          </blockquote>
+        </div>
+      </div>
+
+      <!-- Scene 3 — outcome -->
+      <div class="scene-pane" data-scene="2">
+        <div class="scene-callout">
+          <div class="num">9/24</div>
+          <h3>Tier mapping. Real-time.</h3>
+          <p>One spoken response yields a rubric-aligned score, three detected behavioral health signals, and an MTSS tier recommendation — before the student stands up.</p>
+        </div>
+        <div class="scene-voice-text">
+          <div class="stat">→ MTSS recommendation</div>
+          <blockquote>
+            Tier 1 — universal support.<br/>
+            Strength-based reflection.<br/>
+            Optional peer-mentor pathway.
+          </blockquote>
+        </div>
+      </div>
+
+      <div class="surveys-progress" id="surveysProgress">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ZERO NET COST ========== -->
+<section class="cost">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">CYBHI reimbursement</div>
+      <h2>Zero net cost. <em>At scale.</em></h2>
+      <p class="lede">California's multi-payer fee schedule turns behavioral health screening from a budget line into a sustainable funding mechanism.</p>
+    </div>
+    <div class="cost-stage">
+      <div class="cost-card coral reveal">
+        <div class="cost-big coral">$4.81</div>
+        <h4>Per administration</h4>
+        <p>CPT Code 96127 with diagnosis Z13.89 through CYBHI's multi-payer fee schedule — reimbursed in full through third-party administrators.</p>
+      </div>
+      <div class="cost-card blue reveal">
+        <div class="cost-big">$0</div>
+        <h4>Net cost to districts</h4>
+        <p>Full reimbursement means the screening pays for itself. At scale, universal screening generates surplus revenue rather than consuming budget.</p>
+      </div>
+      <div class="cost-card gold reveal">
+        <div class="cost-big">3</div>
+        <h4>Eligible practitioner types</h4>
+        <p>School Psychologists, Social Workers, and Counselors — administer and generate reimbursement. No new hires required.</p>
+      </div>
+    </div>
+    <div class="cost-foot reveal">
+      <p>Eligible practitioners administer the screener; districts receive full reimbursement through third-party administrators.</p>
+      <a href="https://www.dhcs.ca.gov/CYBHI/Documents/CYBHI-Fee-Schedule-Scope-of-Services-Rates-and-Codes.pdf" target="_blank" rel="noopener" data-cursor="hover">View official CYBHI fee schedule →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== HOW IT WORKS ========== -->
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">How it works</div>
+      <h2>From prompt to support plan — <em>in one session.</em></h2>
+    </div>
+    <div class="how-rail" id="howRail">
+      <div class="how-steps" id="howSteps">
+        <div class="how-progress-rail"><div class="how-progress-fill" id="howProgressFill"></div></div>
+        <div class="how-step-markers" id="howMarkers">
+          <div class="marker active"></div>
+          <div class="marker"></div>
+          <div class="marker"></div>
+          <div class="marker"></div>
+        </div>
+        <div class="how-steps-sticky">
+          <div class="how-step-stack">
+            <div class="how-step active" data-step="0">
+              <div class="num">Step 01 · Student intake</div>
+              <h3>Authentic voice, not forced choice.</h3>
+              <p>Open-ended, spoken-language prompts — no Likert, no checkboxes. Developed with South County SELPA through SDCOE. Each prompt targets one of six behavioral health domains.</p>
+              <div class="how-chips">
+                <div class="how-chip">Self-Insight</div>
+                <div class="how-chip">Emotional Resilience</div>
+                <div class="how-chip">Relational Awareness</div>
+                <div class="how-chip">Conflict Resolution</div>
+                <div class="how-chip">Help-Seeking</div>
+                <div class="how-chip">Reflective Growth</div>
+              </div>
+            </div>
+            <div class="how-step" data-step="1">
+              <div class="num">Step 02 · NLP scoring</div>
+              <h3>Real-time scoring against a validated rubric.</h3>
+              <p>Audio and video responses are auto-transcribed and scored by IMPACTER's proprietary ML pipeline against a four-point engagement rubric. Total score out of 24, with immediate MTSS tier assignment — no lag, no manual review required.</p>
+            </div>
+            <div class="how-step" data-step="2">
+              <div class="num">Step 03 · MTSS assignment</div>
+              <h3>Evidence-based tier mapping at the moment of screening.</h3>
+              <p>Each score maps automatically to an MTSS tier with specific recommended next steps. Tier 3 flags route directly to counselors. No bottleneck between screening and support connection.</p>
+              <div class="how-chips">
+                <div class="how-chip t3">Tier 3 · Intensive</div>
+                <div class="how-chip t2">Tier 2 · Targeted</div>
+                <div class="how-chip t1">Tier 1 · Universal</div>
+              </div>
+            </div>
+            <div class="how-step" data-step="3">
+              <div class="num">Step 04 · Administrator dashboard</div>
+              <h3>Individual review and schoolwide needs assessment.</h3>
+              <p>Counselors and site admins access a dashboard surfacing all screener results, individual and aggregate trends, flagged responses for urgent review, and tier recommendations with suggested actions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="how-visuals">
+        <div class="how-visual-sticky">
+          <div class="how-visual-stack">
+            <div class="how-visual-img active" data-step="0"><img src="assets/screens/screener-carousel.png" alt="IMPACTER prompt carousel" /></div>
+            <div class="how-visual-img" data-step="1"><img src="assets/screens/bh-rubric.png" alt="Behavioral Health Rubric" /></div>
+            <div class="how-visual-img" data-step="2"><img src="assets/screens/mtss-pyramid.png" alt="MTSS support tier pyramid" /></div>
+            <div class="how-visual-img" data-step="3"><img src="assets/screens/dashboard-analytics.png" alt="Administrator analytics dashboard" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== VOICE INTELLIGENCE ========== -->
+<section class="voice-intel" id="voice">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Voice Intelligence Analysis</div>
+      <h2>What authentic language reveals that <em>numbers can't.</em></h2>
+      <p class="lede">NC Portrait Assessment — Adaptability competency. Watch the transcript sync word-for-word as she speaks, and watch the model surface three behavioral health signals no survey could capture.</p>
+    </div>
+
+    <!-- New 2-column layout: video left, domain bars right -->
+    <div class="vi-stage-2 score-bar-section" id="viStage">
+
+      <!-- LEFT: video player -->
+      <div class="vi-video-wrap" id="viVideoWrap">
+        <video id="viVideo" playsinline preload="metadata"
+               poster="assets/screens/dashboard-percy.png">
+          <source src="assets/screens/nc-girl.mp4" type="video/mp4" />
+        </video>
+        <div class="vi-play-overlay" id="viPlayOverlay">
+          <div class="vi-play-btn" id="viPlayBtn">▶</div>
+        </div>
+        <div class="vi-live-badge">
+          <span class="vi-live-dot"></span>LIVE SCORING
+        </div>
+        <div class="vi-signal-badge" id="viSignalBadge">3 signals detected</div>
+      </div>
+
+      <!-- RIGHT: domain bars + callout -->
+      <div class="vi-right">
+        <div class="vi-domain-bars">
+          <div class="vi-domain-row">
+            <div class="vi-domain-head">
+              <span class="vi-domain-name">Emotional Resilience</span>
+              <span class="vi-domain-score" id="vd-er">—</span>
+            </div>
+            <div class="vi-bar-track"><div class="vi-bar-fill" id="vb-er"></div></div>
+          </div>
+          <div class="vi-domain-row">
+            <div class="vi-domain-head">
+              <span class="vi-domain-name">Self-Insight</span>
+              <span class="vi-domain-score" id="vd-si">—</span>
+            </div>
+            <div class="vi-bar-track"><div class="vi-bar-fill" id="vb-si"></div></div>
+          </div>
+          <div class="vi-domain-row">
+            <div class="vi-domain-head">
+              <span class="vi-domain-name">Reflective Growth</span>
+              <span class="vi-domain-score" id="vd-rg">—</span>
+            </div>
+            <div class="vi-bar-track"><div class="vi-bar-fill" id="vb-rg"></div></div>
+          </div>
+          <div class="vi-domain-row">
+            <div class="vi-domain-head">
+              <span class="vi-domain-name">Relational Awareness</span>
+              <span class="vi-domain-score" id="vd-ra">—</span>
+            </div>
+            <div class="vi-bar-track"><div class="vi-bar-fill" id="vb-ra"></div></div>
+          </div>
+          <div class="vi-domain-row">
+            <div class="vi-domain-head">
+              <span class="vi-domain-name">Help-Seeking</span>
+              <span class="vi-domain-score" id="vd-hs">—</span>
+            </div>
+            <div class="vi-bar-track"><div class="vi-bar-fill" id="vb-hs"></div></div>
+          </div>
+        </div>
+
+        <div class="vi-total-row">
+          <span class="vi-total-lbl">Total score</span>
+          <span class="vi-total-val" id="vi-total">— / 20</span>
+        </div>
+
+        <!-- Rotating attribute callout -->
+        <div class="vi-callout" id="viCallout">
+          <div class="vi-callout-item active" data-callout="0">
+            <span class="vi-callout-time">Signal at 0:03 — Emotional Resilience</span>
+            <span class="vi-callout-text">"Failure reframing detected — failure recast as an unmet aspiration, not a catastrophe."</span>
+          </div>
+          <div class="vi-callout-item" data-callout="1">
+            <span class="vi-callout-time">Signal at 0:09 — Self-Insight</span>
+            <span class="vi-callout-text">"Comfort-zone metaphor surfaced — spontaneous, original language for avoidance behavior."</span>
+          </div>
+          <div class="vi-callout-item" data-callout="2">
+            <span class="vi-callout-time">Signal at 0:13 — Reflective Growth</span>
+            <span class="vi-callout-text">"Present-tense growth commitment — she's narrating an active ongoing process, not past reflection."</span>
+          </div>
+          <div class="vi-callout-dots" id="viCalloutDots">
+            <div class="vi-callout-dot active"></div>
+            <div class="vi-callout-dot"></div>
+            <div class="vi-callout-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Karaoke transcript -->
+    <div class="voice-transcript" style="margin-top:40px">
+      <div class="label">Whisper-synced · word-by-word</div>
+      <div class="transcript-text" id="karaoke"></div>
+      <div class="voice-controls">
+        <button class="voice-toggle" id="voiceToggle" data-cursor="hover">▶ Play transcript</button>
+        <div class="scrub" id="voiceScrub"><div class="scrub-fill" id="voiceScrubFill"></div></div>
+        <span class="time" id="voiceTime">0:00</span>
+      </div>
+    </div>
+
+    <div class="voice-cards">
+      <div class="voice-card reveal">
+        <span class="eb er">Emotional Resilience</span>
+        <h4>Failure reframing.</h4>
+        <p class="quote">"My biggest failure would be not taking enough risk to experience true failure."</p>
+        <p>The model flags this as a resilience marker: failure is recast as an unmet aspiration — not a catastrophe. There is no self-blame. The causal arrow runs forward, not backward.</p>
+      </div>
+      <div class="voice-card reveal">
+        <span class="eb si">Self-Insight</span>
+        <h4>Avoidance pattern named.</h4>
+        <p class="quote">"I tend to stay in my comfort zone and stand behind the yellow caution tape."</p>
+        <p>A spontaneous, original metaphor for her own avoidance behavior. The encoder isn't looking for keywords — it's looking for the naming precision that signals genuine self-awareness.</p>
+      </div>
+      <div class="voice-card reveal">
+        <span class="eb rg">Reflective Growth</span>
+        <h4>Present-tense growth commitment.</h4>
+        <p class="quote">"Every day I'm trying to expand the barriers of my comfort zone…"</p>
+        <p>Present-tense growth orientation fused with a desire to increase risk exposure. She isn't describing past growth — she's narrating an active, ongoing process.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SAMPLE PROMPTS ========== -->
+<section class="prompts" id="prompts">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Sample prompts</div>
+      <h2>Experience the authentic voice difference.</h2>
+      <p class="lede">Click any prompt to see how IMPACTER captures student perspectives through conversation — not clinical questionnaires.</p>
+    </div>
+    <div class="prompts-tabs reveal" id="promptsTabs">
+      <button class="active" data-tab="g3" data-cursor="hover">Grades 3–12</button>
+      <button data-tab="tk" data-cursor="hover">TK–2</button>
+    </div>
+    <div class="prompts-grid reveal" id="prompts-g3">
+      <a class="prompt-card blue" href="https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener" data-cursor="hover">
+        <span class="comp">Self-Insight</span><h4>Self-Insight Reflection</h4>
+        <p>Recognizing self, naming choices, describing growth.</p><span class="arrow">↗</span>
+      </a>
+      <a class="prompt-card coral" href="https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener" data-cursor="hover">
+        <span class="comp">Emotional Resilience</span><h4>The Hard Days</h4>
+        <p>Naming emotions, coping strategies, perseverance.</p><span class="arrow">↗</span>
+      </a>
+      <a class="prompt-card green" href="https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener" data-cursor="hover">
+        <span class="comp">Relational Awareness</span><h4>Something Changed</h4>
+        <p>Noticing change in relationships, demonstrating empathy.</p><span class="arrow">↗</span>
+      </a>
+      <a class="prompt-card gold" href="https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener" data-cursor="hover">
+        <span class="comp">Conflict Resolution</span><h4>Fixing What Broke</h4>
+        <p>Taking responsibility, practicing repair, persistence.</p><span class="arrow">↗</span>
+      </a>
+      <a class="prompt-card purple" href="https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener" data-cursor="hover">
+        <span class="comp">Help-Seeking</span><h4>Stronger Together</h4>
+        <p>Knowing when to ask for help and using available supports.</p><span class="arrow">↗</span>
+      </a>
+      <a class="prompt-card teal" href="https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener" data-cursor="hover">
+        <span class="comp">Reflective Growth</span><h4>Not the Same Person</h4>
+        <p>Describing personal growth, identifying change, setting goals.</p><span class="arrow">↗</span>
+      </a>
+    </div>
+    <div class="prompts-grid reveal" id="prompts-tk" style="display:none">
+      <a class="prompt-card purple" href="https://flex.impacterpathway.com/f96z46iz7?preview" target="_blank" rel="noopener" data-cursor="hover">
+        <span class="comp">Help-Seeking</span><h4>Effective Help-Seeking #1</h4>
+        <p>TK–2 scenario-based prompt. Bite-sized engagement.</p><span class="arrow">↗</span>
+      </a>
+      <a class="prompt-card coral" href="https://flex.impacterpathway.com/fi4mgwelx?preview" target="_blank" rel="noopener" data-cursor="hover">
+        <span class="comp">Emotional Resilience</span><h4>Emotional Resilience</h4>
+        <p>TK–2 scenario for emotional regulation and naming feelings.</p><span class="arrow">↗</span>
+      </a>
+      <a class="prompt-card purple" href="https://flex.impacterpathway.com/fqn60zgac?preview" target="_blank" rel="noopener" data-cursor="hover">
+        <span class="comp">Help-Seeking</span><h4>Effective Help-Seeking #2</h4>
+        <p>Second TK–2 help-seeking scenario.</p><span class="arrow">↗</span>
+      </a>
+      <a class="prompt-card green" href="https://flex.impacterpathway.com/fjzzdvxk8?preview" target="_blank" rel="noopener" data-cursor="hover">
+        <span class="comp">Relational Awareness</span><h4>Relational Awareness</h4>
+        <p>TK–2 scenario for relationship awareness and connection.</p><span class="arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PLAYBOOK ========== -->
+<section class="playbook" id="playbook">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Implementation playbook</div>
+      <h2>Seven battle-tested deployment models.</h2>
+      <p class="lede">Every recommendation comes from real implementation experience — not theoretical frameworks.</p>
+    </div>
+    <div class="playbook-stage">
+      <div class="playbook-cover reveal" data-cursor="hover">
+        <img src="assets/screens/playbook-cover.png" alt="Behavioral Health Screener Implementation Playbook cover" />
+      </div>
+      <div class="playbook-info reveal">
+        <h3>22 pages. 7 deployment models. One quick-launch blueprint.</h3>
+        <p>From homeroom block sessions to mobile carts to family-assisted remote — every model is documented with logistics, scripts, and 30-minute quick-launch instructions that work in real schools.</p>
+        <a class="btn-cta" href="playbook.pdf" download data-cursor="hover">Download playbook (PDF) <span class="arrow">→</span></a>
+        <div class="pb-models">
+          <div class="pb-model"><div class="num">1</div><div><h5>Class period block</h5><p>Universal coverage in 20–30 min.</p></div></div>
+          <div class="pb-model"><div class="num">2</div><div><h5>Mobile assessment cart</h5><p>Pop-up flexibility, K–12.</p></div></div>
+          <div class="pb-model"><div class="num">3</div><div><h5>Small-group testing</h5><p>Quiet, controlled environment.</p></div></div>
+          <div class="pb-model"><div class="num">4</div><div><h5>Push-in mini-stations</h5><p>Support / IEP-friendly.</p></div></div>
+          <div class="pb-model"><div class="num">5</div><div><h5>Pull-out targeted</h5><p>Personalized care.</p></div></div>
+          <div class="pb-model"><div class="num">6</div><div><h5>Family-assisted remote</h5><p>Home connection.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== RESOURCES ========== -->
+<section class="resources" id="resources">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Resources</div>
+      <h2>Everything you need to <em>move forward.</em></h2>
+    </div>
+    <div class="resources-bento reveal">
+      <a class="res lg-1" href="playbook.pdf" data-cursor="hover">
+        <div class="thumb" style="background-image:url('assets/screens/playbook-cover.png');background-position:top center"></div>
+        <h4>Implementation Playbook (Full PDF)</h4>
+        <p>22 pages. All 7 deployment models, 30-min quick-launch blueprint, accessibility supports, student framing scripts.</p>
+        <div class="lk">Download PDF</div>
+      </a>
+      <a class="res lg-2" href="https://screener.impacterpathway.com" target="_blank" rel="noopener" data-cursor="hover">
+        <div class="thumb" style="background-image:url('assets/screens/dashboard-percy.png');background-position:top center"></div>
+        <h4>Live Screener — Full Experience</h4>
+        <p>The complete behavioral health screener — built, deployed, and ready for district partners to experience today.</p>
+        <div class="lk">Launch screener</div>
+      </a>
+      <a class="res sm" href="https://www.dhcs.ca.gov/CYBHI/Documents/CYBHI-Fee-Schedule-Scope-of-Services-Rates-and-Codes.pdf" target="_blank" rel="noopener" data-cursor="hover" style="background:linear-gradient(135deg,rgba(99,142,197,0.4),rgba(63,107,163,0.4));border-color:rgba(99,142,197,0.4)">
+        <h4>CYBHI Fee Schedule</h4>
+        <p>Official DHCS document — CPT 96127 rates and scope of services.</p>
+        <div class="lk">View schedule</div>
+      </a>
+      <a class="res sm" href="https://www.youtube.com/watch?v=HXtIlzYY3hg" target="_blank" rel="noopener" data-cursor="hover">
+        <h4>Student Exemplar — Purpose</h4>
+        <p>Watch a student respond to the Purpose prompt. Real voice. Real scoring.</p>
+        <div class="lk">Watch video</div>
+      </a>
+      <a class="res sm" href="mailto:info@impacterpathway.com?subject=EDCOE Pilot Report Request" data-cursor="hover">
+        <h4>EDCOE Pilot Report</h4>
+        <p>Full pilot report — results, trends, district-level insights. Email for access.</p>
+        <div class="lk">Request report</div>
+      </a>
+      <a class="res sm" href="mailto:info@impacterpathway.com" data-cursor="hover" style="background:linear-gradient(135deg,rgba(243,113,99,0.3),rgba(216,85,70,0.3));border-color:rgba(243,113,99,0.4)">
+        <h4>Talk to the team</h4>
+        <p>Direct line to Team IMPACTER — pilots, contracts, partnerships.</p>
+        <div class="lk">Email us</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FINAL CTA ========== -->
+<section class="final" id="contact">
+  <div class="wrap">
+    <h2>Ready to start <em>listening?</em></h2>
+    <p>Your students have something important to say. IMPACTER creates the conditions where they can say it — and the infrastructure to act on what you hear.</p>
+    <div class="final-ctas">
+      <a class="btn-cta" href="mailto:info@impacterpathway.com?subject=Behavioral Health Screener Interest" data-cursor="hover">Contact Team IMPACTER <span class="arrow">→</span></a>
+      <a class="btn-ghost" href="mailto:info@impacterpathway.com" data-cursor="hover">info@impacterpathway.com</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <img class="footer-logo" src="assets/logos/impacter-pathway-white.svg" alt="IMPACTER Pathway" />
+        <p>Authentic student voice → rubric-aligned ML scoring → decision-grade insights for K-12 districts, county offices, and state systems.</p>
+      </div>
+      <div>
+        <h5>Product</h5>
+        <ul>
+          <li><a href="https://screener.impacterpathway.com" target="_blank" rel="noopener">Live screener</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#prompts">Sample prompts</a></li>
+          <li><a href="playbook.pdf">Implementation playbook</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="https://www.impacterpathway.com" target="_blank" rel="noopener">impacterpathway.com</a></li>
+          <li><a href="mailto:info@impacterpathway.com">info@impacterpathway.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-foot">
+      <span>© 2026 Impacter Education Corp. Developed with South County SELPA / SDCOE.</span>
+      <span>CYBHI reimbursement via CPT Code 96127.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+(() => {
+  if (window.matchMedia("(max-width: 900px)").matches) return;
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let mx = window.innerWidth/2, my = window.innerHeight/2;
+  let rx = mx, ry = my;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function tick() {
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
+    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+    requestAnimationFrame(tick);
+  }
+  tick();
+  document.querySelectorAll('[data-cursor="hover"], a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+})();
+
+/* ============================================================
+   SCROLL PROGRESS RAIL
+   ============================================================ */
+(() => {
+  const fill = document.getElementById('scrollFill');
+  function update() {
+    const sc = window.scrollY;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    fill.style.width = Math.min(100, (sc / max) * 100) + '%';
+  }
+  document.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+/* ============================================================
+   NAV — hide on scroll-down, show on scroll-up
+   ============================================================ */
+(() => {
+  const nav = document.getElementById('nav');
+  let lastY = 0;
+  document.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > 80 && y > lastY + 4) nav.classList.add('hide');
+    else if (y < lastY - 4) nav.classList.remove('hide');
+    lastY = y;
+  }, { passive: true });
+})();
+
+/* ============================================================
+   HERO 3D TILT
+   ============================================================ */
+(() => {
+  if (window.matchMedia("(max-width: 900px)").matches) return;
+  const tilt = document.getElementById('heroTilt');
+  const stage = document.querySelector('.hero');
+  if (!tilt || !stage) return;
+  stage.addEventListener('mousemove', e => {
+    const r = stage.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    tilt.style.transform = `rotateY(${x * 8}deg) rotateX(${-y * 6}deg) translateY(${y * -8}px)`;
+  });
+  stage.addEventListener('mouseleave', () => {
+    tilt.style.transform = 'rotateY(0) rotateX(0)';
+  });
+})();
+
+/* ============================================================
+   SCROLL REVEALS
+   ============================================================ */
+(() => {
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        en.target.classList.add('in');
+        io.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+  els.forEach(el => io.observe(el));
+})();
+
+/* ============================================================
+   MARQUEE
+   ============================================================ */
+(() => {
+  const m = document.querySelector('.marquee');
+  if (!m) return;
+  let pos = 0;
+  const speed = 0.4;
+  function tick() {
+    pos -= speed;
+    const half = m.scrollWidth / 2;
+    if (Math.abs(pos) >= half) pos = 0;
+    m.style.transform = `translateX(${pos}px)`;
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+/* ============================================================
+   KINETIC DIVIDER
+   ============================================================ */
+(() => {
+  const kt = document.querySelector('.kinetic-text');
+  if (!kt) return;
+  let pos = 0;
+  function tick() {
+    pos -= 0.6;
+    const half = kt.scrollWidth / 2;
+    if (Math.abs(pos) >= half) pos = 0;
+    kt.style.transform = `translateX(${pos}px)`;
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+/* ============================================================
+   WHAT SURVEYS MISS — pinned scene controller
+   ============================================================ */
+(() => {
+  const stage = document.getElementById('surveysStage');
+  const panes = document.querySelectorAll('.scene-pane');
+  const dots = document.querySelectorAll('#surveysProgress .dot');
+  const wordEl = document.getElementById('surveysWord');
+  const likertCard = document.getElementById('likertCard');
+  const SCENES = ['A scale of 1 to 5.', 'A 26-second story.', 'A tier. A plan. Today.'];
+  if (!stage) return;
+  function update() {
+    const r = stage.getBoundingClientRect();
+    const total = stage.offsetHeight - window.innerHeight;
+    const progress = Math.max(0, Math.min(1, -r.top / total));
+    let scene = 0;
+    if (progress > 0.66) scene = 2;
+    else if (progress > 0.33) scene = 1;
+    panes.forEach((p, i) => p.classList.toggle('active', i === scene));
+    dots.forEach((d, i) => d.classList.toggle('active', i === scene));
+    if (wordEl.dataset.scene !== String(scene)) {
+      wordEl.dataset.scene = scene;
+      wordEl.textContent = SCENES[scene];
+    }
+    likertCard?.classList.toggle('dying', scene > 0);
+  }
+  document.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+/* ============================================================
+   HOW IT WORKS — sticky scroll narrative
+   ============================================================ */
+(() => {
+  const rail = document.getElementById('howRail');
+  const steps = document.querySelectorAll('.how-step');
+  const visuals = document.querySelectorAll('.how-visual-img');
+  const markers = document.querySelectorAll('#howMarkers .marker');
+  const fill = document.getElementById('howProgressFill');
+  if (!rail) return;
+  function update() {
+    const r = rail.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const total = r.height - vh * 0.4;
+    const traveled = Math.max(0, vh * 0.3 - r.top);
+    const progress = Math.max(0, Math.min(1, traveled / total));
+    fill.style.height = (progress * 100) + '%';
+    let active = Math.min(3, Math.floor(progress * 4));
+    steps.forEach((s, i) => s.classList.toggle('active', i === active));
+    visuals.forEach((v, i) => v.classList.toggle('active', i === active));
+    markers.forEach((m, i) => m.classList.toggle('active', i === active));
+  }
+  document.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+
+/* ============================================================
+   PROMPTS TABS
+   ============================================================ */
+(() => {
+  const tabs = document.querySelectorAll('#promptsTabs button');
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.dataset.tab;
+      document.getElementById('prompts-g3').style.display = tab === 'g3' ? '' : 'none';
+      document.getElementById('prompts-tk').style.display = tab === 'tk' ? '' : 'none';
+    });
+  });
+})();
+
+/* ============================================================
+   VOICE INTELLIGENCE — video + rAF karaoke + domain bars + streamer
+   ============================================================ */
+(() => {
+  const video = document.getElementById('viVideo');
+  const playOverlay = document.getElementById('viPlayOverlay');
+  const karaokeEl = document.getElementById('karaoke');
+  const toggleBtn = document.getElementById('voiceToggle');
+  const scrubEl = document.getElementById('voiceScrub');
+  const scrubFill = document.getElementById('voiceScrubFill');
+  const timeEl = document.getElementById('voiceTime');
+  const streamer = document.getElementById('streamer');
+
+  // Domain score elements
+  const domEls = {
+    er: { score: document.getElementById('vd-er'), bar: document.getElementById('vb-er'), stScore: document.getElementById('st-er'), stBar: document.getElementById('stb-er') },
+    si: { score: document.getElementById('vd-si'), bar: document.getElementById('vb-si'), stScore: document.getElementById('st-si'), stBar: document.getElementById('stb-si') },
+    rg: { score: document.getElementById('vd-rg'), bar: document.getElementById('vb-rg'), stScore: document.getElementById('st-rg'), stBar: document.getElementById('stb-rg') },
+    ra: { score: document.getElementById('vd-ra'), bar: document.getElementById('vb-ra'), stScore: document.getElementById('st-ra'), stBar: document.getElementById('stb-ra') },
+    hs: { score: document.getElementById('vd-hs'), bar: document.getElementById('vb-hs'), stScore: document.getElementById('st-hs'), stBar: document.getElementById('stb-hs') },
+  };
+  const totalEl = document.getElementById('vi-total');
+  const stTotalEl = document.getElementById('st-total');
+
+  // Domain score thresholds (when in the video each domain lights up)
+  const DOMAIN_SCORES = {
+    er: { time: 3.5,  score: 4, max: 4 },
+    si: { time: 9.0,  score: 4, max: 4 },
+    rg: { time: 13.0, score: 4, max: 4 },
+    ra: { time: null, score: 3, max: 4 },
+    hs: { time: null, score: 2, max: 4 },
+  };
+
+  // Karaoke words (verbatim transcript from nc-girl.mp4 + charlene.mp4 — timing calibrated to footage)
+  const WORDS = [
+    {t:0.0,  text:'When'},   {t:0.2,  text:'given'}, {t:0.45, text:'some'},
+    {t:0.65, text:'thought'},{t:0.85, text:'to'},     {t:0.95, text:'this'},
+    {t:1.15, text:'question,'},{t:1.55,text:'I'},     {t:1.7,  text:'realize'},
+    {t:2.05, text:'I'},      {t:2.2,  text:"don't"}, {t:2.5,  text:'have'},
+    {t:2.7,  text:'as'},     {t:2.85, text:'much'},  {t:3.05, text:'failures', tag:'er'},
+    {t:3.5,  text:'as'},     {t:3.65, text:'I'},     {t:3.8,  text:'would'},
+    {t:4.0,  text:'have'},   {t:4.2,  text:'expected.'},
+    {t:4.95, text:'My'},     {t:5.1,  text:'biggest'},{t:5.45,text:'failure', tag:'er'},
+    {t:5.85, text:'would'},  {t:6.05, text:'be'},    {t:6.2,  text:'not'},
+    {t:6.4,  text:'taking'}, {t:6.65, text:'enough'},{t:6.95, text:'risk'},
+    {t:7.25, text:'to'},     {t:7.4,  text:'experience'},{t:7.85,text:'true'},
+    {t:8.1,  text:'failure.'},
+    {t:8.85, text:'I'},      {t:9.0,  text:'tend'},  {t:9.25, text:'to'},
+    {t:9.4,  text:'stay'},   {t:9.65, text:'in'},    {t:9.8,  text:'my'},
+    {t:9.95, text:'comfort', tag:'si'},{t:10.3,text:'zone', tag:'si'},
+    {t:10.6, text:'and'},    {t:10.8, text:'stand'}, {t:11.1, text:'behind'},
+    {t:11.45,text:'the'},    {t:11.6, text:'yellow', tag:'si'},
+    {t:11.95,text:'caution', tag:'si'},{t:12.3,text:'tape.', tag:'si'},
+    {t:13.0, text:'Every'},  {t:13.25,text:'day'},
+    {t:13.5, text:"I'm", tag:'rg'},{t:13.7,text:'trying', tag:'rg'},
+    {t:14.0, text:'to'},     {t:14.15,text:'expand', tag:'rg'},
+    {t:14.55,text:'the'},    {t:14.7, text:'barriers'},
+    {t:15.05,text:'of'},     {t:15.2, text:'my'},
+    {t:15.35,text:'comfort', tag:'rg'},{t:15.7,text:'zone.', tag:'rg'},
+  ];
+  const DURATION = 17;
+
+  // Render karaoke words
+  if (karaokeEl) {
+    WORDS.forEach(w => {
+      const span = document.createElement('span');
+      span.className = 'word' + (w.tag ? ' tag-' + w.tag : '');
+      span.dataset.t = w.t;
+      span.textContent = w.text;
+      karaokeEl.appendChild(span);
+      karaokeEl.appendChild(document.createTextNode(' '));
+    });
+  }
+  const wordEls = karaokeEl ? karaokeEl.querySelectorAll('.word') : [];
+
+  function fmt(s) {
+    s = Math.max(0, s);
+    const m = Math.floor(s / 60), r = Math.floor(s % 60);
+    return `${m}:${r.toString().padStart(2,'0')}`;
+  }
+
+  let detectedDomains = {};
+
+  function applyTime(t) {
+    // Karaoke
+    let currentIdx = -1;
+    for (let i = 0; i < WORDS.length; i++) {
+      if (WORDS[i].t <= t) currentIdx = i; else break;
+    }
+    wordEls.forEach((w, i) => {
+      w.classList.remove('current', 'spoken');
+      if (i < currentIdx) w.classList.add('spoken');
+      else if (i === currentIdx) w.classList.add('current');
+    });
+
+    // Scrub
+    if (scrubFill) scrubFill.style.width = (Math.min(t, DURATION) / DURATION * 100) + '%';
+    if (timeEl) timeEl.textContent = fmt(t);
+
+    // Domain scores
+    let total = 0;
+    Object.entries(DOMAIN_SCORES).forEach(([key, cfg]) => {
+      const triggered = cfg.time !== null && t >= cfg.time;
+      const el = domEls[key];
+      if (!el) return;
+      if (triggered && !detectedDomains[key]) {
+        detectedDomains[key] = true;
+        // Animate score in
+        el.score.textContent = `${cfg.score} / ${cfg.max}`;
+        el.score.classList.add('lit');
+        el.bar.style.width = (cfg.score / cfg.max * 100) + '%';
+        if (el.stScore) { el.stScore.textContent = `${cfg.score}/${cfg.max}`; el.stScore.classList.add('detected'); }
+        if (el.stBar) el.stBar.style.width = (cfg.score / cfg.max * 100) + '%';
+        setTimeout(() => el.score.classList.remove('lit'), 800);
+      }
+      if (detectedDomains[key] || cfg.time === null) total += cfg.score;
+    });
+    if (detectedDomains.er || detectedDomains.si || detectedDomains.rg) {
+      const shown = Object.values(detectedDomains).filter(Boolean).length * 4;
+      if (totalEl) totalEl.textContent = `${shown} / 20`;
+      if (stTotalEl) stTotalEl.textContent = `${shown} / 20`;
+    }
+  }
+
+  // rAF loop synced to video
+  let rafId = null;
+  function rafLoop() {
+    if (video && !video.paused && !video.ended) {
+      applyTime(video.currentTime);
+      rafId = requestAnimationFrame(rafLoop);
+    }
+  }
+
+  // Simulated playback (for karaoke-only mode without video)
+  let simPlaying = false, simStart = 0, simPaused = 0, simRaf = null;
+  function simLoop() {
+    if (!simPlaying) return;
+    const elapsed = (performance.now() - simStart) / 1000;
+    if (elapsed >= DURATION) {
+      applyTime(DURATION);
+      simPlaying = false;
+      simPaused = 0;
+      if (toggleBtn) toggleBtn.innerHTML = '↻ Replay';
+      return;
+    }
+    applyTime(elapsed);
+    simRaf = requestAnimationFrame(simLoop);
+  }
+
+  // Video play/pause via overlay
+  if (video && playOverlay) {
+    playOverlay.addEventListener('click', () => {
+      if (video.paused) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+    video.addEventListener('play', () => {
+      playOverlay.classList.add('hidden');
+      detectedDomains = {};
+      Object.values(domEls).forEach(el => {
+        if (el.score) el.score.textContent = '—';
+        if (el.bar) el.bar.style.width = '0%';
+        if (el.stScore) { el.stScore.textContent = '—'; el.stScore.classList.remove('detected'); }
+        if (el.stBar) el.stBar.style.width = '0%';
+      });
+      if (totalEl) totalEl.textContent = '— / 20';
+      if (stTotalEl) stTotalEl.textContent = '— / 20';
+      rafId = requestAnimationFrame(rafLoop);
+    });
+    video.addEventListener('pause', () => {
+      playOverlay.classList.remove('hidden');
+      cancelAnimationFrame(rafId);
+    });
+    video.addEventListener('ended', () => {
+      playOverlay.classList.remove('hidden');
+      cancelAnimationFrame(rafId);
+    });
+    video.addEventListener('timeupdate', () => {
+      // fallback for mobile where rAF may be throttled
+      if (video.paused) applyTime(video.currentTime);
+    });
+  }
+
+  // Karaoke-only toggle (scrub without video)
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      if (simPlaying) {
+        simPlaying = false; cancelAnimationFrame(simRaf);
+        simPaused = (performance.now() - simStart) / 1000;
+        toggleBtn.innerHTML = '▶ Play transcript';
+      } else {
+        if (simPaused >= DURATION) { simPaused = 0; detectedDomains = {}; }
+        simStart = performance.now() - simPaused * 1000;
+        simPlaying = true;
+        toggleBtn.innerHTML = '⏸ Pause';
+        simLoop();
+        // Also try playing video
+        video?.play().catch(() => {});
+      }
+    });
+  }
+
+  // Scrub click
+  if (scrubEl) {
+    scrubEl.addEventListener('click', e => {
+      const r = scrubEl.getBoundingClientRect();
+      const t = ((e.clientX - r.left) / r.width) * DURATION;
+      if (video) { video.currentTime = t; applyTime(t); }
+      simPaused = t;
+      simStart = performance.now() - t * 1000;
+    });
+  }
+
+  // Streamer overlay — appears when voice section is in view
+  const voiceSection = document.getElementById('voice');
+  if (voiceSection && streamer) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        streamer.classList.toggle('visible', en.isIntersecting);
+      });
+    }, { threshold: 0.2 });
+    io.observe(voiceSection);
+  }
+
+  // Rotating attribute callout
+  const calloutItems = document.querySelectorAll('.vi-callout-item');
+  const calloutDots = document.querySelectorAll('.vi-callout-dot');
+  let calloutIdx = 0;
+  function nextCallout() {
+    calloutItems.forEach((c, i) => c.classList.toggle('active', i === calloutIdx));
+    calloutDots.forEach((d, i) => d.classList.toggle('active', i === calloutIdx));
+    calloutIdx = (calloutIdx + 1) % calloutItems.length;
+  }
+  setInterval(nextCallout, 6000);
+})();
+</script>
+</body>
+</html>

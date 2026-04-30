@@ -56,11 +56,11 @@ nav .cta-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(
   position: relative; overflow: hidden;
 }
 .hero-bg-motif {
-  position: absolute; right: -80px; top: -80px;
-  width: 600px; height: 600px;
-  background-image: url('images/impacter-circle-icon.png');
+  position: absolute; right: -60px; top: 50%; transform: translateY(-50%);
+  width: 640px; height: 320px;
+  background-image: url('images/impacter-logo-waveform.png');
   background-size: contain; background-repeat: no-repeat;
-  opacity: 0.04; pointer-events: none;
+  opacity: 0.07; pointer-events: none; filter: brightness(2);
 }
 .hero-inner {
   max-width: var(--max-page); margin: 0 auto; width: 100%;
@@ -449,14 +449,18 @@ nav .cta-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(
 .voice-section .section-body { color: rgba(255,255,255,0.5); }
 .voice-player-wrap {
   display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px;
-  margin-top: 48px; align-items: start;
+  margin-top: 48px; align-items: stretch;
 }
 .video-player-card {
   border-radius: var(--radius-lg); overflow: hidden;
   box-shadow: 0 32px 64px rgba(0,0,0,0.5);
   background: #000; position: relative;
+  display: flex; flex-direction: column;
 }
-.video-player-card video { width: 100%; display: block; max-height: 420px; object-fit: cover; object-position: top center; }
+.video-player-card video {
+  width: 100%; display: block; flex: 1; min-height: 0;
+  object-fit: cover; object-position: top center;
+}
 /* ML annotation card overlaid on video */
 .ml-card-overlay {
   position: absolute; top: 12px; right: 12px;
@@ -530,6 +534,91 @@ nav .cta-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(
 .ac-pill.resilience { background: rgba(110,231,183,0.15); color: #6EE7B7; }
 .ac-pill.insight    { background: rgba(252,211,77,0.15);  color: #FCD34D; }
 .ac-pill.rgrowth    { background: rgba(147,197,253,0.15); color: #93C5FD; }
+
+/* ── VOICE INTELLIGENCE ENHANCEMENTS ── */
+/* Custom progress bar */
+.vi-progress-wrap {
+  position: relative; padding: 0 14px; height: 32px;
+  background: rgba(0,0,0,0.55); display: flex; align-items: center;
+  cursor: pointer; user-select: none;
+}
+.vi-progress-track {
+  position: relative; height: 3px; background: rgba(255,255,255,0.12);
+  border-radius: 2px; flex: 1;
+}
+.vi-progress-fill {
+  position: absolute; left: 0; top: 0; height: 100%;
+  background: var(--color-coral); border-radius: 2px;
+  pointer-events: none; width: 0%;
+}
+.vi-dot {
+  position: absolute; top: 50%; width: 11px; height: 11px;
+  border-radius: 50%; border: 2px solid rgba(0,0,0,0.7);
+  transform: translate(-50%, -50%);
+  transition: box-shadow 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+.vi-dot.dot-active {
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 0 10px currentColor;
+  transform: translate(-50%, -50%) scale(1.3);
+}
+.vi-time-label {
+  font-family: var(--font-display); font-weight: 700; font-size: 10px;
+  color: rgba(255,255,255,0.35); margin-left: 10px; white-space: nowrap;
+}
+
+/* Next insight button */
+.next-insight-btn {
+  margin-left: auto;
+  background: rgba(99,142,197,0.15); border: 1px solid rgba(99,142,197,0.25);
+  border-radius: 5px; padding: 3px 9px;
+  font-family: var(--font-display); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.06em; text-transform: uppercase; color: rgba(214,231,241,0.6);
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.next-insight-btn:hover { background: rgba(99,142,197,0.3); color: #fff; border-color: rgba(99,142,197,0.5); }
+
+/* Right column: transcript + score stacked */
+.voice-right-col { display: flex; flex-direction: column; gap: 16px; }
+.voice-right-col .transcript-panel { flex: 1; min-height: 0; max-height: 300px; }
+
+/* Live BH Score Panel */
+.live-score-panel {
+  background: rgba(255,255,255,0.04); border-radius: var(--radius-lg);
+  padding: 18px 20px; border: 1px solid rgba(255,255,255,0.06);
+}
+.lsp-eyebrow {
+  font-family: var(--font-display); font-weight: 900; font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.3);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.lsp-eyebrow::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+.lsp-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.lsp-bar-label { font-size: 10px; color: rgba(255,255,255,0.38); width: 118px; flex-shrink: 0; letter-spacing: 0.01em; }
+.lsp-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+.lsp-bar-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.lsp-bar-val { font-family: var(--font-display); font-weight: 700; font-size: 11px; color: rgba(255,255,255,0.3); width: 20px; text-align: right; flex-shrink: 0; transition: color 0.4s; }
+.lsp-bar-val.scored { color: rgba(255,255,255,0.7); }
+.lsp-footer { display: flex; align-items: flex-end; justify-content: space-between; margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; }
+.lsp-total-num { font-family: var(--font-display); font-weight: 800; font-size: 26px; color: #fff; line-height: 1; }
+.lsp-total-denom { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.3); margin-left: 2px; }
+.lsp-tier-badge {
+  padding: 4px 12px; border-radius: var(--radius-pill);
+  font-family: var(--font-display); font-weight: 800; font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.4s;
+}
+.lsp-tier-badge.pending { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.2); }
+.lsp-tier-badge.t1 { background: rgba(16,185,129,0.18); color: #34D399; }
+.lsp-tier-badge.t2 { background: rgba(245,158,11,0.18); color: #FCD34D; }
+.lsp-tier-badge.t3 { background: rgba(239,68,68,0.18); color: #FCA5A5; }
+
+/* Analysis card active glow */
+.analysis-card { transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s; }
+.analysis-card.card-active { animation: cardpulse 2s ease-in-out infinite; }
+.analysis-card.card-active.resilience-card { border-color: rgba(110,231,183,0.45); box-shadow: 0 0 24px rgba(110,231,183,0.1); }
+.analysis-card.card-active.insight-card    { border-color: rgba(252,211,77,0.45);  box-shadow: 0 0 24px rgba(252,211,77,0.1); }
+.analysis-card.card-active.rgrowth-card    { border-color: rgba(147,197,253,0.45); box-shadow: 0 0 24px rgba(147,197,253,0.1); }
+@keyframes cardpulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.015)} }
 
 /* ── MTSS ── */
 .mtss-section { background: var(--surface-container-low); }
@@ -654,23 +743,33 @@ nav .cta-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(
 
 /* ── BHSSA WIN BANNER ── */
 .bhssa-banner {
-  background: var(--surface-blue); padding: 28px var(--gutter);
-  border-top: 3px solid var(--color-primary);
+  background: linear-gradient(135deg, #0B1F3A 0%, #1a2f52 100%);
+  padding: 40px var(--gutter);
+  border-top: 3px solid var(--color-coral);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 .bhssa-inner {
   max-width: var(--max-page); margin: 0 auto;
-  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+}
+.bhssa-gif {
+  flex-shrink: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  height: 120px;
+  width: auto;
 }
 .bhssa-badge {
-  background: var(--color-primary); color: #fff;
+  background: var(--color-coral); color: #fff;
   font-family: var(--font-display); font-weight: 900; font-size: 10px;
   letter-spacing: 0.12em; text-transform: uppercase;
   padding: 5px 14px; border-radius: var(--radius-pill); flex-shrink: 0; white-space: nowrap;
 }
 .bhssa-text {
-  font-family: var(--font-body); font-size: 15px; color: var(--fg-2); line-height: 1.5;
+  font-family: var(--font-body); font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.6;
 }
-.bhssa-text strong { font-weight: 700; color: var(--fg-1); }
+.bhssa-text strong { font-weight: 700; color: #fff; }
 
 /* ── RESOURCES ── */
 .resources-section { background: var(--surface); }
@@ -696,6 +795,53 @@ nav .cta-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(
   font-size: 13px; color: var(--color-primary-deep);
   display: flex; align-items: center; gap: 4px;
 }
+
+/* ── RESOURCE MODAL ── */
+.rm-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(11,22,44,0.82); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.rm-overlay.open { opacity: 1; pointer-events: all; }
+.rm-box {
+  background: var(--surface-lowest); border-radius: var(--radius-xl);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.45);
+  width: 100%; max-width: 900px; max-height: 88vh;
+  display: flex; flex-direction: column;
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.25s ease;
+}
+.rm-overlay.open .rm-box { transform: translateY(0) scale(1); }
+.rm-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px 24px; border-bottom: 1px solid var(--outline-variant);
+  flex-shrink: 0;
+}
+.rm-title {
+  font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--fg-1);
+  flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rm-close {
+  width: 32px; height: 32px; border-radius: 50%; border: none;
+  background: var(--surface-container-low); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--fg-2); transition: background 0.15s;
+  font-size: 18px; line-height: 1; flex-shrink: 0;
+}
+.rm-close:hover { background: var(--surface-container); color: var(--fg-1); }
+.rm-open-link {
+  font-family: var(--font-display); font-weight: 700; font-size: 12px;
+  color: var(--color-primary-deep); text-decoration: none; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.rm-open-link:hover { text-decoration: underline; }
+.rm-body { flex: 1; min-height: 0; overflow: hidden; border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+.rm-body iframe { width: 100%; height: 100%; border: none; display: block; min-height: 500px; }
+.rm-body video { width: 100%; max-height: 70vh; display: block; background: #000; border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+.resource-card { cursor: pointer; }
 
 /* ── CTA ── */
 .cta-section {
@@ -784,9 +930,9 @@ footer img { height: 24px; opacity: 0.7; }
     <div class="hero-left">
       <div class="hero-eyebrow">Behavioral Health Screener</div>
       <h1 class="hero-h1">
-        Student Wellness Starts<br>
-        With Authentic<br>
-        <em>Voice.</em>
+        Student Wellness<br>
+        Starts With<br>
+        <em>Authentic Voice.</em>
       </h1>
       <p class="hero-sub">IMPACTER's Natural Language Screener replaces checkbox surveys with real student conversation — and California pays for it at scale through CYBHI.</p>
       <div class="hero-ctas">
@@ -853,7 +999,7 @@ footer img { height: 24px; opacity: 0.7; }
 <!-- BHSSA WIN BANNER -->
 <div class="bhssa-banner">
   <div class="bhssa-inner">
-    <img src="images/bhssa-announcement.gif" alt="BHSSA contract win announcement" style="height:56px;border-radius:8px;flex-shrink:0;">
+    <img src="images/bhssa-announcement.gif" alt="BHSSA contract win announcement" class="bhssa-gif">
     <div class="bhssa-badge">New — April 2026</div>
     <p class="bhssa-text"><strong>Selected by California BHSOAC + Santa Clara County Office of Education</strong> for statewide behavioral health performance management evaluation — BHSSA-002, prime-subbed with SCCOE.</p>
   </div>
@@ -1077,23 +1223,61 @@ footer img { height: 24px; opacity: 0.7; }
           <div class="ml-card-text" id="mlText">—</div>
           <div class="ml-card-quote" id="mlQuote"></div>
         </div>
+        <!-- Custom progress bar with insight dots -->
+        <div class="vi-progress-wrap" id="viProgress">
+          <div class="vi-progress-track" id="viTrack">
+            <div class="vi-progress-fill" id="viFill"></div>
+            <div class="vi-dot" id="viDot0" style="left:11.4%;background:#6EE7B7;color:#6EE7B7" title="Emotional Resilience — 9s"></div>
+            <div class="vi-dot" id="viDot1" style="left:24.2%;background:#FCD34D;color:#FCD34D" title="Self-Insight — 20s"></div>
+            <div class="vi-dot" id="viDot2" style="left:66.5%;background:#93C5FD;color:#93C5FD" title="Reflective Growth — 55s"></div>
+          </div>
+          <span class="vi-time-label" id="viTimeLabel">0:00</span>
+        </div>
       </div>
-      <div class="transcript-panel">
-        <div class="tp-eyebrow">Whisper-synced transcript</div>
-        <div id="transcript-words"></div>
+      <div class="voice-right-col">
+        <div class="transcript-panel">
+          <div class="tp-eyebrow">Whisper-synced transcript <button class="next-insight-btn" id="nextInsightBtn">⟶ Next insight</button></div>
+          <div id="transcript-words"></div>
+        </div>
+        <!-- Live BH Score Panel -->
+        <div class="live-score-panel">
+          <div class="lsp-eyebrow">Live BH domain score</div>
+          <div class="lsp-bar-row">
+            <span class="lsp-bar-label">Emotional Resilience</span>
+            <div class="lsp-bar-track"><div class="lsp-bar-fill" id="barResilience" style="background:#6EE7B7"></div></div>
+            <span class="lsp-bar-val" id="valResilience">—</span>
+          </div>
+          <div class="lsp-bar-row">
+            <span class="lsp-bar-label">Self-Insight</span>
+            <div class="lsp-bar-track"><div class="lsp-bar-fill" id="barInsight" style="background:#FCD34D"></div></div>
+            <span class="lsp-bar-val" id="valInsight">—</span>
+          </div>
+          <div class="lsp-bar-row">
+            <span class="lsp-bar-label">Reflective Growth</span>
+            <div class="lsp-bar-track"><div class="lsp-bar-fill" id="barRgrowth" style="background:#93C5FD"></div></div>
+            <span class="lsp-bar-val" id="valRgrowth">—</span>
+          </div>
+          <div class="lsp-footer">
+            <div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-bottom:4px;letter-spacing:0.08em;text-transform:uppercase;font-family:var(--font-display);font-weight:700">Total score</div>
+              <span class="lsp-total-num" id="lspScore">0</span><span class="lsp-total-denom">/12</span>
+            </div>
+            <div class="lsp-tier-badge pending" id="lspTier">Scoring…</div>
+          </div>
+        </div>
       </div>
       <div class="voice-analysis">
-        <div class="analysis-card">
+        <div class="analysis-card resilience-card" id="card-resilience">
           <div class="ac-pill resilience">Emotional Resilience</div>
           <h5>Failure reframing</h5>
           <p>"My biggest failure would be not taking enough risk to experience true failure." The model flags this as a resilience marker: failure is recast as an unmet aspiration — not a catastrophe. There is no self-blame. The causal arrow runs forward, not backward.</p>
         </div>
-        <div class="analysis-card">
+        <div class="analysis-card insight-card" id="card-insight">
           <div class="ac-pill insight">Self-Insight</div>
           <h5>Avoidance pattern named</h5>
           <p>"I tend to stay in my comfort zone and stand behind the yellow caution tape." A spontaneous, original metaphor for her own avoidance behavior. The encoder isn't looking for key words — it's looking for the naming precision that signals genuine self-awareness. This is it.</p>
         </div>
-        <div class="analysis-card">
+        <div class="analysis-card rgrowth-card" id="card-rgrowth">
           <div class="ac-pill rgrowth">Reflective Growth</div>
           <h5>Present-tense growth commitment</h5>
           <p>"Every day I'm trying to expand the barriers of my comfort zone... I'd like to experience a lot more failures." Present-tense growth orientation fused with a desire to increase risk exposure. She isn't describing past growth — she's narrating an active, ongoing process.</p>
@@ -1255,25 +1439,25 @@ footer img { height: 24px; opacity: 0.7; }
     <span class="eyebrow">Resources</span>
     <h2 class="section-h2">Everything you need to move forward.</h2>
     <div class="resources-grid">
-      <a href="https://sdcoe.impacterpathway.com/fu58vkone" target="_blank" class="resource-card">
+      <a href="https://drive.google.com/file/d/1s-WRCtYtdwlfEj4UaprgxzPSIiFpMfSU/view?usp=sharing" target="_blank" class="resource-card">
         <div class="rc-icon"><i data-lucide="bar-chart-2" style="width:20px;height:20px;stroke-width:1.75"></i></div>
         <h4>EDCOE Behavioral Health Pilot Report</h4>
         <p>Full data report from the El Dorado County pilot — results, trends, and district-level insights.</p>
         <div class="rc-arrow">View report <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2.5"></i></div>
       </a>
-      <a href="https://drive.google.com/file/d/1XlxUArIl8MqFzfFVn2tK_hmNa9kxKg_S/view?usp=sharing" target="_blank" class="resource-card">
+      <a href="https://docs.google.com/document/d/14Dmw3CXe5Eiygg8O90GsuH_O1RyQXDgh8abr8A-0rlM/edit?usp=sharing" target="_blank" class="resource-card">
         <div class="rc-icon"><i data-lucide="file-text" style="width:20px;height:20px;stroke-width:1.75"></i></div>
-        <h4>Parent Notification Opt-Out</h4>
+        <h4>Parent Notification Example</h4>
         <p>Sample parent notification and opt-out documentation for district implementation and FERPA compliance.</p>
         <div class="rc-arrow">View document <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2.5"></i></div>
       </a>
-      <a href="https://drive.google.com/file/d/1xDNOc7XBmCNKIjqwuObjaNwC-MHcJsALB/view" target="_blank" class="resource-card">
+      <a href="images/purpose-exemplar.mp4" target="_blank" class="resource-card">
         <div class="rc-icon"><i data-lucide="mic" style="width:20px;height:20px;stroke-width:1.75"></i></div>
         <h4>Student Exemplar — Purpose</h4>
         <p>Voice Intelligence Analysis showing how linguistic architecture surfaces behavioral health insight a survey can't capture.</p>
-        <div class="rc-arrow">View exemplar <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2.5"></i></div>
+        <div class="rc-arrow">Watch exemplar <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2.5"></i></div>
       </a>
-      <a href="https://www.dhcs.ca.gov/CYBHI/Documents/CYBHI-Fee-Schedule-Scope-of-Services-Rates-and-Codes.pdf" target="_blank" class="resource-card">
+      <a href="cybhi-fee-schedule.pdf" target="_blank" class="resource-card">
         <div class="rc-icon"><i data-lucide="landmark" style="width:20px;height:20px;stroke-width:1.75"></i></div>
         <h4>CYBHI Fee Schedule</h4>
         <p>Official DHCS document — CPT Code 96127 rates and scope of services for behavioral health screening reimbursement.</p>
@@ -1285,11 +1469,11 @@ footer img { height: 24px; opacity: 0.7; }
         <p>22 pages. All 7 deployment models, 30-minute quick-launch blueprint, accessibility supports, student framing scripts.</p>
         <div class="rc-arrow">Download PDF <i data-lucide="download" style="width:13px;height:13px;stroke-width:2.5"></i></div>
       </a>
-      <a href="https://screener.impacterpathway.com" target="_blank" class="resource-card">
+      <a href="https://sdcoe.impacterpathway.com/fu58vkone#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" class="resource-card">
         <div class="rc-icon" style="background:var(--surface-coral-low)"><i data-lucide="play-circle" style="width:20px;height:20px;stroke-width:1.75;color:var(--color-coral-deep)"></i></div>
-        <h4>Live Screener Platform</h4>
-        <p>The full behavioral health screener — built, deployed, and ready for district partners to experience today.</p>
-        <div class="rc-arrow" style="color:var(--color-coral-deep)">Launch platform <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2.5"></i></div>
+        <h4>Live Screener — Full Experience</h4>
+        <p>The complete behavioral health screener — built, deployed, and ready for district partners to experience today.</p>
+        <div class="rc-arrow" style="color:var(--color-coral-deep)">Launch screener <i data-lucide="arrow-right" style="width:13px;height:13px;stroke-width:2.5"></i></div>
       </a>
     </div>
   </div>
@@ -1372,16 +1556,93 @@ NC_WORDS.forEach((w, i) => {
   if (i < NC_WORDS.length - 1) container.appendChild(document.createTextNode(' '));
 });
 
-const vid = document.getElementById('ncgirl');
-const wordSpans = container.querySelectorAll('.transcript-word');
-const mlOverlay = document.getElementById('mlOverlay');
-const mlLabel   = document.getElementById('mlLabel');
-const mlText    = document.getElementById('mlText');
-const mlQuote   = document.getElementById('mlQuote');
+const vid        = document.getElementById('ncgirl');
+const wordSpans  = container.querySelectorAll('.transcript-word');
+const mlOverlay  = document.getElementById('mlOverlay');
+const mlLabel    = document.getElementById('mlLabel');
+const mlText     = document.getElementById('mlText');
+const mlQuote    = document.getElementById('mlQuote');
+
+// Progress bar elements
+const viFill      = document.getElementById('viFill');
+const viTimeLabel = document.getElementById('viTimeLabel');
+const viTrack     = document.getElementById('viTrack');
+const viProgress  = document.getElementById('viProgress');
+const viDots      = [document.getElementById('viDot0'), document.getElementById('viDot1'), document.getElementById('viDot2')];
+const TOTAL_DUR   = 82.0;
+// dot timestamps matching NC_ML start times
+const DOT_TIMES   = [9.32, 19.86, 54.52];
+
+// Score panel elements
+const barResilience = document.getElementById('barResilience');
+const barInsight    = document.getElementById('barInsight');
+const barRgrowth    = document.getElementById('barRgrowth');
+const valResilience = document.getElementById('valResilience');
+const valInsight    = document.getElementById('valInsight');
+const valRgrowth    = document.getElementById('valRgrowth');
+const lspScore      = document.getElementById('lspScore');
+const lspTier       = document.getElementById('lspTier');
+
+// Analysis card elements
+const cardResilience = document.getElementById('card-resilience');
+const cardInsight    = document.getElementById('card-insight');
+const cardRgrowth    = document.getElementById('card-rgrowth');
+
+// Score targets (out of 4 each, total /12)
+const SCORES = { resilience: 3, insight: 4, rgrowth: 4 };
+// Track which domains have been scored
+const scored = { resilience: false, insight: false, rgrowth: false };
+
+function fmt(s) {
+  const m = Math.floor(s/60), sec = Math.floor(s%60);
+  return m + ':' + String(sec).padStart(2,'0');
+}
+
+function animateBar(fillEl, valEl, pct, numVal, color) {
+  fillEl.style.width = pct + '%';
+  valEl.textContent = numVal + '/4';
+  valEl.classList.add('scored');
+}
+
+function updateTier(total) {
+  lspScore.textContent = total;
+  lspTier.className = 'lsp-tier-badge';
+  if (total >= 10) {
+    lspTier.textContent = 'Tier 1 — Universal';
+    lspTier.classList.add('t1');
+  } else if (total >= 7) {
+    lspTier.textContent = 'Tier 2 — Targeted';
+    lspTier.classList.add('t2');
+  } else if (total > 0) {
+    lspTier.textContent = 'Tier 3 — Intensive';
+    lspTier.classList.add('t3');
+  } else {
+    lspTier.textContent = 'Scoring…';
+    lspTier.classList.add('pending');
+  }
+}
+
+const VI_PAD = 14; // matches vi-progress-wrap padding
+
+function updateProgressBar(t) {
+  const pct = Math.min(t / TOTAL_DUR * 100, 100);
+  viFill.style.width = pct + '%';
+  viTimeLabel.textContent = fmt(t) + ' / ' + fmt(TOTAL_DUR);
+  DOT_TIMES.forEach((dt, i) => {
+    const active = t >= dt && t < (NC_ML[i] ? NC_ML[i].end : TOTAL_DUR);
+    viDots[i].classList.toggle('dot-active', active);
+  });
+}
+
+vid.addEventListener('seeking', () => updateProgressBar(vid.currentTime));
+vid.addEventListener('seeked',  () => updateProgressBar(vid.currentTime));
 
 vid.addEventListener('timeupdate', () => {
   const t = vid.currentTime;
-  // word highlighting
+
+  updateProgressBar(t);
+
+  // — Word highlighting —
   wordSpans.forEach((span, i) => {
     const start = parseFloat(span.dataset.start);
     const nextStart = i < wordSpans.length - 1 ? parseFloat(wordSpans[i+1].dataset.start) : 999;
@@ -1392,7 +1653,8 @@ vid.addEventListener('timeupdate', () => {
       span.classList.remove('active');
     }
   });
-  // ML overlay card
+
+  // — ML overlay card —
   const card = NC_ML.find(c => t >= c.start && t < c.end);
   if (card) {
     mlLabel.textContent = '+ ' + card.label;
@@ -1404,6 +1666,75 @@ vid.addEventListener('timeupdate', () => {
     mlOverlay.style.opacity = '1';
   } else {
     mlOverlay.style.opacity = '0';
+  }
+
+  // — Analysis card glow —
+  cardResilience.classList.toggle('card-active', t >= NC_ML[0].start && t < NC_ML[0].end);
+  cardInsight.classList.toggle('card-active',    t >= NC_ML[1].start && t < NC_ML[1].end);
+  cardRgrowth.classList.toggle('card-active',    t >= NC_ML[2].start && t < NC_ML[2].end);
+
+  // — Live score bars (animate once when each segment first plays) —
+  if (!scored.resilience && t >= NC_ML[0].start) {
+    scored.resilience = true;
+    animateBar(barResilience, valResilience, (SCORES.resilience/4)*100, SCORES.resilience, '#6EE7B7');
+  }
+  if (!scored.insight && t >= NC_ML[1].start) {
+    scored.insight = true;
+    animateBar(barInsight, valInsight, (SCORES.insight/4)*100, SCORES.insight, '#FCD34D');
+  }
+  if (!scored.rgrowth && t >= NC_ML[2].start) {
+    scored.rgrowth = true;
+    animateBar(barRgrowth, valRgrowth, (SCORES.rgrowth/4)*100, SCORES.rgrowth, '#93C5FD');
+  }
+
+  // — Running total —
+  const total = (scored.resilience ? SCORES.resilience : 0)
+              + (scored.insight    ? SCORES.insight    : 0)
+              + (scored.rgrowth    ? SCORES.rgrowth    : 0);
+  updateTier(total);
+});
+
+// — Progress bar scrub (mousedown + drag) —
+function seekToEvent(e) {
+  const rect   = viProgress.getBoundingClientRect();
+  const trackW = rect.width - VI_PAD * 2;
+  const pct    = Math.max(0, Math.min(1, (e.clientX - rect.left - VI_PAD) / trackW));
+  vid.currentTime = pct * TOTAL_DUR;
+  updateProgressBar(pct * TOTAL_DUR);
+}
+
+viProgress.addEventListener('mousedown', e => {
+  e.preventDefault(); // stop browser selecting text / other weirdness
+  seekToEvent(e);
+  const onMove = ev => { if (ev.buttons & 1) seekToEvent(ev); };
+  const onUp   = ()  => {
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup',   onUp);
+  };
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup',   onUp);
+});
+
+// touch scrub
+viProgress.addEventListener('touchstart', e => {
+  e.preventDefault();
+  seekToEvent(e.touches[0]);
+}, { passive: false });
+viProgress.addEventListener('touchmove', e => {
+  e.preventDefault();
+  seekToEvent(e.touches[0]);
+}, { passive: false });
+
+// — Next insight button —
+document.getElementById('nextInsightBtn').addEventListener('click', () => {
+  const t = vid.currentTime;
+  const next = NC_ML.find(c => c.start > t + 0.5);
+  if (next) {
+    vid.currentTime = next.start;
+    if (vid.paused) vid.play();
+  } else {
+    vid.currentTime = NC_ML[0].start;
+    if (vid.paused) vid.play();
   }
 });
 </script>

@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Behavioral Health Screener — IMPACTER Pathway</title>
+<meta name="description" content="AI-powered behavioral health screening for K-12 districts. Voice-based, reimbursable under CPT 96127, validated by California BHSOAC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --coral: #F37163;
+    --blue: #638EC5;
+    --navy: #0F1B2E;
+    --navy-mid: #0d2035;
+    --navy-light: #162840;
+    --accent: #D6E7F1;
+    --text: #E8EFF6;
+    --text-dim: #8BA4BE;
+    --border: rgba(255,255,255,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── Scroll Progress ── */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    width: 0%;
+    height: 3px;
+    background: var(--coral);
+    z-index: 1000;
+    transition: width 0.05s linear;
+    pointer-events: none;
+  }
+
+  /* ── Film Grain ── */
+  #grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px 128px;
+    animation: grainShift 0.5s steps(2) infinite;
+  }
+  @keyframes grainShift {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-2px, 1px); }
+    50% { transform: translate(1px, -2px); }
+    75% { transform: translate(-1px, 2px); }
+    100% { transform: translate(2px, -1px); }
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: linear-gradient(to bottom, rgba(15,27,46,0.95) 0%, rgba(15,27,46,0) 100%);
+    transition: transform 0.35s ease, background 0.3s ease;
+  }
+  nav.hidden { transform: translateY(-100%); }
+  nav.solid { background: rgba(15,27,46,0.97); }
+
+  .nav-logo img { height: 28px; display: block; }
+
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--coral);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 22px;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .hero-video-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-video-wrap video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+  }
+
+  .hero-gradient {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      to top,
+      var(--navy) 0%,
+      rgba(15,27,46,0.82) 30%,
+      rgba(15,27,46,0.4) 60%,
+      rgba(15,27,46,0.15) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+    width: 100%;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 24px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: var(--coral);
+    opacity: 0.8;
+  }
+
+  .hero-headline {
+    font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    max-width: 800px;
+    margin-bottom: 28px;
+    color: #fff;
+  }
+
+  .hero-headline em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: rgba(214,231,241,0.85);
+    max-width: 560px;
+    line-height: 1.65;
+    margin-bottom: 40px;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--coral);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 14px 4px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(214,231,241,0.3);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.6); }
+
+  /* ── Waveform Divider ── */
+  .waveform-divider {
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    line-height: 0;
+    background: var(--navy);
+  }
+  .waveform-svg {
+    width: 100%;
+    height: 80px;
+    display: block;
+  }
+  .wave-bar {
+    transform-origin: bottom center;
+    animation: wavePulse 1.8s ease-in-out infinite;
+  }
+  @keyframes wavePulse {
+    0%, 100% { transform: scaleY(1); opacity: 0.6; }
+    50% { transform: scaleY(0.4); opacity: 1; }
+  }
+
+  /* ── Stats Strip ── */
+  .stats-strip {
+    background: var(--navy-mid);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 64px 40px;
+  }
+  .stats-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+  .stat-item {
+    padding: 0 48px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:first-child { padding-left: 0; }
+  .stat-item:last-child { border-right: none; }
+
+  .stat-number {
+    font-size: clamp(2.8rem, 5vw, 3.8rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--coral);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: var(--text-dim);
+    line-height: 1.4;
+    max-width: 200px;
+  }
+
+  /* ── Section scaffolding ── */
+  .section {
+    padding: 100px 40px;
+  }
+  .section-alt { background: var(--navy-mid); }
+
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--coral);
+  }
+
+  .section-heading {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    max-width: 640px;
+  }
+
+  .section-body {
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: rgba(214,231,241,0.8);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  /* ── Voice Intelligence Section ── */
+  .vi-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .vi-video-col { position: relative; }
+
+  .vi-video-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9/16;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #000;
+    max-width: 360px;
+  }
+
+  .vi-video-wrap video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Karaoke caption overlay */
+  .vi-caption-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 60px 20px 24px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+    z-index: 5;
+  }
+  .vi-caption-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #fff;
+    text-align: left;
+    min-height: 48px;
+  }
+  .vi-caption-text .word { transition: color 0.15s, opacity 0.15s; opacity: 0.4; }
+  .vi-caption-text .word.active { opacity: 1; color: #fff; }
+  .vi-caption-text .word.past { opacity: 0.75; color: rgba(255,255,255,0.75); }
+
+  /* Floating score chip on video */
+  .vi-score-chip {
+    position: absolute;
+    top: 20px; left: 20px;
+    background: rgba(10,14,20,0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .vi-score-chip.show { opacity: 1; transform: translateY(0); }
+  .vi-chip-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  .vi-chip-domain {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--coral);
+  }
+  .vi-chip-score {
+    display: flex;
+    gap: 3px;
+    margin-top: 5px;
+  }
+  .vi-chip-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: background 0.3s;
+  }
+  .vi-chip-dot.lit { background: var(--coral); }
+
+  /* Domain bars (right column) */
+  .vi-domains-col {}
+  .vi-domains-header {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .vi-domain-row {
+    margin-bottom: 24px;
+    opacity: 0.4;
+    transition: opacity 0.5s ease;
+  }
+  .vi-domain-row.active { opacity: 1; }
+
+  .vi-domain-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .vi-domain-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .vi-domain-score-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--coral);
+  }
+  .vi-domain-bar-bg {
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .vi-domain-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: var(--coral);
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .vi-domain-tag {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-dim);
+    margin-top: 5px;
+    font-style: italic;
+  }
+
+  .vi-controls {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .vi-play-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--coral);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .vi-play-btn:hover { opacity: 0.85; }
+
+  .vi-accuracy-note {
+    margin-top: 32px;
+    padding: 16px 20px;
+    background: rgba(99,142,197,0.08);
+    border: 1px solid rgba(99,142,197,0.15);
+    border-radius: 12px;
+  }
+  .vi-accuracy-num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .vi-accuracy-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+
+  /* ── MTSS Pyramid ── */
+  .mtss-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .mtss-img-wrap {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .mtss-img-wrap img {
+    width: 100%;
+    display: block;
+    border-radius: 20px;
+  }
+
+  .mtss-tiers { display: flex; flex-direction: column; gap: 24px; }
+
+  .mtss-tier {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px 24px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    transition: border-color 0.3s;
+  }
+  .mtss-tier:hover { border-color: rgba(243,113,99,0.3); }
+
+  .mtss-tier-badge {
+    flex-shrink: 0;
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .tier-1 { background: rgba(99,142,197,0.15); color: var(--blue); border: 1px solid rgba(99,142,197,0.2); }
+  .tier-2 { background: rgba(243,113,99,0.12); color: var(--coral); border: 1px solid rgba(243,113,99,0.2); }
+  .tier-3 { background: rgba(214,231,241,0.08); color: var(--accent); border: 1px solid rgba(214,231,241,0.12); }
+
+  .mtss-tier-content {}
+  .mtss-tier-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #fff;
+  }
+  .mtss-tier-sub {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .mtss-tier-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(214,231,241,0.7);
+    line-height: 1.55;
+  }
+
+  /* ── What Surveys Miss ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-top: 64px;
+  }
+
+  .compare-col {}
+  .compare-col-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .compare-col.col-miss .compare-col-label { color: var(--text-dim); }
+  .compare-col.col-voice .compare-col-label { color: var(--coral); }
+
+  .compare-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 22px;
+  }
+  .compare-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    margin-top: 1px;
+  }
+  .col-miss .compare-icon { background: rgba(255,255,255,0.06); color: var(--text-dim); }
+  .col-voice .compare-icon { background: rgba(243,113,99,0.15); color: var(--coral); }
+
+  .compare-text {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(214,231,241,0.75);
+    line-height: 1.55;
+  }
+  .col-voice .compare-text { color: var(--text); }
+
+  /* ── Sample Prompts ── */
+  .prompts-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 40px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 100px;
+    padding: 4px;
+    width: fit-content;
+  }
+  .prompt-tab {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 100px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .prompt-tab.active {
+    background: var(--coral);
+    color: #fff;
+  }
+
+  .prompts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .prompt-tile {
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: border-color 0.25s, transform 0.25s, background 0.25s;
+    position: relative;
+    background: rgba(255,255,255,0.02);
+  }
+  .prompt-tile:hover {
+    border-color: rgba(243,113,99,0.4);
+    background: rgba(243,113,99,0.04);
+    transform: translateY(-2px);
+  }
+
+  .prompt-domain-pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--coral);
+    background: rgba(243,113,99,0.1);
+    border-radius: 100px;
+    padding: 3px 10px;
+    margin-bottom: 14px;
+  }
+
+  .prompt-question {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(214,231,241,0.85);
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+
+  .prompt-try {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--coral);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Modal ── */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5,10,18,0.94);
+    z-index: 900;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-backdrop.open { display: flex; }
+
+  .modal-panel {
+    position: relative;
+    width: 480px;
+    max-width: 95vw;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    z-index: 10;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: #fff;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.2s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.2); }
+  .modal-iframe {
+    width: 100%;
+    height: 600px;
+    border: none;
+    display: block;
+  }
+
+  /* ── BHSSA Section ── */
+  .bhssa-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .bhssa-img-wrap img {
+    width: 100%;
+    border-radius: 16px;
+    display: block;
+  }
+  .bhssa-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(99,142,197,0.1);
+    border: 1px solid rgba(99,142,197,0.2);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 24px;
+  }
+  .bhssa-text {
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(214,231,241,0.8);
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 24px;
+  }
+  .bhssa-validation {
+    padding: 20px 24px;
+    border-left: 3px solid var(--coral);
+    background: rgba(243,113,99,0.05);
+    border-radius: 0 12px 12px 0;
+  }
+  .bhssa-validation p {
+    font-size: 14px;
+    color: rgba(214,231,241,0.85);
+    line-height: 1.6;
+  }
+  .bhssa-validation strong { color: #fff; }
+
+  /* ── CYBHI Funding ── */
+  .cybhi-inner {
+    max-width: 700px;
+  }
+  .cybhi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 48px 0;
+  }
+  .cybhi-item {}
+  .cybhi-num {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--blue);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .cybhi-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-dim);
+    line-height: 1.45;
+  }
+  .cybhi-prose {
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(214,231,241,0.75);
+    line-height: 1.7;
+  }
+  .cybhi-prose strong { color: var(--text); font-weight: 500; }
+
+  /* ── Resources ── */
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .resource-card {
+    padding: 32px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: border-color 0.25s, transform 0.25s;
+    background: rgba(255,255,255,0.02);
+  }
+  .resource-card:hover {
+    border-color: rgba(99,142,197,0.4);
+    transform: translateY(-3px);
+  }
+  .resource-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(99,142,197,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+  }
+  .resource-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .resource-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-dim);
+    line-height: 1.55;
+  }
+
+  /* ── Footer ── */
+  footer {
+    padding: 60px 40px;
+    border-top: 1px solid var(--border);
+    background: var(--navy);
+  }
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .footer-logo img { height: 24px; display: block; opacity: 0.8; }
+  .footer-links {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .footer-links a {
+    font-size: 13px;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text); }
+  .footer-copy {
+    font-size: 12px;
+    color: rgba(139,164,190,0.5);
+    text-align: right;
+  }
+
+  /* ── Streamer Overlay ── */
+  .streamer {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    z-index: 200;
+    width: 280px;
+    background: rgba(10,14,20,0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 20px;
+    transform: translateX(340px);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1), opacity 0.4s ease;
+    box-shadow: 0 24px 56px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  .streamer.visible { transform: translateX(0); opacity: 1; }
+
+  .streamer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .streamer-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--coral);
+  }
+  .streamer-pulse {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--coral);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(243,113,99,0.4); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(243,113,99,0); }
+  }
+
+  .streamer-context {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    font-style: italic;
+    transition: opacity 0.4s;
+  }
+
+  .streamer-domain {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .sd-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(214,231,241,0.8);
+  }
+  .sd-score {
+    display: flex;
+    gap: 3px;
+  }
+  .sd-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    transition: background 0.3s;
+  }
+  .sd-dot.lit { background: var(--coral); }
+  .sd-dot.lit-blue { background: var(--blue); }
+
+  .streamer-footer {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    font-size: 10px;
+    color: rgba(139,164,190,0.4);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Reveal animations ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .hero-content { padding: 0 20px 80px; }
+    .section { padding: 64px 20px; }
+    .stats-inner { grid-template-columns: 1fr; gap: 32px; }
+    .stat-item { padding: 0; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+    .stat-item:last-child { border-bottom: none; }
+    .vi-layout { grid-template-columns: 1fr; gap: 40px; }
+    .vi-video-wrap { max-width: 100%; }
+    .mtss-layout { grid-template-columns: 1fr; gap: 40px; }
+    .compare-grid { grid-template-columns: 1fr; gap: 40px; }
+    .prompts-grid { grid-template-columns: 1fr 1fr; }
+    .bhssa-layout { grid-template-columns: 1fr; gap: 40px; }
+    .cybhi-grid { grid-template-columns: 1fr 1fr; }
+    .resources-grid { grid-template-columns: 1fr; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+    .footer-copy { text-align: left; }
+    .streamer { display: none; }
+  }
+  @media (max-width: 480px) {
+    .prompts-grid { grid-template-columns: 1fr; }
+    .cybhi-grid { grid-template-columns: 1fr; }
+    .hero-headline { font-size: 2.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Scroll Progress -->
+<div id="scroll-progress"></div>
+
+<!-- Film Grain -->
+<div id="grain" aria-hidden="true"></div>
+
+<!-- Nav -->
+<nav id="main-nav">
+  <div class="nav-logo">
+    <a href="/bh/"><img src="../images/impacter-pathway-white.svg" alt="IMPACTER Pathway"></a>
+  </div>
+  <a href="#resources" class="nav-cta">See the platform ↗</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-video-wrap">
+    <video autoplay muted loop playsinline preload="metadata">
+      <source src="../images/nc-girl.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-gradient"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Human Skills Analytics · Behavioral Health Screener</div>
+    <h1 class="hero-headline">What if the screening<br>conversation was actually<br><em>a conversation?</em></h1>
+    <p class="hero-sub">Voice-based behavioral health screening for K-12 students — capturing what a 1-to-5 scale never could, and what support teams have always needed to know.</p>
+    <div class="hero-actions">
+      <a href="#voice-intelligence" class="btn-primary">See the platform ↓</a>
+      <a href="../playbook.pdf" class="btn-ghost" target="_blank">Download playbook →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Waveform Divider -->
+<div class="waveform-divider" aria-hidden="true">
+  <svg class="waveform-svg" viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <g fill="#F37163">
+      <!-- Animated waveform bars -->
+      <rect class="wave-bar" x="10" y="30" width="6" height="40" rx="3" opacity="0.5" style="animation-delay:0s"/>
+      <rect class="wave-bar" x="26" y="20" width="6" height="55" rx="3" opacity="0.7" style="animation-delay:0.1s"/>
+      <rect class="wave-bar" x="42" y="35" width="6" height="30" rx="3" opacity="0.4" style="animation-delay:0.2s"/>
+      <rect class="wave-bar" x="58" y="10" width="6" height="65" rx="3" opacity="0.8" style="animation-delay:0.3s"/>
+      <rect class="wave-bar" x="74" y="25" width="6" height="48" rx="3" opacity="0.6" style="animation-delay:0.05s"/>
+      <rect class="wave-bar" x="90" y="40" width="6" height="25" rx="3" opacity="0.35" style="animation-delay:0.15s"/>
+      <rect class="wave-bar" x="106" y="15" width="6" height="60" rx="3" opacity="0.75" style="animation-delay:0.25s"/>
+      <rect class="wave-bar" x="122" y="30" width="6" height="42" rx="3" opacity="0.55" style="animation-delay:0.35s"/>
+      <rect class="wave-bar" x="138" y="5" width="6" height="70" rx="3" opacity="0.9" style="animation-delay:0.0s"/>
+      <rect class="wave-bar" x="154" y="28" width="6" height="44" rx="3" opacity="0.5" style="animation-delay:0.4s"/>
+      <rect class="wave-bar" x="170" y="38" width="6" height="28" rx="3" opacity="0.38" style="animation-delay:0.12s"/>
+      <rect class="wave-bar" x="186" y="12" width="6" height="62" rx="3" opacity="0.8" style="animation-delay:0.22s"/>
+      <rect class="wave-bar" x="202" y="22" width="6" height="50" rx="3" opacity="0.65" style="animation-delay:0.32s"/>
+      <rect class="wave-bar" x="218" y="8" width="6" height="68" rx="3" opacity="0.85" style="animation-delay:0.08s"/>
+      <rect class="wave-bar" x="234" y="32" width="6" height="38" rx="3" opacity="0.48" style="animation-delay:0.18s"/>
+      <rect class="wave-bar" x="250" y="42" width="6" height="22" rx="3" opacity="0.3" style="animation-delay:0.28s"/>
+      <rect class="wave-bar" x="266" y="18" width="6" height="57" rx="3" opacity="0.72" style="animation-delay:0.38s"/>
+      <rect class="wave-bar" x="282" y="27" width="6" height="46" rx="3" opacity="0.58" style="animation-delay:0.04s"/>
+      <rect class="wave-bar" x="298" y="7" width="6" height="67" rx="3" opacity="0.88" style="animation-delay:0.14s"/>
+      <rect class="wave-bar" x="314" y="33" width="6" height="36" rx="3" opacity="0.45" style="animation-delay:0.24s"/>
+      <rect class="wave-bar" x="330" y="43" width="6" height="23" rx="3" opacity="0.32" style="animation-delay:0.34s"/>
+      <rect class="wave-bar" x="346" y="16" width="6" height="59" rx="3" opacity="0.76" style="animation-delay:0.06s"/>
+      <rect class="wave-bar" x="362" y="26" width="6" height="47" rx="3" opacity="0.62" style="animation-delay:0.16s"/>
+      <rect class="wave-bar" x="378" y="4" width="6" height="72" rx="3" opacity="0.92" style="animation-delay:0.26s"/>
+      <rect class="wave-bar" x="394" y="31" width="6" height="40" rx="3" opacity="0.5" style="animation-delay:0.36s"/>
+      <!-- Center peak area -->
+      <rect class="wave-bar" x="410" y="2" width="8" height="76" rx="4" opacity="1" style="animation-delay:0.0s"/>
+      <rect class="wave-bar" x="428" y="14" width="8" height="62" rx="4" opacity="0.82" style="animation-delay:0.1s"/>
+      <rect class="wave-bar" x="446" y="6" width="8" height="70" rx="4" opacity="0.9" style="animation-delay:0.2s"/>
+      <rect class="wave-bar" x="464" y="18" width="8" height="55" rx="4" opacity="0.72" style="animation-delay:0.07s"/>
+      <rect class="wave-bar" x="482" y="1" width="8" height="78" rx="4" opacity="1" style="animation-delay:0.17s"/>
+      <rect class="wave-bar" x="500" y="11" width="8" height="64" rx="4" opacity="0.84" style="animation-delay:0.27s"/>
+      <rect class="wave-bar" x="518" y="5" width="8" height="71" rx="4" opacity="0.92" style="animation-delay:0.03s"/>
+      <rect class="wave-bar" x="536" y="16" width="8" height="57" rx="4" opacity="0.74" style="animation-delay:0.13s"/>
+      <rect class="wave-bar" x="554" y="3" width="8" height="75" rx="4" opacity="0.97" style="animation-delay:0.23s"/>
+      <rect class="wave-bar" x="572" y="9" width="8" height="65" rx="4" opacity="0.86" style="animation-delay:0.33s"/>
+      <rect class="wave-bar" x="590" y="19" width="8" height="53" rx="4" opacity="0.7" style="animation-delay:0.43s"/>
+      <!-- Mirror right side -->
+      <rect class="wave-bar" x="610" y="2" width="8" height="76" rx="4" opacity="1" style="animation-delay:0.05s"/>
+      <rect class="wave-bar" x="628" y="14" width="8" height="62" rx="4" opacity="0.82" style="animation-delay:0.15s"/>
+      <rect class="wave-bar" x="646" y="6" width="8" height="70" rx="4" opacity="0.9" style="animation-delay:0.25s"/>
+      <rect class="wave-bar" x="664" y="18" width="8" height="55" rx="4" opacity="0.72" style="animation-delay:0.0s"/>
+      <rect class="wave-bar" x="682" y="1" width="8" height="78" rx="4" opacity="1" style="animation-delay:0.2s"/>
+      <rect class="wave-bar" x="700" y="11" width="8" height="64" rx="4" opacity="0.84" style="animation-delay:0.1s"/>
+      <rect class="wave-bar" x="718" y="5" width="8" height="71" rx="4" opacity="0.92" style="animation-delay:0.3s"/>
+      <rect class="wave-bar" x="736" y="31" width="6" height="40" rx="3" opacity="0.5" style="animation-delay:0.08s"/>
+      <rect class="wave-bar" x="752" y="16" width="6" height="59" rx="3" opacity="0.76" style="animation-delay:0.18s"/>
+      <rect class="wave-bar" x="768" y="43" width="6" height="23" rx="3" opacity="0.32" style="animation-delay:0.28s"/>
+      <rect class="wave-bar" x="784" y="33" width="6" height="36" rx="3" opacity="0.45" style="animation-delay:0.38s"/>
+      <rect class="wave-bar" x="800" y="7" width="6" height="67" rx="3" opacity="0.88" style="animation-delay:0.04s"/>
+      <rect class="wave-bar" x="816" y="27" width="6" height="46" rx="3" opacity="0.58" style="animation-delay:0.14s"/>
+      <rect class="wave-bar" x="832" y="18" width="6" height="57" rx="3" opacity="0.72" style="animation-delay:0.24s"/>
+      <rect class="wave-bar" x="848" y="42" width="6" height="22" rx="3" opacity="0.3" style="animation-delay:0.34s"/>
+      <rect class="wave-bar" x="864" y="32" width="6" height="38" rx="3" opacity="0.48" style="animation-delay:0.09s"/>
+      <rect class="wave-bar" x="880" y="8" width="6" height="68" rx="3" opacity="0.85" style="animation-delay:0.19s"/>
+      <rect class="wave-bar" x="896" y="22" width="6" height="50" rx="3" opacity="0.65" style="animation-delay:0.29s"/>
+      <rect class="wave-bar" x="912" y="12" width="6" height="62" rx="3" opacity="0.8" style="animation-delay:0.39s"/>
+      <rect class="wave-bar" x="928" y="38" width="6" height="28" rx="3" opacity="0.38" style="animation-delay:0.06s"/>
+      <rect class="wave-bar" x="944" y="28" width="6" height="44" rx="3" opacity="0.5" style="animation-delay:0.16s"/>
+      <rect class="wave-bar" x="960" y="5" width="6" height="70" rx="3" opacity="0.9" style="animation-delay:0.26s"/>
+      <rect class="wave-bar" x="976" y="30" width="6" height="42" rx="3" opacity="0.55" style="animation-delay:0.36s"/>
+      <rect class="wave-bar" x="992" y="15" width="6" height="60" rx="3" opacity="0.75" style="animation-delay:0.01s"/>
+      <rect class="wave-bar" x="1008" y="40" width="6" height="25" rx="3" opacity="0.35" style="animation-delay:0.11s"/>
+      <rect class="wave-bar" x="1024" y="25" width="6" height="48" rx="3" opacity="0.6" style="animation-delay:0.21s"/>
+      <rect class="wave-bar" x="1040" y="10" width="6" height="65" rx="3" opacity="0.8" style="animation-delay:0.31s"/>
+      <rect class="wave-bar" x="1056" y="35" width="6" height="30" rx="3" opacity="0.4" style="animation-delay:0.41s"/>
+      <rect class="wave-bar" x="1072" y="20" width="6" height="55" rx="3" opacity="0.7" style="animation-delay:0.07s"/>
+      <rect class="wave-bar" x="1088" y="30" width="6" height="40" rx="3" opacity="0.5" style="animation-delay:0.17s"/>
+      <rect class="wave-bar" x="1104" y="22" width="6" height="52" rx="3" opacity="0.66" style="animation-delay:0.27s"/>
+      <rect class="wave-bar" x="1120" y="36" width="6" height="32" rx="3" opacity="0.42" style="animation-delay:0.37s"/>
+      <rect class="wave-bar" x="1136" y="12" width="6" height="60" rx="3" opacity="0.78" style="animation-delay:0.02s"/>
+      <rect class="wave-bar" x="1152" y="28" width="6" height="45" rx="3" opacity="0.57" style="animation-delay:0.12s"/>
+      <rect class="wave-bar" x="1168" y="44" width="6" height="20" rx="3" opacity="0.28" style="animation-delay:0.22s"/>
+      <rect class="wave-bar" x="1184" y="32" width="6" height="38" rx="3" opacity="0.47" style="animation-delay:0.32s"/>
+    </g>
+  </svg>
+</div>
+
+<!-- Stats Strip -->
+<div class="stats-strip" id="stats">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <div class="stat-number">97%</div>
+      <div class="stat-label">student participation in pilot screening windows</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:0.1s">
+      <div class="stat-number">1.4</div>
+      <div class="stat-label">days average time from screening to support connection</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:0.2s">
+      <div class="stat-number">$0</div>
+      <div class="stat-label">net cost after CYBHI reimbursement under CPT 96127</div>
+    </div>
+  </div>
+</div>
+
+<!-- Voice Intelligence Section -->
+<section class="section" id="voice-intelligence" data-streamer-label="Live Analysis">
+  <div class="section-inner">
+    <div class="section-eyebrow">Voice Intelligence</div>
+    <div class="vi-layout">
+      <div class="vi-video-col reveal">
+        <div class="vi-video-wrap" id="vi-video-container">
+          <video id="viVideo" src="../images/nc-girl.mp4" playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;"></video>
+          <div class="vi-caption-bar">
+            <div class="vi-caption-text" id="vi-caption"></div>
+          </div>
+          <!-- Score chip -->
+          <div class="vi-score-chip" id="vi-score-chip">
+            <div class="vi-chip-label">Detected signal</div>
+            <div class="vi-chip-domain" id="vi-chip-domain">Emotional Resilience</div>
+            <div class="vi-chip-score" id="vi-chip-dots"></div>
+          </div>
+        </div>
+        <div class="vi-controls" style="margin-top:16px;">
+          <button class="vi-play-btn" id="vi-play-btn" onclick="toggleVI()">
+            <span id="vi-btn-icon">▶</span> Play response
+          </button>
+        </div>
+      </div>
+      <div class="vi-domains-col reveal" style="transition-delay:0.15s">
+        <h2 class="section-heading" style="font-size:1.8rem;margin-bottom:14px;">Every word carries signal.</h2>
+        <p class="section-body" style="font-size:0.95rem;margin-bottom:36px;">Our model reads hesitation, self-correction, emotional framing, and insight — in real time. Watch domain scores emerge as a student speaks.</p>
+        <div class="vi-domains-header">Domain Scores — Live Session</div>
+
+        <div class="vi-domain-row active" data-domain="ra">
+          <div class="vi-domain-top">
+            <span class="vi-domain-name">Relational Awareness</span>
+            <span class="vi-domain-score-text" id="score-ra">3/4</span>
+          </div>
+          <div class="vi-domain-bar-bg">
+            <div class="vi-domain-bar-fill" id="bar-ra" style="width:75%"></div>
+          </div>
+          <div class="vi-domain-tag">Pre-scored from earlier prompt</div>
+        </div>
+
+        <div class="vi-domain-row active" data-domain="hs">
+          <div class="vi-domain-top">
+            <span class="vi-domain-name">Help-Seeking</span>
+            <span class="vi-domain-score-text" id="score-hs">2/4</span>
+          </div>
+          <div class="vi-domain-bar-bg">
+            <div class="vi-domain-bar-fill" id="bar-hs" style="width:50%;background: var(--blue)"></div>
+          </div>
+          <div class="vi-domain-tag">Pre-scored from earlier prompt</div>
+        </div>
+
+        <div class="vi-domain-row" data-domain="er" id="row-er">
+          <div class="vi-domain-top">
+            <span class="vi-domain-name">Emotional Resilience</span>
+            <span class="vi-domain-score-text" id="score-er">—</span>
+          </div>
+          <div class="vi-domain-bar-bg">
+            <div class="vi-domain-bar-fill" id="bar-er" style="width:0%"></div>
+          </div>
+          <div class="vi-domain-tag">Scoring this prompt…</div>
+        </div>
+
+        <div class="vi-domain-row" data-domain="si" id="row-si">
+          <div class="vi-domain-top">
+            <span class="vi-domain-name">Self-Insight</span>
+            <span class="vi-domain-score-text" id="score-si">—</span>
+          </div>
+          <div class="vi-domain-bar-bg">
+            <div class="vi-domain-bar-fill" id="bar-si" style="width:0%"></div>
+          </div>
+          <div class="vi-domain-tag">Scoring this prompt…</div>
+        </div>
+
+        <div class="vi-domain-row" data-domain="rg" id="row-rg">
+          <div class="vi-domain-top">
+            <span class="vi-domain-name">Reflective Growth</span>
+            <span class="vi-domain-score-text" id="score-rg">—</span>
+          </div>
+          <div class="vi-domain-bar-bg">
+            <div class="vi-domain-bar-fill" id="bar-rg" style="width:0%"></div>
+          </div>
+          <div class="vi-domain-tag">Scoring this prompt…</div>
+        </div>
+
+        <div class="vi-accuracy-note reveal" style="transition-delay:0.3s">
+          <div class="vi-accuracy-num">.918 QWK</div>
+          <div class="vi-accuracy-label">Model accuracy vs. human expert raters (Quadratic Weighted Kappa)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MTSS Pyramid -->
+<section class="section section-alt" id="mtss" data-streamer-label="District Summary">
+  <div class="section-inner">
+    <div class="section-eyebrow">MTSS Integration</div>
+    <div class="mtss-layout">
+      <div class="mtss-img-wrap reveal">
+        <img src="../images/mtss-pyramid.png" alt="MTSS Three-Tier Pyramid">
+      </div>
+      <div class="mtss-tiers reveal" style="transition-delay:0.15s">
+        <h2 class="section-heading">Screening that maps to your existing support structure</h2>
+        <p class="section-body">The Behavioral Health Screener doesn't create a new system — it makes your MTSS tiers more precise, more equitable, and faster to activate.</p>
+
+        <div class="mtss-tier">
+          <div class="mtss-tier-badge tier-1">T1</div>
+          <div class="mtss-tier-content">
+            <div class="mtss-tier-title">Tier 1 — Universal Screening</div>
+            <div class="mtss-tier-sub">All students, all grade bands, 3-5 prompts each</div>
+            <div class="mtss-tier-desc">Every student completes voice-based prompts at the start of each semester. AI scoring identifies baseline patterns across all five behavioral health domains at the population level.</div>
+          </div>
+        </div>
+
+        <div class="mtss-tier">
+          <div class="mtss-tier-badge tier-2">T2</div>
+          <div class="mtss-tier-content">
+            <div class="mtss-tier-title">Tier 2 — Targeted Support</div>
+            <div class="mtss-tier-sub">Students flagged by signal patterns, counselor review</div>
+            <div class="mtss-tier-desc">Students with elevated concern scores are surfaced automatically to counseling teams with domain-level evidence — not just a number, but the actual language that triggered the flag.</div>
+          </div>
+        </div>
+
+        <div class="mtss-tier">
+          <div class="mtss-tier-badge tier-3">T3</div>
+          <div class="mtss-tier-content">
+            <div class="mtss-tier-title">Tier 3 — Intensive Intervention</div>
+            <div class="mtss-tier-sub">High-need students, case coordination, documentation</div>
+            <div class="mtss-tier-desc">For students with persistent or acute signals, screener data feeds directly into case documentation and helps clinicians track growth across re-screening intervals.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- What Surveys Miss -->
+<section class="section" id="surveys">
+  <div class="section-inner">
+    <div class="section-eyebrow">The Signal Gap</div>
+    <h2 class="section-heading reveal">Likert scales were never built for this.</h2>
+    <p class="section-body reveal" style="transition-delay:0.1s">A student who rates their stress a 3 out of 5 and a student who's masking crisis behind a composed exterior both select 3. The screener goes further.</p>
+    <div class="compare-grid">
+      <div class="compare-col col-miss reveal" style="transition-delay:0.1s">
+        <div class="compare-col-label">What a 1–5 scale captures</div>
+        <div class="compare-item">
+          <div class="compare-icon">—</div>
+          <div class="compare-text">A single number in the moment of response</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-icon">—</div>
+          <div class="compare-text">Self-report bias — students who mask perform fine on paper</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-icon">—</div>
+          <div class="compare-text">Aggregate trends, but no individual narrative</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-icon">—</div>
+          <div class="compare-text">Answers that feel safe, not necessarily honest</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-icon">—</div>
+          <div class="compare-text">No signal about how a student thinks about themselves</div>
+        </div>
+      </div>
+      <div class="compare-col col-voice reveal" style="transition-delay:0.2s">
+        <div class="compare-col-label">What voice reveals</div>
+        <div class="compare-item">
+          <div class="compare-icon">+</div>
+          <div class="compare-text">The words students actually choose to describe their experience</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-icon">+</div>
+          <div class="compare-text">Self-awareness, contradiction, hedging, and emotional framing</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-icon">+</div>
+          <div class="compare-text">Domain-level scores with verbatim evidence for counselors</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-icon">+</div>
+          <div class="compare-text">Longitudinal change across screening intervals</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-icon">+</div>
+          <div class="compare-text">Insight into who is genuinely open to help — and who needs to be reached</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sample Prompts -->
+<section class="section section-alt" id="prompts" data-streamer-label="Screening in Progress">
+  <div class="section-inner">
+    <div class="section-eyebrow">Sample Prompts</div>
+    <h2 class="section-heading reveal">Hear what students say when you give them space to talk.</h2>
+    <p class="section-body reveal" style="transition-delay:0.1s">Each domain uses 2-3 open-ended, voice-recorded prompts. Click any tile to hear a sample prompt and try it yourself.</p>
+
+    <div class="prompts-tabs reveal" style="transition-delay:0.15s">
+      <button class="prompt-tab active" onclick="setGrade('3-12')">Grades 3–12</button>
+      <button class="prompt-tab" onclick="setGrade('tk-2')">TK–2</button>
+    </div>
+
+    <div class="prompts-grid" id="prompts-grid">
+      <div class="prompt-tile reveal" style="transition-delay:0.1s" onclick="openModal('https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+        <div class="prompt-domain-pill">Self-Insight</div>
+        <div class="prompt-question">"What's something you've gotten better at this year — and what did it take to get there?"</div>
+        <div class="prompt-try">Try this prompt →</div>
+      </div>
+      <div class="prompt-tile reveal" style="transition-delay:0.15s" onclick="openModal('https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+        <div class="prompt-domain-pill">Emotional Resilience</div>
+        <div class="prompt-question">"Tell me about a time things didn't go the way you planned. What did you do?"</div>
+        <div class="prompt-try">Try this prompt →</div>
+      </div>
+      <div class="prompt-tile reveal" style="transition-delay:0.2s" onclick="openModal('https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+        <div class="prompt-domain-pill">Relational Awareness</div>
+        <div class="prompt-question">"Is there someone at school you feel like you could actually talk to if something was wrong?"</div>
+        <div class="prompt-try">Try this prompt →</div>
+      </div>
+      <div class="prompt-tile reveal" style="transition-delay:0.25s" onclick="openModal('https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+        <div class="prompt-domain-pill">Conflict Resolution</div>
+        <div class="prompt-question">"Tell me about a disagreement you had with someone. How did you handle it?"</div>
+        <div class="prompt-try">Try this prompt →</div>
+      </div>
+      <div class="prompt-tile reveal" style="transition-delay:0.3s" onclick="openModal('https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+        <div class="prompt-domain-pill">Help-Seeking</div>
+        <div class="prompt-question">"When something's hard — like really hard — do you usually talk to someone about it or handle it on your own?"</div>
+        <div class="prompt-try">Try this prompt →</div>
+      </div>
+      <div class="prompt-tile reveal" style="transition-delay:0.35s" onclick="openModal('https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+        <div class="prompt-domain-pill">Reflective Growth</div>
+        <div class="prompt-question">"If you could go back and handle one situation differently this year, what would it be — and what would you do instead?"</div>
+        <div class="prompt-try">Try this prompt →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BHSSA State Validation -->
+<section class="section" id="bhssa" data-streamer-label="State Validation">
+  <div class="section-inner">
+    <div class="bhssa-layout">
+      <div class="bhssa-img-wrap reveal">
+        <img src="../images/bhssa-announcement.gif" alt="BHSSA State Validation Announcement">
+      </div>
+      <div class="reveal" style="transition-delay:0.15s">
+        <div class="bhssa-badge">State Validation · BHSSA-002</div>
+        <h2 class="section-heading">Selected for California's statewide behavioral health evaluation.</h2>
+        <p class="bhssa-text">In partnership with the Santa Clara County Office of Education, IMPACTER Pathway was selected by the California Behavioral Health Services Oversight and Accountability Commission (BHSOAC) for the statewide behavioral health performance management evaluation.</p>
+        <div class="bhssa-validation">
+          <p><strong>BHSSA-002</strong> — Statewide evaluation of student behavioral health screening and outcomes. IMPACTER Pathway is one of a small number of district-facing tools selected for this validation study, which will inform California's behavioral health infrastructure for the next decade.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CYBHI Funding -->
+<section class="section section-alt" id="funding">
+  <div class="section-inner">
+    <div class="section-eyebrow">CYBHI Reimbursement</div>
+    <div class="cybhi-inner">
+      <h2 class="section-heading reveal">Districts can run this program at no net cost.</h2>
+      <p class="cybhi-prose reveal" style="transition-delay:0.1s;margin-bottom:0;">Through California's <strong>Children and Youth Behavioral Health Initiative (CYBHI)</strong>, schools can submit for reimbursement on each behavioral health screening administered — effectively offsetting the cost of the program entirely.</p>
+
+      <div class="cybhi-grid">
+        <div class="cybhi-item reveal">
+          <div class="cybhi-num">$4.81</div>
+          <div class="cybhi-desc">Reimbursement per administration under CPT 96127</div>
+        </div>
+        <div class="cybhi-item reveal" style="transition-delay:0.1s">
+          <div class="cybhi-num">$0</div>
+          <div class="cybhi-desc">Net cost after CYBHI reimbursement for participating districts</div>
+        </div>
+        <div class="cybhi-item reveal" style="transition-delay:0.2s">
+          <div class="cybhi-num">Z13.89</div>
+          <div class="cybhi-desc">Diagnosis code paired with CPT 96127 for behavioral health encounter billing</div>
+        </div>
+      </div>
+
+      <p class="cybhi-prose reveal" style="transition-delay:0.3s">Our team handles the documentation support to help districts configure their billing workflow. For most districts we work with, <strong>the screener pays for itself within the first screening window</strong>. We can walk through your district's specific reimbursement scenario on a call.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Resources -->
+<section class="section" id="resources">
+  <div class="section-inner">
+    <div class="section-eyebrow">Get Started</div>
+    <h2 class="section-heading reveal">See the platform in the context of your district.</h2>
+    <p class="section-body reveal" style="transition-delay:0.1s">Whether you want to walk through a live demo, review the research base, or explore a pilot structure — we're ready to go as fast as you want to move.</p>
+
+    <div class="resources-grid">
+      <a href="https://sdcoe.impacterpathway.com" target="_blank" class="resource-card reveal">
+        <div class="resource-icon">🎙️</div>
+        <div class="resource-title">Live Screener</div>
+        <div class="resource-desc">Experience the student-facing screener yourself. Try any of the six domain prompts in real time.</div>
+      </a>
+      <a href="../playbook.pdf" target="_blank" class="resource-card reveal" style="transition-delay:0.1s">
+        <div class="resource-icon">📄</div>
+        <div class="resource-title">District Playbook</div>
+        <div class="resource-desc">Implementation guide covering MTSS integration, reimbursement setup, data privacy, and rollout timelines.</div>
+      </a>
+      <a href="mailto:info@impacterpathway.com" class="resource-card reveal" style="transition-delay:0.2s">
+        <div class="resource-icon">✉️</div>
+        <div class="resource-title">Talk to our team</div>
+        <div class="resource-desc">Schedule a demo or ask a question. We work with district leadership, counseling directors, and MTSS coordinators.</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="../images/impacter-pathway-white.svg" alt="IMPACTER Pathway">
+    </div>
+    <div class="footer-links">
+      <a href="mailto:info@impacterpathway.com">info@impacterpathway.com</a>
+      <a href="../playbook.pdf" target="_blank">Playbook</a>
+      <a href="https://sdcoe.impacterpathway.com" target="_blank">Live Screener</a>
+    </div>
+    <div class="footer-copy">© 2026 IMPACTER Pathway<br>Human Skills Analytics</div>
+  </div>
+</footer>
+
+<!-- Streamer Overlay -->
+<div class="streamer" id="streamer" aria-live="polite">
+  <div class="streamer-header">
+    <span class="streamer-label" id="streamer-label">Live Analysis</span>
+    <div class="streamer-pulse"></div>
+  </div>
+  <div class="streamer-context" id="streamer-context">Behavioral Health Screener</div>
+
+  <div class="streamer-domain">
+    <span class="sd-name">Emotional Resilience</span>
+    <div class="sd-score" id="sd-er">
+      <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
+    </div>
+  </div>
+  <div class="streamer-domain">
+    <span class="sd-name">Self-Insight</span>
+    <div class="sd-score" id="sd-si">
+      <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
+    </div>
+  </div>
+  <div class="streamer-domain">
+    <span class="sd-name">Reflective Growth</span>
+    <div class="sd-score" id="sd-rg">
+      <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
+    </div>
+  </div>
+  <div class="streamer-domain">
+    <span class="sd-name">Relational Awareness</span>
+    <div class="sd-score" id="sd-ra">
+      <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot"></div>
+    </div>
+  </div>
+  <div class="streamer-domain">
+    <span class="sd-name">Help-Seeking</span>
+    <div class="sd-score" id="sd-hs">
+      <div class="sd-dot lit-blue"></div><div class="sd-dot lit-blue"></div><div class="sd-dot"></div><div class="sd-dot"></div>
+    </div>
+  </div>
+
+  <div class="streamer-footer">IMPACTER · Human Skills Analytics</div>
+</div>
+
+<!-- VideoAsk Modal -->
+<div class="modal-backdrop" id="modal" onclick="closeModalOnBackdrop(event)">
+  <div class="modal-panel">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    <iframe class="modal-iframe" id="modal-iframe" src="" allow="camera; microphone; autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+/* ──────────────────────────────
+   WORD TIMESTAMPS
+────────────────────────────── */
+const WORDS = [
+  {t:0.0, text:'When'}, {t:0.2, text:'given'}, {t:0.45, text:'some'},
+  {t:0.65, text:'thought'}, {t:0.85, text:'to'}, {t:0.95, text:'this'},
+  {t:1.15, text:'question,'}, {t:1.55, text:'I'}, {t:1.7, text:'realize'},
+  {t:2.05, text:'I'}, {t:2.2, text:"don't"}, {t:2.5, text:'have'},
+  {t:2.7, text:'as'}, {t:2.85, text:'much'}, {t:3.05, text:'failures', tag:'er'},
+  {t:3.5, text:'as'}, {t:3.65, text:'I'}, {t:3.8, text:'would'},
+  {t:4.0, text:'have'}, {t:4.2, text:'expected.'},
+  {t:4.95, text:'My'}, {t:5.1, text:'biggest'}, {t:5.45, text:'failure', tag:'er'},
+  {t:5.85, text:'would'}, {t:6.05, text:'be'}, {t:6.2, text:'not'},
+  {t:6.4, text:'taking'}, {t:6.65, text:'enough'}, {t:6.95, text:'risk'},
+  {t:7.25, text:'to'}, {t:7.4, text:'experience'}, {t:7.85, text:'true'},
+  {t:8.1, text:'failure.'}, {t:8.75, text:'I'}, {t:8.95, text:'think', tag:'si'},
+  {t:9.35, text:'I'}, {t:9.55, text:'guard'}, {t:9.85, text:'myself'},
+  {t:10.2, text:'from'}, {t:10.45, text:'it.'},
+  {t:11.2, text:'Part'}, {t:11.4, text:'of'}, {t:11.6, text:'me'},
+  {t:11.8, text:'does'}, {t:12.0, text:"n't"}, {t:12.15, text:'want'},
+  {t:12.4, text:'to'}, {t:12.6, text:'fail.'},
+  {t:13.3, text:'But'}, {t:13.6, text:'another', tag:'rg'}, {t:13.9, text:'part'},
+  {t:14.2, text:'of'}, {t:14.35, text:'me'}, {t:14.55, text:'understands'},
+  {t:14.95, text:'that'}, {t:15.15, text:'failure'}, {t:15.5, text:'is'},
+  {t:15.7, text:'the'}, {t:15.9, text:'only'}, {t:16.2, text:'way'},
+  {t:16.5, text:'to'}, {t:16.7, text:'truly'}, {t:17.0, text:'succeed.'},
+];
+
+/* Domain trigger timestamps */
+const DOMAIN_TRIGGERS = [
+  { time: 3.5, domain: 'er', name: 'Emotional Resilience', score: 4 },
+  { time: 9.0, domain: 'si', name: 'Self-Insight', score: 4 },
+  { time: 13.0, domain: 'rg', name: 'Reflective Growth', score: 4 },
+];
+
+const WINDOW_SIZE = 6; // words visible at once
+
+/* ──────────────────────────────
+   VOICE INTELLIGENCE PLAYER
+────────────────────────────── */
+const viVideo = document.getElementById('viVideo');
+const captionEl = document.getElementById('vi-caption');
+const playBtn = document.getElementById('vi-play-btn');
+const btnIcon = document.getElementById('vi-btn-icon');
+const scoreChip = document.getElementById('vi-score-chip');
+const chipDomain = document.getElementById('vi-chip-domain');
+const chipDots = document.getElementById('vi-chip-dots');
+
+let rafId = null;
+let viPlaying = false;
+let triggeredDomains = new Set();
+let chipTimeout = null;
+
+function buildCaption() {
+  captionEl.innerHTML = WORDS.map((w, i) =>
+    `<span class="word" id="w${i}">${w.text} </span>`
+  ).join('');
+}
+buildCaption();
+
+function updateCaption(ct) {
+  // Find active word index
+  let activeIdx = -1;
+  for (let i = 0; i < WORDS.length; i++) {
+    if (WORDS[i].t <= ct) activeIdx = i;
+    else break;
+  }
+
+  const windowStart = Math.max(0, activeIdx - 2);
+  const windowEnd = Math.min(WORDS.length - 1, windowStart + WINDOW_SIZE - 1);
+
+  WORDS.forEach((w, i) => {
+    const el = document.getElementById('w' + i);
+    if (!el) return;
+    if (i < windowStart || i > windowEnd) {
+      el.style.display = 'none';
+    } else {
+      el.style.display = 'inline';
+      el.classList.remove('active', 'past');
+      if (i === activeIdx) el.classList.add('active');
+      else if (i < activeIdx) el.classList.add('past');
+    }
+  });
+}
+
+function checkDomainTriggers(ct) {
+  DOMAIN_TRIGGERS.forEach(trigger => {
+    if (ct >= trigger.time && !triggeredDomains.has(trigger.domain)) {
+      triggeredDomains.add(trigger.domain);
+      activateDomain(trigger.domain, trigger.name, trigger.score);
+    }
+  });
+}
+
+function activateDomain(domain, name, score) {
+  // Animate bar
+  const barEl = document.getElementById('bar-' + domain);
+  const scoreEl = document.getElementById('score-' + domain);
+  const rowEl = document.getElementById('row-' + domain);
+  if (barEl) { barEl.style.width = (score / 4 * 100) + '%'; }
+  if (scoreEl) { scoreEl.textContent = score + '/4'; }
+  if (rowEl) { rowEl.classList.add('active'); }
+
+  // Show chip
+  chipDomain.textContent = name;
+  chipDots.innerHTML = Array.from({length: 4}, (_, i) =>
+    `<div class="vi-chip-dot${i < score ? ' lit' : ''}"></div>`
+  ).join('');
+  scoreChip.classList.add('show');
+
+  clearTimeout(chipTimeout);
+  chipTimeout = setTimeout(() => {
+    scoreChip.classList.remove('show');
+  }, 2500);
+}
+
+function rafLoop() {
+  if (!viPlaying) return;
+  const ct = viVideo.currentTime;
+  updateCaption(ct);
+  checkDomainTriggers(ct);
+  rafId = requestAnimationFrame(rafLoop);
+}
+
+function toggleVI() {
+  if (viVideo.paused) {
+    viVideo.play();
+    viPlaying = true;
+    btnIcon.textContent = '⏸';
+    playBtn.querySelector('span:last-child') && (playBtn.lastChild.textContent = ' Pause');
+    playBtn.innerHTML = '<span id="vi-btn-icon">⏸</span> Pause';
+    rafId = requestAnimationFrame(rafLoop);
+  } else {
+    viVideo.pause();
+    viPlaying = false;
+    playBtn.innerHTML = '<span id="vi-btn-icon">▶</span> Play response';
+    cancelAnimationFrame(rafId);
+  }
+}
+
+viVideo.addEventListener('ended', () => {
+  viPlaying = false;
+  playBtn.innerHTML = '<span id="vi-btn-icon">▶</span> Play response';
+  cancelAnimationFrame(rafId);
+});
+
+/* ──────────────────────────────
+   MODAL
+────────────────────────────── */
+const modal = document.getElementById('modal');
+const modalIframe = document.getElementById('modal-iframe');
+
+function openModal(url) {
+  modalIframe.src = url;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modal.classList.remove('open');
+  modalIframe.src = '';
+  document.body.style.overflow = '';
+}
+
+function closeModalOnBackdrop(e) {
+  if (e.target === modal) closeModal();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ──────────────────────────────
+   GRADE TABS (TK-2 vs 3-12)
+────────────────────────────── */
+const prompts312 = [
+  { domain: 'Self-Insight', url: 'https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"What\'s something you\'ve gotten better at this year — and what did it take to get there?"' },
+  { domain: 'Emotional Resilience', url: 'https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"Tell me about a time things didn\'t go the way you planned. What did you do?"' },
+  { domain: 'Relational Awareness', url: 'https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"Is there someone at school you feel like you could actually talk to if something was wrong?"' },
+  { domain: 'Conflict Resolution', url: 'https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"Tell me about a disagreement you had with someone. How did you handle it?"' },
+  { domain: 'Help-Seeking', url: 'https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"When something\'s hard — like really hard — do you usually talk to someone about it or handle it on your own?"' },
+  { domain: 'Reflective Growth', url: 'https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"If you could go back and handle one situation differently this year, what would it be — and what would you do instead?"' },
+];
+
+const promptsTK2 = [
+  { domain: 'Self-Insight', url: 'https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"Tell me something you learned how to do that was tricky at first."' },
+  { domain: 'Emotional Resilience', url: 'https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"What do you do when you feel sad or upset at school?"' },
+  { domain: 'Relational Awareness', url: 'https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"Who is a grown-up at school that makes you feel safe? Tell me about them."' },
+  { domain: 'Conflict Resolution', url: 'https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"What do you do when you and a friend disagree about something?"' },
+  { domain: 'Help-Seeking', url: 'https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"If something was bothering you, who would you tell?"' },
+  { domain: 'Reflective Growth', url: 'https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"Is there something you wish you had done differently this week?"' },
+];
+
+function renderPrompts(list) {
+  const grid = document.getElementById('prompts-grid');
+  grid.innerHTML = list.map((p, i) => `
+    <div class="prompt-tile" style="transition-delay:${0.05 * i}s" onclick="openModal('${p.url}')">
+      <div class="prompt-domain-pill">${p.domain}</div>
+      <div class="prompt-question">${p.q}</div>
+      <div class="prompt-try">Try this prompt →</div>
+    </div>
+  `).join('');
+}
+
+function setGrade(grade) {
+  document.querySelectorAll('.prompt-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderPrompts(grade === '3-12' ? prompts312 : promptsTK2);
+}
+
+/* ──────────────────────────────
+   SCROLL PROGRESS
+────────────────────────────── */
+const progressBar = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = (window.scrollY / total) * 100;
+  progressBar.style.width = pct + '%';
+}, { passive: true });
+
+/* ──────────────────────────────
+   NAV HIDE/SHOW
+────────────────────────────── */
+const nav = document.getElementById('main-nav');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const curr = window.scrollY;
+  if (curr > 80) nav.classList.add('solid');
+  else nav.classList.remove('solid');
+
+  if (curr > lastScroll && curr > 200) nav.classList.add('hidden');
+  else nav.classList.remove('hidden');
+  lastScroll = curr;
+}, { passive: true });
+
+/* ──────────────────────────────
+   INTERSECTION OBSERVER — REVEALS
+────────────────────────────── */
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in-view');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ──────────────────────────────
+   STREAMER OVERLAY — SECTION DETECT
+────────────────────────────── */
+const streamer = document.getElementById('streamer');
+const streamerLabel = document.getElementById('streamer-label');
+const streamerContext = document.getElementById('streamer-context');
+
+const SECTION_LABELS = {
+  'voice-intelligence': { label: 'Live Analysis', context: 'Scoring this response in real time…' },
+  'mtss': { label: 'District Summary', context: 'Viewing MTSS integration overview' },
+  'prompts': { label: 'Screening in Progress', context: '6 domain prompts ready' },
+  'bhssa': { label: 'State Validation', context: 'BHSSA-002 · California BHSOAC' },
+  'funding': { label: 'CYBHI Breakdown', context: 'CPT 96127 reimbursement data' },
+  'resources': { label: 'Get Started', context: 'Schedule a district walkthrough' },
+};
+
+let streamerVisible = false;
+
+const streamerSectionObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id || e.target.dataset.streamerId;
+      const cfg = SECTION_LABELS[id];
+      if (cfg) {
+        streamerLabel.textContent = cfg.label;
+        streamerContext.textContent = cfg.context;
+      }
+    }
+  });
+}, { threshold: 0.3 });
+
+// Show/hide streamer after hero
+const heroSection = document.querySelector('.hero');
+const heroObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) {
+      streamer.classList.add('visible');
+    } else {
+      streamer.classList.remove('visible');
+    }
+  });
+}, { threshold: 0.1 });
+heroObs.observe(heroSection);
+
+// Observe each labeled section
+document.querySelectorAll('[data-streamer-label]').forEach(sec => {
+  streamerSectionObs.observe(sec);
+});
+
+// Also handle stats section
+const statsSection = document.getElementById('stats');
+if (statsSection) {
+  const statsObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        streamerLabel.textContent = 'Student Data';
+        streamerContext.textContent = 'Pilot window outcomes';
+      }
+    });
+  }, { threshold: 0.4 });
+  statsObs.observe(statsSection);
+}
+
+/* ──────────────────────────────
+   KARAOKE — reset on video end/seek
+────────────────────────────── */
+viVideo.addEventListener('seeked', () => {
+  triggeredDomains.clear();
+  // Reset domain rows
+  ['er','si','rg'].forEach(d => {
+    const bar = document.getElementById('bar-' + d);
+    const score = document.getElementById('score-' + d);
+    const row = document.getElementById('row-' + d);
+    if (bar && viVideo.currentTime < (d === 'er' ? 3.5 : d === 'si' ? 9.0 : 13.0)) {
+      bar.style.width = '0%';
+      score.textContent = '—';
+      if (row) row.classList.remove('active');
+    }
+  });
+  updateCaption(viVideo.currentTime);
+});
+</script>
+</body>
+</html>

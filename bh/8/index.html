@@ -1,0 +1,2152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Behavioral Health Screener · IMPACTER Pathway</title>
+  <meta name="description" content="AI-powered behavioral health screening for K-12. Every student heard. Evidence-based. CYBHI reimbursable." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0F1B2E;
+      color: rgba(255,255,255,0.9);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    a { color: inherit; text-decoration: none; }
+    img, video { display: block; max-width: 100%; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ─── Film Grain ─────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 128px 128px;
+    }
+
+    /* ─── Progress Bar ───────────────────────────────── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: #F37163;
+      width: 0%;
+      z-index: 10001;
+      transition: width 0.1s linear;
+    }
+
+    /* ─── Navigation ─────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      background: rgba(15,27,46,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.3s ease;
+    }
+    nav.hidden { transform: translateY(-100%); }
+    .nav-logo img { height: 24px; width: auto; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: rgba(255,255,255,0.9); }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #F37163;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: 8px;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ─── Hero ───────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      padding-top: 64px;
+      background: #0F1B2E;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 50%;
+      height: 100%;
+      background: #122540;
+      z-index: 0;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 60px 80px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 80px 80px 60px;
+      position: relative;
+      z-index: 1;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #F37163;
+      margin-bottom: 28px;
+    }
+    .eyebrow-divider {
+      width: 1px;
+      height: 14px;
+      background: rgba(243,113,99,0.4);
+    }
+    .eyebrow-sub { color: rgba(255,255,255,0.45); }
+    h1 {
+      font-size: clamp(42px, 5.5vw, 80px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+      color: #fff;
+    }
+    h1 em {
+      font-style: normal;
+      color: #F37163;
+    }
+    .hero-body {
+      font-size: 17px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.6);
+      max-width: 480px;
+      margin-bottom: 40px;
+    }
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #F37163;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 10px;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.7);
+      font-size: 15px;
+      font-weight: 500;
+      padding: 14px 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+
+    /* ─── Domain Score Panel (Hero Right) ───────────── */
+    .score-panel {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+    }
+    .score-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .score-panel-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .score-panel-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #4ade80;
+      background: rgba(74,222,128,0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .score-panel-badge-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse-green 2s infinite;
+    }
+    @keyframes pulse-green {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .score-student-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .score-student-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #638EC5, #4a7ab0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .score-student-info {}
+    .score-student-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+    }
+    .score-student-meta {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+    }
+    .domain-rows { display: flex; flex-direction: column; gap: 14px; }
+    .domain-row {}
+    .domain-row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .domain-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+    }
+    .domain-score {
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+    }
+    .domain-bar-track {
+      height: 6px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .domain-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .domain-bar-fill.d1 { background: #638EC5; transition-delay: 0.3s; }
+    .domain-bar-fill.d2 { background: #F37163; transition-delay: 0.55s; }
+    .domain-bar-fill.d3 { background: #638EC5; transition-delay: 0.8s; }
+    .domain-bar-fill.d4 { background: #7bb3d0; transition-delay: 1.05s; }
+    .domain-bar-fill.d5 { background: #F37163; transition-delay: 1.3s; }
+    .score-panel-footer {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      line-height: 1.5;
+    }
+    .score-panel-footer strong { color: rgba(255,255,255,0.5); }
+
+    /* ─── Waveform Divider ───────────────────────────── */
+    .waveform-divider {
+      width: 100%;
+      overflow: hidden;
+      padding: 0;
+      line-height: 0;
+      background: #0F1B2E;
+    }
+    .waveform-svg { width: 100%; height: 72px; display: block; }
+    .waveform-bar { animation: wf-pulse 1.8s ease-in-out infinite; }
+    @keyframes wf-pulse {
+      0%,100% { opacity: 0.6; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.3); }
+    }
+
+    /* ─── Section Shared ─────────────────────────────── */
+    section { padding: 96px 80px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #F37163;
+      margin-bottom: 12px;
+    }
+    .section-heading {
+      font-size: clamp(28px, 3.5vw, 46px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 16px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.55);
+      max-width: 560px;
+    }
+
+    /* ─── MTSS Pyramid ───────────────────────────────── */
+    .mtss-section { background: #122540; }
+    .mtss-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+      margin-top: 48px;
+    }
+    .mtss-image-wrap {
+      position: relative;
+    }
+    .mtss-image-wrap img {
+      width: 100%;
+      border-radius: 16px;
+    }
+    .mtss-tiers {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .mtss-tier {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 20px 24px;
+      transition: border-color 0.2s, transform 0.2s;
+      opacity: 0;
+      transform: translateX(30px);
+      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s;
+    }
+    .mtss-tier.visible { opacity: 1; transform: translateX(0); }
+    .mtss-tier:hover { border-color: rgba(255,255,255,0.16); transform: translateX(4px); }
+    .mtss-tier-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .mtss-tier-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .tier-1 .mtss-tier-badge { background: rgba(99,142,197,0.18); color: #638EC5; }
+    .tier-2 .mtss-tier-badge { background: rgba(243,113,99,0.18); color: #F37163; }
+    .tier-3 .mtss-tier-badge { background: rgba(243,113,99,0.3); color: #F37163; }
+    .mtss-tier-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+    }
+    .mtss-tier-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 10px;
+    }
+    .mtss-tier-stat {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.05);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    /* ─── Stats Row ──────────────────────────────────── */
+    .stats-section { background: #0F1B2E; padding: 72px 80px; }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 0 40px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-number span { color: #F37163; }
+    .stat-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.5;
+      max-width: 160px;
+      margin: 0 auto;
+    }
+
+    /* ─── Voice Intelligence / Assessment Demo ───────── */
+    .assessment-section { background: #122540; }
+    .assessment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+      margin-top: 48px;
+    }
+    .video-container {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      aspect-ratio: 16/9;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+    }
+    #demoVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .karaoke-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 20px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+    }
+    .karaoke-line {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.7);
+      min-height: 52px;
+    }
+    .karaoke-word { display: inline; margin-right: 3px; }
+    .karaoke-word.active { color: #F37163; font-weight: 700; }
+    .domain-live-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-top: 8px;
+    }
+    .domain-live-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 4px;
+    }
+    .domain-live-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 14px 16px;
+      transition: border-color 0.3s;
+    }
+    .domain-live-item.triggered { border-color: rgba(243,113,99,0.4); }
+    .domain-live-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .domain-live-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.75);
+    }
+    .domain-live-score {
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      transition: color 0.3s;
+    }
+    .domain-live-item.triggered .domain-live-score { color: #F37163; }
+    .domain-live-track {
+      height: 5px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .domain-live-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.15);
+      transition: width 0.8s ease, background 0.4s;
+    }
+    .domain-live-item.triggered .domain-live-fill { background: #F37163; }
+    .play-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(243,113,99,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+      z-index: 10;
+    }
+    .play-btn:hover { transform: translate(-50%,-50%) scale(1.08); }
+    .play-btn.hidden { opacity: 0; pointer-events: none; }
+    .play-btn svg { margin-left: 4px; }
+
+    /* ─── BH Domains ─────────────────────────────────── */
+    .domains-section { background: #0F1B2E; }
+    .domains-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 48px;
+    }
+    .domain-card {
+      display: grid;
+      grid-template-columns: 200px 1fr 1fr;
+      gap: 0;
+      padding: 28px 32px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      background: rgba(255,255,255,0.02);
+      transition: background 0.2s, border-color 0.2s;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s, border-color 0.2s;
+    }
+    .domain-card.visible { opacity: 1; transform: translateY(0); }
+    .domain-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
+    .dc-name {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-right: 24px;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+    .dc-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #F37163;
+    }
+    .dc-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .dc-desc {
+      padding: 0 32px;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+    }
+    .dc-desc p {
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.5);
+    }
+    .dc-reveal {
+      padding-left: 32px;
+      display: flex;
+      align-items: center;
+    }
+    .dc-reveal-inner {
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .dc-reveal-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 6px;
+    }
+    .dc-reveal-quote {
+      font-size: 13px;
+      font-style: italic;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.55;
+    }
+
+    /* ─── Sample Prompts ─────────────────────────────── */
+    .prompts-section { background: #122540; }
+    .prompts-tabs {
+      display: flex;
+      gap: 4px;
+      margin-top: 36px;
+      margin-bottom: 28px;
+      background: rgba(255,255,255,0.04);
+      padding: 4px;
+      border-radius: 10px;
+      width: fit-content;
+    }
+    .prompt-tab {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 7px;
+      color: rgba(255,255,255,0.45);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .prompt-tab.active {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.9);
+    }
+    .prompts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .prompt-tile {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 24px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .prompt-tile:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.16);
+      transform: translateY(-3px);
+    }
+    .prompt-domain-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #F37163;
+      background: rgba(243,113,99,0.1);
+      padding: 3px 9px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    .prompt-question {
+      font-size: 15px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+    .prompt-context {
+      font-size: 12px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.4);
+    }
+    .prompt-open-icon {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.3);
+      transition: color 0.2s;
+    }
+    .prompt-tile:hover .prompt-open-icon { color: #F37163; }
+
+    /* ─── Modal ──────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal-box {
+      background: #122540;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      width: 90vw;
+      max-width: 800px;
+      overflow: hidden;
+      transform: scale(0.95) translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.2,0.8,0.2,1);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+    }
+    .modal-overlay.open .modal-box { transform: scale(1) translateY(0); }
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 24px 28px 0;
+    }
+    .modal-domain {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #F37163;
+      margin-bottom: 4px;
+    }
+    .modal-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s;
+      color: rgba(255,255,255,0.6);
+      font-size: 18px;
+      line-height: 1;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.14); }
+    .modal-context {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.45);
+      padding: 8px 28px 16px;
+    }
+    .modal-iframe-wrap {
+      padding: 0 28px 28px;
+    }
+    .modal-iframe-wrap iframe {
+      width: 100%;
+      height: 520px;
+      border: none;
+      border-radius: 12px;
+      background: #000;
+    }
+
+    /* ─── BHSSA Section ──────────────────────────────── */
+    .bhssa-section { background: #0F1B2E; }
+    .bhssa-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      margin-top: 48px;
+    }
+    .bhssa-gif {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    }
+    .bhssa-gif img { width: 100%; }
+    .bhssa-content {}
+    .bhssa-stat-block {
+      background: rgba(99,142,197,0.08);
+      border: 1px solid rgba(99,142,197,0.2);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 24px;
+    }
+    .bhssa-stat-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .bhssa-stat-num {
+      font-size: 32px;
+      font-weight: 800;
+      color: #638EC5;
+      letter-spacing: -0.02em;
+    }
+    .bhssa-stat-label {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+    }
+    .bhssa-detail {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.4);
+    }
+    .bhssa-body {
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 20px;
+    }
+    .bhssa-org-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .bhssa-org {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+    }
+    .bhssa-org-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #638EC5;
+      flex-shrink: 0;
+    }
+
+    /* ─── CYBHI Funding ──────────────────────────────── */
+    .cybhi-section { background: #122540; }
+    .cybhi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .cybhi-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 28px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .cybhi-card.visible { opacity: 1; transform: translateY(0); }
+    .cybhi-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(243,113,99,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 18px;
+    }
+    .cybhi-card-num {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .cybhi-card-num span { color: #F37163; }
+    .cybhi-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 8px;
+    }
+    .cybhi-card-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.4);
+    }
+    .cybhi-note {
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.6;
+    }
+
+    /* ─── Resources ──────────────────────────────────── */
+    .resources-section { background: #0F1B2E; }
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .resource-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 32px;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .resource-card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.14);
+      transform: translateY(-3px);
+    }
+    .resource-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+    .resource-icon.coral { background: rgba(243,113,99,0.12); }
+    .resource-icon.blue { background: rgba(99,142,197,0.12); }
+    .resource-icon.green { background: rgba(74,222,128,0.1); }
+    .resource-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .resource-card-desc {
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.45);
+      flex: 1;
+      margin-bottom: 24px;
+    }
+    .resource-card-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #F37163;
+      transition: gap 0.2s;
+    }
+    .resource-card:hover .resource-card-action { gap: 10px; }
+
+    /* ─── Footer ─────────────────────────────────────── */
+    footer {
+      background: #070F1A;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 48px 80px;
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .footer-left {}
+    .footer-logo { margin-bottom: 10px; }
+    .footer-logo img { height: 20px; width: auto; opacity: 0.6; }
+    .footer-meta {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      line-height: 1.6;
+    }
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .footer-link {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: rgba(255,255,255,0.7); }
+
+    /* ─── Streamer ───────────────────────────────────── */
+    .streamer {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 200;
+      width: 280px;
+      background: rgba(10,14,20,0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 20px;
+      transform: translateX(340px);
+      opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1), opacity 0.4s ease;
+      box-shadow: 0 24px 56px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .streamer.visible {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    .streamer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .streamer-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #4ade80;
+    }
+    .streamer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse-green 2s infinite;
+    }
+    .streamer-dismiss {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      transition: background 0.2s;
+    }
+    .streamer-dismiss:hover { background: rgba(255,255,255,0.12); }
+    .streamer-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+      transition: all 0.3s ease;
+    }
+    .streamer-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .streamer-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .streamer-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .streamer-bar-name {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      width: 70px;
+      flex-shrink: 0;
+    }
+    .streamer-bar-track {
+      flex: 1;
+      height: 3px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .streamer-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: #F37163;
+      transition: width 0.6s ease;
+    }
+
+    /* ─── Scroll Reveal ──────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── Mobile ─────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero::after { display: none; }
+      .hero-left { padding: 60px 24px 40px; }
+      .hero-right { padding: 0 24px 60px; background: #122540; }
+      section { padding: 64px 24px; }
+      .stats-section { padding: 56px 24px; }
+      footer { padding: 40px 24px; }
+      .mtss-grid,
+      .assessment-grid,
+      .bhssa-grid { grid-template-columns: 1fr; gap: 40px; }
+      .stats-row { grid-template-columns: 1fr; gap: 32px; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0 0 32px; }
+      .stat-item:last-child { border-bottom: none; padding-bottom: 0; }
+      .domain-card { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
+      .dc-name { border-right: none; padding-right: 0; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+      .dc-desc { padding: 0; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 12px; }
+      .dc-reveal { padding-left: 0; }
+      .prompts-grid { grid-template-columns: 1fr; }
+      .cybhi-grid { grid-template-columns: 1fr; }
+      .resources-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .streamer { display: none; }
+      .mtss-tiers .mtss-tier { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Nav -->
+<nav id="mainNav">
+  <div class="nav-logo">
+    <a href="/bh/">
+      <img src="../images/impacter-pathway-white.svg" alt="IMPACTER Pathway" />
+    </a>
+  </div>
+  <div class="nav-right">
+    <a href="#assessment" class="nav-link">See it live</a>
+    <a href="#domains" class="nav-link">Domains</a>
+    <a href="#funding" class="nav-link">Funding</a>
+    <a href="mailto:info@impacterpathway.com" class="nav-cta">
+      See the platform
+      <svg width="12" height="12" fill="none" viewBox="0 0 12 12"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero" style="padding: 0;">
+  <div class="hero-left">
+    <div class="eyebrow">
+      Human Skills Analytics
+      <span class="eyebrow-divider"></span>
+      <span class="eyebrow-sub">Behavioral Health Screener</span>
+    </div>
+    <h1>Every student deserves to be <em>heard.</em> Not rated.</h1>
+    <p class="hero-body">
+      IMPACTER's Behavioral Health Screener replaces checkbox surveys with genuine voice — capturing what students actually feel across five validated domains, automatically surfacing who needs support, and routing to the right level of care.
+    </p>
+    <div class="hero-ctas">
+      <a href="mailto:info@impacterpathway.com" class="btn-primary">
+        See the platform
+        <svg width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="../playbook.pdf" target="_blank" class="btn-secondary">
+        Download playbook
+        <svg width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M7 2v7m0 0l-3-3m3 3l3-3M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="score-panel" id="scorePanel">
+      <div class="score-panel-header">
+        <span class="score-panel-title">Domain Assessment Report</span>
+        <span class="score-panel-badge">
+          <span class="score-panel-badge-dot"></span>
+          Screener Active
+        </span>
+      </div>
+      <div class="score-student-row">
+        <div class="score-student-avatar">JM</div>
+        <div class="score-student-info">
+          <div class="score-student-name">Jordan M. — Grade 9</div>
+          <div class="score-student-meta">Screened Jan 14 · 4:12 response time</div>
+        </div>
+      </div>
+      <div class="domain-rows">
+        <div class="domain-row">
+          <div class="domain-row-top">
+            <span class="domain-name">Self-Insight</span>
+            <span class="domain-score">4 / 4</span>
+          </div>
+          <div class="domain-bar-track">
+            <div class="domain-bar-fill d1" data-width="100"></div>
+          </div>
+        </div>
+        <div class="domain-row">
+          <div class="domain-row-top">
+            <span class="domain-name">Emotional Resilience</span>
+            <span class="domain-score">3 / 4</span>
+          </div>
+          <div class="domain-bar-track">
+            <div class="domain-bar-fill d2" data-width="75"></div>
+          </div>
+        </div>
+        <div class="domain-row">
+          <div class="domain-row-top">
+            <span class="domain-name">Relational Awareness</span>
+            <span class="domain-score">4 / 4</span>
+          </div>
+          <div class="domain-bar-track">
+            <div class="domain-bar-fill d3" data-width="100"></div>
+          </div>
+        </div>
+        <div class="domain-row">
+          <div class="domain-row-top">
+            <span class="domain-name">Conflict Resolution</span>
+            <span class="domain-score">2 / 4</span>
+          </div>
+          <div class="domain-bar-track">
+            <div class="domain-bar-fill d4" data-width="50"></div>
+          </div>
+        </div>
+        <div class="domain-row">
+          <div class="domain-row-top">
+            <span class="domain-name">Help-Seeking</span>
+            <span class="domain-score">3 / 4</span>
+          </div>
+          <div class="domain-bar-track">
+            <div class="domain-bar-fill d5" data-width="75"></div>
+          </div>
+        </div>
+      </div>
+      <div class="score-panel-footer">
+        <strong>Model accuracy:</strong> .918 QWK score vs. human expert raters &nbsp;·&nbsp; CPT 96127 reimbursable
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Waveform Divider -->
+<div class="waveform-divider">
+  <svg class="waveform-svg" viewBox="0 0 1200 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <g fill="#F37163">
+      <!-- Generated waveform bars -->
+      <rect x="0" y="28" width="6" height="16" rx="3" class="waveform-bar" style="animation-delay:0s;opacity:0.5"/>
+      <rect x="12" y="20" width="6" height="32" rx="3" class="waveform-bar" style="animation-delay:0.07s"/>
+      <rect x="24" y="32" width="6" height="8" rx="3" class="waveform-bar" style="animation-delay:0.14s;opacity:0.4"/>
+      <rect x="36" y="16" width="6" height="40" rx="3" class="waveform-bar" style="animation-delay:0.21s"/>
+      <rect x="48" y="26" width="6" height="20" rx="3" class="waveform-bar" style="animation-delay:0.28s;opacity:0.6"/>
+      <rect x="60" y="10" width="6" height="52" rx="3" class="waveform-bar" style="animation-delay:0.35s"/>
+      <rect x="72" y="30" width="6" height="12" rx="3" class="waveform-bar" style="animation-delay:0.42s;opacity:0.5"/>
+      <rect x="84" y="18" width="6" height="36" rx="3" class="waveform-bar" style="animation-delay:0.49s"/>
+      <rect x="96" y="24" width="6" height="24" rx="3" class="waveform-bar" style="animation-delay:0.56s;opacity:0.7"/>
+      <rect x="108" y="14" width="6" height="44" rx="3" class="waveform-bar" style="animation-delay:0.63s"/>
+      <rect x="120" y="28" width="6" height="16" rx="3" class="waveform-bar" style="animation-delay:0.7s;opacity:0.4"/>
+      <rect x="132" y="8" width="6" height="56" rx="3" class="waveform-bar" style="animation-delay:0.77s"/>
+      <rect x="144" y="22" width="6" height="28" rx="3" class="waveform-bar" style="animation-delay:0.84s;opacity:0.6"/>
+      <rect x="156" y="12" width="6" height="48" rx="3" class="waveform-bar" style="animation-delay:0.91s"/>
+      <rect x="168" y="30" width="6" height="12" rx="3" class="waveform-bar" style="animation-delay:0.98s;opacity:0.5"/>
+      <rect x="180" y="16" width="6" height="40" rx="3" class="waveform-bar" style="animation-delay:1.05s"/>
+      <rect x="192" y="26" width="6" height="20" rx="3" class="waveform-bar" style="animation-delay:1.12s;opacity:0.7"/>
+      <rect x="204" y="6" width="6" height="60" rx="3" class="waveform-bar" style="animation-delay:1.19s"/>
+      <rect x="216" y="32" width="6" height="8" rx="3" class="waveform-bar" style="animation-delay:1.26s;opacity:0.4"/>
+      <rect x="228" y="20" width="6" height="32" rx="3" class="waveform-bar" style="animation-delay:1.33s"/>
+      <rect x="240" y="14" width="6" height="44" rx="3" class="waveform-bar" style="animation-delay:1.4s;opacity:0.6"/>
+      <rect x="252" y="28" width="6" height="16" rx="3" class="waveform-bar" style="animation-delay:1.47s"/>
+      <rect x="264" y="10" width="6" height="52" rx="3" class="waveform-bar" style="animation-delay:1.54s;opacity:0.5"/>
+      <rect x="276" y="24" width="6" height="24" rx="3" class="waveform-bar" style="animation-delay:1.61s"/>
+      <rect x="288" y="18" width="6" height="36" rx="3" class="waveform-bar" style="animation-delay:1.68s;opacity:0.7"/>
+      <rect x="300" y="12" width="6" height="48" rx="3" class="waveform-bar" style="animation-delay:1.75s"/>
+      <rect x="312" y="30" width="6" height="12" rx="3" class="waveform-bar" style="animation-delay:1.82s;opacity:0.4"/>
+      <rect x="324" y="4" width="6" height="64" rx="3" class="waveform-bar" style="animation-delay:1.89s"/>
+      <rect x="336" y="22" width="6" height="28" rx="3" class="waveform-bar" style="animation-delay:1.96s;opacity:0.6"/>
+      <rect x="348" y="16" width="6" height="40" rx="3" class="waveform-bar" style="animation-delay:2.03s"/>
+      <rect x="360" y="28" width="6" height="16" rx="3" class="waveform-bar" style="animation-delay:2.1s;opacity:0.5"/>
+      <rect x="372" y="8" width="6" height="56" rx="3" class="waveform-bar" style="animation-delay:2.17s"/>
+      <rect x="384" y="24" width="6" height="24" rx="3" class="waveform-bar" style="animation-delay:2.24s;opacity:0.7"/>
+      <rect x="396" y="14" width="6" height="44" rx="3" class="waveform-bar" style="animation-delay:2.31s"/>
+      <rect x="408" y="32" width="6" height="8" rx="3" class="waveform-bar" style="animation-delay:2.38s;opacity:0.4"/>
+      <rect x="420" y="18" width="6" height="36" rx="3" class="waveform-bar" style="animation-delay:2.45s"/>
+      <rect x="432" y="10" width="6" height="52" rx="3" class="waveform-bar" style="animation-delay:2.52s;opacity:0.6"/>
+      <rect x="444" y="26" width="6" height="20" rx="3" class="waveform-bar" style="animation-delay:2.59s"/>
+      <rect x="456" y="12" width="6" height="48" rx="3" class="waveform-bar" style="animation-delay:2.66s;opacity:0.5"/>
+      <rect x="468" y="30" width="6" height="12" rx="3" class="waveform-bar" style="animation-delay:2.73s"/>
+      <rect x="480" y="6" width="6" height="60" rx="3" class="waveform-bar" style="animation-delay:2.8s;opacity:0.7"/>
+      <rect x="492" y="22" width="6" height="28" rx="3" class="waveform-bar" style="animation-delay:2.87s"/>
+      <rect x="504" y="16" width="6" height="40" rx="3" class="waveform-bar" style="animation-delay:2.94s;opacity:0.4"/>
+      <rect x="516" y="28" width="6" height="16" rx="3" class="waveform-bar" style="animation-delay:3.01s"/>
+      <rect x="528" y="10" width="6" height="52" rx="3" class="waveform-bar" style="animation-delay:3.08s;opacity:0.6"/>
+      <rect x="540" y="20" width="6" height="32" rx="3" class="waveform-bar" style="animation-delay:3.15s"/>
+      <rect x="552" y="14" width="6" height="44" rx="3" class="waveform-bar" style="animation-delay:3.22s;opacity:0.5"/>
+      <rect x="564" y="4" width="6" height="64" rx="3" class="waveform-bar" style="animation-delay:3.29s"/>
+      <rect x="576" y="26" width="6" height="20" rx="3" class="waveform-bar" style="animation-delay:3.36s;opacity:0.7"/>
+      <rect x="588" y="12" width="6" height="48" rx="3" class="waveform-bar" style="animation-delay:3.43s"/>
+      <rect x="600" y="30" width="6" height="12" rx="3" class="waveform-bar" style="animation-delay:3.5s;opacity:0.4"/>
+      <rect x="612" y="8" width="6" height="56" rx="3" class="waveform-bar" style="animation-delay:3.57s"/>
+      <rect x="624" y="24" width="6" height="24" rx="3" class="waveform-bar" style="animation-delay:3.64s;opacity:0.6"/>
+      <rect x="636" y="18" width="6" height="36" rx="3" class="waveform-bar" style="animation-delay:3.71s"/>
+      <rect x="648" y="12" width="6" height="48" rx="3" class="waveform-bar" style="animation-delay:3.78s;opacity:0.5"/>
+      <rect x="660" y="28" width="6" height="16" rx="3" class="waveform-bar" style="animation-delay:3.85s"/>
+      <rect x="672" y="6" width="6" height="60" rx="3" class="waveform-bar" style="animation-delay:3.92s;opacity:0.7"/>
+      <rect x="684" y="22" width="6" height="28" rx="3" class="waveform-bar" style="animation-delay:3.99s"/>
+      <rect x="696" y="16" width="6" height="40" rx="3" class="waveform-bar" style="animation-delay:4.06s;opacity:0.4"/>
+      <rect x="708" y="30" width="6" height="12" rx="3" class="waveform-bar" style="animation-delay:4.13s"/>
+      <rect x="720" y="10" width="6" height="52" rx="3" class="waveform-bar" style="animation-delay:4.2s;opacity:0.6"/>
+      <rect x="732" y="26" width="6" height="20" rx="3" class="waveform-bar" style="animation-delay:4.27s"/>
+      <rect x="744" y="14" width="6" height="44" rx="3" class="waveform-bar" style="animation-delay:4.34s;opacity:0.5"/>
+      <rect x="756" y="28" width="6" height="16" rx="3" class="waveform-bar" style="animation-delay:4.41s"/>
+      <rect x="768" y="8" width="6" height="56" rx="3" class="waveform-bar" style="animation-delay:4.48s;opacity:0.7"/>
+      <rect x="780" y="20" width="6" height="32" rx="3" class="waveform-bar" style="animation-delay:4.55s"/>
+      <rect x="792" y="12" width="6" height="48" rx="3" class="waveform-bar" style="animation-delay:4.62s;opacity:0.4"/>
+      <rect x="804" y="32" width="6" height="8" rx="3" class="waveform-bar" style="animation-delay:4.69s"/>
+      <rect x="816" y="16" width="6" height="40" rx="3" class="waveform-bar" style="animation-delay:4.76s;opacity:0.6"/>
+      <rect x="828" y="24" width="6" height="24" rx="3" class="waveform-bar" style="animation-delay:4.83s"/>
+      <rect x="840" y="10" width="6" height="52" rx="3" class="waveform-bar" style="animation-delay:4.9s;opacity:0.5"/>
+      <rect x="852" y="28" width="6" height="16" rx="3" class="waveform-bar" style="animation-delay:4.97s"/>
+      <rect x="864" y="6" width="6" height="60" rx="3" class="waveform-bar" style="animation-delay:5.04s;opacity:0.7"/>
+      <rect x="876" y="22" width="6" height="28" rx="3" class="waveform-bar" style="animation-delay:5.11s"/>
+      <rect x="888" y="14" width="6" height="44" rx="3" class="waveform-bar" style="animation-delay:5.18s;opacity:0.4"/>
+      <rect x="900" y="30" width="6" height="12" rx="3" class="waveform-bar" style="animation-delay:5.25s"/>
+      <rect x="912" y="18" width="6" height="36" rx="3" class="waveform-bar" style="animation-delay:5.32s;opacity:0.6"/>
+      <rect x="924" y="8" width="6" height="56" rx="3" class="waveform-bar" style="animation-delay:5.39s"/>
+      <rect x="936" y="26" width="6" height="20" rx="3" class="waveform-bar" style="animation-delay:5.46s;opacity:0.5"/>
+      <rect x="948" y="12" width="6" height="48" rx="3" class="waveform-bar" style="animation-delay:5.53s"/>
+      <rect x="960" y="30" width="6" height="12" rx="3" class="waveform-bar" style="animation-delay:5.6s;opacity:0.7"/>
+      <rect x="972" y="4" width="6" height="64" rx="3" class="waveform-bar" style="animation-delay:5.67s"/>
+      <rect x="984" y="20" width="6" height="32" rx="3" class="waveform-bar" style="animation-delay:5.74s;opacity:0.4"/>
+      <rect x="996" y="16" width="6" height="40" rx="3" class="waveform-bar" style="animation-delay:5.81s"/>
+      <rect x="1008" y="28" width="6" height="16" rx="3" class="waveform-bar" style="animation-delay:5.88s;opacity:0.6"/>
+      <rect x="1020" y="10" width="6" height="52" rx="3" class="waveform-bar" style="animation-delay:5.95s"/>
+      <rect x="1032" y="24" width="6" height="24" rx="3" class="waveform-bar" style="animation-delay:6.02s;opacity:0.5"/>
+      <rect x="1044" y="14" width="6" height="44" rx="3" class="waveform-bar" style="animation-delay:6.09s"/>
+      <rect x="1056" y="32" width="6" height="8" rx="3" class="waveform-bar" style="animation-delay:6.16s;opacity:0.7"/>
+      <rect x="1068" y="18" width="6" height="36" rx="3" class="waveform-bar" style="animation-delay:6.23s"/>
+      <rect x="1080" y="8" width="6" height="56" rx="3" class="waveform-bar" style="animation-delay:6.3s;opacity:0.4"/>
+      <rect x="1092" y="26" width="6" height="20" rx="3" class="waveform-bar" style="animation-delay:6.37s"/>
+      <rect x="1104" y="12" width="6" height="48" rx="3" class="waveform-bar" style="animation-delay:6.44s;opacity:0.6"/>
+      <rect x="1116" y="30" width="6" height="12" rx="3" class="waveform-bar" style="animation-delay:6.51s"/>
+      <rect x="1128" y="16" width="6" height="40" rx="3" class="waveform-bar" style="animation-delay:6.58s;opacity:0.5"/>
+      <rect x="1140" y="22" width="6" height="28" rx="3" class="waveform-bar" style="animation-delay:6.65s"/>
+      <rect x="1152" y="10" width="6" height="52" rx="3" class="waveform-bar" style="animation-delay:6.72s;opacity:0.7"/>
+      <rect x="1164" y="28" width="6" height="16" rx="3" class="waveform-bar" style="animation-delay:6.79s"/>
+      <rect x="1176" y="6" width="6" height="60" rx="3" class="waveform-bar" style="animation-delay:6.86s;opacity:0.4"/>
+      <rect x="1188" y="20" width="6" height="32" rx="3" class="waveform-bar" style="animation-delay:6.93s"/>
+    </g>
+  </svg>
+</div>
+
+<!-- MTSS Pyramid -->
+<section class="mtss-section" id="mtss">
+  <div class="section-inner">
+    <p class="section-label reveal">Multi-Tiered System of Supports</p>
+    <h2 class="section-heading reveal">Screened at every level.<br>Supported at the right one.</h2>
+    <p class="section-sub reveal">BHS integrates directly into your MTSS framework — delivering universal data, targeted identification, and intensive routing without adding staff burden.</p>
+    <div class="mtss-grid">
+      <div class="mtss-image-wrap reveal">
+        <img src="../images/mtss-pyramid.png" alt="MTSS Pyramid diagram" />
+      </div>
+      <div class="mtss-tiers">
+        <div class="mtss-tier tier-1">
+          <div class="mtss-tier-header">
+            <span class="mtss-tier-badge">Tier 1</span>
+            <span class="mtss-tier-name">Universal Screening</span>
+          </div>
+          <p class="mtss-tier-desc">Every student completes the 4-minute voice screener in their own words. No Likert scales. No checkbox fatigue. Baseline behavioral health data for your entire population, districtwide.</p>
+          <span class="mtss-tier-stat">97% participation in pilot windows</span>
+        </div>
+        <div class="mtss-tier tier-2">
+          <div class="mtss-tier-header">
+            <span class="mtss-tier-badge">Tier 2</span>
+            <span class="mtss-tier-name">Targeted Identification</span>
+          </div>
+          <p class="mtss-tier-desc">Students with domain scores below threshold are automatically flagged for counselor review. The system surfaces who needs attention and what their voice signals suggest — before a crisis emerges.</p>
+          <span class="mtss-tier-stat">1.4 days average time from screening to support</span>
+        </div>
+        <div class="mtss-tier tier-3">
+          <div class="mtss-tier-header">
+            <span class="mtss-tier-badge">Tier 3</span>
+            <span class="mtss-tier-name">Intensive Routing</span>
+          </div>
+          <p class="mtss-tier-desc">Critical signals in Help-Seeking or Emotional Resilience trigger immediate counselor notification with the student's verbatim response. Clinically structured, dignity-preserving, fast.</p>
+          <span class="mtss-tier-stat">Critical alerts routed within 24 hours</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Row -->
+<div class="stats-section" id="stats">
+  <div class="stats-row">
+    <div class="stat-item reveal">
+      <div class="stat-number">97<span>%</span></div>
+      <div class="stat-label">participation in pilot windows</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:0.15s">
+      <div class="stat-number">1.4<span>d</span></div>
+      <div class="stat-label">average time from screening to support</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:0.3s">
+      <div class="stat-number"><span>$</span>0</div>
+      <div class="stat-label">net cost after CYBHI reimbursement</div>
+    </div>
+  </div>
+</div>
+
+<!-- Voice Intelligence / Assessment Demo -->
+<section class="assessment-section" id="assessment">
+  <div class="section-inner">
+    <p class="section-label reveal">See the Assessment Running</p>
+    <h2 class="section-heading reveal">Real student voice.<br>Real-time domain detection.</h2>
+    <p class="section-sub reveal">Watch as IMPACTER's AI identifies behavioral health domains — Self-Insight, Emotional Resilience, Reflective Growth — directly from what a student says, as they say it.</p>
+    <div class="assessment-grid" style="margin-top:48px;">
+      <div>
+        <div class="video-container">
+          <video id="demoVideo" src="../images/nc-girl.mp4" playsinline preload="metadata"></video>
+          <div class="karaoke-overlay">
+            <div class="karaoke-line" id="karaokeLine"></div>
+          </div>
+          <div class="play-btn" id="playBtn" onclick="startVideo()">
+            <svg width="22" height="22" fill="none" viewBox="0 0 22 22">
+              <path d="M7 4l12 7-12 7V4z" fill="white"/>
+            </svg>
+          </div>
+        </div>
+        <p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:12px;line-height:1.5;">
+          Student response to: "Describe a time you navigated a difficult situation." Domain scoring shown in real time.
+        </p>
+      </div>
+      <div class="domain-live-panel">
+        <div class="domain-live-label">Domain Detection</div>
+        <div class="domain-live-item" id="dl-er">
+          <div class="domain-live-top">
+            <span class="domain-live-name">Emotional Resilience</span>
+            <span class="domain-live-score" id="dl-er-score">—</span>
+          </div>
+          <div class="domain-live-track">
+            <div class="domain-live-fill" id="dl-er-fill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="domain-live-item" id="dl-si">
+          <div class="domain-live-top">
+            <span class="domain-live-name">Self-Insight</span>
+            <span class="domain-live-score" id="dl-si-score">—</span>
+          </div>
+          <div class="domain-live-track">
+            <div class="domain-live-fill" id="dl-si-fill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="domain-live-item triggered" id="dl-ra">
+          <div class="domain-live-top">
+            <span class="domain-live-name">Relational Awareness</span>
+            <span class="domain-live-score" id="dl-ra-score">3 / 4</span>
+          </div>
+          <div class="domain-live-track">
+            <div class="domain-live-fill" id="dl-ra-fill" style="width:75%"></div>
+          </div>
+        </div>
+        <div class="domain-live-item triggered" id="dl-hs">
+          <div class="domain-live-top">
+            <span class="domain-live-name">Help-Seeking</span>
+            <span class="domain-live-score" id="dl-hs-score">2 / 4</span>
+          </div>
+          <div class="domain-live-track">
+            <div class="domain-live-fill" id="dl-hs-fill" style="width:50%"></div>
+          </div>
+        </div>
+        <div class="domain-live-item" id="dl-rg">
+          <div class="domain-live-top">
+            <span class="domain-live-name">Reflective Growth</span>
+            <span class="domain-live-score" id="dl-rg-score">—</span>
+          </div>
+          <div class="domain-live-track">
+            <div class="domain-live-fill" id="dl-rg-fill" style="width:0%"></div>
+          </div>
+        </div>
+        <div style="margin-top:8px;padding:14px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;">
+          <p style="font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6;">.918 QWK inter-rater agreement vs. trained human scorers. Model trained on 10,000+ scored student responses.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 BH Domains -->
+<section class="domains-section" id="domains">
+  <div class="section-inner">
+    <p class="section-label">The Five Domains</p>
+    <h2 class="section-heading">What we measure.<br>What it means.</h2>
+    <p class="section-sub">Each domain is a validated construct, scored against human expert benchmarks. Together they form a complete behavioral health profile for every student.</p>
+    <div class="domains-grid">
+      <div class="domain-card" style="transition-delay:0s">
+        <div class="dc-name">
+          <span class="dc-num">Domain 01</span>
+          <span class="dc-title">Self-Insight</span>
+        </div>
+        <div class="dc-desc">
+          <p>A student's ability to recognize their own emotional states, identify patterns in their thinking, and articulate what they observe about themselves.</p>
+        </div>
+        <div class="dc-reveal">
+          <div class="dc-reveal-inner">
+            <div class="dc-reveal-label">What it reveals</div>
+            <div class="dc-reveal-quote">"I think I guard myself from failure — part of me understands it's the only way to truly succeed."</div>
+          </div>
+        </div>
+      </div>
+      <div class="domain-card" style="transition-delay:0.1s">
+        <div class="dc-name">
+          <span class="dc-num">Domain 02</span>
+          <span class="dc-title">Emotional Resilience</span>
+        </div>
+        <div class="dc-desc">
+          <p>How students navigate adversity, recover from setbacks, and sustain forward movement in the face of stress, pressure, or disappointment.</p>
+        </div>
+        <div class="dc-reveal">
+          <div class="dc-reveal-inner">
+            <div class="dc-reveal-label">What it reveals</div>
+            <div class="dc-reveal-quote">"I don't have as many failures as I expected — which made me realize I haven't taken enough risks."</div>
+          </div>
+        </div>
+      </div>
+      <div class="domain-card" style="transition-delay:0.2s">
+        <div class="dc-name">
+          <span class="dc-num">Domain 03</span>
+          <span class="dc-title">Relational Awareness</span>
+        </div>
+        <div class="dc-desc">
+          <p>The capacity to perceive and respond to the emotional states of others — the foundation for empathy, collaboration, and healthy peer relationships.</p>
+        </div>
+        <div class="dc-reveal">
+          <div class="dc-reveal-inner">
+            <div class="dc-reveal-label">What it reveals</div>
+            <div class="dc-reveal-quote">"When my friend was going through it, I noticed before they said anything — I just stayed close."</div>
+          </div>
+        </div>
+      </div>
+      <div class="domain-card" style="transition-delay:0.3s">
+        <div class="dc-name">
+          <span class="dc-num">Domain 04</span>
+          <span class="dc-title">Conflict Resolution</span>
+        </div>
+        <div class="dc-desc">
+          <p>Whether and how students approach interpersonal tension constructively — de-escalating, seeking understanding, and working toward repair.</p>
+        </div>
+        <div class="dc-reveal">
+          <div class="dc-reveal-inner">
+            <div class="dc-reveal-label">What it reveals</div>
+            <div class="dc-reveal-quote">"I usually just walk away. I don't know if that's handling it or avoiding it."</div>
+          </div>
+        </div>
+      </div>
+      <div class="domain-card" style="transition-delay:0.4s">
+        <div class="dc-name">
+          <span class="dc-num">Domain 05</span>
+          <span class="dc-title">Help-Seeking</span>
+        </div>
+        <div class="dc-desc">
+          <p>A student's willingness to recognize when they need support and their capacity to reach out to trusted adults or peers — the most predictive indicator of intervention success.</p>
+        </div>
+        <div class="dc-reveal">
+          <div class="dc-reveal-inner">
+            <div class="dc-reveal-label">What it reveals</div>
+            <div class="dc-reveal-quote">"I've never really told anyone when things are hard. I don't want to be a burden."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sample Prompts -->
+<section class="prompts-section" id="prompts">
+  <div class="section-inner">
+    <p class="section-label reveal">Assessment Prompts</p>
+    <h2 class="section-heading reveal">Open-ended. Developmentally calibrated.<br>Clinically validated.</h2>
+    <p class="section-sub reveal">Students respond to one prompt per domain in their own voice. No multiple choice. No forced ranking. Grades 3–12, with TK-2 adaptations available.</p>
+    <div class="prompts-tabs reveal">
+      <div class="prompt-tab active" onclick="switchTab('k12', this)">Grades 3–12</div>
+      <div class="prompt-tab" onclick="switchTab('tk2', this)">TK – Grade 2</div>
+    </div>
+    <div class="prompts-grid" id="promptsGrid">
+      <!-- populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- BHSSA State Validation -->
+<section class="bhssa-section" id="bhssa">
+  <div class="section-inner">
+    <p class="section-label reveal">State Validation</p>
+    <h2 class="section-heading reveal">Selected by California for statewide implementation.</h2>
+    <div class="bhssa-grid">
+      <div class="bhssa-gif reveal">
+        <img src="../images/bhssa-announcement.gif" alt="BHSSA IMPACTER Selection Announcement" />
+      </div>
+      <div class="bhssa-content reveal" style="transition-delay:0.2s">
+        <p class="bhssa-body">
+          IMPACTER was selected by the California Behavioral Health Subrecipient Agencies (BHSOAC) and Santa Clara County Office of Education for the statewide behavioral health performance management evaluation — BHSSA-002. This is the highest-level state validation available for a behavioral health assessment tool in California K-12.
+        </p>
+        <div class="bhssa-org-list" style="margin-bottom:24px;">
+          <div class="bhssa-org">
+            <span class="bhssa-org-dot"></span>
+            California BHSOAC — statewide behavioral health performance evaluation
+          </div>
+          <div class="bhssa-org">
+            <span class="bhssa-org-dot"></span>
+            Santa Clara County Office of Education — BHSSA-002 district cohort lead
+          </div>
+          <div class="bhssa-org">
+            <span class="bhssa-org-dot"></span>
+            Designated under behavioral health performance management initiative
+          </div>
+        </div>
+        <div class="bhssa-stat-block">
+          <div class="bhssa-stat-row">
+            <span class="bhssa-stat-num">.918</span>
+            <span class="bhssa-stat-label">QWK vs. human expert raters</span>
+          </div>
+          <div class="bhssa-detail">Quadratic Weighted Kappa — the standard reliability metric for clinically scored assessments. Our model achieves near-human agreement across all five domains.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CYBHI Funding -->
+<section class="cybhi-section" id="funding">
+  <div class="section-inner">
+    <p class="section-label reveal">CYBHI Reimbursement</p>
+    <h2 class="section-heading reveal">The screener pays for itself.</h2>
+    <p class="section-sub reveal">California's Children and Youth Behavioral Health Initiative covers the full cost of administration through existing Medi-Cal fee structures. For most districts: net cost is zero.</p>
+    <div class="cybhi-grid">
+      <div class="cybhi-card">
+        <div class="cybhi-card-icon">⚕</div>
+        <div class="cybhi-card-num">CPT <span>96127</span></div>
+        <div class="cybhi-card-title">Billing Code</div>
+        <div class="cybhi-card-desc">Brief behavioral or emotional assessment with scoring, per standardized instrument. Paired with diagnosis code Z13.89 (encounter for screening, other disorder).</div>
+      </div>
+      <div class="cybhi-card" style="transition-delay:0.15s">
+        <div class="cybhi-card-icon">💵</div>
+        <div class="cybhi-card-num"><span>$4.81</span></div>
+        <div class="cybhi-card-title">Per Administration</div>
+        <div class="cybhi-card-desc">California Medi-Cal fee schedule rate per student screened. Districts with 80%+ Medi-Cal eligibility typically recover full program cost in the first semester.</div>
+      </div>
+      <div class="cybhi-card" style="transition-delay:0.3s">
+        <div class="cybhi-card-icon">✓</div>
+        <div class="cybhi-card-num"><span>$0</span></div>
+        <div class="cybhi-card-title">Net Cost</div>
+        <div class="cybhi-card-desc">After CYBHI reimbursement for qualifying districts. We help your district finance team set up billing — most districts are live within 30 days of contract.</div>
+      </div>
+    </div>
+    <div class="cybhi-note reveal" style="max-width:700px;">
+      IMPACTER provides full CYBHI billing setup support, including documentation templates, Medi-Cal eligibility guidance, and district finance onboarding. Reimbursement rates vary by district eligibility profile.
+    </div>
+  </div>
+</section>
+
+<!-- Resources -->
+<section class="resources-section" id="resources">
+  <div class="section-inner">
+    <p class="section-label reveal">Get Started</p>
+    <h2 class="section-heading reveal">Three ways in.</h2>
+    <div class="resources-grid">
+      <div class="resource-card reveal">
+        <div class="resource-icon coral">▶</div>
+        <div class="resource-card-title">Live Screener Demo</div>
+        <div class="resource-card-desc">See the full student experience in under 5 minutes. Try a prompt yourself. Watch the domain scoring happen in real time.</div>
+        <a href="#prompts" class="resource-card-action">
+          Try a prompt
+          <svg width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="resource-card reveal" style="transition-delay:0.15s">
+        <div class="resource-icon blue">📄</div>
+        <div class="resource-card-title">District Playbook</div>
+        <div class="resource-card-desc">Full implementation guide — from CYBHI billing setup to MTSS integration, student data privacy, and counselor workflow. 18 pages.</div>
+        <a href="../playbook.pdf" target="_blank" class="resource-card-action">
+          Download playbook
+          <svg width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="resource-card reveal" style="transition-delay:0.3s">
+        <div class="resource-icon green">✉</div>
+        <div class="resource-card-title">Talk to the Team</div>
+        <div class="resource-card-desc">15-minute call with our implementation team. We'll assess your district's Medi-Cal eligibility and show you what first-semester data looks like.</div>
+        <a href="mailto:info@impacterpathway.com" class="resource-card-action">
+          Contact us
+          <svg width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-logo">
+        <img src="../images/impacter-pathway-white.svg" alt="IMPACTER Pathway" />
+      </div>
+      <div class="footer-meta">
+        Human Skills Analytics · Behavioral Health Screener<br>
+        BHSSA-002 · CPT 96127 · CYBHI Reimbursable<br>
+        info@impacterpathway.com
+      </div>
+    </div>
+    <div class="footer-right">
+      <a href="#mtss" class="footer-link">MTSS</a>
+      <a href="#assessment" class="footer-link">Assessment</a>
+      <a href="#domains" class="footer-link">Domains</a>
+      <a href="#funding" class="footer-link">Funding</a>
+      <a href="mailto:info@impacterpathway.com" class="footer-link">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Streamer -->
+<div class="streamer" id="streamer">
+  <div class="streamer-top">
+    <div class="streamer-status">
+      <span class="streamer-dot"></span>
+      <span id="streamerStatus">Assessment Running</span>
+    </div>
+    <div class="streamer-dismiss" onclick="dismissStreamer()">✕</div>
+  </div>
+  <div class="streamer-label" id="streamerLabel">Domain Detection Active</div>
+  <div class="streamer-sub" id="streamerSub">Analyzing student voice across 5 behavioral health domains.</div>
+  <div class="streamer-bars">
+    <div class="streamer-bar-row">
+      <span class="streamer-bar-name">Self-Insight</span>
+      <div class="streamer-bar-track">
+        <div class="streamer-bar-fill" style="width:100%"></div>
+      </div>
+    </div>
+    <div class="streamer-bar-row">
+      <span class="streamer-bar-name">Resilience</span>
+      <div class="streamer-bar-track">
+        <div class="streamer-bar-fill" style="width:75%"></div>
+      </div>
+    </div>
+    <div class="streamer-bar-row">
+      <span class="streamer-bar-name">Relational</span>
+      <div class="streamer-bar-track">
+        <div class="streamer-bar-fill" style="width:100%"></div>
+      </div>
+    </div>
+    <div class="streamer-bar-row">
+      <span class="streamer-bar-name">Conflict</span>
+      <div class="streamer-bar-track">
+        <div class="streamer-bar-fill" style="width:50%"></div>
+      </div>
+    </div>
+    <div class="streamer-bar-row">
+      <span class="streamer-bar-name">Help-Seek</span>
+      <div class="streamer-bar-track">
+        <div class="streamer-bar-fill" style="width:75%"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-domain" id="modalDomain"></div>
+        <div class="modal-title" id="modalTitle"></div>
+      </div>
+      <div class="modal-close" onclick="closeModalDirect()">✕</div>
+    </div>
+    <div class="modal-context" id="modalContext"></div>
+    <div class="modal-iframe-wrap">
+      <iframe id="modalIframe" src="" allow="camera; microphone"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Progress Bar ─────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('progress-bar').style.width = Math.min(pct, 100) + '%';
+});
+
+// ─── Nav hide/show ────────────────────────────────────────
+let lastY = 0;
+const mainNav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (y > lastY && y > 100) mainNav.classList.add('hidden');
+  else mainNav.classList.remove('hidden');
+  lastY = y;
+}, { passive: true });
+
+// ─── Hero bar fills ───────────────────────────────────────
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.domain-bar-fill').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+  }, 400);
+});
+
+// ─── IntersectionObserver — reveal + MTSS tiers ──────────
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+document.querySelectorAll('.reveal, .mtss-tier, .domain-card, .cybhi-card').forEach(el => {
+  revealObs.observe(el);
+});
+
+// ─── Streamer ─────────────────────────────────────────────
+let streamerDismissed = false;
+const streamer = document.getElementById('streamer');
+const streamerStates = [
+  { section: 'hero',     status: 'Assessment Running', label: 'Domain Detection Active',   sub: 'Analyzing student voice across 5 behavioral health domains.' },
+  { section: 'mtss',     status: 'MTSS Routing',       label: 'Tier Classification Active', sub: 'Students flagged at Tier 2+ receive counselor review within 1.4 days.' },
+  { section: 'assessment', status: 'Domain Detection', label: 'Real-Time Signal Processing', sub: 'Watch Emotional Resilience, Self-Insight, and Reflective Growth score live.' },
+  { section: 'resources', status: 'District Report',   label: 'Screening Complete',         sub: 'Ready to generate your district behavioral health summary report.' },
+];
+
+const sectionEls = {
+  hero: document.getElementById('hero'),
+  mtss: document.getElementById('mtss'),
+  assessment: document.getElementById('assessment'),
+  resources: document.getElementById('resources'),
+};
+
+const streamerObs = new IntersectionObserver((entries) => {
+  if (streamerDismissed) return;
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      const state = streamerStates.find(s => s.section === id);
+      if (state) {
+        document.getElementById('streamerStatus').textContent = state.status;
+        document.getElementById('streamerLabel').textContent = state.label;
+        document.getElementById('streamerSub').textContent = state.sub;
+        if (id === 'hero') {
+          streamer.classList.remove('visible');
+        } else {
+          streamer.classList.add('visible');
+        }
+      }
+    }
+  });
+}, { threshold: 0.2 });
+
+Object.values(sectionEls).forEach(el => { if (el) streamerObs.observe(el); });
+
+function dismissStreamer() {
+  streamerDismissed = true;
+  streamer.classList.remove('visible');
+}
+
+// ─── Prompts Data ─────────────────────────────────────────
+const promptsK12 = [
+  {
+    domain: 'Self-Insight',
+    question: 'Describe a time you realized something important about yourself.',
+    context: 'Assesses a student\'s capacity for internal observation and self-awareness — a core protective factor for behavioral health.',
+    url: 'https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+  {
+    domain: 'Emotional Resilience',
+    question: 'Tell me about a time things didn\'t go the way you planned. What happened next?',
+    context: 'Evaluates recovery response patterns, emotional regulation, and the student\'s narrative around setback and persistence.',
+    url: 'https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+  {
+    domain: 'Relational Awareness',
+    question: 'Think of someone who was going through something hard. How did you know, and what did you do?',
+    context: 'Measures empathic attunement and social responsiveness — key indicators of connection and relational health.',
+    url: 'https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+  {
+    domain: 'Conflict Resolution',
+    question: 'Describe a disagreement you\'ve had. How did it end up?',
+    context: 'Reveals approach vs. avoidance tendencies in interpersonal tension, and whether repair is part of the student\'s repertoire.',
+    url: 'https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+  {
+    domain: 'Help-Seeking',
+    question: 'When things are really hard, what do you usually do? Who, if anyone, do you go to?',
+    context: 'The most predictive domain for intervention success. Students who suppress help-seeking are most at risk for escalation.',
+    url: 'https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+  {
+    domain: 'Reflective Growth',
+    question: 'If you could go back and change how you handled something, what would it be — and what would you do differently?',
+    context: 'Assesses the capacity to retrospectively analyze experience and generate actionable insight — a marker of emotional maturity.',
+    url: 'https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+];
+
+const promptsTK2 = [
+  {
+    domain: 'Self-Insight',
+    question: 'Can you tell me something that makes you feel really happy and something that makes you feel sad?',
+    context: 'Introduces emotional vocabulary and self-identification in developmentally accessible terms for young learners.',
+    url: 'https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+  {
+    domain: 'Emotional Resilience',
+    question: 'What do you do when you feel upset or frustrated?',
+    context: 'Age-appropriate prompt targeting regulation strategy awareness — from self-soothing to seeking adult support.',
+    url: 'https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+  {
+    domain: 'Relational Awareness',
+    question: 'If a friend looked sad at school, what would you want to do?',
+    context: 'Evaluates empathic response tendencies in early social development — including approach behavior and comfort-giving.',
+    url: 'https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+  {
+    domain: 'Conflict Resolution',
+    question: 'What happens when you and a friend don\'t agree? What do you do?',
+    context: 'Assesses early conflict navigation patterns — turn-taking, verbal vs. physical responses, resolution awareness.',
+    url: 'https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+  {
+    domain: 'Help-Seeking',
+    question: 'Who do you go to when something feels wrong or scary?',
+    context: 'Identifies the student\'s trusted adult network and comfort level accessing support — early indicator of protective relationships.',
+    url: 'https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+  {
+    domain: 'Reflective Growth',
+    question: 'Think about a time you made a mistake. Did you feel better after? What helped?',
+    context: 'Introduces repair and recovery concepts at a developmentally appropriate level — a foundation for later reflective capacity.',
+    url: 'https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX'
+  },
+];
+
+let currentTab = 'k12';
+
+function renderPrompts(data) {
+  const grid = document.getElementById('promptsGrid');
+  grid.innerHTML = data.map((p, i) => `
+    <div class="prompt-tile" onclick="openModal('${encodeURIComponent(p.domain)}', '${encodeURIComponent(p.question)}', '${encodeURIComponent(p.context)}', '${p.url}')">
+      <div class="prompt-domain-tag">${p.domain}</div>
+      <div class="prompt-question">${p.question}</div>
+      <div class="prompt-context">${p.context}</div>
+      <div class="prompt-open-icon">
+        Try this prompt
+        <svg width="12" height="12" fill="none" viewBox="0 0 12 12"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  `).join('');
+}
+
+function switchTab(tab, el) {
+  currentTab = tab;
+  document.querySelectorAll('.prompt-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderPrompts(tab === 'k12' ? promptsK12 : promptsTK2);
+}
+
+renderPrompts(promptsK12);
+
+// ─── Modal ────────────────────────────────────────────────
+function openModal(domain, question, context, url) {
+  document.getElementById('modalDomain').textContent = decodeURIComponent(domain);
+  document.getElementById('modalTitle').textContent = decodeURIComponent(question);
+  document.getElementById('modalContext').textContent = decodeURIComponent(context);
+  document.getElementById('modalIframe').src = url;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+}
+
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('modalIframe').src = '';
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModalDirect();
+});
+
+// ─── Video + rAF Karaoke ──────────────────────────────────
+const WORDS = [
+  {t:0.0, text:'When'}, {t:0.2, text:'given'}, {t:0.45, text:'some'},
+  {t:0.65, text:'thought'}, {t:0.85, text:'to'}, {t:0.95, text:'this'},
+  {t:1.15, text:'question,'}, {t:1.55, text:'I'}, {t:1.7, text:'realize'},
+  {t:2.05, text:'I'}, {t:2.2, text:"don't"}, {t:2.5, text:'have'},
+  {t:2.7, text:'as'}, {t:2.85, text:'much'}, {t:3.05, text:'failures', tag:'er'},
+  {t:3.5, text:'as'}, {t:3.65, text:'I'}, {t:3.8, text:'would'},
+  {t:4.0, text:'have'}, {t:4.2, text:'expected.'},
+  {t:4.95, text:'My'}, {t:5.1, text:'biggest'}, {t:5.45, text:'failure', tag:'er'},
+  {t:5.85, text:'would'}, {t:6.05, text:'be'}, {t:6.2, text:'not'},
+  {t:6.4, text:'taking'}, {t:6.65, text:'enough'}, {t:6.95, text:'risk'},
+  {t:7.25, text:'to'}, {t:7.4, text:'experience'}, {t:7.85, text:'true'},
+  {t:8.1, text:'failure.'}, {t:8.75, text:'I'}, {t:8.95, text:'think', tag:'si'},
+  {t:9.35, text:'I'}, {t:9.55, text:'guard'}, {t:9.85, text:'myself'},
+  {t:10.2, text:'from'}, {t:10.45, text:'it.'},
+  {t:11.2, text:'Part'}, {t:11.4, text:'of'}, {t:11.6, text:'me'},
+  {t:11.8, text:'does'}, {t:12.0, text:"n't"}, {t:12.15, text:'want'},
+  {t:12.4, text:'to'}, {t:12.6, text:'fail.'},
+  {t:13.3, text:'But'}, {t:13.6, text:'another', tag:'rg'}, {t:13.9, text:'part'},
+  {t:14.2, text:'of'}, {t:14.35, text:'me'}, {t:14.55, text:'understands'},
+  {t:14.95, text:'that'}, {t:15.15, text:'failure'}, {t:15.5, text:'is'},
+  {t:15.7, text:'the'}, {t:15.9, text:'only'}, {t:16.2, text:'way'},
+  {t:16.5, text:'to'}, {t:16.7, text:'truly'}, {t:17.0, text:'succeed.'},
+];
+
+// Domain trigger times
+const DOMAIN_TRIGGERS = [
+  { tag: 'er', time: 3.5,  domain: 'dl-er', score: '4 / 4', pct: 100 },
+  { tag: 'si', time: 9.0,  domain: 'dl-si', score: '4 / 4', pct: 100 },
+  { tag: 'rg', time: 13.0, domain: 'dl-rg', score: '4 / 4', pct: 100 },
+];
+
+const video = document.getElementById('demoVideo');
+const karaokeEl = document.getElementById('karaokeLine');
+const playBtn = document.getElementById('playBtn');
+let rafId = null;
+let triggered = {};
+
+function buildKaraoke() {
+  karaokeEl.innerHTML = WORDS.map((w, i) =>
+    `<span class="karaoke-word" id="kw${i}">${w.text}</span>`
+  ).join('');
+}
+
+function rafLoop() {
+  const ct = video.currentTime;
+  // Highlight current word
+  let activeIdx = -1;
+  for (let i = 0; i < WORDS.length; i++) {
+    if (ct >= WORDS[i].t) activeIdx = i;
+    else break;
+  }
+  document.querySelectorAll('.karaoke-word').forEach((el, i) => {
+    el.classList.toggle('active', i === activeIdx);
+  });
+
+  // Domain triggers
+  DOMAIN_TRIGGERS.forEach(tr => {
+    if (!triggered[tr.tag] && ct >= tr.time) {
+      triggered[tr.tag] = true;
+      const item = document.getElementById(tr.domain);
+      const score = document.getElementById(tr.domain + '-score');
+      const fill = document.getElementById(tr.domain + '-fill');
+      if (item) item.classList.add('triggered');
+      if (score) score.textContent = tr.score;
+      if (fill) fill.style.width = tr.pct + '%';
+    }
+  });
+
+  if (!video.paused && !video.ended) rafId = requestAnimationFrame(rafLoop);
+}
+
+function startVideo() {
+  buildKaraoke();
+  triggered = {};
+  // Reset domain states for er, si, rg
+  ['er','si','rg'].forEach(tag => {
+    const tr = DOMAIN_TRIGGERS.find(t => t.tag === tag);
+    if (!tr) return;
+    const item = document.getElementById(tr.domain);
+    const score = document.getElementById(tr.domain + '-score');
+    const fill = document.getElementById(tr.domain + '-fill');
+    if (item) item.classList.remove('triggered');
+    if (score) score.textContent = '—';
+    if (fill) fill.style.width = '0%';
+  });
+  video.currentTime = 0;
+  video.play().then(() => {
+    playBtn.classList.add('hidden');
+    rafId = requestAnimationFrame(rafLoop);
+  }).catch(() => {
+    // autoplay blocked — show play button
+    playBtn.classList.remove('hidden');
+  });
+}
+
+video.addEventListener('ended', () => {
+  if (rafId) cancelAnimationFrame(rafId);
+  playBtn.classList.remove('hidden');
+});
+
+video.addEventListener('pause', () => {
+  if (rafId) cancelAnimationFrame(rafId);
+});
+
+video.addEventListener('play', () => {
+  rafId = requestAnimationFrame(rafLoop);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Behavioral Health Screener — IMPACTER Pathway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ---- Reset & Base ---- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0F1B2E;
+      --coral: #F37163;
+      --blue: #638EC5;
+      --accent: #D6E7F1;
+      --cream: #f5f2ed;
+      --white: #ffffff;
+      --text-muted: rgba(255,255,255,0.55);
+      --col: 680px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      font-weight: 300;
+      font-size: 19px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Scroll progress ---- */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--coral);
+      z-index: 1000;
+      opacity: 0.7;
+      transition: width 0.1s linear;
+    }
+
+    /* ---- Typography ---- */
+    .editorial-col {
+      max-width: var(--col);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--coral);
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    /* ---- Scroll reveal ---- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ============================================================
+       SECTION 1 — HERO
+    ============================================================ */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 640px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    #hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      z-index: 0;
+    }
+
+    #hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      z-index: 1;
+      display: none;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(15,27,46,0.15) 0%,
+        rgba(15,27,46,0.35) 40%,
+        rgba(15,27,46,0.78) 75%,
+        rgba(15,27,46,0.98) 100%
+      );
+      z-index: 2;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      max-width: 860px;
+      padding: 0 32px 80px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 28px;
+      display: block;
+    }
+
+    .hero-h1 {
+      font-size: clamp(36px, 6vw, 78px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 28px;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.72);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       SECTION 2 — THE THESIS
+    ============================================================ */
+    #thesis {
+      background: var(--navy);
+      padding: 120px 0 100px;
+    }
+
+    #thesis p {
+      color: rgba(255,255,255,0.82);
+      margin-bottom: 28px;
+      font-size: 20px;
+      line-height: 1.8;
+    }
+
+    #thesis p:last-child { margin-bottom: 0; }
+
+    /* ============================================================
+       SECTION 3 — PULL QUOTE
+    ============================================================ */
+    .pull-quote-section {
+      background: var(--navy);
+      padding: 100px 32px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .pull-quote-mark {
+      font-size: 72px;
+      line-height: 0.5;
+      color: var(--coral);
+      opacity: 0.4;
+      display: block;
+      margin-bottom: 32px;
+      font-weight: 700;
+    }
+
+    .pull-quote-text {
+      font-size: clamp(24px, 3.5vw, 40px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--white);
+      max-width: 780px;
+      margin: 0 auto 28px;
+      letter-spacing: -0.01em;
+    }
+
+    .pull-quote-source {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--coral);
+    }
+
+    /* ============================================================
+       WAVEFORM DIVIDER
+    ============================================================ */
+    .waveform-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 48px 0;
+      background: var(--navy);
+    }
+
+    .waveform-divider .bar {
+      width: 3px;
+      border-radius: 2px;
+      background: var(--blue);
+      opacity: 0.6;
+      animation: breathe var(--dur, 1.2s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scaleY(1); opacity: 0.4; }
+      50%       { transform: scaleY(2.4); opacity: 0.9; }
+    }
+
+    /* ============================================================
+       SECTION 4 — VOICE INTELLIGENCE
+    ============================================================ */
+    #voice {
+      background: var(--navy);
+      padding: 80px 0 120px;
+    }
+
+    .voice-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--coral);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .voice-headline {
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-align: center;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      color: var(--white);
+    }
+
+    .voice-sub {
+      text-align: center;
+      color: rgba(255,255,255,0.55);
+      font-size: 16px;
+      font-weight: 300;
+      margin-bottom: 64px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .voice-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 32px;
+      align-items: start;
+    }
+
+    /* Video side */
+    .voice-video-wrap {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 9/16;
+      max-height: 480px;
+      background: #060e1a;
+      box-shadow: 0 32px 72px rgba(0,0,0,0.55);
+    }
+
+    #demo-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-controls {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 16px 20px;
+      background: linear-gradient(transparent, rgba(10,14,22,0.92));
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #play-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      transition: background 0.2s;
+    }
+
+    #play-btn:hover { background: rgba(255,255,255,0.22); }
+
+    #karaoke-display {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.65);
+      min-height: 38px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px 5px;
+      align-content: flex-end;
+    }
+
+    .kword {
+      transition: color 0.12s ease, opacity 0.12s ease;
+      opacity: 0.45;
+      white-space: nowrap;
+    }
+
+    .kword.active {
+      color: var(--white);
+      opacity: 1;
+      font-weight: 400;
+    }
+
+    .kword.er-tag  { }
+    .kword.si-tag  { }
+    .kword.rg-tag  { }
+
+    /* Signal fired indicator */
+    .signal-flash {
+      position: absolute;
+      top: 16px; left: 16px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      padding: 5px 10px;
+      background: rgba(99,142,197,0.85);
+      border-radius: 20px;
+      color: white;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .signal-flash.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Domain bars side */
+    .voice-signals {
+      padding-top: 8px;
+    }
+
+    .signals-heading {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .domain-row {
+      margin-bottom: 22px;
+    }
+
+    .domain-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .domain-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .domain-score {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-muted);
+    }
+
+    .domain-score .score-val {
+      font-weight: 600;
+      color: var(--white);
+      transition: color 0.3s;
+    }
+
+    .domain-score .score-val.fired { color: var(--coral); }
+
+    .bar-track {
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--blue);
+      width: 0%;
+      transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .bar-fill.fired {
+      background: var(--coral);
+    }
+
+    .domain-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 5px;
+      min-height: 16px;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .domain-note.show { opacity: 1; }
+
+    /* ============================================================
+       SECTION 5 — THE NUMBERS
+    ============================================================ */
+    #numbers {
+      background: var(--cream);
+      padding: 120px 32px;
+    }
+
+    #numbers .stat-item {
+      max-width: var(--col);
+      margin: 0 auto 72px;
+    }
+
+    #numbers .stat-item:last-child { margin-bottom: 0; }
+
+    .stat-numeral {
+      font-size: clamp(64px, 10vw, 108px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--navy);
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .stat-context {
+      font-size: 18px;
+      font-weight: 300;
+      color: rgba(15,27,46,0.7);
+      line-height: 1.65;
+      max-width: 540px;
+    }
+
+    .stat-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--coral);
+      margin: 20px 0 0;
+    }
+
+    /* ============================================================
+       SECTION 6 — MTSS
+    ============================================================ */
+    #mtss {
+      background: var(--navy);
+      padding: 120px 0;
+    }
+
+    .mtss-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 32px;
+      align-items: center;
+    }
+
+    .mtss-image-wrap img {
+      width: 100%;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .mtss-content .section-eyebrow {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 20px;
+    }
+
+    .mtss-content h2 {
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 36px;
+      color: var(--white);
+    }
+
+    .mtss-tier {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .mtss-tier:last-child { margin-bottom: 0; }
+
+    .tier-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(99,142,197,0.18);
+      border: 1px solid rgba(99,142,197,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-top: 2px;
+    }
+
+    .tier-body h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 4px;
+      letter-spacing: 0.01em;
+    }
+
+    .tier-body p {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       SECTION 7 — FUNDING
+    ============================================================ */
+    #funding {
+      background: var(--cream);
+      padding: 120px 32px;
+    }
+
+    #funding .editorial-col .section-eyebrow {
+      color: var(--navy);
+      opacity: 0.5;
+    }
+
+    #funding h2 {
+      font-size: clamp(26px, 3.5vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--navy);
+      margin-bottom: 36px;
+    }
+
+    #funding .funding-prose p {
+      font-size: 19px;
+      font-weight: 300;
+      color: rgba(15,27,46,0.75);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    #funding .funding-prose p:last-child { margin-bottom: 0; }
+
+    #funding .funding-prose strong {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       SECTION 8 — BHSSA / STATE VALIDATION
+    ============================================================ */
+    #bhssa {
+      background: var(--navy);
+      padding: 120px 0;
+    }
+
+    .bhssa-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 32px;
+      align-items: center;
+    }
+
+    .bhssa-image-wrap img {
+      width: 100%;
+      border-radius: 8px;
+      display: block;
+      box-shadow: 0 24px 56px rgba(0,0,0,0.5);
+    }
+
+    .bhssa-content .section-eyebrow {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 20px;
+    }
+
+    .bhssa-content h2 {
+      font-size: clamp(26px, 3.2vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .bhssa-content p {
+      font-size: 17px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+
+    .bhssa-content p:last-child { margin-bottom: 0; }
+
+    .bhssa-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 9px 16px;
+      background: rgba(99,142,197,0.12);
+      border: 1px solid rgba(99,142,197,0.25);
+      border-radius: 24px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+
+    /* ============================================================
+       SECTION 9 — PROMPTS
+    ============================================================ */
+    #prompts {
+      background: var(--navy);
+      padding: 80px 32px 120px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    #prompts .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    #prompts .section-header h2 {
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    #prompts .section-header p {
+      font-size: 17px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.55);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .prompts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .prompt-tile {
+      padding: 32px 28px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      display: block;
+      text-align: left;
+    }
+
+    .prompt-tile:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .prompt-domain {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .prompt-question {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.55;
+    }
+
+    .prompt-arrow {
+      display: block;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--blue);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .prompt-tile:hover .prompt-arrow { opacity: 1; }
+
+    /* ============================================================
+       MODAL
+    ============================================================ */
+    #modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,14,22,0.9);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    #modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      margin: 20px;
+      background: var(--navy);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .modal-title {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+
+    #modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255,255,255,0.5);
+      font-size: 22px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      transition: background 0.2s, color 0.2s;
+    }
+    #modal-close:hover { background: rgba(255,255,255,0.08); color: white; }
+
+    #modal-frame {
+      width: 100%;
+      height: 560px;
+      border: none;
+      display: block;
+    }
+
+    /* ============================================================
+       STREAMER
+    ============================================================ */
+    .streamer {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 200;
+      width: 280px;
+      background: rgba(10,14,20,0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 20px;
+      transform: translateX(340px);
+      opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1), opacity 0.4s ease;
+      box-shadow: 0 24px 56px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    .streamer.visible {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .streamer-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse-dot 1.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.8); }
+    }
+
+    .streamer-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .streamer-domain-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .streamer-domain-name {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.65);
+    }
+
+    .streamer-score {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.4);
+      transition: color 0.4s;
+    }
+
+    .streamer-score.active { color: var(--white); }
+    .streamer-score.fired  { color: var(--coral); }
+
+    .streamer-bar-track {
+      height: 2px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 1px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .streamer-bar-fill {
+      height: 100%;
+      border-radius: 1px;
+      background: var(--blue);
+      width: 0%;
+      transition: width 0.7s ease;
+    }
+
+    .streamer-bar-fill.fired { background: var(--coral); }
+
+    /* ============================================================
+       SECTION 10 — ENDCAP
+    ============================================================ */
+    #endcap {
+      background: var(--navy);
+      padding: 120px 32px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .endcap-line {
+      width: 48px;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+      margin: 0 auto 48px;
+    }
+
+    .endcap-statement {
+      font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1.35;
+      color: rgba(255,255,255,0.88);
+      margin-bottom: 28px;
+    }
+
+    .endcap-statement strong {
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .endcap-email {
+      display: inline-block;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--coral);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid rgba(243,113,99,0.35);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .endcap-email:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.4);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      background: rgba(0,0,0,0.3);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 36px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    footer img {
+      height: 22px;
+      width: auto;
+      opacity: 0.7;
+    }
+
+    .footer-right {
+      text-align: right;
+    }
+
+    .footer-email {
+      display: block;
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+      margin-bottom: 4px;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* ============================================================
+       MOBILE
+    ============================================================ */
+    @media (max-width: 768px) {
+      .streamer { display: none; }
+
+      .voice-layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .voice-video-wrap {
+        max-height: 360px;
+      }
+
+      .mtss-layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .mtss-image-wrap {
+        order: 2;
+      }
+
+      .bhssa-layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .prompts-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-right { text-align: left; }
+
+      .hero-h1 {
+        font-size: clamp(28px, 8vw, 48px);
+      }
+    }
+
+    @media (max-width: 520px) {
+      .prompts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Scroll progress bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Streamer overlay -->
+  <div class="streamer" id="streamer">
+    <div class="streamer-header">
+      <div class="live-dot"></div>
+      <span class="streamer-label">Listening Now</span>
+    </div>
+    <!-- rows populated by JS -->
+    <div id="streamer-rows"></div>
+  </div>
+
+  <!-- VideoAsk Modal -->
+  <div id="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-domain-label">Sample Prompt</span>
+        <button id="modal-close" aria-label="Close">&#x2715;</button>
+      </div>
+      <iframe id="modal-frame" src="" allow="camera; microphone; autoplay" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section id="hero">
+    <!-- Static image fallback -->
+    <img id="hero-bg" src="../images/hero-portrait-blazer.png" alt="Student portrait" />
+    <!-- Optionally swap to video -->
+    <!-- <video id="hero-video" autoplay muted loop playsinline poster="../images/hero-portrait-blazer.png">
+      <source src="../images/nc-girl.mp4" type="video/mp4" />
+    </video> -->
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <span class="hero-eyebrow">Human Skills Analytics &nbsp;&#183;&nbsp; Behavioral Health Screener</span>
+      <h1 class="hero-h1">What If We Stopped Asking Students To Rate Their Feelings From One To Five?</h1>
+      <p class="hero-sub">A different approach to behavioral health screening — one that actually listens.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       THE THESIS
+  ============================================================ -->
+  <section id="thesis">
+    <div class="editorial-col">
+      <span class="eyebrow reveal">The Problem</span>
+
+      <p class="reveal reveal-delay-1">
+        For more than a decade, districts across America have used Likert-scale surveys to understand student wellbeing. A 1 asks students to locate a feeling on a number line. A 5 suggests they have it figured out. But a child in crisis rarely answers 5. And a child who is quietly struggling never fills it in at all. We have been asking the wrong question.
+      </p>
+
+      <p class="reveal reveal-delay-2">
+        The instruments we rely on were designed to aggregate, not to understand. They tell a district something happened without telling anyone what. A percentage can flag a trend. It cannot explain why Marcus stopped eating lunch with his friends, or why Aaliyah's grades collapsed in November, or why a student who wrote "I'm fine" on every screener for three years was anything but.
+      </p>
+
+      <p class="reveal reveal-delay-3">
+        Something shifts when a student is given a microphone instead of a rubric. They stop performing wellness and start describing it. The hesitation before a sentence. The qualifier that reveals the real belief. The pivot from what they planned to say to what they actually mean. This is the signal behavioral health has always been missing — and the one that AI is now capable of hearing.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PULL QUOTE
+  ============================================================ -->
+  <div class="pull-quote-section reveal">
+    <span class="pull-quote-mark">&ldquo;</span>
+    <p class="pull-quote-text">We aren't looking for data points. We're looking for the moment a student finally finds their voice.</p>
+    <span class="pull-quote-source">Team IMPACTER</span>
+  </div>
+
+  <!-- ============================================================
+       WAVEFORM DIVIDER
+  ============================================================ -->
+  <div class="waveform-divider" id="waveform-divider" aria-hidden="true">
+    <!-- bars injected by JS -->
+  </div>
+
+  <!-- ============================================================
+       VOICE INTELLIGENCE
+  ============================================================ -->
+  <section id="voice">
+    <span class="voice-label reveal">Voice Intelligence</span>
+    <h2 class="voice-headline reveal">Here's what the model heard.</h2>
+    <p class="voice-sub reveal">A student responds to a single open-ended prompt. What follows is documentary evidence — not a product demo.</p>
+
+    <div class="voice-layout">
+      <!-- Video -->
+      <div class="reveal">
+        <div class="voice-video-wrap">
+          <video id="demo-video" src="../images/nc-girl.mp4" playsinline preload="metadata" poster="../images/hero-portrait-blazer.png"></video>
+
+          <div class="signal-flash" id="signal-flash"></div>
+
+          <div class="video-controls">
+            <button id="play-btn" aria-label="Play / Pause">
+              <svg id="play-icon" width="16" height="16" viewBox="0 0 16 16" fill="white">
+                <polygon points="3,1 14,8 3,15"/>
+              </svg>
+              <svg id="pause-icon" width="16" height="16" viewBox="0 0 16 16" fill="white" style="display:none">
+                <rect x="2" y="1" width="4" height="14" rx="1"/>
+                <rect x="10" y="1" width="4" height="14" rx="1"/>
+              </svg>
+            </button>
+            <div id="karaoke-display" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Domain signals -->
+      <div class="voice-signals reveal reveal-delay-2">
+        <div class="signals-heading">Domain signals</div>
+
+        <div class="domain-row" id="dr-er">
+          <div class="domain-meta">
+            <span class="domain-name">Emotional Resilience</span>
+            <span class="domain-score"><span class="score-val" id="sv-er">—</span> / 4</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" id="bf-er"></div></div>
+          <div class="domain-note" id="dn-er">Emotional Resilience signal detected at 3.5 seconds.</div>
+        </div>
+
+        <div class="domain-row" id="dr-si">
+          <div class="domain-meta">
+            <span class="domain-name">Self-Insight</span>
+            <span class="domain-score"><span class="score-val" id="sv-si">—</span> / 4</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" id="bf-si"></div></div>
+          <div class="domain-note" id="dn-si">Self-Insight signal detected at 9.0 seconds.</div>
+        </div>
+
+        <div class="domain-row" id="dr-rg">
+          <div class="domain-meta">
+            <span class="domain-name">Reflective Growth</span>
+            <span class="domain-score"><span class="score-val" id="sv-rg">—</span> / 4</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" id="bf-rg"></div></div>
+          <div class="domain-note" id="dn-rg">Reflective Growth signal detected at 13.0 seconds.</div>
+        </div>
+
+        <div class="domain-row" id="dr-ra">
+          <div class="domain-meta">
+            <span class="domain-name">Relational Awareness</span>
+            <span class="domain-score"><span class="score-val" id="sv-ra">3</span> / 4</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" id="bf-ra" style="width:75%; background: var(--blue);"></div></div>
+          <div class="domain-note"></div>
+        </div>
+
+        <div class="domain-row" id="dr-hs">
+          <div class="domain-meta">
+            <span class="domain-name">Help-Seeking</span>
+            <span class="domain-score"><span class="score-val" id="sv-hs">2</span> / 4</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" id="bf-hs" style="width:50%; background: var(--blue);"></div></div>
+          <div class="domain-note"></div>
+        </div>
+
+        <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.07);">
+          <p style="font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.4); line-height: 1.6;">
+            Model accuracy: <strong style="color: rgba(255,255,255,0.65); font-weight: 500;">.918 QWK</strong> against human expert raters across a validation sample of 3,200 student responses.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       THE NUMBERS
+  ============================================================ -->
+  <section id="numbers">
+    <div class="stat-item reveal">
+      <span class="stat-numeral" style="color: var(--coral);">97%</span>
+      <p class="stat-context">Participation rate in district pilot windows — compared to 34–52% typical response rates on traditional written surveys.</p>
+      <div class="stat-divider"></div>
+    </div>
+
+    <div class="stat-item reveal reveal-delay-1">
+      <span class="stat-numeral" style="color: var(--navy);">1.4 days</span>
+      <p class="stat-context">Average time from screening to support connection. The Screener does not produce a report and a waiting list — it produces a signal and a next step.</p>
+      <div class="stat-divider"></div>
+    </div>
+
+    <div class="stat-item reveal reveal-delay-2">
+      <span class="stat-numeral" style="color: var(--coral);">$0 net cost</span>
+      <p class="stat-context">After CYBHI reimbursement through CPT 96127. Districts that have avoided the Screener on budget grounds have been paying for it all along — they just haven't been collecting the reimbursement.</p>
+      <div class="stat-divider"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MTSS
+  ============================================================ -->
+  <section id="mtss">
+    <div class="mtss-layout">
+      <div class="mtss-image-wrap reveal">
+        <img src="../images/mtss-pyramid.png" alt="MTSS Pyramid — Universal, Targeted, Intensive" />
+      </div>
+
+      <div class="mtss-content reveal reveal-delay-1">
+        <span class="section-eyebrow">MTSS Integration</span>
+        <h2>How districts build it into their existing architecture.</h2>
+
+        <div class="mtss-tier">
+          <div class="tier-num">1</div>
+          <div class="tier-body">
+            <h3>Universal — Tier 1</h3>
+            <p>The Screener runs district-wide, three times a year. Every student responds. Every voice is heard. The model identifies students who warrant a closer look — without stigma, without opt-in, without a counselor having to guess.</p>
+          </div>
+        </div>
+
+        <div class="mtss-tier">
+          <div class="tier-num">2</div>
+          <div class="tier-body">
+            <h3>Targeted — Tier 2</h3>
+            <p>Students flagged at Tier 1 are routed to small-group support. The Screener data informs the grouping — counselors work with students who have similar behavioral health profiles, not arbitrary scheduling cohorts.</p>
+          </div>
+        </div>
+
+        <div class="mtss-tier">
+          <div class="tier-num">3</div>
+          <div class="tier-body">
+            <h3>Intensive — Tier 3</h3>
+            <p>For students in acute need, the Screener provides the clinical team with documented voice-based evidence — transcript, domain scores, and AI-generated summary — before the first appointment. Less intake. More intervention.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FUNDING
+  ============================================================ -->
+  <section id="funding">
+    <div class="editorial-col">
+      <span class="eyebrow reveal" style="color: rgba(15,27,46,0.45);">The Funding Mechanism</span>
+      <h2 class="reveal" style="color: var(--navy);">California is paying for districts to listen better. Here's how.</h2>
+
+      <div class="funding-prose reveal reveal-delay-1">
+        <p>
+          California's Children and Youth Behavioral Health Initiative — CYBHI — created a funding mechanism that most district business offices have not yet learned to use. The mechanism is straightforward: the Behavioral Health Screener qualifies for reimbursement under <strong>CPT code 96127 with diagnosis code Z13.89</strong>, payable by Medi-Cal, private insurance, and county mental health plans.
+        </p>
+        <p>
+          The reimbursement rate is <strong>$4.81 per administration</strong>. For a district of 5,000 students screening three times a year, that is $72,150 in recoverable revenue annually — enough to cover the Screener and fund a portion of the counseling hours the data generates. Three practitioner types can administer: licensed clinical social workers, credentialed school counselors, and licensed marriage and family therapists. Most districts already employ at least two of the three.
+        </p>
+        <p>
+          The practical result is a screening program that costs <strong>$0 net</strong> after reimbursement — and generates both student data and a funding stream that grows with usage. The districts that have moved fastest are not the ones with the largest behavioral health budgets. They are the ones whose business offices read the CPT schedule.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       BHSSA
+  ============================================================ -->
+  <section id="bhssa">
+    <div class="bhssa-layout">
+      <div class="bhssa-image-wrap reveal">
+        <img src="../images/bhssa-announcement.gif" alt="BHSSA-002 Selection Announcement" />
+      </div>
+
+      <div class="bhssa-content reveal reveal-delay-1">
+        <span class="section-eyebrow">State Validation</span>
+        <h2>Selected by California for statewide evaluation.</h2>
+
+        <p>
+          In 2024, the California Behavioral Health Services Oversight and Accountability Commission — BHSOAC — partnered with the Santa Clara County Office of Education to identify tools capable of anchoring statewide behavioral health performance management. The Behavioral Health Screener was selected under designation <strong>BHSSA-002</strong>.
+        </p>
+
+        <p>
+          Selection does not mean endorsement. It means the instrument met a threshold: the Commission believed the Screener was capable of producing behavioral health evidence at scale, reliably enough to inform policy. That is a different standard than a vendor claim or a pilot anecdote.
+        </p>
+
+        <p>
+          For districts considering the Screener, BHSSA-002 provides one practical assurance: this instrument has been examined by people whose job is to evaluate behavioral health instruments. It held up.
+        </p>
+
+        <div class="bhssa-badge">
+          &#10003; &nbsp;BHSSA-002 &nbsp;&nbsp;|&nbsp;&nbsp; CA BHSOAC + SCCOE
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Second pull quote -->
+  <div class="pull-quote-section reveal">
+    <span class="pull-quote-mark">&ldquo;</span>
+    <p class="pull-quote-text">A percentage can flag a trend. It cannot explain why a student who wrote "I'm fine" on every screener for three years was anything but.</p>
+    <span class="pull-quote-source">IMPACTER Pathway — Behavioral Health Screener Overview</span>
+  </div>
+
+  <!-- ============================================================
+       PROMPTS
+  ============================================================ -->
+  <section id="prompts">
+    <div class="section-header reveal">
+      <span class="eyebrow" style="text-align:center; display:block; margin-bottom: 12px;">The Artifacts</span>
+      <h2>Hear what students say.</h2>
+      <p>Six domains. Six open-ended prompts. Click any domain to respond as a student would.</p>
+    </div>
+
+    <div class="prompts-grid reveal">
+      <div class="prompt-tile" data-domain="Self-Insight" data-url="https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX">
+        <span class="prompt-domain">Self-Insight</span>
+        <p class="prompt-question">Tell me about a time you surprised yourself — when you did something you didn't think you could do, or felt something you didn't expect to feel.</p>
+        <span class="prompt-arrow">Respond as a student &rarr;</span>
+      </div>
+
+      <div class="prompt-tile" data-domain="Emotional Resilience" data-url="https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX">
+        <span class="prompt-domain">Emotional Resilience</span>
+        <p class="prompt-question">What does it feel like for you when things don't go the way you planned? Walk me through what you do next.</p>
+        <span class="prompt-arrow">Respond as a student &rarr;</span>
+      </div>
+
+      <div class="prompt-tile" data-domain="Relational Awareness" data-url="https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX">
+        <span class="prompt-domain">Relational Awareness</span>
+        <p class="prompt-question">Think about a relationship that matters to you — a friend, a family member, a teacher. What makes it work? What makes it hard?</p>
+        <span class="prompt-arrow">Respond as a student &rarr;</span>
+      </div>
+
+      <div class="prompt-tile" data-domain="Conflict Resolution" data-url="https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX">
+        <span class="prompt-domain">Conflict Resolution</span>
+        <p class="prompt-question">Describe a disagreement you've had with someone. What happened, and looking back, what do you wish you had done differently?</p>
+        <span class="prompt-arrow">Respond as a student &rarr;</span>
+      </div>
+
+      <div class="prompt-tile" data-domain="Help-Seeking" data-url="https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX">
+        <span class="prompt-domain">Help-Seeking</span>
+        <p class="prompt-question">When you're going through something difficult, what do you usually do? Who, if anyone, do you turn to, and why?</p>
+        <span class="prompt-arrow">Respond as a student &rarr;</span>
+      </div>
+
+      <div class="prompt-tile" data-domain="Reflective Growth" data-url="https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX">
+        <span class="prompt-domain">Reflective Growth</span>
+        <p class="prompt-question">What's something you've changed your mind about in the last year — about yourself, someone else, or how something works?</p>
+        <span class="prompt-arrow">Respond as a student &rarr;</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ENDCAP
+  ============================================================ -->
+  <section id="endcap">
+    <div class="endcap-line"></div>
+    <p class="endcap-statement reveal">
+      <strong>Bring the screener to your district.</strong><br />
+      A conversation takes fifteen minutes. Knowing what your students actually need takes one semester.
+    </p>
+    <a class="endcap-email reveal reveal-delay-1" href="mailto:info@impacterpathway.com">info@impacterpathway.com</a>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <img src="../images/impacter-pathway-white.svg" alt="IMPACTER Pathway" />
+    <div class="footer-right">
+      <a class="footer-email" href="mailto:info@impacterpathway.com">info@impacterpathway.com</a>
+      <span class="footer-copy">&copy; 2026 IMPACTER Pathway. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    'use strict';
+
+    // ---- Scroll progress bar ----
+    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = pct + '%';
+    }, { passive: true });
+
+    // ---- Reveal on scroll ----
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(el => revealObserver.observe(el));
+
+    // ---- Waveform bars ----
+    const waveDiv = document.getElementById('waveform-divider');
+    const heights = [12, 18, 28, 40, 52, 40, 62, 48, 36, 52, 42, 30, 50, 36, 22, 34, 48, 38, 26, 44, 56, 44, 32, 46, 38, 24, 36, 50, 40, 28];
+    heights.forEach((h, i) => {
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = h + 'px';
+      bar.style.setProperty('--dur', (0.9 + Math.random() * 0.7).toFixed(2) + 's');
+      bar.style.setProperty('--delay', (Math.random() * 0.6).toFixed(2) + 's');
+      waveDiv.appendChild(bar);
+    });
+
+    // ---- Karaoke + Domain bars ----
+    const WORDS = [
+      {t:0.0, text:'When'}, {t:0.2, text:'given'}, {t:0.45, text:'some'},
+      {t:0.65, text:'thought'}, {t:0.85, text:'to'}, {t:0.95, text:'this'},
+      {t:1.15, text:'question,'}, {t:1.55, text:'I'}, {t:1.7, text:'realize'},
+      {t:2.05, text:'I'}, {t:2.2, text:"don't"}, {t:2.5, text:'have'},
+      {t:2.7, text:'as'}, {t:2.85, text:'much'}, {t:3.05, text:'failures', tag:'er'},
+      {t:3.5, text:'as'}, {t:3.65, text:'I'}, {t:3.8, text:'would'},
+      {t:4.0, text:'have'}, {t:4.2, text:'expected.'},
+      {t:4.95, text:'My'}, {t:5.1, text:'biggest'}, {t:5.45, text:'failure', tag:'er'},
+      {t:5.85, text:'would'}, {t:6.05, text:'be'}, {t:6.2, text:'not'},
+      {t:6.4, text:'taking'}, {t:6.65, text:'enough'}, {t:6.95, text:'risk'},
+      {t:7.25, text:'to'}, {t:7.4, text:'experience'}, {t:7.85, text:'true'},
+      {t:8.1, text:'failure.'}, {t:8.75, text:'I'}, {t:8.95, text:'think', tag:'si'},
+      {t:9.35, text:'I'}, {t:9.55, text:'guard'}, {t:9.85, text:'myself'},
+      {t:10.2, text:'from'}, {t:10.45, text:'it.'},
+      {t:11.2, text:'Part'}, {t:11.4, text:'of'}, {t:11.6, text:'me'},
+      {t:11.8, text:'does'}, {t:12.0, text:"n't"}, {t:12.15, text:'want'},
+      {t:12.4, text:'to'}, {t:12.6, text:'fail.'},
+      {t:13.3, text:'But'}, {t:13.6, text:'another', tag:'rg'}, {t:13.9, text:'part'},
+      {t:14.2, text:'of'}, {t:14.35, text:'me'}, {t:14.55, text:'understands'},
+      {t:14.95, text:'that'}, {t:15.15, text:'failure'}, {t:15.5, text:'is'},
+      {t:15.7, text:'the'}, {t:15.9, text:'only'}, {t:16.2, text:'way'},
+      {t:16.5, text:'to'}, {t:16.7, text:'truly'}, {t:17.0, text:'succeed.'},
+    ];
+
+    // Domain trigger times (seconds)
+    const TRIGGERS = { er: 3.5, si: 9.0, rg: 13.0 };
+    const fired = { er: false, si: false, rg: false };
+
+    // Build karaoke spans
+    const karaokeEl = document.getElementById('karaoke-display');
+    const spans = WORDS.map((w, i) => {
+      const sp = document.createElement('span');
+      sp.className = 'kword';
+      if (w.tag) sp.classList.add(w.tag + '-tag');
+      sp.textContent = w.text;
+      karaokeEl.appendChild(sp);
+      return sp;
+    });
+
+    const video = document.getElementById('demo-video');
+    const playBtn = document.getElementById('play-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const signalFlash = document.getElementById('signal-flash');
+
+    let rafId = null;
+    let lastActiveIdx = -1;
+
+    function fireSignal(domain, label, score, pct) {
+      // Main domain bars
+      const scoreEl = document.getElementById('sv-' + domain);
+      const fillEl  = document.getElementById('bf-' + domain);
+      const noteEl  = document.getElementById('dn-' + domain);
+
+      if (scoreEl) {
+        scoreEl.textContent = score;
+        scoreEl.classList.add('fired');
+      }
+      if (fillEl) {
+        fillEl.style.width = pct + '%';
+        fillEl.classList.add('fired');
+      }
+      if (noteEl) {
+        noteEl.classList.add('show');
+      }
+
+      // Flash signal label
+      signalFlash.textContent = label + ' detected';
+      signalFlash.classList.add('show');
+      clearTimeout(signalFlash._timer);
+      signalFlash._timer = setTimeout(() => signalFlash.classList.remove('show'), 2200);
+
+      // Update streamer
+      updateStreamerDomain(domain, score, pct, true);
+    }
+
+    function karaokeLoop() {
+      const ct = video.currentTime;
+
+      // Find active word
+      let activeIdx = -1;
+      for (let i = 0; i < WORDS.length; i++) {
+        if (ct >= WORDS[i].t) activeIdx = i;
+      }
+
+      if (activeIdx !== lastActiveIdx) {
+        spans.forEach((sp, i) => {
+          sp.classList.toggle('active', i === activeIdx);
+        });
+        lastActiveIdx = activeIdx;
+      }
+
+      // Domain triggers
+      if (!fired.er && ct >= TRIGGERS.er) {
+        fired.er = true;
+        fireSignal('er', 'Emotional Resilience', 4, 100);
+      }
+      if (!fired.si && ct >= TRIGGERS.si) {
+        fired.si = true;
+        fireSignal('si', 'Self-Insight', 4, 100);
+      }
+      if (!fired.rg && ct >= TRIGGERS.rg) {
+        fired.rg = true;
+        fireSignal('rg', 'Reflective Growth', 4, 100);
+      }
+
+      rafId = requestAnimationFrame(karaokeLoop);
+    }
+
+    // Play / pause
+    playBtn.addEventListener('click', () => {
+      if (video.paused) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+
+    video.addEventListener('play', () => {
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = '';
+      if (!rafId) rafId = requestAnimationFrame(karaokeLoop);
+    });
+
+    video.addEventListener('pause', () => {
+      playIcon.style.display = '';
+      pauseIcon.style.display = 'none';
+    });
+
+    video.addEventListener('ended', () => {
+      playIcon.style.display = '';
+      pauseIcon.style.display = 'none';
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    });
+
+    // Reset on seek
+    video.addEventListener('seeked', () => {
+      const ct = video.currentTime;
+      // Reset domain fires if seeked back
+      if (ct < TRIGGERS.er) { fired.er = false; resetDomain('er'); }
+      if (ct < TRIGGERS.si) { fired.si = false; resetDomain('si'); }
+      if (ct < TRIGGERS.rg) { fired.rg = false; resetDomain('rg'); }
+    });
+
+    function resetDomain(domain) {
+      const scoreEl = document.getElementById('sv-' + domain);
+      const fillEl  = document.getElementById('bf-' + domain);
+      const noteEl  = document.getElementById('dn-' + domain);
+      if (scoreEl) { scoreEl.textContent = '—'; scoreEl.classList.remove('fired'); }
+      if (fillEl)  { fillEl.style.width = '0%'; fillEl.classList.remove('fired'); }
+      if (noteEl)  { noteEl.classList.remove('show'); }
+      updateStreamerDomain(domain, '—', 0, false);
+    }
+
+    // ---- Streamer ----
+    const streamer = document.getElementById('streamer');
+    const streamerRows = document.getElementById('streamer-rows');
+
+    const STREAMER_DOMAINS = [
+      { key: 'er', label: 'Emotional Resilience', score: '—', pct: 0 },
+      { key: 'si', label: 'Self-Insight', score: '—', pct: 0 },
+      { key: 'rg', label: 'Reflective Growth', score: '—', pct: 0 },
+      { key: 'ra', label: 'Relational Awareness', score: '3', pct: 75 },
+      { key: 'hs', label: 'Help-Seeking', score: '2', pct: 50 },
+    ];
+
+    STREAMER_DOMAINS.forEach(d => {
+      const row = document.createElement('div');
+      row.innerHTML = `
+        <div class="streamer-domain-row">
+          <span class="streamer-domain-name">${d.label}</span>
+          <span class="streamer-score${d.score !== '—' ? ' active' : ''}" id="stscore-${d.key}">${d.score !== '—' ? d.score + '/4' : '—'}</span>
+        </div>
+        <div class="streamer-bar-track">
+          <div class="streamer-bar-fill${d.key === 'er' || d.key === 'si' || d.key === 'rg' ? '' : ''}" id="stbar-${d.key}" style="width:${d.pct}%"></div>
+        </div>
+      `;
+      streamerRows.appendChild(row);
+    });
+
+    function updateStreamerDomain(key, score, pct, isFired) {
+      const scoreEl = document.getElementById('stscore-' + key);
+      const barEl   = document.getElementById('stbar-' + key);
+      if (scoreEl) {
+        scoreEl.textContent = score !== '—' ? score + '/4' : '—';
+        scoreEl.classList.toggle('active', score !== '—');
+        scoreEl.classList.toggle('fired', isFired);
+      }
+      if (barEl) {
+        barEl.style.width = pct + '%';
+        barEl.classList.toggle('fired', isFired);
+      }
+    }
+
+    // Show/hide streamer based on #voice visibility
+    const voiceSection = document.getElementById('voice');
+    const streamerObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          streamer.classList.add('visible');
+        } else {
+          streamer.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    streamerObserver.observe(voiceSection);
+
+    // ---- Prompt modal ----
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalFrame   = document.getElementById('modal-frame');
+    const modalClose   = document.getElementById('modal-close');
+    const modalLabel   = document.getElementById('modal-domain-label');
+
+    document.querySelectorAll('.prompt-tile').forEach(tile => {
+      tile.addEventListener('click', () => {
+        const url    = tile.dataset.url;
+        const domain = tile.dataset.domain;
+        modalLabel.textContent = domain;
+        modalFrame.src = url;
+        modalOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeModal() {
+      modalOverlay.classList.remove('open');
+      modalFrame.src = '';
+      document.body.style.overflow = '';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+  })();
+  </script>
+</body>
+</html>

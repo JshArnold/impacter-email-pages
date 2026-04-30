@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Behavioral Health Screener — IMPACTER Pathway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,300;1,9..40,400;1,9..40,500;1,9..40,700;1,9..40,800&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --cream: #FAF7F2;
+    --navy: #0F1B2E;
+    --blue: #638EC5;
+    --coral: #F37163;
+    --black: #1D1B1C;
+    --gray: rgba(29,27,28,0.55);
+    --rule: rgba(29,27,28,0.12);
+    --rule-white: rgba(255,255,255,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--black);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--cream);
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 60px;
+  }
+
+  nav img.logo { height: 22px; display: block; }
+
+  nav .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+  }
+
+  nav .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--black);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  nav .nav-links a:hover { opacity: 1; }
+
+  nav .nav-links a.cta {
+    color: var(--coral);
+    opacity: 1;
+    font-weight: 600;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    background: var(--cream);
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 80px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left { position: relative; z-index: 2; }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--coral);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .hero-headline {
+    font-size: clamp(64px, 7vw, 108px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: var(--black);
+    margin-bottom: 32px;
+  }
+
+  .hero-headline .underline-wrap {
+    position: relative;
+    display: inline-block;
+  }
+
+  .hero-headline .underline-wrap svg {
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    overflow: visible;
+  }
+
+  .hero-subhead {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--black);
+    opacity: 0.55;
+    max-width: 460px;
+    margin-bottom: 56px;
+  }
+
+  /* Stats strip */
+  .hero-stats {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .hero-stat {
+    padding-right: 32px;
+    margin-right: 32px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .hero-stat:last-child {
+    border-right: none;
+    padding-right: 0;
+    margin-right: 0;
+  }
+
+  .hero-stat .stat-num {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .hero-stat .stat-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Hero right — dashboard image */
+  .hero-right {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .hero-right img {
+    width: 120%;
+    max-width: none;
+    margin-right: -48px;
+    display: block;
+    border: none;
+  }
+
+  /* ── PULL QUOTE 1 ── */
+  #pullquote1 {
+    background: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 80px;
+    text-align: center;
+  }
+
+  #pullquote1 blockquote {
+    font-size: clamp(48px, 5.5vw, 84px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.2;
+    color: #fff;
+    max-width: 900px;
+    letter-spacing: -0.02em;
+  }
+
+  #pullquote1 cite {
+    display: block;
+    margin-top: 40px;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* ── WHAT SURVEYS MISS ── */
+  #surveys {
+    background: var(--cream);
+    padding: 100px 48px;
+  }
+
+  .section-label-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--black);
+    white-space: nowrap;
+  }
+
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .newspaper-spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 2px solid var(--black);
+  }
+
+  .newspaper-col {
+    padding: 48px 48px 64px;
+  }
+
+  .newspaper-col:first-child {
+    border-right: 1px solid var(--rule);
+  }
+
+  .newspaper-col:last-child {
+    border-left: 4px solid var(--coral);
+    padding-left: 44px;
+  }
+
+  .newspaper-headline {
+    font-size: clamp(36px, 3.5vw, 56px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    margin-bottom: 32px;
+  }
+
+  /* Likert mockup */
+  .likert-mock {
+    background: #f0ece4;
+    border: 1px solid rgba(29,27,28,0.15);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    line-height: 1.8;
+    color: var(--black);
+  }
+
+  .likert-mock .lm-title {
+    font-weight: bold;
+    font-size: 11px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .likert-mock .lm-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px dashed rgba(29,27,28,0.2);
+  }
+
+  .likert-mock .lm-item:last-child { border-bottom: none; }
+
+  .likert-mock .lm-scale {
+    display: flex;
+    gap: 8px;
+  }
+
+  .likert-mock .lm-scale span {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--black);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+
+  .likert-mock .lm-scale span.checked {
+    background: var(--black);
+    color: #fff;
+  }
+
+  .likert-subhead {
+    font-size: 16px;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--gray);
+    margin-top: 16px;
+  }
+
+  /* Right column */
+  .newspaper-col .student-gif {
+    width: 100%;
+    max-width: 420px;
+    display: block;
+    margin-bottom: 28px;
+  }
+
+  .editorial-quote {
+    font-size: 22px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--black);
+    margin-bottom: 20px;
+    padding-left: 20px;
+    border-left: 3px solid var(--coral);
+  }
+
+  .editorial-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .editorial-tag {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--coral);
+  }
+
+  .editorial-tag::before { content: '['; }
+  .editorial-tag::after { content: ']'; }
+
+  .newspaper-close-rule {
+    height: 2px;
+    background: var(--black);
+    margin-top: 64px;
+  }
+
+  /* ── STAT MOMENT 1 ── */
+  #statmoment1 {
+    background: var(--navy);
+    padding: 100px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+  }
+
+  .big-stat-block {
+    padding: 0 48px;
+    border-right: 1px solid var(--rule-white);
+    text-align: center;
+  }
+
+  .big-stat-block:first-child { padding-left: 0; }
+  .big-stat-block:last-child { border-right: none; padding-right: 0; }
+
+  .big-stat-num {
+    font-size: clamp(80px, 8vw, 120px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: #fff;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .big-stat-label {
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
+
+  /* ── BHSSA ── */
+  #bhssa {
+    background: var(--cream);
+    padding: 100px 48px;
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .bhssa-left {}
+
+  .bhssa-headline {
+    font-size: clamp(36px, 3.5vw, 56px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--black);
+    margin-bottom: 24px;
+  }
+
+  .bhssa-note {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--coral);
+    font-weight: 500;
+  }
+
+  .bhssa-right img {
+    width: 100%;
+    display: block;
+  }
+
+  /* ── RUBRIC LEVELS ── */
+  #rubric {
+    background: var(--cream);
+    padding: 80px 48px 100px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .rubric-header {
+    margin-bottom: 72px;
+  }
+
+  .rubric-header .line1 {
+    font-size: clamp(56px, 6vw, 88px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: var(--black);
+    display: block;
+  }
+
+  .rubric-header .line2 {
+    font-size: clamp(56px, 6vw, 88px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: var(--black);
+    display: block;
+  }
+
+  .rubric-list { list-style: none; }
+
+  .rubric-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 40px;
+    padding: 36px 0;
+    border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+
+  .rubric-item:last-child { border-bottom: 1px solid var(--rule); }
+
+  .rubric-num-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .rubric-num-label span {
+    display: block;
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .rubric-desc {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--black);
+    line-height: 1.6;
+    opacity: 0.75;
+    max-width: 680px;
+  }
+
+  .rubric-desc strong {
+    color: var(--black);
+    opacity: 1;
+    font-weight: 600;
+  }
+
+  /* ── PULL QUOTE 2 ── */
+  #pullquote2 {
+    background: var(--navy);
+    padding: 120px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 80vh;
+  }
+
+  #pullquote2 blockquote {
+    font-size: clamp(32px, 3.5vw, 56px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.3;
+    color: #fff;
+    max-width: 900px;
+    letter-spacing: -0.02em;
+    margin-bottom: 40px;
+  }
+
+  #pullquote2 cite {
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* ── VOICE INTELLIGENCE ── */
+  #voice {
+    background: var(--cream);
+    padding: 100px 48px;
+  }
+
+  .voice-header {
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--black);
+    max-width: 900px;
+    margin-bottom: 72px;
+  }
+
+  .voice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .voice-video-wrap {
+    position: relative;
+  }
+
+  .voice-video-wrap video {
+    width: 100%;
+    display: block;
+    cursor: pointer;
+  }
+
+  .video-play-btn {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    background: var(--black);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  .voice-right {}
+
+  .transcript-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 16px;
+  }
+
+  .transcript-excerpt {
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--black);
+    margin-bottom: 48px;
+    padding-left: 20px;
+    border-left: 2px solid var(--rule);
+  }
+
+  .annotation-list { list-style: none; }
+
+  .annotation-item {
+    padding: 20px 0 20px 24px;
+    border-left: 3px solid var(--blue);
+    margin-bottom: 20px;
+  }
+
+  .annotation-item .ann-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+
+  .annotation-item .ann-text {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--black);
+    opacity: 0.8;
+  }
+
+  /* ── SAMPLE PROMPTS ── */
+  #prompts {
+    background: var(--navy);
+    padding: 100px 48px;
+  }
+
+  .prompts-header {
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: #fff;
+    margin-bottom: 48px;
+    max-width: 700px;
+  }
+
+  .tab-row {
+    display: flex;
+    gap: 0;
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--rule-white);
+  }
+
+  .tab-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    padding: 12px 24px 12px 0;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    margin-right: 24px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tab-btn.active {
+    color: #fff;
+    border-bottom-color: var(--coral);
+  }
+
+  .prompts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .prompt-tab-panel { display: none; }
+  .prompt-tab-panel.active { display: contents; }
+
+  .prompt-tile {
+    background: #162030;
+    padding: 32px 28px;
+    border: 1px solid rgba(255,255,255,0.06);
+    text-decoration: none;
+    display: block;
+    transition: background 0.2s;
+  }
+
+  .prompt-tile:hover { background: #1e2e42; }
+
+  .prompt-tile .pt-competency {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 12px;
+  }
+
+  .prompt-tile .pt-label {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .prompt-tile .pt-arrow {
+    font-size: 20px;
+    color: var(--coral);
+    line-height: 1;
+  }
+
+  /* ── RESOURCES ── */
+  #resources {
+    background: var(--cream);
+    padding: 100px 48px;
+  }
+
+  .resources-header {
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--black);
+    margin-bottom: 64px;
+  }
+
+  .resources-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 0;
+    border-top: 2px solid var(--black);
+  }
+
+  .resource-featured {
+    padding: 48px 48px 48px 0;
+    border-right: 1px solid var(--rule);
+  }
+
+  .resource-featured img {
+    width: 280px;
+    display: block;
+    margin-bottom: 28px;
+  }
+
+  .resource-featured h3 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--black);
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .resource-featured p {
+    font-size: 15px;
+    color: var(--gray);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    max-width: 420px;
+  }
+
+  .resource-link {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--black);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+  }
+
+  .resource-link:hover { color: var(--coral); }
+
+  .resource-list {
+    padding: 48px 0 48px 48px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .resource-list-item {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .resource-list-item:first-child { padding-top: 0; }
+  .resource-list-item:last-child { border-bottom: none; }
+
+  .resource-list-item .rl-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 6px;
+  }
+
+  .resource-list-item a {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--black);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    line-height: 1.3;
+    transition: color 0.2s;
+  }
+
+  .resource-list-item a:hover { color: var(--coral); }
+
+  .resource-list-item .rl-desc {
+    font-size: 13px;
+    color: var(--gray);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* ── FINAL CTA ── */
+  #finalcta {
+    background: var(--navy);
+    padding: 120px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .finalcta-headline {
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #fff;
+    max-width: 800px;
+    margin-bottom: 48px;
+  }
+
+  .finalcta-link {
+    font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 700;
+    color: var(--coral);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-thickness: 2px;
+    transition: opacity 0.2s;
+  }
+
+  .finalcta-link:hover { opacity: 0.8; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    border-top: 1px solid var(--rule-white);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  footer img.logo { height: 20px; display: block; }
+
+  footer .footer-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  footer .footer-links a {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  footer .footer-links a:hover { color: rgba(255,255,255,0.8); }
+
+  footer .footer-copy {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    nav .nav-links { gap: 20px; }
+    nav .nav-links li:not(:last-child):not(:nth-last-child(2)) { display: none; }
+
+    #hero {
+      grid-template-columns: 1fr;
+      padding: 60px 24px 48px;
+      min-height: auto;
+    }
+
+    .hero-right { display: none; }
+
+    .hero-stats {
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .hero-stat {
+      border-right: none;
+      padding-right: 0;
+      margin-right: 0;
+      min-width: 120px;
+    }
+
+    #pullquote1 { padding: 60px 24px; }
+    #pullquote1 blockquote { font-size: 36px; }
+
+    #surveys { padding: 60px 24px; }
+    .newspaper-spread { grid-template-columns: 1fr; }
+    .newspaper-col:first-child { border-right: none; border-bottom: 1px solid var(--rule); }
+    .newspaper-col:last-child { border-left: 4px solid var(--coral); }
+
+    #statmoment1 {
+      grid-template-columns: 1fr;
+      padding: 60px 24px;
+      gap: 48px;
+    }
+
+    .big-stat-block {
+      border-right: none;
+      padding: 0;
+      border-bottom: 1px solid var(--rule-white);
+      padding-bottom: 40px;
+    }
+
+    .big-stat-block:last-child { border-bottom: none; padding-bottom: 0; }
+
+    #bhssa {
+      grid-template-columns: 1fr;
+      padding: 60px 24px;
+      gap: 40px;
+    }
+
+    #rubric { padding: 60px 24px; }
+    .rubric-item { grid-template-columns: 1fr; gap: 12px; }
+
+    #pullquote2 { padding: 60px 24px; min-height: auto; }
+
+    #voice { padding: 60px 24px; }
+    .voice-grid { grid-template-columns: 1fr; gap: 40px; }
+
+    #prompts { padding: 60px 24px; }
+    .prompts-grid { grid-template-columns: 1fr; }
+
+    #resources { padding: 60px 24px; }
+    .resources-layout { grid-template-columns: 1fr; }
+    .resource-featured { border-right: none; border-bottom: 1px solid var(--rule); padding: 40px 0; }
+    .resource-list { padding: 40px 0 0; }
+
+    #finalcta { padding: 80px 24px; }
+
+    footer {
+      flex-direction: column;
+      gap: 24px;
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    footer .footer-links { flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#hero">
+    <img src="../images/impacter-pathway-black.svg" alt="IMPACTER Pathway" class="logo">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#surveys">What We Do</a></li>
+    <li><a href="#bhssa">Recognition</a></li>
+    <li><a href="#prompts">Try It</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="mailto:info@impacterpathway.com?subject=BHS%20Demo%20Request" class="cta">Book a demo →</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-left reveal">
+    <p class="hero-eyebrow">Behavioral Health Screener · CYBHI-Aligned</p>
+    <h1 class="hero-headline">
+      Student wellness<br>
+      starts with<br>
+      <span class="underline-wrap">authentic voice.<svg viewBox="0 0 300 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M2,8 C40,2 80,12 120,6 C160,0 200,10 240,5 C265,2 285,8 298,6" stroke="#F37163" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg></span>
+    </h1>
+    <p class="hero-subhead">Open-voice behavioral health screening that captures what a student actually means — not just what a checkbox allows them to say.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="stat-num" data-target="97" data-suffix="%">97%</div>
+        <div class="stat-label">Participation Rate</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-num">1.4 days</div>
+        <div class="stat-label">Avg. Turnaround</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-num">$0 net</div>
+        <div class="stat-label">Cost via CYBHI</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-num">.918</div>
+        <div class="stat-label">QWK vs. Expert Raters</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="../images/dashboard-percy.png" alt="IMPACTER Dashboard" loading="eager">
+  </div>
+</section>
+
+<!-- ── PULL QUOTE 1 ── -->
+<section id="pullquote1">
+  <blockquote class="reveal">
+    "No checkboxes.<br>
+    No 1-to-5 scales.<br>
+    Just the actual student."
+  </blockquote>
+  <cite class="reveal">— IMPACTER Pathway</cite>
+</section>
+
+<!-- ── WHAT SURVEYS MISS ── -->
+<section id="surveys">
+  <div class="section-label-row reveal">
+    <span class="section-label">What Surveys Miss</span>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="newspaper-spread">
+    <div class="newspaper-col reveal">
+      <h2 class="newspaper-headline">47 Likert Items.<br>Zero Stories.</h2>
+      <div class="likert-mock">
+        <div class="lm-title">Student Wellness Survey — Page 3 of 4</div>
+        <div class="lm-item">
+          <span>I feel connected to my school</span>
+          <div class="lm-scale">
+            <span>1</span><span>2</span><span class="checked">3</span><span>4</span><span>5</span>
+          </div>
+        </div>
+        <div class="lm-item">
+          <span>I have adults I can talk to</span>
+          <div class="lm-scale">
+            <span>1</span><span>2</span><span>3</span><span class="checked">4</span><span>5</span>
+          </div>
+        </div>
+        <div class="lm-item">
+          <span>I feel emotionally supported</span>
+          <div class="lm-scale">
+            <span>1</span><span>2</span><span class="checked">3</span><span>4</span><span>5</span>
+          </div>
+        </div>
+        <div class="lm-item">
+          <span>I manage stress effectively</span>
+          <div class="lm-scale">
+            <span>1</span><span>2</span><span>3</span><span>4</span><span class="checked">5</span>
+          </div>
+        </div>
+        <div class="lm-item">
+          <span>I feel safe at school</span>
+          <div class="lm-scale">
+            <span>1</span><span class="checked">2</span><span>3</span><span>4</span><span>5</span>
+          </div>
+        </div>
+        <div class="lm-item">
+          <span>I bounce back from setbacks</span>
+          <div class="lm-scale">
+            <span>1</span><span>2</span><span>3</span><span class="checked">4</span><span>5</span>
+          </div>
+        </div>
+      </div>
+      <p class="likert-subhead">The "3" tells you nothing about why.</p>
+    </div>
+
+    <div class="newspaper-col reveal">
+      <h2 class="newspaper-headline">26 Seconds.<br>Three Signals.</h2>
+      <img src="../images/bh-student.gif" alt="Student responding" class="student-gif">
+      <p class="editorial-quote">"I tend to stay in my comfort zone and stand behind the yellow caution tape."</p>
+      <div class="editorial-tags">
+        <span class="editorial-tag">Emotional Resilience</span>
+        <span class="editorial-tag">Self-Insight</span>
+        <span class="editorial-tag">Reflective Growth</span>
+      </div>
+    </div>
+  </div>
+  <div class="newspaper-close-rule"></div>
+</section>
+
+<!-- ── STAT MOMENT 1 ── -->
+<section id="statmoment1">
+  <div class="big-stat-block reveal">
+    <span class="big-stat-num" data-target="97" data-suffix="%" data-decimals="0">97%</span>
+    <p class="big-stat-label">Participation rate<br>across pilot schools</p>
+  </div>
+  <div class="big-stat-block reveal">
+    <span class="big-stat-num" data-target="4.81" data-prefix="$" data-decimals="2">$4.81</span>
+    <p class="big-stat-label">Per admin<br>CYBHI CPT 96127</p>
+  </div>
+  <div class="big-stat-block reveal">
+    <span class="big-stat-num" data-target="918" data-prefix="." data-decimals="0">.918</span>
+    <p class="big-stat-label">QWK vs. expert raters<br>inter-rater reliability</p>
+  </div>
+</section>
+
+<!-- ── BHSSA ── -->
+<section id="bhssa">
+  <div class="bhssa-left reveal">
+    <h2 class="bhssa-headline">Selected by California BHSOAC for statewide behavioral health evaluation.</h2>
+    <p class="bhssa-note">April 2026 · statewide scope · K–12</p>
+  </div>
+  <div class="bhssa-right reveal">
+    <img src="../images/bhssa-announcement.gif" alt="BHSSA Announcement">
+  </div>
+</section>
+
+<!-- ── FOUR RUBRIC LEVELS ── -->
+<section id="rubric">
+  <div class="rubric-header reveal">
+    <span class="line1">One scoring frame.</span>
+    <span class="line2">Four levels.</span>
+  </div>
+
+  <ul class="rubric-list">
+    <li class="rubric-item reveal">
+      <div class="rubric-num-label">
+        <span>01</span>
+        Minimal
+      </div>
+      <p class="rubric-desc"><strong>Surface acknowledgment only.</strong> The student uses general or borrowed language — no personal connection, no evidence of internalized understanding. Screener flags for follow-up and tier consideration.</p>
+    </li>
+    <li class="rubric-item reveal">
+      <div class="rubric-num-label">
+        <span>02</span>
+        Surface
+      </div>
+      <p class="rubric-desc"><strong>Descriptive but not reflective.</strong> The student names experiences or feelings but doesn't explain their significance. Language is transactional. Model notes emotional vocabulary present but unanchored.</p>
+    </li>
+    <li class="rubric-item reveal">
+      <div class="rubric-num-label">
+        <span>03</span>
+        Engaged
+      </div>
+      <p class="rubric-desc"><strong>Personal narrative with self-awareness.</strong> The student connects experience to identity or growth. Specific language. The model finds patterns — metaphor, cause-and-effect framing, self-regulation signals.</p>
+    </li>
+    <li class="rubric-item reveal">
+      <div class="rubric-num-label">
+        <span>04</span>
+        Reflective
+      </div>
+      <p class="rubric-desc"><strong>Integrated insight and agency.</strong> The student demonstrates nuanced understanding of self — including contradiction, uncertainty, or aspiration. Model flags resilience markers, help-seeking language, values clarity.</p>
+    </li>
+  </ul>
+</section>
+
+<!-- ── PULL QUOTE 2 ── -->
+<section id="pullquote2">
+  <blockquote class="reveal">
+    "The model flags this as a resilience marker: failure is recast as an unmet aspiration — not a catastrophe."
+  </blockquote>
+  <cite class="reveal">NC Portrait · Adaptability Competency</cite>
+</section>
+
+<!-- ── VOICE INTELLIGENCE ── -->
+<section id="voice">
+  <div class="section-label-row reveal">
+    <span class="section-label">Voice Intelligence</span>
+    <div class="section-rule"></div>
+  </div>
+
+  <h2 class="voice-header reveal">What Authentic Language Reveals That Numbers Can't</h2>
+
+  <div class="voice-grid">
+    <div class="voice-video-wrap reveal">
+      <video id="portraitVideo" src="../images/nc-girl.mp4" loop muted playsinline poster="../images/dashboard-percy.png"></video>
+      <button class="video-play-btn" id="videoToggle" onclick="toggleVideo()">▶ Play</button>
+    </div>
+
+    <div class="voice-right reveal">
+      <p class="transcript-label">Student Response — NC Portrait · Adaptability</p>
+      <p class="transcript-excerpt">"When I think about a time I failed at something and how I grew from it... I think about my first year of JV soccer. I was cut because I wasn't good enough, and instead of giving up, I went to practice every single day on my own."</p>
+
+      <ul class="annotation-list">
+        <li class="annotation-item">
+          <p class="ann-tag">Resilience Marker</p>
+          <p class="ann-text">Failure is recast as an unmet aspiration. The student doesn't catastrophize — they pivot to agency. High signal for Adaptability Level 3–4.</p>
+        </li>
+        <li class="annotation-item">
+          <p class="ann-tag">Help-Seeking Signal</p>
+          <p class="ann-text">"On my own" indicates autonomous growth orientation — student did not disengage, but also did not seek support. Flag for educator awareness.</p>
+        </li>
+        <li class="annotation-item">
+          <p class="ann-tag">Language Pattern</p>
+          <p class="ann-text">Specific temporal anchoring ("first year of JV") and behavioral detail ("every single day") correlate with Reflective Level scoring. Distinct from vague generalization.</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── SAMPLE PROMPTS ── -->
+<section id="prompts">
+  <h2 class="prompts-header reveal">Experience the authentic voice difference.</h2>
+
+  <div class="tab-row reveal">
+    <button class="tab-btn active" onclick="switchTab('k12')">Grades 3–12</button>
+    <button class="tab-btn" onclick="switchTab('tk2')">TK–2</button>
+  </div>
+
+  <div class="prompts-grid">
+    <!-- Grades 3-12 -->
+    <div class="prompt-tab-panel active" id="tab-k12">
+      <a href="https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Self-Insight</p>
+        <p class="pt-label">Who are you when things get hard?</p>
+        <p class="pt-arrow">→</p>
+      </a>
+      <a href="https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Emotional Resilience</p>
+        <p class="pt-label">Tell us about a time you bounced back.</p>
+        <p class="pt-arrow">→</p>
+      </a>
+      <a href="https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Relational Awareness</p>
+        <p class="pt-label">How do you show up for the people around you?</p>
+        <p class="pt-arrow">→</p>
+      </a>
+      <a href="https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Conflict Resolution</p>
+        <p class="pt-label">Describe a time you worked through a disagreement.</p>
+        <p class="pt-arrow">→</p>
+      </a>
+      <a href="https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Help-Seeking</p>
+        <p class="pt-label">When do you ask for help — and what makes that hard?</p>
+        <p class="pt-arrow">→</p>
+      </a>
+      <a href="https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Reflective Growth</p>
+        <p class="pt-label">What's something you've changed your mind about?</p>
+        <p class="pt-arrow">→</p>
+      </a>
+    </div>
+
+    <!-- TK-2 -->
+    <div class="prompt-tab-panel" id="tab-tk2">
+      <a href="https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Self-Insight</p>
+        <p class="pt-label">What's something you're really good at?</p>
+        <p class="pt-arrow">→</p>
+      </a>
+      <a href="https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Emotional Resilience</p>
+        <p class="pt-label">What do you do when something makes you sad?</p>
+        <p class="pt-arrow">→</p>
+      </a>
+      <a href="https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Relational Awareness</p>
+        <p class="pt-label">Tell me about a friend who makes you feel good.</p>
+        <p class="pt-arrow">→</p>
+      </a>
+      <a href="https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Conflict Resolution</p>
+        <p class="pt-label">What do you do when you and a friend disagree?</p>
+        <p class="pt-arrow">→</p>
+      </a>
+      <a href="https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Help-Seeking</p>
+        <p class="pt-label">Who do you go to when you need help?</p>
+        <p class="pt-arrow">→</p>
+      </a>
+      <a href="https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX" class="prompt-tile reveal" target="_blank" rel="noopener">
+        <p class="pt-competency">Reflective Growth</p>
+        <p class="pt-label">What's something you learned this week?</p>
+        <p class="pt-arrow">→</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── RESOURCES ── -->
+<section id="resources">
+  <div class="section-label-row reveal">
+    <span class="section-label">Resources</span>
+    <div class="section-rule"></div>
+  </div>
+  <div class="resources-layout">
+    <div class="resource-featured reveal">
+      <img src="../images/playbook-cover.png" alt="BHS Playbook">
+      <h3>Implementation Playbook</h3>
+      <p>Everything your team needs: prompt sequences, MTSS integration guide, scoring rubric, sample parent communications, and CYBHI billing reference.</p>
+      <a href="../playbook.pdf" class="resource-link" target="_blank">Download the Playbook →</a>
+    </div>
+    <ul class="resource-list">
+      <li class="resource-list-item reveal">
+        <p class="rl-tag">Live Tool</p>
+        <a href="https://screener.impacterpathway.com" target="_blank" rel="noopener">Live Screener Platform</a>
+        <p class="rl-desc">Try the full student experience — works on any device, no login required.</p>
+      </li>
+      <li class="resource-list-item reveal">
+        <p class="rl-tag">Billing Reference</p>
+        <a href="https://www.dhcs.ca.gov/CYBHI/Documents/CYBHI-Fee-Schedule-Scope-of-Services-Rates-and-Codes.pdf" target="_blank" rel="noopener">CYBHI Fee Schedule</a>
+        <p class="rl-desc">Official CA DHCS document. CPT 96127 for brief behavioral health assessment.</p>
+      </li>
+      <li class="resource-list-item reveal">
+        <p class="rl-tag">Recognition</p>
+        <a href="#bhssa">BHSOAC Statewide Selection</a>
+        <p class="rl-desc">California's Behavioral Health Services Oversight and Accountability Commission. April 2026.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ── -->
+<section id="finalcta">
+  <h2 class="finalcta-headline reveal">Your students have something important to say.</h2>
+  <a href="mailto:info@impacterpathway.com" class="finalcta-link reveal">info@impacterpathway.com →</a>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <a href="https://impacterpathway.com">
+    <img src="../images/impacter-pathway-white.svg" alt="IMPACTER Pathway" class="logo">
+  </a>
+  <ul class="footer-links">
+    <li><a href="https://screener.impacterpathway.com">Live Screener</a></li>
+    <li><a href="../playbook.pdf">Playbook</a></li>
+    <li><a href="mailto:info@impacterpathway.com">Contact</a></li>
+    <li><a href="https://impacterpathway.com">impacterpathway.com</a></li>
+  </ul>
+  <p class="footer-copy">© 2026 IMPACTER Pathway</p>
+</footer>
+
+<script>
+/* ── SCROLL REVEAL ── */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ── COUNTING STATS ── */
+function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+function animateCount(el) {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const decimals = parseInt(el.dataset.decimals ?? '0');
+  const duration = 1600;
+  const start = performance.now();
+
+  function step(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const value = target * easeOut(progress);
+    el.textContent = prefix + value.toFixed(decimals) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  }
+
+  requestAnimationFrame(step);
+}
+
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      if (el.dataset.target) animateCount(el);
+      statObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('[data-target]').forEach(el => statObserver.observe(el));
+
+/* ── VIDEO TOGGLE ── */
+function toggleVideo() {
+  const video = document.getElementById('portraitVideo');
+  const btn = document.getElementById('videoToggle');
+  if (video.paused) {
+    video.play();
+    btn.textContent = '⏸ Pause';
+  } else {
+    video.pause();
+    btn.textContent = '▶ Play';
+  }
+}
+
+/* ── TAB SWITCHING ── */
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.prompt-tab-panel').forEach(p => p.classList.remove('active'));
+
+  event.currentTarget.classList.add('active');
+  const panel = document.getElementById('tab-' + id);
+  if (panel) {
+    panel.classList.add('active');
+    // Re-trigger reveal for newly visible items
+    panel.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+      el.classList.add('visible');
+    });
+  }
+}
+</script>
+</body>
+</html>

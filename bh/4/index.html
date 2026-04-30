@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BH Screener — IMPACTER Pathway</title>
+  <meta name="description" content="Natural Language Behavioral Health Screener. Auto-scored. MTSS-ready. CYBHI-reimbursed." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: 0 !important;
+    }
+
+    :root {
+      --navy: #0B1120;
+      --navy-mid: #0F1B2E;
+      --blue: #638EC5;
+      --coral: #F37163;
+      --green: #4ADE80;
+      --mono-dim: rgba(255,255,255,0.35);
+      --mono-mid: rgba(255,255,255,0.55);
+      --mono-text: rgba(255,255,255,0.75);
+      --white: #FFFFFF;
+      --rule: rgba(255,255,255,0.12);
+      --rule-thick: rgba(255,255,255,0.18);
+      --font-display: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --header-h: 52px;
+      --rail-w: 36px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: var(--font-display);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── SCROLL PROGRESS ── */
+    #scroll-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--coral);
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed;
+      top: 2px;
+      left: 0;
+      right: 0;
+      height: var(--header-h);
+      background: var(--navy);
+      border-bottom: 1px solid var(--rule);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      padding: 0 24px 0 calc(var(--rail-w) + 24px);
+      gap: 0;
+    }
+
+    .header-wordmark {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white);
+      flex: 1;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .header-status {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--coral);
+      letter-spacing: 0.08em;
+    }
+
+    .header-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .header-links a {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mono-mid);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.15s;
+    }
+
+    .header-links a:hover {
+      color: var(--white);
+    }
+
+    .header-cta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--coral) !important;
+      letter-spacing: 0.08em;
+      border: 1px solid var(--coral);
+      padding: 5px 12px;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s !important;
+    }
+
+    .header-cta:hover {
+      background: var(--coral);
+      color: var(--navy) !important;
+    }
+
+    /* ── LEFT SIDE RAIL ── */
+    #side-rail {
+      position: fixed;
+      left: 0;
+      top: var(--header-h);
+      bottom: 0;
+      width: var(--rail-w);
+      border-right: 1px solid var(--rule);
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0;
+      gap: 16px;
+      background: var(--navy);
+    }
+
+    .rail-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--mono-dim);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    .rail-dots {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .rail-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--mono-dim);
+      transition: background 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+
+    .rail-dot.active {
+      background: var(--coral);
+      transform: scale(1.5);
+    }
+
+    .rail-dot.passed {
+      background: var(--blue);
+    }
+
+    #rail-section-name {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      color: var(--mono-dim);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+      margin-top: auto;
+      padding-bottom: 24px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      padding-top: var(--header-h);
+      padding-left: var(--rail-w);
+    }
+
+    section {
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    .label-mono {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--mono-dim);
+      text-transform: uppercase;
+    }
+
+    .label-coral {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--coral);
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: calc(100vh - var(--header-h));
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 64px 64px 64px;
+      position: relative;
+    }
+
+    .hero-error {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--coral);
+      letter-spacing: 0.1em;
+      margin-bottom: 32px;
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: clamp(60px, 8vw, 100px);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 56px;
+      color: var(--white);
+    }
+
+    .hero-headline span.dim {
+      color: rgba(255,255,255,0.45);
+    }
+
+    .hero-body {
+      display: grid;
+      grid-template-columns: 1fr 2px 1fr;
+      gap: 0 48px;
+      align-items: start;
+      max-width: 960px;
+      margin-bottom: 56px;
+    }
+
+    .hero-rule-v {
+      width: 2px;
+      background: var(--rule-thick);
+      align-self: stretch;
+    }
+
+    .hero-left {
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 1.65;
+      color: var(--mono-text);
+    }
+
+    .hero-left strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .hero-right {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 2;
+      color: var(--mono-mid);
+    }
+
+    .hero-right .prompt-sym {
+      color: var(--blue);
+    }
+
+    .hero-right .val {
+      color: var(--white);
+    }
+
+    .hero-right .val-green {
+      color: var(--green);
+    }
+
+    .hero-right .val-coral {
+      color: var(--coral);
+    }
+
+    .hero-bottom {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      padding-top: 40px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .hero-launch {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      color: var(--coral);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.15s;
+    }
+
+    .hero-launch:hover {
+      color: var(--white);
+    }
+
+    .hero-scroll {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mono-dim);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.15s;
+    }
+
+    .hero-scroll:hover {
+      color: var(--mono-mid);
+    }
+
+    /* ── MARQUEE / TRUST BAND ── */
+    #trust {
+      padding: 0;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      overflow: hidden;
+      background: var(--navy-mid);
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 28s linear infinite;
+    }
+
+    .marquee-inner {
+      display: flex;
+      align-items: center;
+      padding: 14px 0;
+      white-space: nowrap;
+    }
+
+    .marquee-inner span {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.38);
+      padding: 0 24px;
+    }
+
+    .marquee-inner .dot {
+      color: var(--blue);
+      font-size: 6px;
+    }
+
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── BHSSA ── */
+    #bhssa {
+      padding: 96px 64px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 80px;
+      align-items: center;
+      background: var(--navy);
+    }
+
+    .bhssa-left {}
+
+    .bhssa-validation {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--green);
+      letter-spacing: 0.12em;
+      margin-bottom: 28px;
+    }
+
+    .bhssa-headline {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(32px, 4vw, 54px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 28px;
+    }
+
+    .bhssa-sub {
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--mono-text);
+      max-width: 480px;
+    }
+
+    .bhssa-right img {
+      width: 100%;
+      display: block;
+    }
+
+    /* ── SURVEY FAIL / VOICE PASS ── */
+    #compare {
+      padding: 96px 64px;
+      background: var(--navy-mid);
+    }
+
+    .compare-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--mono-dim);
+      letter-spacing: 0.12em;
+      margin-bottom: 48px;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 2px 1fr;
+      gap: 0 64px;
+      align-items: start;
+    }
+
+    .compare-rule-v {
+      background: var(--rule-thick);
+      align-self: stretch;
+    }
+
+    /* Survey Fail Panel */
+    .survey-fail-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--coral);
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .survey-fail-label::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--coral);
+      opacity: 0.5;
+    }
+
+    .survey-items {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .survey-item {
+      opacity: 0.28;
+    }
+
+    .survey-item-q {
+      font-family: var(--font-display);
+      font-size: 13px;
+      color: var(--white);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .likert-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .likert-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--mono-dim);
+      letter-spacing: 0.05em;
+      min-width: 36px;
+    }
+
+    .likert-circles {
+      display: flex;
+      gap: 8px;
+    }
+
+    .likert-circle {
+      width: 20px;
+      height: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .survey-data-readouts {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .readout-line {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--coral);
+      letter-spacing: 0.06em;
+    }
+
+    /* Voice Pass Panel */
+    .voice-pass-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--green);
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .voice-pass-label::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      animation: pulse-green 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-green {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .voice-video-wrap {
+      position: relative;
+      margin-bottom: 28px;
+      cursor: pointer;
+    }
+
+    .voice-video-wrap video {
+      width: 100%;
+      display: block;
+      max-height: 260px;
+      object-fit: cover;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(11,17,32,0.5);
+      transition: opacity 0.2s;
+    }
+
+    .video-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .play-btn {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--white);
+      background: rgba(11,17,32,0.8);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 10px 20px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+    }
+
+    .transcript-box {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--rule);
+      padding: 20px;
+    }
+
+    .transcript-header {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--mono-dim);
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+
+    .transcript-text {
+      font-family: var(--font-display);
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--mono-text);
+    }
+
+    .transcript-text .tag {
+      background: rgba(99,142,197,0.2);
+      border-bottom: 1px solid var(--blue);
+      color: var(--blue);
+      padding: 0 2px;
+    }
+
+    .transcript-text .tag-emotional {
+      background: rgba(74,222,128,0.12);
+      border-bottom: 1px solid var(--green);
+      color: var(--green);
+      padding: 0 2px;
+    }
+
+    /* ── DOMAIN SCORING ── */
+    #domains {
+      padding: 96px 64px;
+      background: var(--navy);
+    }
+
+    .domains-header {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mono-dim);
+      letter-spacing: 0.12em;
+      margin-bottom: 48px;
+    }
+
+    .domain-table {
+      max-width: 720px;
+    }
+
+    .domain-row {
+      display: grid;
+      grid-template-columns: 200px 1fr 80px;
+      align-items: center;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--rule);
+      gap: 32px;
+    }
+
+    .domain-row:first-child {
+      border-top: 1px solid var(--rule);
+    }
+
+    .domain-name {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--mono-text);
+    }
+
+    .domain-bar-wrap {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+    }
+
+    .bar-seg {
+      width: 20px;
+      height: 6px;
+      background: var(--blue);
+    }
+
+    .bar-seg.empty {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .bar-seg.dash {
+      background: transparent;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .domain-score {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mono-mid);
+      letter-spacing: 0.05em;
+      text-align: right;
+    }
+
+    .domain-score.null {
+      color: rgba(255,255,255,0.2);
+    }
+
+    .domain-total {
+      margin-top: 32px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--white);
+      letter-spacing: 0.06em;
+    }
+
+    .domain-total span {
+      color: var(--coral);
+    }
+
+    /* ── HOW IT WORKS ── */
+    #process {
+      padding: 96px 64px;
+      background: var(--navy-mid);
+    }
+
+    .process-header {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mono-dim);
+      letter-spacing: 0.12em;
+      margin-bottom: 64px;
+    }
+
+    .process-timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
+    }
+
+    .process-step {
+      padding: 0 32px 0 0;
+      position: relative;
+    }
+
+    .process-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      right: 0;
+      width: 1px;
+      height: 100%;
+      background: var(--rule);
+    }
+
+    .process-step:not(:first-child) {
+      padding-left: 32px;
+    }
+
+    .step-num {
+      font-family: var(--font-mono);
+      font-size: 48px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.06);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .step-id {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--blue);
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+
+    .step-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .step-desc {
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--mono-text);
+    }
+
+    .step-img {
+      margin-top: 24px;
+    }
+
+    .step-img img {
+      width: 100%;
+      display: block;
+      border: 1px solid var(--rule);
+    }
+
+    /* ── FUNDING MODEL ── */
+    #funding {
+      padding: 96px 64px;
+      background: var(--navy);
+    }
+
+    .funding-header {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mono-dim);
+      letter-spacing: 0.12em;
+      margin-bottom: 48px;
+    }
+
+    .funding-data-row {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      max-width: 680px;
+      border: 1px solid var(--rule);
+      margin-bottom: 40px;
+    }
+
+    .funding-cell {
+      flex: 1;
+      padding: 28px 32px;
+      border-right: 1px solid var(--rule);
+    }
+
+    .funding-cell:last-child {
+      border-right: none;
+    }
+
+    .funding-cell-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--mono-dim);
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+    }
+
+    .funding-cell-value {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+
+    .funding-cell-value.net {
+      color: var(--green);
+    }
+
+    .funding-note {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--mono-text);
+      line-height: 1.65;
+      max-width: 560px;
+      margin-bottom: 24px;
+    }
+
+    .funding-link {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--blue);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.15s;
+    }
+
+    .funding-link:hover {
+      color: var(--white);
+    }
+
+    /* ── SAMPLE PROMPTS ── */
+    #prompts {
+      padding: 96px 64px;
+      background: var(--navy-mid);
+    }
+
+    .prompts-header {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mono-dim);
+      letter-spacing: 0.12em;
+      margin-bottom: 48px;
+    }
+
+    .prompts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      max-width: 900px;
+    }
+
+    .prompt-tile {
+      background: var(--navy);
+      padding: 32px 28px;
+      text-decoration: none;
+      display: block;
+      transition: background 0.15s;
+      position: relative;
+    }
+
+    .prompt-tile:hover {
+      background: var(--navy-mid);
+    }
+
+    .prompt-tile:hover .prompt-arrow {
+      color: var(--coral);
+    }
+
+    .prompt-num {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--mono-dim);
+      letter-spacing: 0.12em;
+      margin-bottom: 16px;
+    }
+
+    .prompt-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .prompt-desc {
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--mono-text);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .prompt-arrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mono-dim);
+      letter-spacing: 0.08em;
+      transition: color 0.15s;
+    }
+
+    /* ── FINAL CTA ── */
+    #cta {
+      padding: 120px 64px;
+      background: var(--navy);
+    }
+
+    .cta-pre {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--mono-dim);
+      letter-spacing: 0.12em;
+      margin-bottom: 32px;
+    }
+
+    .cta-main {
+      font-family: var(--font-mono);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700;
+      color: var(--coral);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      display: inline-block;
+      margin-bottom: 32px;
+      transition: color 0.15s;
+    }
+
+    .cta-main:hover {
+      color: var(--white);
+    }
+
+    .cta-email {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--mono-mid);
+      letter-spacing: 0.06em;
+      display: block;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px 64px;
+      background: var(--navy-mid);
+      border-top: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: start;
+      gap: 48px;
+    }
+
+    .footer-logo img {
+      height: 18px;
+      opacity: 0.6;
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--mono-dim);
+      line-height: 2;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--mono-dim);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover {
+      color: var(--white);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      #side-rail { display: none; }
+
+      main { padding-left: 0; }
+
+      header { padding: 0 16px; }
+
+      .header-links { display: none; }
+
+      #hero { padding: 48px 24px 48px 24px; }
+
+      .hero-headline { font-size: clamp(44px, 12vw, 72px); }
+
+      .hero-body {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .hero-rule-v { display: none; }
+
+      #bhssa {
+        grid-template-columns: 1fr;
+        padding: 64px 24px;
+      }
+
+      #compare {
+        padding: 64px 24px;
+      }
+
+      .compare-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .compare-rule-v { display: none; }
+
+      #domains { padding: 64px 24px; }
+
+      .domain-row {
+        grid-template-columns: 1fr 80px;
+        gap: 16px;
+      }
+
+      .domain-bar-wrap { display: none; }
+
+      #process { padding: 64px 24px; }
+
+      .process-timeline {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .process-step::after { display: none; }
+      .process-step { padding: 0 !important; }
+
+      #funding { padding: 64px 24px; }
+
+      .funding-data-row {
+        flex-direction: column;
+      }
+
+      .funding-cell { border-right: none; border-bottom: 1px solid var(--rule); }
+      .funding-cell:last-child { border-bottom: none; }
+
+      #prompts { padding: 64px 24px; }
+
+      .prompts-grid { grid-template-columns: 1fr; }
+
+      #cta { padding: 80px 24px; }
+
+      footer {
+        grid-template-columns: 1fr;
+        padding: 32px 24px;
+        gap: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCROLL PROGRESS -->
+  <div id="scroll-bar"></div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-wordmark">IMPACTER·PATHWAY</div>
+    <nav class="header-nav">
+      <span class="header-status">[STATUS: ACTIVE]</span>
+      <div class="header-links">
+        <a href="#process">HOW_IT_WORKS</a>
+        <a href="#funding">FUNDING</a>
+        <a href="#prompts">PROMPTS</a>
+        <a href="mailto:info@impacterpathway.com" class="header-cta">BOOK_DEMO →</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- LEFT SIDE RAIL -->
+  <div id="side-rail">
+    <div class="rail-label">// BH_SCREENER</div>
+    <div class="rail-dots" id="rail-dots">
+      <div class="rail-dot active" data-section="hero" title="Hero"></div>
+      <div class="rail-dot" data-section="bhssa" title="BHSSA"></div>
+      <div class="rail-dot" data-section="compare" title="Compare"></div>
+      <div class="rail-dot" data-section="domains" title="Domains"></div>
+      <div class="rail-dot" data-section="process" title="Process"></div>
+      <div class="rail-dot" data-section="funding" title="Funding"></div>
+      <div class="rail-dot" data-section="prompts" title="Prompts"></div>
+      <div class="rail-dot" data-section="cta" title="CTA"></div>
+    </div>
+    <div id="rail-section-name">HERO</div>
+  </div>
+
+  <main>
+
+    <!-- HERO -->
+    <section id="hero">
+      <div class="hero-error">ERR: SURVEY_FAIL — CHECKBOX_DATA_UNRELIABLE — INSIGHT_SCORE: null</div>
+
+      <h1 class="hero-headline">
+        Stop<br />
+        <span class="dim">surveying.</span><br />
+        Start listening.
+      </h1>
+
+      <div class="hero-body">
+        <div class="hero-left">
+          IMPACTER's <strong>Natural Language Screener</strong> replaces checkbox SEL surveys with real student conversation. Responses are analyzed by NLP, auto-scored against six behavioral health domains, and translated directly into <strong>MTSS tier assignments</strong>. No inference. No guesswork. <strong>CYBHI-reimbursed.</strong>
+        </div>
+        <div class="hero-rule-v"></div>
+        <div class="hero-right">
+          <div><span class="prompt-sym">&gt;</span> STUDENT_ID: <span class="val">anonymous</span></div>
+          <div><span class="prompt-sym">&gt;</span> PROMPT: <span class="val">adaptability</span></div>
+          <div><span class="prompt-sym">&gt;</span> RESPONSE_TIME: <span class="val">26.3s</span></div>
+          <div><span class="prompt-sym">&gt;</span> DOMAINS_DETECTED: <span class="val">3/6</span></div>
+          <div><span class="prompt-sym">&gt;</span> TIER_ASSIGNMENT: <span class="val-coral">TIER_1</span></div>
+          <div><span class="prompt-sym">&gt;</span> SCORE: <span class="val">9/24</span></div>
+          <div><span class="prompt-sym">&gt;</span> STATUS: <span class="val-green">COMPLETE ✓</span></div>
+        </div>
+      </div>
+
+      <div class="hero-bottom">
+        <a href="https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX" class="hero-launch" target="_blank" rel="noopener">&gt; LAUNCH_SCREENER</a>
+        <a href="#compare" class="hero-scroll">↓ view_transcript</a>
+      </div>
+    </section>
+
+    <!-- TRUST MARQUEE -->
+    <section id="trust">
+      <div class="marquee-track">
+        <div class="marquee-inner">
+          <span>DEPLOYED</span><span class="dot">●</span>
+          <span>SDCOE</span><span class="dot">●</span>
+          <span>EDCOE</span><span class="dot">●</span>
+          <span>SCCOE</span><span class="dot">●</span>
+          <span>VISTA USD</span><span class="dot">●</span>
+          <span>SAN DIEGO USD</span><span class="dot">●</span>
+          <span>CA BHSOAC</span><span class="dot">●</span>
+          <span>CYBHI CERTIFIED</span><span class="dot">●</span>
+          <span>CPT 96127</span><span class="dot">●</span>
+          <span>MTSS TIER 1–3</span><span class="dot">●</span>
+          <span>GRADES 3–12</span><span class="dot">●</span>
+        </div>
+        <!-- duplicate for seamless loop -->
+        <div class="marquee-inner" aria-hidden="true">
+          <span>DEPLOYED</span><span class="dot">●</span>
+          <span>SDCOE</span><span class="dot">●</span>
+          <span>EDCOE</span><span class="dot">●</span>
+          <span>SCCOE</span><span class="dot">●</span>
+          <span>VISTA USD</span><span class="dot">●</span>
+          <span>SAN DIEGO USD</span><span class="dot">●</span>
+          <span>CA BHSOAC</span><span class="dot">●</span>
+          <span>CYBHI CERTIFIED</span><span class="dot">●</span>
+          <span>CPT 96127</span><span class="dot">●</span>
+          <span>MTSS TIER 1–3</span><span class="dot">●</span>
+          <span>GRADES 3–12</span><span class="dot">●</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- BHSSA -->
+    <section id="bhssa">
+      <div class="bhssa-left">
+        <div class="bhssa-validation">[EXTERNAL_VALIDATION: CONFIRMED] — CA BHSOAC SELECTION — 2024</div>
+        <h2 class="bhssa-headline">Selected by California BHSOAC for statewide evaluation.</h2>
+        <p class="bhssa-sub">
+          The Behavioral Health Services, Oversight, and Accountability Commission identified IMPACTER as a validated behavioral health screener for the statewide CYBHI initiative — one of a small number of tools recommended for district deployment and reimbursement.
+        </p>
+      </div>
+      <div class="bhssa-right">
+        <img src="../images/bhssa-announcement.gif" alt="BHSSA Award Announcement" />
+      </div>
+    </section>
+
+    <!-- SURVEY FAIL / VOICE PASS -->
+    <section id="compare">
+      <div class="compare-label">// MODALITY_COMPARISON — SURVEY_FAIL vs VOICE_PASS</div>
+
+      <div class="compare-grid">
+
+        <!-- SURVEY FAIL -->
+        <div class="compare-panel">
+          <div class="survey-fail-label">ERR_SURVEY_FAIL — ACCURACY: 0.024 — INSIGHT: null</div>
+
+          <div class="survey-items">
+            <div class="survey-item">
+              <div class="survey-item-q">I am able to manage my emotions when things go wrong.</div>
+              <div class="likert-row">
+                <span class="likert-label">Never</span>
+                <div class="likert-circles">
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                </div>
+                <span class="likert-label" style="text-align:right">Always</span>
+              </div>
+            </div>
+
+            <div class="survey-item">
+              <div class="survey-item-q">I feel comfortable asking for help when I need it.</div>
+              <div class="likert-row">
+                <span class="likert-label">Never</span>
+                <div class="likert-circles">
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                </div>
+                <span class="likert-label" style="text-align:right">Always</span>
+              </div>
+            </div>
+
+            <div class="survey-item">
+              <div class="survey-item-q">I understand how my actions affect others around me.</div>
+              <div class="likert-row">
+                <span class="likert-label">Never</span>
+                <div class="likert-circles">
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                </div>
+                <span class="likert-label" style="text-align:right">Always</span>
+              </div>
+            </div>
+
+            <div class="survey-item">
+              <div class="survey-item-q">I have strategies that help me calm down when upset.</div>
+              <div class="likert-row">
+                <span class="likert-label">Never</span>
+                <div class="likert-circles">
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                  <div class="likert-circle"></div>
+                </div>
+                <span class="likert-label" style="text-align:right">Always</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="survey-data-readouts">
+            <div class="readout-line">ACCURACY: 0.024</div>
+            <div class="readout-line">INSIGHT: null</div>
+            <div class="readout-line">ACTIONABLE_SIGNAL: false</div>
+            <div class="readout-line">STUDENT_TRUST: degraded</div>
+          </div>
+        </div>
+
+        <div class="compare-rule-v"></div>
+
+        <!-- VOICE PASS -->
+        <div class="compare-panel">
+          <div class="voice-pass-label">NLP_ANALYSIS_ACTIVE — SIGNAL_STRENGTH: HIGH</div>
+
+          <div class="voice-video-wrap" id="voice-video-wrap">
+            <video id="voice-video" src="../images/nc-girl.mp4" playsinline muted loop></video>
+            <div class="video-overlay" id="video-overlay">
+              <button class="play-btn" id="play-btn">▶ PLAY_TRANSCRIPT</button>
+            </div>
+          </div>
+
+          <div class="transcript-box">
+            <div class="transcript-header">// VERBATIM_TRANSCRIPT — STUDENT_RESPONSE — ADAPTABILITY_PROMPT</div>
+            <div class="transcript-text">
+              "When things change at the last minute I get frustrated at first, but I've learned that
+              <span class="tag-emotional">getting upset doesn't fix anything</span>. Last year when my science
+              project partner dropped out the night before — I just took a breath and
+              <span class="tag">figured out what I could actually control</span>. I asked the teacher if I could
+              present alone and she said yes. I still got a B plus and I was
+              <span class="tag-emotional">honestly kind of proud of myself for not panicking</span>."
+            </div>
+          </div>
+
+          <div class="survey-data-readouts" style="border-top-color: rgba(74,222,128,0.2);">
+            <div class="readout-line" style="color: var(--green);">DOMAINS_FLAGGED: emotional_resilience, self-insight, reflective_growth</div>
+            <div class="readout-line" style="color: var(--green);">TIER_SIGNAL: TIER_1_AFFIRMED</div>
+            <div class="readout-line" style="color: var(--green);">ACTIONABLE_SIGNAL: true</div>
+            <div class="readout-line" style="color: var(--green);">PROCESSING_TIME: 4.2s</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- DOMAIN SCORING -->
+    <section id="domains">
+      <div class="domains-header">// BEHAVIORAL_HEALTH_DOMAINS — NLP_SCORED — SAMPLE_STUDENT</div>
+
+      <div class="domain-table">
+
+        <div class="domain-row">
+          <div class="domain-name">Emotional Resilience</div>
+          <div class="domain-bar-wrap">
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg empty"></div>
+            <div class="bar-seg empty"></div>
+          </div>
+          <div class="domain-score">3 / 4</div>
+        </div>
+
+        <div class="domain-row">
+          <div class="domain-name">Self-Insight</div>
+          <div class="domain-bar-wrap">
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg empty"></div>
+            <div class="bar-seg empty"></div>
+          </div>
+          <div class="domain-score">3 / 4</div>
+        </div>
+
+        <div class="domain-row">
+          <div class="domain-name">Reflective Growth</div>
+          <div class="domain-bar-wrap">
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg"></div>
+            <div class="bar-seg empty"></div>
+            <div class="bar-seg empty"></div>
+          </div>
+          <div class="domain-score">3 / 4</div>
+        </div>
+
+        <div class="domain-row">
+          <div class="domain-name">Relational Awareness</div>
+          <div class="domain-bar-wrap">
+            <div class="bar-seg dash" style="width:100px; height:1px; background: rgba(255,255,255,0.15);"></div>
+          </div>
+          <div class="domain-score null">—</div>
+        </div>
+
+        <div class="domain-row">
+          <div class="domain-name">Conflict Resolution</div>
+          <div class="domain-bar-wrap">
+            <div class="bar-seg dash" style="width:100px; height:1px; background: rgba(255,255,255,0.15);"></div>
+          </div>
+          <div class="domain-score null">—</div>
+        </div>
+
+        <div class="domain-row">
+          <div class="domain-name">Help-Seeking</div>
+          <div class="domain-bar-wrap">
+            <div class="bar-seg dash" style="width:100px; height:1px; background: rgba(255,255,255,0.15);"></div>
+          </div>
+          <div class="domain-score null">—</div>
+        </div>
+
+      </div>
+
+      <div class="domain-total">
+        TOTAL: 9 / 24 &nbsp;·&nbsp; <span>TIER_1_RECOMMENDED</span> &nbsp;·&nbsp; DOMAINS_ACTIVE: 3/6
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="process">
+      <div class="process-header">// PROCESS — FOUR_STAGE_PIPELINE</div>
+
+      <div class="process-timeline">
+
+        <div class="process-step">
+          <div class="step-num">01</div>
+          <div class="step-id">01_INTAKE</div>
+          <div class="step-title">Student Speaks</div>
+          <p class="step-desc">Student responds to a domain-specific voice prompt via VideoAsk. No login required. Anonymous by default. Works on any device with a microphone.</p>
+          <div class="step-img">
+            <img src="../images/bh-student.gif" alt="Student intake" />
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-num">02</div>
+          <div class="step-id">02_NLP_SCORE</div>
+          <div class="step-title">NLP Analysis</div>
+          <p class="step-desc">Transcript is extracted and analyzed against six behavioral health domains. Each domain scored 0–4. Tier placement is computed in under 5 seconds.</p>
+          <div class="step-img">
+            <img src="../images/scoring-ui.png" alt="NLP Scoring" />
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-num">03</div>
+          <div class="step-id">03_MTSS_ASSIGN</div>
+          <div class="step-title">MTSS Placement</div>
+          <p class="step-desc">Score maps to Tier 1, 2, or 3. Aggregate cohort data surfaces patterns across classrooms, grade levels, and schools — without individual student exposure.</p>
+          <div class="step-img">
+            <img src="../images/mtss-pyramid.png" alt="MTSS Pyramid" />
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-num">04</div>
+          <div class="step-id">04_DASHBOARD</div>
+          <div class="step-title">Educator View</div>
+          <p class="step-desc">Counselors and administrators access real-time dashboards. Filter by domain, grade, cohort. Export for MTSS documentation. Reimbursement-ready reporting.</p>
+          <div class="step-img">
+            <img src="../images/dashboard-percy.png" alt="Dashboard" />
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CYBHI FUNDING MODEL -->
+    <section id="funding">
+      <div class="funding-header">// FUNDING_MODEL — CYBHI_REIMBURSEMENT — CPT_96127</div>
+
+      <div class="funding-data-row">
+        <div class="funding-cell">
+          <div class="funding-cell-label">CPT_CODE</div>
+          <div class="funding-cell-value">96127</div>
+        </div>
+        <div class="funding-cell">
+          <div class="funding-cell-label">MEDI-CAL_RATE</div>
+          <div class="funding-cell-value">$4.81</div>
+        </div>
+        <div class="funding-cell">
+          <div class="funding-cell-label">NET_COST_TO_DISTRICT</div>
+          <div class="funding-cell-value net">$0.00</div>
+        </div>
+      </div>
+
+      <p class="funding-note">
+        Through California's Children and Youth Behavioral Health Initiative (CYBHI), districts can bill Medi-Cal for each screener administered using CPT code 96127. At $4.81 per screen, the per-student cost of running IMPACTER is fully offset — in many cases generating a surplus that funds additional support services.
+      </p>
+
+      <a href="https://www.dhcs.ca.gov/services/medi-cal/Pages/CYBHI.aspx" class="funding-link" target="_blank" rel="noopener">
+        &gt; DHCS_CYBHI_DOCUMENTATION →
+      </a>
+    </section>
+
+    <!-- SAMPLE PROMPTS -->
+    <section id="prompts">
+      <div class="prompts-header">// ACTIVE_PROMPTS — GRADES 3–12 — CLICK TO LAUNCH</div>
+
+      <div class="prompts-grid">
+
+        <a class="prompt-tile" href="https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener">
+          <div class="prompt-num">PROMPT_01 · SELF_INSIGHT</div>
+          <div class="prompt-name">Self-Insight</div>
+          <div class="prompt-desc">Students reflect on a moment they surprised themselves. Surfaces self-awareness and metacognitive depth.</div>
+          <div class="prompt-arrow">&gt; LAUNCH_PROMPT →</div>
+        </a>
+
+        <a class="prompt-tile" href="https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener">
+          <div class="prompt-num">PROMPT_02 · EMOTIONAL_RESILIENCE</div>
+          <div class="prompt-name">Emotional Resilience</div>
+          <div class="prompt-desc">Students describe how they handled a difficult situation. Scores coping strategy and emotional regulation signals.</div>
+          <div class="prompt-arrow">&gt; LAUNCH_PROMPT →</div>
+        </a>
+
+        <a class="prompt-tile" href="https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener">
+          <div class="prompt-num">PROMPT_03 · RELATIONAL_AWARENESS</div>
+          <div class="prompt-name">Relational Awareness</div>
+          <div class="prompt-desc">Students speak about a relationship that matters to them. Reveals empathy, reciprocity, and social connection.</div>
+          <div class="prompt-arrow">&gt; LAUNCH_PROMPT →</div>
+        </a>
+
+        <a class="prompt-tile" href="https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener">
+          <div class="prompt-num">PROMPT_04 · CONFLICT_RESOLUTION</div>
+          <div class="prompt-name">Conflict Resolution</div>
+          <div class="prompt-desc">Students walk through how they navigated a disagreement. Detects constructive vs avoidant response patterns.</div>
+          <div class="prompt-arrow">&gt; LAUNCH_PROMPT →</div>
+        </a>
+
+        <a class="prompt-tile" href="https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener">
+          <div class="prompt-num">PROMPT_05 · HELP_SEEKING</div>
+          <div class="prompt-name">Help-Seeking</div>
+          <div class="prompt-desc">Students describe asking for support. Identifies trust in adults, self-advocacy, and access to protective relationships.</div>
+          <div class="prompt-arrow">&gt; LAUNCH_PROMPT →</div>
+        </a>
+
+        <a class="prompt-tile" href="https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX" target="_blank" rel="noopener">
+          <div class="prompt-num">PROMPT_06 · REFLECTIVE_GROWTH</div>
+          <div class="prompt-name">Reflective Growth</div>
+          <div class="prompt-desc">Students discuss something they've learned about themselves. Scores depth of personal learning and future orientation.</div>
+          <div class="prompt-arrow">&gt; LAUNCH_PROMPT →</div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section id="cta">
+      <div class="cta-pre">// INITIALIZE_PARTNERSHIP — IMPACTER_PATHWAY</div>
+      <a href="mailto:info@impacterpathway.com" class="cta-main">&gt; INITIALIZE_PARTNERSHIP</a>
+      <span class="cta-email">// info@impacterpathway.com</span>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-logo">
+        <img src="../images/impacter-pathway-white.svg" alt="IMPACTER Pathway" />
+        <div class="footer-copy" style="margin-top: 16px;">
+          © 2024 IMPACTER Pathway<br />
+          All rights reserved.<br />
+          CA BHSOAC Recognized
+        </div>
+      </div>
+      <div class="footer-copy">
+        <div style="margin-bottom: 8px; color: rgba(255,255,255,0.5);">// LEGAL</div>
+        Student data is anonymous by default.<br />
+        No PII collected at intake.<br />
+        FERPA compliant. COPPA compliant.<br />
+        SOC 2 audit in progress.
+      </div>
+      <div class="footer-links">
+        <div style="font-family: var(--font-mono); font-size: 9px; color: var(--mono-dim); letter-spacing: 0.12em; margin-bottom: 12px;">// LINKS</div>
+        <a href="mailto:info@impacterpathway.com">info@impacterpathway.com</a>
+        <a href="../playbook.pdf" target="_blank">DOWNLOAD_PLAYBOOK</a>
+        <a href="https://www.dhcs.ca.gov/services/medi-cal/Pages/CYBHI.aspx" target="_blank" rel="noopener">DHCS_CYBHI</a>
+        <a href="mailto:info@impacterpathway.com?subject=Demo Request">REQUEST_DEMO</a>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    // ── SCROLL PROGRESS ──
+    const scrollBar = document.getElementById('scroll-bar');
+    function updateScrollBar() {
+      const scrolled = window.scrollY;
+      const total = document.body.scrollHeight - window.innerHeight;
+      scrollBar.style.width = (scrolled / total * 100) + '%';
+    }
+    window.addEventListener('scroll', updateScrollBar, { passive: true });
+
+    // ── SECTION OBSERVER / SIDE RAIL ──
+    const sections = [
+      { id: 'hero',    label: 'HERO' },
+      { id: 'bhssa',   label: 'BHSSA' },
+      { id: 'compare', label: 'COMPARE' },
+      { id: 'domains', label: 'DOMAINS' },
+      { id: 'process', label: 'PROCESS' },
+      { id: 'funding', label: 'FUNDING' },
+      { id: 'prompts', label: 'PROMPTS' },
+      { id: 'cta',     label: 'CTA' },
+    ];
+
+    const railSectionName = document.getElementById('rail-section-name');
+    const railDots = Array.from(document.querySelectorAll('.rail-dot'));
+
+    let currentSection = 'hero';
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          currentSection = id;
+          const meta = sections.find(s => s.id === id);
+          if (meta) railSectionName.textContent = meta.label;
+
+          const idx = sections.findIndex(s => s.id === id);
+          railDots.forEach((dot, i) => {
+            dot.classList.remove('active', 'passed');
+            if (i < idx) dot.classList.add('passed');
+            if (i === idx) dot.classList.add('active');
+          });
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-10% 0px -10% 0px' });
+
+    sections.forEach(s => {
+      const el = document.getElementById(s.id);
+      if (el) observer.observe(el);
+    });
+
+    // Dot click navigation
+    railDots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        const el = document.getElementById(sections[i].id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // ── VIDEO TOGGLE ──
+    const video = document.getElementById('voice-video');
+    const overlay = document.getElementById('video-overlay');
+    const playBtn = document.getElementById('play-btn');
+
+    if (video && overlay && playBtn) {
+      document.getElementById('voice-video-wrap').addEventListener('click', () => {
+        if (video.paused) {
+          video.muted = false;
+          video.play();
+          overlay.classList.add('hidden');
+          playBtn.textContent = '❚❚ PAUSE';
+        } else {
+          video.pause();
+          overlay.classList.remove('hidden');
+          playBtn.textContent = '▶ PLAY_TRANSCRIPT';
+        }
+      });
+
+      video.addEventListener('ended', () => {
+        overlay.classList.remove('hidden');
+        playBtn.textContent = '▶ PLAY_TRANSCRIPT';
+      });
+    }
+
+    // ── MARQUEE PAUSE ON HOVER ──
+    const marqueeTrack = document.querySelector('.marquee-track');
+    if (marqueeTrack) {
+      marqueeTrack.addEventListener('mouseenter', () => {
+        marqueeTrack.style.animationPlayState = 'paused';
+      });
+      marqueeTrack.addEventListener('mouseleave', () => {
+        marqueeTrack.style.animationPlayState = 'running';
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMPACTER Behavioral Health Screener — Stop surveying. Start listening.</title>
+  <meta name="description" content="AI-powered behavioral health screening that listens to what students actually say. Selected by California BHSOAC for statewide evaluation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0F1B2E;
+      --navy-light: #162744;
+      --navy-mid: #1A3050;
+      --blue: #638EC5;
+      --coral: #F37163;
+      --cream: #FAF7F2;
+      --white: rgba(255,255,255,0.92);
+      --white-dim: rgba(255,255,255,0.5);
+      --white-faint: rgba(255,255,255,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* ─── SCROLL PROGRESS RAIL ─── */
+    #progress-rail {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--coral);
+      z-index: 1000;
+      transition: width 0.1s linear;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: linear-gradient(to bottom, rgba(15,27,46,0.95) 0%, transparent 100%);
+      backdrop-filter: blur(0px);
+    }
+
+    nav.scrolled {
+      background: rgba(15,27,46,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--white-faint);
+    }
+
+    .nav-logo img { height: 28px; display: block; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--white-dim);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-links .nav-cta {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .nav-links .nav-cta::after {
+      content: ' →';
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 120px;
+      overflow: hidden;
+    }
+
+    .hero-headline {
+      text-align: center;
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-headline h1 {
+      font-size: clamp(52px, 7vw, 88px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--white);
+    }
+
+    .hero-headline h1 .coral { color: var(--coral); }
+
+    /* ─── CINEMATIC VIDEO ZONE ─── */
+    .hero-cinema {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 32px;
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 48px;
+      z-index: 2;
+    }
+
+    .video-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .video-frame {
+      position: relative;
+      width: 280px;
+      aspect-ratio: 9/16;
+      background: #000;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .video-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15,27,46,0.4);
+      transition: opacity 0.3s;
+    }
+
+    .play-overlay.hidden { opacity: 0; pointer-events: none; }
+
+    .play-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .play-btn:hover {
+      background: rgba(255,255,255,0.25);
+      transform: scale(1.05);
+    }
+
+    .play-btn svg { margin-left: 4px; }
+
+    /* ─── KARAOKE PANEL ─── */
+    .karaoke-panel {
+      width: 280px;
+      min-height: 120px;
+      background: rgba(22,39,68,0.9);
+      border-top: 2px solid var(--navy-mid);
+      padding: 20px;
+      font-size: 15px;
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+      color: var(--white-dim);
+      border-radius: 0 0 6px 6px;
+    }
+
+    .karaoke-panel .k-word {
+      display: inline;
+      transition: color 0.15s;
+    }
+
+    .karaoke-panel .k-word.active {
+      color: var(--coral);
+      font-weight: 600;
+    }
+
+    .karaoke-panel .k-word.spoken {
+      color: var(--white);
+    }
+
+    /* ─── FLOATING SCORE PANEL ─── */
+    .score-panel {
+      position: relative;
+      top: 0;
+      background: rgba(15,27,46,0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(99,142,197,0.3);
+      border-radius: 6px;
+      padding: 20px 24px;
+      width: 240px;
+      flex-shrink: 0;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      align-self: flex-start;
+      margin-top: 40px;
+    }
+
+    .score-panel.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .score-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .score-panel-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--white-dim);
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #4ade80;
+      letter-spacing: 0.08em;
+    }
+
+    .live-dot::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse-dot 1.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.7); }
+    }
+
+    .score-divider {
+      border: none;
+      border-top: 1px solid var(--white-faint);
+      margin: 12px 0;
+    }
+
+    .score-domain {
+      margin-bottom: 14px;
+    }
+
+    .score-domain:last-child { margin-bottom: 0; }
+
+    .score-domain-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--white-dim);
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .score-domain-name .score-val {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .score-bar-track {
+      height: 3px;
+      background: var(--white-faint);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .score-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 2px;
+      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .score-bar-fill.er { background: var(--coral); }
+    .score-bar-fill.si { background: var(--blue); }
+    .score-bar-fill.rg { background: #a78bfa; }
+
+    .score-total {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--white-faint);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--white-dim);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .score-total .total-val {
+      color: var(--white);
+      font-size: 14px;
+    }
+
+    /* Right spacer column */
+    .score-spacer {
+      width: 240px;
+      flex-shrink: 0;
+    }
+
+    /* ─── SCROLL INDICATOR ─── */
+    .scroll-hint {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--white-faint);
+      animation: float-hint 2.5s ease-in-out infinite;
+      padding-bottom: 40px;
+    }
+
+    @keyframes float-hint {
+      0%, 100% { transform: translateY(0); opacity: 0.4; }
+      50% { transform: translateY(4px); opacity: 0.7; }
+    }
+
+    /* ─── MARQUEE ─── */
+    #marquee {
+      background: var(--navy-light);
+      border-top: 1px solid var(--white-faint);
+      border-bottom: 1px solid var(--white-faint);
+      padding: 18px 0;
+      overflow: hidden;
+    }
+
+    .marquee-eyebrow {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--white-faint);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee-scroll 28s linear infinite;
+    }
+
+    .marquee-track:hover { animation-play-state: paused; }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 32px;
+      padding-right: 80px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--white-dim);
+    }
+
+    .marquee-item span {
+      color: var(--white-faint);
+      font-weight: 400;
+    }
+
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ─── BHSSA SECTION ─── */
+    #bhssa {
+      background: var(--navy-light);
+      padding: 100px 48px;
+    }
+
+    .bhssa-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .bhssa-text .bhssa-date {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--coral);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .bhssa-text h2 {
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .bhssa-text p {
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--white-dim);
+      max-width: 480px;
+    }
+
+    .bhssa-visual {
+      position: relative;
+    }
+
+    .bhssa-visual img {
+      width: 100%;
+      border-radius: 4px;
+      display: block;
+    }
+
+    /* ─── WHAT SURVEYS MISS ─── */
+    #surveys-miss {
+      padding: 100px 48px;
+      background: var(--navy);
+    }
+
+    .surveys-miss-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .surveys-miss-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--white-faint);
+      text-transform: uppercase;
+      margin-bottom: 56px;
+    }
+
+    .surveys-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      align-items: start;
+      border-left: 1px solid var(--white-faint);
+    }
+
+    .surveys-panel {
+      padding: 48px;
+      border-right: 1px solid var(--white-faint);
+    }
+
+    .surveys-panel.dead {
+      opacity: 0.35;
+      filter: grayscale(0.8);
+    }
+
+    .surveys-panel-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--white-faint);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .surveys-panel.dead .surveys-panel-tag {
+      color: rgba(255,255,255,0.25);
+    }
+
+    .likert-mock {
+      background: rgba(255,255,255,0.04);
+      border-radius: 4px;
+      padding: 24px;
+    }
+
+    .likert-q {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .likert-scale {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .likert-opt {
+      flex: 1;
+      height: 28px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .voice-panel-video {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .voice-panel-video img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .voice-panel-video .video-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--navy);
+      border: 1px solid var(--white-faint);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--white-dim);
+      padding: 4px 8px;
+      border-radius: 3px;
+    }
+
+    .voice-quote {
+      font-size: 16px;
+      font-style: italic;
+      line-height: 1.55;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .voice-quote::before { content: '\201C'; }
+    .voice-quote::after { content: '\201D'; }
+
+    .domain-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .domain-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 5px 12px;
+      border-radius: 3px;
+      border: 1px solid var(--coral);
+      color: var(--coral);
+      background: transparent;
+    }
+
+    /* ─── RUBRIC LEVELS ─── */
+    #rubric-levels {
+      padding: 100px 48px;
+      background: var(--navy);
+      border-top: 1px solid var(--white-faint);
+    }
+
+    .rubric-header {
+      max-width: 1100px;
+      margin: 0 auto 64px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--white-faint);
+      text-transform: uppercase;
+    }
+
+    .rubric-levels-row {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-left: 1px solid var(--white-faint);
+    }
+
+    .rubric-level {
+      padding: 40px 36px;
+      border-right: 1px solid var(--white-faint);
+      position: relative;
+    }
+
+    .rubric-num {
+      font-size: clamp(72px, 8vw, 110px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 16px;
+      opacity: 0.18;
+    }
+
+    .rubric-level:nth-child(1) .rubric-num { color: var(--coral); opacity: 0.25; }
+    .rubric-level:nth-child(2) .rubric-num { color: #f59e0b; opacity: 0.25; }
+    .rubric-level:nth-child(3) .rubric-num { color: #4ade80; opacity: 0.25; }
+    .rubric-level:nth-child(4) .rubric-num { color: var(--blue); opacity: 0.25; }
+
+    .rubric-level-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .rubric-level-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--white-dim);
+    }
+
+    .rubric-level-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      margin-bottom: 12px;
+    }
+
+    .rubric-level:nth-child(1) .rubric-level-tag { background: rgba(243,113,99,0.15); color: var(--coral); }
+    .rubric-level:nth-child(2) .rubric-level-tag { background: rgba(245,158,11,0.15); color: #f59e0b; }
+    .rubric-level:nth-child(3) .rubric-level-tag { background: rgba(74,222,128,0.15); color: #4ade80; }
+    .rubric-level:nth-child(4) .rubric-level-tag { background: rgba(99,142,197,0.15); color: var(--blue); }
+
+    /* ─── ZERO NET COST ─── */
+    #zero-cost {
+      padding: 100px 48px;
+      background: var(--navy-light);
+    }
+
+    .zero-cost-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .zero-cost-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--white-faint);
+      text-transform: uppercase;
+      margin-bottom: 64px;
+    }
+
+    .cost-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-left: 1px solid var(--white-faint);
+      margin-bottom: 40px;
+    }
+
+    .cost-stat {
+      padding: 0 48px 0 40px;
+      border-right: 1px solid var(--white-faint);
+    }
+
+    .cost-stat-num {
+      font-size: clamp(56px, 7vw, 96px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .cost-stat:nth-child(2) .cost-stat-num { color: #4ade80; }
+
+    .cost-stat-desc {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--white-dim);
+      max-width: 240px;
+    }
+
+    .cybhi-link {
+      margin-top: 32px;
+      font-size: 13px;
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(99,142,197,0.4);
+      padding-bottom: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .cybhi-link:hover {
+      color: var(--white);
+      border-color: var(--white-dim);
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    #how-it-works {
+      padding: 100px 48px;
+      background: var(--navy);
+    }
+
+    .how-header {
+      max-width: 1100px;
+      margin: 0 auto 80px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--white-faint);
+      text-transform: uppercase;
+    }
+
+    .how-step {
+      max-width: 1100px;
+      margin: 0 auto 72px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .how-step:last-child { margin-bottom: 0; }
+
+    .how-step.reverse { direction: rtl; }
+    .how-step.reverse > * { direction: ltr; }
+
+    .how-step-text {}
+
+    .how-step-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--coral);
+      margin-bottom: 16px;
+    }
+
+    .how-step-headline {
+      font-size: clamp(22px, 2.5vw, 30px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 14px;
+      line-height: 1.25;
+    }
+
+    .how-step-desc {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--white-dim);
+    }
+
+    .how-step-visual img, .how-step-visual video {
+      width: 100%;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .how-step-visual.dark {
+      background: var(--navy-light);
+      border: 1px solid var(--white-faint);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    /* ─── SAMPLE PROMPTS ─── */
+    #sample-prompts {
+      padding: 100px 48px;
+      background: var(--navy-light);
+    }
+
+    .prompts-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .prompts-header-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .prompts-headline {
+      font-size: clamp(28px, 3vw, 38px);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: var(--white);
+      line-height: 1.1;
+    }
+
+    .tab-group {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--white-faint);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .tab-btn {
+      padding: 9px 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      background: transparent;
+      border: none;
+      color: var(--white-dim);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .prompts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--white-faint);
+      border: 1px solid var(--white-faint);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .prompt-card {
+      background: var(--navy);
+      padding: 28px 24px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: background 0.2s;
+    }
+
+    .prompt-card:hover { background: var(--navy-mid); }
+
+    .prompt-card-domain {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .prompt-card-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.45;
+      flex: 1;
+    }
+
+    .prompt-card-cta {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--coral);
+      letter-spacing: 0.04em;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .prompt-card-tk {
+      background: var(--navy);
+      padding: 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border: 1px solid var(--white-faint);
+      transition: background 0.2s;
+    }
+
+    .prompt-card-tk:hover { background: var(--navy-mid); }
+
+    .tk-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    /* ─── RESOURCES ─── */
+    #resources {
+      padding: 80px 48px;
+      background: var(--navy);
+      border-top: 1px solid var(--white-faint);
+    }
+
+    .resources-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .resources-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--white-faint);
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .resources-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid var(--white-faint);
+    }
+
+    .resource-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--white-faint);
+      text-decoration: none;
+      color: var(--white);
+      transition: color 0.2s;
+      gap: 24px;
+    }
+
+    .resource-row:hover { color: var(--blue); }
+    .resource-row:hover .resource-arrow { transform: translateX(4px); }
+
+    .resource-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .resource-name {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .resource-desc {
+      font-size: 14px;
+      color: var(--white-dim);
+      font-weight: 400;
+    }
+
+    .resource-arrow {
+      font-size: 20px;
+      transition: transform 0.2s;
+    }
+
+    /* ─── FINAL CTA ─── */
+    #final-cta {
+      padding: 140px 48px;
+      background: var(--navy-light);
+      text-align: center;
+    }
+
+    .final-cta-headline {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 40px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .final-cta-link {
+      font-size: clamp(16px, 2vw, 20px);
+      font-weight: 600;
+      color: var(--coral);
+      text-decoration: none;
+      border-bottom: 2px solid var(--coral);
+      padding-bottom: 2px;
+      letter-spacing: 0.01em;
+      transition: opacity 0.2s;
+    }
+
+    .final-cta-link:hover { opacity: 0.75; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid var(--white-faint);
+      padding: 48px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .footer-logo img { height: 24px; display: block; margin-bottom: 12px; }
+
+    .footer-tagline {
+      font-size: 13px;
+      color: var(--white-faint);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--white-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      margin-top: 36px;
+      font-size: 12px;
+      color: var(--white-faint);
+      border-top: 1px solid var(--white-faint);
+      padding-top: 24px;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { gap: 16px; }
+      .nav-links li:nth-child(1), .nav-links li:nth-child(2) { display: none; }
+
+      #hero { padding-top: 100px; }
+      .hero-cinema { flex-direction: column; align-items: center; padding: 0 20px; }
+      .score-panel { width: 100%; max-width: 320px; margin-top: 16px; }
+      .score-spacer { display: none; }
+      .karaoke-panel { width: 100%; max-width: 320px; }
+      .video-frame { width: 240px; }
+
+      .bhssa-inner { grid-template-columns: 1fr; gap: 40px; }
+      .surveys-panels { grid-template-columns: 1fr; }
+      .surveys-panel { border-right: none; border-bottom: 1px solid var(--white-faint); }
+      .rubric-levels-row { grid-template-columns: 1fr 1fr; }
+      .cost-stats { grid-template-columns: 1fr; }
+      .cost-stat { padding: 0 0 32px 32px; border-right: none; border-bottom: 1px solid var(--white-faint); }
+      .cost-stat:last-child { border-bottom: none; }
+      .how-step, .how-step.reverse { grid-template-columns: 1fr; direction: ltr; gap: 32px; }
+      .prompts-grid { grid-template-columns: 1fr; }
+      .tk-grid { grid-template-columns: 1fr; }
+      #bhssa, #surveys-miss, #rubric-levels, #zero-cost, #how-it-works, #sample-prompts, #resources, #final-cta { padding: 72px 20px; }
+      footer { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div id="progress-rail"></div>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo">
+    <a href="https://impacterpathway.com">
+      <img src="../images/impacter-pathway-white.svg" alt="IMPACTER Pathway">
+    </a>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#bhssa">Recognition</a></li>
+    <li><a href="#how-it-works">How it works</a></li>
+    <li><a href="#sample-prompts">Try it</a></li>
+    <li><a href="mailto:info@impacterpathway.com" class="nav-cta">Book a demo</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     CINEMATIC HERO
+═══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-headline">
+    <h1>Stop surveying.<br><span class="coral">Start listening.</span></h1>
+  </div>
+
+  <div class="hero-cinema">
+    <!-- LEFT: Score panel -->
+    <div class="score-panel" id="score-panel">
+      <div class="score-panel-header">
+        <span class="score-panel-label">Live · BH Scoring</span>
+        <span class="live-dot">ACTIVE</span>
+      </div>
+      <hr class="score-divider">
+
+      <div class="score-domain">
+        <div class="score-domain-name">
+          Emotional Resilience
+          <span class="score-val" id="er-val">— / 4</span>
+        </div>
+        <div class="score-bar-track">
+          <div class="score-bar-fill er" id="er-bar"></div>
+        </div>
+      </div>
+
+      <div class="score-domain">
+        <div class="score-domain-name">
+          Self-Insight
+          <span class="score-val" id="si-val">— / 4</span>
+        </div>
+        <div class="score-bar-track">
+          <div class="score-bar-fill si" id="si-bar"></div>
+        </div>
+      </div>
+
+      <div class="score-domain">
+        <div class="score-domain-name">
+          Reflective Growth
+          <span class="score-val" id="rg-val">— / 4</span>
+        </div>
+        <div class="score-bar-track">
+          <div class="score-bar-fill rg" id="rg-bar"></div>
+        </div>
+      </div>
+
+      <div class="score-total">
+        <span>Total Score</span>
+        <span class="total-val" id="total-val">— / 20</span>
+      </div>
+    </div>
+
+    <!-- CENTER: Video + Karaoke -->
+    <div class="video-column">
+      <div class="video-frame" id="video-frame">
+        <video
+          id="hero-video"
+          src="../images/nc-girl.mp4"
+          muted
+          playsinline
+          preload="auto"
+        ></video>
+        <div class="play-overlay" id="play-overlay">
+          <div class="play-btn" id="play-btn" role="button" aria-label="Play video">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <polygon points="6,3 19,11 6,19" fill="rgba(255,255,255,0.9)"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="karaoke-panel" id="karaoke-panel">
+        <span id="karaoke-text" style="color: rgba(255,255,255,0.3); font-size:13px; font-style:italic;">
+          Press play to hear her speak.
+        </span>
+      </div>
+    </div>
+
+    <!-- RIGHT: Spacer to balance layout -->
+    <div class="score-spacer"></div>
+  </div>
+
+  <div class="scroll-hint">↓ See what it reveals</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     MARQUEE
+═══════════════════════════════════════════ -->
+<section id="marquee">
+  <div class="marquee-eyebrow">In the field with</div>
+  <div class="marquee-track" id="marquee-track">
+    <div class="marquee-item">
+      San Diego COE <span>·</span>
+      El Dorado COE <span>·</span>
+      Santa Clara COE <span>·</span>
+      San Diego USD <span>·</span>
+      Vista USD <span>·</span>
+      CA BHSOAC <span>·</span>
+      South County SELPA <span>·</span>
+    </div>
+    <div class="marquee-item" aria-hidden="true">
+      San Diego COE <span>·</span>
+      El Dorado COE <span>·</span>
+      Santa Clara COE <span>·</span>
+      San Diego USD <span>·</span>
+      Vista USD <span>·</span>
+      CA BHSOAC <span>·</span>
+      South County SELPA <span>·</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BHSSA SECTION
+═══════════════════════════════════════════ -->
+<section id="bhssa">
+  <div class="bhssa-inner reveal">
+    <div class="bhssa-text">
+      <div class="bhssa-date">New · April 2026</div>
+      <h2>Selected by California BHSOAC for statewide behavioral health evaluation.</h2>
+      <p>Out of hundreds of applicants, IMPACTER was chosen as one of a handful of tools invited into California's official behavioral health ecosystem — validated for use across K-12 districts statewide.</p>
+    </div>
+    <div class="bhssa-visual">
+      <img src="../images/bhssa-announcement.gif" alt="BHSSA Award Announcement">
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     WHAT SURVEYS MISS
+═══════════════════════════════════════════ -->
+<section id="surveys-miss">
+  <div class="surveys-miss-inner">
+    <div class="surveys-miss-label reveal">What surveys miss</div>
+    <div class="surveys-panels reveal">
+
+      <!-- LEFT: Dead Likert -->
+      <div class="surveys-panel dead">
+        <div class="surveys-panel-tag">Traditional screener</div>
+        <div class="likert-mock">
+          <div class="likert-q">I feel like I can handle difficult emotions when they come up.</div>
+          <div class="likert-scale">
+            <div class="likert-opt">1</div>
+            <div class="likert-opt">2</div>
+            <div class="likert-opt">3</div>
+            <div class="likert-opt" style="background:rgba(255,255,255,0.12);">4</div>
+            <div class="likert-opt">5</div>
+          </div>
+          <div class="likert-q">I am able to stay calm in stressful situations.</div>
+          <div class="likert-scale">
+            <div class="likert-opt">1</div>
+            <div class="likert-opt" style="background:rgba(255,255,255,0.12);">2</div>
+            <div class="likert-opt">3</div>
+            <div class="likert-opt">4</div>
+            <div class="likert-opt">5</div>
+          </div>
+          <div class="likert-q">I feel supported by the adults in my school.</div>
+          <div class="likert-scale">
+            <div class="likert-opt">1</div>
+            <div class="likert-opt">2</div>
+            <div class="likert-opt">3</div>
+            <div class="likert-opt">4</div>
+            <div class="likert-opt" style="background:rgba(255,255,255,0.12);">5</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Voice response -->
+      <div class="surveys-panel">
+        <div class="surveys-panel-tag">IMPACTER voice response</div>
+        <div class="voice-panel-video">
+          <video
+            src="../images/nc-girl.mp4"
+            muted
+            loop
+            autoplay
+            playsinline
+            style="width:100%;height:100%;object-fit:cover;display:block;"
+          ></video>
+          <div class="video-badge">LIVE RESPONSE</div>
+        </div>
+        <div class="voice-quote">I tend to stay in my comfort zone and stand behind the yellow caution tape.</div>
+        <div class="domain-tags">
+          <div class="domain-tag">Emotional Resilience</div>
+          <div class="domain-tag">Self-Insight</div>
+          <div class="domain-tag">Reflective Growth</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOUR RUBRIC LEVELS
+═══════════════════════════════════════════ -->
+<section id="rubric-levels">
+  <div class="rubric-header reveal">Scoring rubric — four levels</div>
+  <div class="rubric-levels-row reveal">
+
+    <div class="rubric-level">
+      <div class="rubric-num">01</div>
+      <div class="rubric-level-tag">Emerging</div>
+      <div class="rubric-level-name">Surface response</div>
+      <div class="rubric-level-desc">Student acknowledges the prompt but does not connect it to personal experience or demonstrate self-reflection.</div>
+    </div>
+
+    <div class="rubric-level">
+      <div class="rubric-num">02</div>
+      <div class="rubric-level-tag">Developing</div>
+      <div class="rubric-level-name">Beginning insight</div>
+      <div class="rubric-level-desc">Student makes a personal connection but reflection is limited. Some evidence of awareness without depth or specificity.</div>
+    </div>
+
+    <div class="rubric-level">
+      <div class="rubric-num">03</div>
+      <div class="rubric-level-tag">Proficient</div>
+      <div class="rubric-level-name">Grounded reflection</div>
+      <div class="rubric-level-desc">Student demonstrates clear self-awareness with specific examples. Response shows genuine insight into their own patterns.</div>
+    </div>
+
+    <div class="rubric-level">
+      <div class="rubric-num">04</div>
+      <div class="rubric-level-tag">Extending</div>
+      <div class="rubric-level-name">Transformative voice</div>
+      <div class="rubric-level-desc">Student articulates growth mindset, identifies specific strategies, and demonstrates readiness to act on their insight.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     ZERO NET COST
+═══════════════════════════════════════════ -->
+<section id="zero-cost">
+  <div class="zero-cost-inner">
+    <div class="zero-cost-label reveal">The economics</div>
+    <div class="cost-stats reveal">
+      <div class="cost-stat">
+        <div class="cost-stat-num">$4.81</div>
+        <div class="cost-stat-desc">CYBHI reimbursement rate per student screened — paid directly to districts by the state of California.</div>
+      </div>
+      <div class="cost-stat">
+        <div class="cost-stat-num">$0</div>
+        <div class="cost-stat-desc">Net district cost when CYBHI reimbursement is applied. Most districts fully offset implementation with existing entitlements.</div>
+      </div>
+      <div class="cost-stat">
+        <div class="cost-stat-num">3</div>
+        <div class="cost-stat-desc">Behavioral health domains scored per student: Emotional Resilience, Self-Insight, and Reflective Growth.</div>
+      </div>
+    </div>
+    <a href="https://www.dhcs.ca.gov/CYBHI/Documents/CYBHI-Fee-Schedule-Scope-of-Services-Rates-and-Codes.pdf" target="_blank" rel="noopener" class="cybhi-link reveal">
+      View the CYBHI fee schedule →
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════════════ -->
+<section id="how-it-works">
+  <div class="how-header reveal">How it works</div>
+
+  <div class="how-step reveal">
+    <div class="how-step-text">
+      <div class="how-step-num">STEP 01</div>
+      <div class="how-step-headline">Students respond in their own voice.</div>
+      <div class="how-step-desc">No checkboxes. No Likert scales. A thoughtful prompt appears — students respond by speaking. VideoAsk captures authentic, unscripted responses that reveal far more than any survey question.</div>
+    </div>
+    <div class="how-step-visual dark">
+      <img src="../images/bh-student.gif" alt="Student responding to screener prompt" style="border-radius:4px;">
+    </div>
+  </div>
+
+  <div class="how-step reverse reveal">
+    <div class="how-step-text">
+      <div class="how-step-num">STEP 02</div>
+      <div class="how-step-headline">AI scores against behavioral health rubrics.</div>
+      <div class="how-step-desc">Each response is transcribed and scored against three behavioral health domains using IMPACTER's proprietary rubric. Scores surface within minutes — not weeks.</div>
+    </div>
+    <div class="how-step-visual dark">
+      <img src="../images/scoring-ui.png" alt="AI scoring interface" style="border-radius:4px;" onerror="this.style.display='none'">
+      <img src="../images/carousel-ui.png" alt="Carousel scoring view" style="border-radius:4px;" onerror="this.style.display='none'">
+    </div>
+  </div>
+
+  <div class="how-step reveal">
+    <div class="how-step-text">
+      <div class="how-step-num">STEP 03</div>
+      <div class="how-step-headline">District leaders see the full picture.</div>
+      <div class="how-step-desc">The Percy dashboard gives coordinators cohort-level insights, individual student profiles, and trend data — built for MTSS identification and early intervention.</div>
+    </div>
+    <div class="how-step-visual dark">
+      <img src="../images/dashboard-percy.png" alt="Percy Purpose dashboard" style="border-radius:4px;">
+    </div>
+  </div>
+
+  <div class="how-step reverse reveal">
+    <div class="how-step-text">
+      <div class="how-step-num">STEP 04</div>
+      <div class="how-step-headline">Integrated into your MTSS framework.</div>
+      <div class="how-step-desc">Screener data maps directly onto MTSS tiers. Universal screening at Tier 1, targeted student lists for Tier 2 check-ins, and individual profiles that inform Tier 3 supports.</div>
+    </div>
+    <div class="how-step-visual dark">
+      <img src="../images/mtss-pyramid.png" alt="MTSS pyramid framework" style="border-radius:4px;">
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SAMPLE PROMPTS
+═══════════════════════════════════════════ -->
+<section id="sample-prompts">
+  <div class="prompts-inner">
+    <div class="prompts-header-row reveal">
+      <div class="prompts-headline">Try a prompt.</div>
+      <div class="tab-group">
+        <button class="tab-btn active" data-tab="gr3-12">Grades 3–12</button>
+        <button class="tab-btn" data-tab="tk2">TK–2</button>
+      </div>
+    </div>
+
+    <!-- Grades 3-12 -->
+    <div class="tab-content active" id="tab-gr3-12">
+      <div class="prompts-grid">
+        <a href="https://sdcoe.impacterpathway.com/fg1zetskz" target="_blank" rel="noopener" class="prompt-card">
+          <div class="prompt-card-domain">Self-Insight</div>
+          <div class="prompt-card-text">What do you know about yourself that most people your age haven't figured out yet?</div>
+          <div class="prompt-card-cta">Open screener →</div>
+        </a>
+        <a href="https://sdcoe.impacterpathway.com/feney4fez" target="_blank" rel="noopener" class="prompt-card">
+          <div class="prompt-card-domain">Emotional Resilience</div>
+          <div class="prompt-card-text">Tell me about a time you failed at something. What did it teach you?</div>
+          <div class="prompt-card-cta">Open screener →</div>
+        </a>
+        <a href="https://sdcoe.impacterpathway.com/fd3l5wact" target="_blank" rel="noopener" class="prompt-card">
+          <div class="prompt-card-domain">Relational Awareness</div>
+          <div class="prompt-card-text">Describe a relationship in your life that makes you want to be a better person. What is it about them?</div>
+          <div class="prompt-card-cta">Open screener →</div>
+        </a>
+        <a href="https://sdcoe.impacterpathway.com/ffl6uxruw" target="_blank" rel="noopener" class="prompt-card">
+          <div class="prompt-card-domain">Conflict Resolution</div>
+          <div class="prompt-card-text">Walk me through how you handled the last real disagreement you had with someone you care about.</div>
+          <div class="prompt-card-cta">Open screener →</div>
+        </a>
+        <a href="https://sdcoe.impacterpathway.com/fhquns046" target="_blank" rel="noopener" class="prompt-card">
+          <div class="prompt-card-domain">Help-Seeking</div>
+          <div class="prompt-card-text">When things get hard, who do you go to? What makes it easy or difficult to ask for help?</div>
+          <div class="prompt-card-cta">Open screener →</div>
+        </a>
+        <a href="https://sdcoe.impacterpathway.com/fnt8m3e2o" target="_blank" rel="noopener" class="prompt-card">
+          <div class="prompt-card-domain">Reflective Growth</div>
+          <div class="prompt-card-text">What's one thing you're actively trying to change about yourself right now?</div>
+          <div class="prompt-card-cta">Open screener →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- TK-2 -->
+    <div class="tab-content" id="tab-tk2">
+      <div class="tk-grid">
+        <a href="https://flex.impacterpathway.com/f96z46iz7?preview" target="_blank" rel="noopener" class="prompt-card-tk">
+          <div class="prompt-card-domain">Emotional Check-In</div>
+          <div class="prompt-card-text">How is your heart feeling today? Show me with your face.</div>
+          <div class="prompt-card-cta">Open screener →</div>
+        </a>
+        <a href="https://flex.impacterpathway.com/fi4mgwelx?preview" target="_blank" rel="noopener" class="prompt-card-tk">
+          <div class="prompt-card-domain">Connection</div>
+          <div class="prompt-card-text">Who is someone at school who makes you feel safe? Tell me about them.</div>
+          <div class="prompt-card-cta">Open screener →</div>
+        </a>
+        <a href="https://flex.impacterpathway.com/fqn60zgac?preview" target="_blank" rel="noopener" class="prompt-card-tk">
+          <div class="prompt-card-domain">Self-Expression</div>
+          <div class="prompt-card-text">When something makes you mad or sad, what do you do to feel better?</div>
+          <div class="prompt-card-cta">Open screener →</div>
+        </a>
+        <a href="https://flex.impacterpathway.com/fjzzdvxk8?preview" target="_blank" rel="noopener" class="prompt-card-tk">
+          <div class="prompt-card-domain">Belonging</div>
+          <div class="prompt-card-text">Tell me about your favorite thing about coming to school.</div>
+          <div class="prompt-card-cta">Open screener →</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     RESOURCES
+═══════════════════════════════════════════ -->
+<section id="resources">
+  <div class="resources-inner">
+    <div class="resources-label reveal">Resources</div>
+    <div class="resources-list reveal">
+      <a href="/playbook.pdf" target="_blank" rel="noopener" class="resource-row">
+        <div class="resource-info">
+          <div class="resource-name">Implementation Playbook</div>
+          <div class="resource-desc">Step-by-step guide for district rollout — CYBHI billing, MTSS integration, staff training.</div>
+        </div>
+        <div class="resource-arrow">→</div>
+      </a>
+      <a href="https://screener.impacterpathway.com" target="_blank" rel="noopener" class="resource-row">
+        <div class="resource-info">
+          <div class="resource-name">Live Screener Platform</div>
+          <div class="resource-desc">Access the full screener dashboard. District coordinators log in here.</div>
+        </div>
+        <div class="resource-arrow">→</div>
+      </a>
+      <a href="https://www.dhcs.ca.gov/CYBHI/Documents/CYBHI-Fee-Schedule-Scope-of-Services-Rates-and-Codes.pdf" target="_blank" rel="noopener" class="resource-row">
+        <div class="resource-info">
+          <div class="resource-name">CYBHI Fee Schedule</div>
+          <div class="resource-desc">Official California Department of Health Care Services reimbursement rates and codes.</div>
+        </div>
+        <div class="resource-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FINAL CTA
+═══════════════════════════════════════════ -->
+<section id="final-cta">
+  <div class="final-cta-headline reveal">Your students have something to say.</div>
+  <a href="mailto:info@impacterpathway.com" class="final-cta-link reveal">Talk to Team IMPACTER →</a>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <img src="../images/impacter-pathway-white.svg" alt="IMPACTER Pathway">
+      </div>
+      <div class="footer-tagline">AI-powered behavioral health screening for K-12.</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://impacterpathway.com">Main site</a>
+      <a href="https://screener.impacterpathway.com">Screener</a>
+      <a href="/playbook.pdf">Playbook</a>
+      <a href="mailto:info@impacterpathway.com">info@impacterpathway.com</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    © 2026 IMPACTER Pathway. All rights reserved. CYBHI reimbursement subject to district eligibility and claim submission.
+  </div>
+</footer>
+
+<script>
+// ─── KARAOKE DATA ───
+const words = [
+  {t:0.0, text:'When'}, {t:0.2, text:'given'}, {t:0.45, text:'some'}, {t:0.65, text:'thought'}, {t:0.85, text:'to'}, {t:0.95, text:'this'}, {t:1.15, text:'question,'}, {t:1.55, text:'I'}, {t:1.7, text:'realize'}, {t:2.05, text:'I'}, {t:2.2, text:"don't"}, {t:2.5, text:'have'}, {t:2.7, text:'as'}, {t:2.85, text:'much'}, {t:3.05, text:'failures', tag:'er'}, {t:3.5, text:'as'}, {t:3.65, text:'I'}, {t:3.8, text:'would'}, {t:4.0, text:'have'}, {t:4.2, text:'expected.'}, {t:4.95, text:'My'}, {t:5.1, text:'biggest'}, {t:5.45, text:'failure', tag:'er'}, {t:5.85, text:'would'}, {t:6.05, text:'be'}, {t:6.2, text:'not'}, {t:6.4, text:'taking'}, {t:6.65, text:'enough'}, {t:6.95, text:'risk'}, {t:7.25, text:'to'}, {t:7.4, text:'experience'}, {t:7.85, text:'true'}, {t:8.1, text:'failure.'}, {t:8.85, text:'I'}, {t:9.0, text:'tend'}, {t:9.25, text:'to'}, {t:9.4, text:'stay'}, {t:9.65, text:'in'}, {t:9.8, text:'my'}, {t:9.95, text:'comfort', tag:'si'}, {t:10.3, text:'zone', tag:'si'}, {t:10.6, text:'and'}, {t:10.8, text:'stand'}, {t:11.1, text:'behind'}, {t:11.45, text:'the'}, {t:11.6, text:'yellow', tag:'si'}, {t:11.95, text:'caution', tag:'si'}, {t:12.3, text:'tape.', tag:'si'}, {t:13.0, text:'Every'}, {t:13.25, text:'day'}, {t:13.5, text:"I'm", tag:'rg'}, {t:13.7, text:'trying', tag:'rg'}, {t:14.0, text:'to'}, {t:14.15, text:'expand', tag:'rg'}, {t:14.55, text:'the'}, {t:14.7, text:'barriers'}, {t:15.05, text:'of'}, {t:15.2, text:'my'}, {t:15.35, text:'comfort', tag:'rg'}, {t:15.7, text:'zone.', tag:'rg'}
+];
+
+// Score timestamps
+const scoreTimestamps = {
+  er: 3.5,
+  si: 9.0,
+  rg: 13.5
+};
+
+const scoreValues = { er: 0, si: 0, rg: 0 };
+const scoreMax = 4;
+const erBar = document.getElementById('er-bar');
+const siBar = document.getElementById('si-bar');
+const rgBar = document.getElementById('rg-bar');
+const erVal = document.getElementById('er-val');
+const siVal = document.getElementById('si-val');
+const rgVal = document.getElementById('rg-val');
+const totalVal = document.getElementById('total-val');
+
+function updateScores(ct) {
+  let changed = false;
+  if (ct >= scoreTimestamps.er && scoreValues.er === 0) {
+    scoreValues.er = 3;
+    changed = true;
+  }
+  if (ct >= scoreTimestamps.si && scoreValues.si === 0) {
+    scoreValues.si = 3;
+    changed = true;
+  }
+  if (ct >= scoreTimestamps.rg && scoreValues.rg === 0) {
+    scoreValues.rg = 4;
+    changed = true;
+  }
+  if (changed) {
+    const pct = (v) => (v / scoreMax * 100) + '%';
+    if (scoreValues.er > 0) {
+      erBar.style.width = pct(scoreValues.er);
+      erVal.textContent = scoreValues.er + ' / 4';
+    }
+    if (scoreValues.si > 0) {
+      siBar.style.width = pct(scoreValues.si);
+      siVal.textContent = scoreValues.si + ' / 4';
+    }
+    if (scoreValues.rg > 0) {
+      rgBar.style.width = pct(scoreValues.rg);
+      rgVal.textContent = scoreValues.rg + ' / 4';
+    }
+    const total = scoreValues.er + scoreValues.si + scoreValues.rg;
+    if (total > 0) {
+      totalVal.textContent = total + ' / 20';
+    }
+  }
+}
+
+// ─── VIDEO + KARAOKE ───
+const video = document.getElementById('hero-video');
+const playOverlay = document.getElementById('play-overlay');
+const playBtn = document.getElementById('play-btn');
+const karaokePanel = document.getElementById('karaoke-panel');
+const scorePanel = document.getElementById('score-panel');
+
+let karaokeBuilt = false;
+let rafId = null;
+
+function buildKaraoke() {
+  const container = document.getElementById('karaoke-text');
+  container.innerHTML = '';
+  words.forEach((w, i) => {
+    const span = document.createElement('span');
+    span.className = 'k-word';
+    span.dataset.index = i;
+    span.textContent = w.text + ' ';
+    container.appendChild(span);
+  });
+  karaokeBuilt = true;
+}
+
+function syncKaraoke(ct) {
+  if (!karaokeBuilt) return;
+  const spans = karaokePanel.querySelectorAll('.k-word');
+  let activeIdx = -1;
+  for (let i = words.length - 1; i >= 0; i--) {
+    if (ct >= words[i].t) {
+      activeIdx = i;
+      break;
+    }
+  }
+  spans.forEach((s, i) => {
+    s.classList.remove('active', 'spoken');
+    if (i < activeIdx) {
+      s.classList.add('spoken');
+    } else if (i === activeIdx) {
+      s.classList.add('active');
+    }
+  });
+}
+
+function rafLoop() {
+  const ct = video.currentTime;
+  syncKaraoke(ct);
+  updateScores(ct);
+  if (!video.paused && !video.ended) {
+    rafId = requestAnimationFrame(rafLoop);
+  }
+}
+
+function startPlayback() {
+  video.play().then(() => {
+    playOverlay.classList.add('hidden');
+    if (!karaokeBuilt) buildKaraoke();
+    rafId = requestAnimationFrame(rafLoop);
+  }).catch(e => console.warn('Autoplay blocked:', e));
+}
+
+playBtn.addEventListener('click', startPlayback);
+video.addEventListener('play', () => {
+  if (!karaokeBuilt) buildKaraoke();
+  rafId = requestAnimationFrame(rafLoop);
+});
+
+video.addEventListener('pause', () => {
+  if (rafId) cancelAnimationFrame(rafId);
+  rafId = null;
+  // Show play overlay again
+  playOverlay.classList.remove('hidden');
+});
+
+video.addEventListener('ended', () => {
+  if (rafId) cancelAnimationFrame(rafId);
+  rafId = null;
+  playOverlay.classList.remove('hidden');
+});
+
+// Show score panel after 2s
+setTimeout(() => {
+  scorePanel.classList.add('visible');
+}, 2000);
+
+// ─── SCROLL PROGRESS ───
+const rail = document.getElementById('progress-rail');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight * 100) : 0;
+  rail.style.width = pct + '%';
+}, { passive: true });
+
+// ─── NAV SCROLL STATE ───
+const nav = document.getElementById('main-nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 60) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+}, { passive: true });
+
+// ─── INTERSECTION OBSERVER ───
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => observer.observe(el));
+
+// ─── TABS ───
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + target).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

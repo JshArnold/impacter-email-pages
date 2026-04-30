@@ -250,11 +250,13 @@ nav .cta-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(
   display: grid; grid-template-columns: 1fr 1fr; gap: 0;
   border-radius: var(--radius-2xl); overflow: hidden;
   box-shadow: var(--shadow-xl); margin-top: 48px;
+  align-items: stretch;
 }
 .contrast-left {
   background: #F0F0EF; padding: 48px 40px;
   display: flex; flex-direction: column; gap: 20px;
 }
+.contrast-left .fake-survey { flex: 1; }
 .contrast-right {
   background: var(--surface-inverse); padding: 48px 40px;
   display: flex; flex-direction: column; gap: 20px;

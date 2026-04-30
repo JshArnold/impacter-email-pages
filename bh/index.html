@@ -276,21 +276,43 @@ nav .cta-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(
   font-family: var(--font-display); font-weight: 800; font-size: 28px;
   line-height: 1.1; letter-spacing: -0.025em; color: #fff;
 }
-/* Static fake Likert survey */
+/* Interactive fake Likert survey */
 .fake-survey {
-  background: #E8E7E6; border-radius: 10px; padding: 20px;
+  background: #E8E7E6; border-radius: 10px; padding: 24px;
   font-family: monospace; font-size: 13px; color: #9BA0A8;
-  margin-top: 8px;
+  margin-top: 8px; display: flex; flex-direction: column; gap: 18px;
 }
-.fake-question { margin-bottom: 14px; font-size: 12px; color: #B0B5BC; }
+.fake-survey-header {
+  font-size: 10px; color: #C0C4C9; letter-spacing: 0.08em; text-transform: uppercase;
+  display: flex; justify-content: space-between; padding-bottom: 10px;
+  border-bottom: 1px solid #DDDCDA;
+}
+.fake-q-block { display: flex; flex-direction: column; gap: 10px; }
+.fake-question { font-size: 12px; color: #A8ADB5; line-height: 1.5; }
 .likert-row { display: flex; gap: 6px; align-items: center; }
-.likert-label { font-size: 11px; color: #B0B5BC; margin: 0 6px; }
+.likert-label { font-size: 10px; color: #C0C4C9; margin: 0 4px; flex-shrink: 0; }
 .likert-dot {
-  width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #CCCAC8;
-  display: flex; align-items: center; justify-content: center; font-size: 11px; color: #B0B5BC;
+  width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #D0CECC;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: #C0C4C9; cursor: pointer; flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
 }
-.likert-dot.selected { background: #CCCAC8; border-color: #CCCAC8; color: #9BA0A8; }
-.fake-note { font-size: 11px; color: #B0B5BC; margin-top: 14px; font-style: italic; }
+.likert-dot:hover { border-color: #B8B5B2; background: #DDDCDA; }
+.likert-dot.selected { background: #C8C5C2; border-color: #C8C5C2; color: #8A8F97; }
+.fake-scale-labels {
+  display: flex; justify-content: space-between;
+  font-size: 9px; color: #C8CBD0; letter-spacing: 0.04em;
+  padding: 0 2px;
+}
+.fake-submit {
+  margin-top: 4px; width: 100%; padding: 10px;
+  background: #DDDCDA; border: none; border-radius: 6px;
+  font-family: monospace; font-size: 12px; color: #A8ADB5;
+  cursor: pointer; transition: background 0.15s;
+}
+.fake-submit:hover { background: #D5D3D1; }
+.fake-submit.submitted { background: #D0CECC; color: #9BA0A8; cursor: default; }
+.fake-note { font-size: 11px; color: #B0B5BC; margin-top: 4px; font-style: italic; }
 /* Flip card — student voice right side */
 .flip-card-wrap {
   margin-top: 8px; perspective: 1000px;
@@ -1077,18 +1099,61 @@ footer img { height: 24px; opacity: 0.7; }
           Traditional survey
         </div>
         <h3>Rate your feelings 1 to 5.</h3>
-        <div class="fake-survey">
-          <div class="fake-question">Q4. I am motivated to succeed in school.</div>
-          <div class="likert-row">
-            <span class="likert-label">1</span>
-            <div class="likert-dot">1</div>
-            <div class="likert-dot">2</div>
-            <div class="likert-dot selected">3</div>
-            <div class="likert-dot">4</div>
-            <div class="likert-dot">5</div>
-            <span class="likert-label">5</span>
+        <div class="fake-survey" id="fakeSurvey">
+          <div class="fake-survey-header">
+            <span>Student Wellness Check-In</span>
+            <span>4 of 4</span>
           </div>
-          <div class="fake-note">Student answered in ~2 seconds. No qualitative signal captured.</div>
+          <div class="fake-q-block">
+            <div class="fake-question">Q1. I am motivated to succeed in school.</div>
+            <div class="likert-row" data-q="1">
+              <span class="likert-label">SD</span>
+              <div class="likert-dot" data-v="1">1</div>
+              <div class="likert-dot" data-v="2">2</div>
+              <div class="likert-dot selected" data-v="3">3</div>
+              <div class="likert-dot" data-v="4">4</div>
+              <div class="likert-dot" data-v="5">5</div>
+              <span class="likert-label">SA</span>
+            </div>
+          </div>
+          <div class="fake-q-block">
+            <div class="fake-question">Q2. I feel connected to people at my school.</div>
+            <div class="likert-row" data-q="2">
+              <span class="likert-label">SD</span>
+              <div class="likert-dot" data-v="1">1</div>
+              <div class="likert-dot" data-v="2">2</div>
+              <div class="likert-dot" data-v="3">3</div>
+              <div class="likert-dot selected" data-v="4">4</div>
+              <div class="likert-dot" data-v="5">5</div>
+              <span class="likert-label">SA</span>
+            </div>
+          </div>
+          <div class="fake-q-block">
+            <div class="fake-question">Q3. I have access to support when I need it.</div>
+            <div class="likert-row" data-q="3">
+              <span class="likert-label">SD</span>
+              <div class="likert-dot" data-v="1">1</div>
+              <div class="likert-dot selected" data-v="2">2</div>
+              <div class="likert-dot" data-v="3">3</div>
+              <div class="likert-dot" data-v="4">4</div>
+              <div class="likert-dot" data-v="5">5</div>
+              <span class="likert-label">SA</span>
+            </div>
+          </div>
+          <div class="fake-q-block">
+            <div class="fake-question">Q4. I feel safe expressing how I really feel.</div>
+            <div class="likert-row" data-q="4">
+              <span class="likert-label">SD</span>
+              <div class="likert-dot" data-v="1">1</div>
+              <div class="likert-dot" data-v="2">2</div>
+              <div class="likert-dot selected" data-v="3">3</div>
+              <div class="likert-dot" data-v="4">4</div>
+              <div class="likert-dot" data-v="5">5</div>
+              <span class="likert-label">SA</span>
+            </div>
+          </div>
+          <button class="fake-submit" id="fakeSubmit">Submit responses →</button>
+          <div class="fake-note" id="fakeNote">Student answered in ~8 seconds. No qualitative signal captured.</div>
         </div>
         <p style="font-size:14px;color:#9BA0A8;line-height:1.7">A score of "3" tells you nothing about <em>why</em> a student is motivated — or whether they're one bad week away from disengaging entirely.</p>
       </div>
@@ -1520,6 +1585,21 @@ function switchTab(id, btn) {
   document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
 }
+
+// ── Fake Likert interactivity ──────────────────────────────────────────────
+document.querySelectorAll('.fake-survey .likert-row').forEach(row => {
+  row.querySelectorAll('.likert-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      row.querySelectorAll('.likert-dot').forEach(d => d.classList.remove('selected'));
+      dot.classList.add('selected');
+    });
+  });
+});
+document.getElementById('fakeSubmit').addEventListener('click', function() {
+  this.textContent = 'Response recorded.';
+  this.classList.add('submitted');
+  document.getElementById('fakeNote').textContent = 'Submitted. Score: 12/20. No qualitative signal captured.';
+});
 
 // ── NC Girl — Real Whisper word-level timestamps ──────────────────────────────
 // Source: pitch/src/slides/06-product.tsx WORD_TS array

@@ -1069,7 +1069,7 @@
 <!-- Nav -->
 <nav id="main-nav">
   <div class="nav-logo">
-    <a href="/bh/" style="display:flex;align-items:center;gap:10px;text-decoration:none;"><img src="../images/impacter-circle-icon.png" alt="IMPACTER" style="height:38px;width:auto;"><span style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;color:#fff;letter-spacing:-0.02em;">IMPACTER</span></a>
+    <a href="/bh/" style="display:flex;align-items:center;text-decoration:none;"><img src="../images/impacter-pathway-white.svg" alt="Impacter Pathway" style="height:32px;width:auto;"></a>
   </div>
   <a href="#resources" class="nav-cta">See the platform ↗</a>
 </nav>
@@ -1083,9 +1083,9 @@
   </div>
   <div class="hero-gradient"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">Human Skills Analytics · Behavioral Health Screener</div>
-    <h1 class="hero-headline">What if the screening<br>conversation was actually<br><em>a conversation?</em></h1>
-    <p class="hero-sub">Voice-based behavioral health screening for K-12 students — capturing what a 1-to-5 scale never could, and what support teams have always needed to know.</p>
+    <div class="hero-eyebrow">Universal Behavioral Health Screening</div>
+    <h1 class="hero-headline">What if listening<br>was the start<br><em>of student support?</em></h1>
+    <p class="hero-sub">Voice-based behavioral health screening for K-12 — built so the conversation that identifies the need is the same one that begins the support.</p>
     <div class="hero-actions">
       <a href="#voice-intelligence" class="btn-primary">See the platform ↓</a>
       <a href="../playbook.pdf" class="btn-ghost" target="_blank">Download playbook →</a>
@@ -2011,19 +2011,33 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
     const H = canvas.offsetHeight;
     ctx.clearRect(0, 0, W, H);
     const t = heroVideo ? (heroVideo.currentTime % 20.125) : 0;
+    const baseAmp = getAmp(t);
     const barW = W / NUM_BARS;
     const gap = barW * 0.28;
     const barPx = barW - gap;
+    const now = Date.now();
 
     for (let i = 0; i < NUM_BARS; i++) {
-      // Spread bars across ±0.15s window so neighbors show adjacent speech energy
-      const spread = ((i / (NUM_BARS - 1)) - 0.5) * 0.3;
-      const target = getAmp(Math.max(0, t + spread));
-      smoothed[i] += (target - smoothed[i]) * 0.22;
-      const barH = Math.max(3, smoothed[i] * H * 0.95);
+      // Each bar oscillates independently at a different frequency — genuinely jagged
+      const f1 = 0.003 + (i % 11) * 0.00055;
+      const f2 = 0.007 + (i % 7)  * 0.00091;
+      const f3 = 0.013 + (i % 5)  * 0.00120;
+      const p1 = Math.sin(now * f1 + i * 1.7);
+      const p2 = Math.sin(now * f2 + i * 2.9 + 1.0);
+      const p3 = Math.sin(now * f3 + i * 0.8 + 2.3);
+      // Combine three waves — different weights for organic feel
+      const combo = p1 * 0.5 + p2 * 0.35 + p3 * 0.15;
+      // Static envelope — gives each bar a fixed personality (some naturally tall, some short)
+      const envelope = 0.25 + 0.75 * Math.abs(Math.sin(i * 0.43 + 0.6));
+      // Push toward extremes: sqrt makes low bars shorter, high bars taller
+      const normalized = (combo + 1) / 2;        // 0..1
+      const jagged = Math.pow(normalized, 0.6);   // exaggerate highs, compress lows
+      const localAmp = baseAmp * envelope * (0.15 + 0.85 * jagged);
+      // No smoothing — raw per-frame changes = hard jagged look
+      const barH = Math.max(3, localAmp * H * 0.95);
       const x = i * barW + gap / 2;
       const y = H - barH;
-      const alpha = 0.25 + smoothed[i] * 0.75;
+      const alpha = 0.35 + localAmp * 0.65;
       ctx.fillStyle = "rgba(243,113,99," + alpha.toFixed(2) + ")";
       ctx.beginPath();
       if (ctx.roundRect) ctx.roundRect(x, y, barPx, barH, 2);

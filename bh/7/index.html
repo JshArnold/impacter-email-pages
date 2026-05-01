@@ -2058,7 +2058,7 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
         const amp = sum/sPerBar;
         if (amp < 0.05) bp.gapPx = 5;
         // Scale up by 380 so bars are tall and dramatic
-        barData.push({height:Math.max(28, amp*800), timestamp:ts, state:'pending', phraseIdx:getPhraseIdx(ts), hoverScale:1});
+        barData.push({height:Math.max(10, amp*800), timestamp:ts, state:'pending', phraseIdx:getPhraseIdx(ts), hoverScale:1});
       }
       audioCtx.close();
       render();
@@ -2069,7 +2069,7 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
       for (let i=0;i<NUM_BARS;i++) {
         const bp=barProps[i], ts=(i/NUM_BARS)*duration;
         if (bp.isGap){barData.push({height:0,timestamp:ts,state:'pending',phraseIdx:-1,hoverScale:1});continue;}
-        barData.push({height:Math.max(28,(0.3+0.7*Math.abs(Math.sin(i*.43+.6)))*(0.5+0.5*r2())*120),timestamp:ts,state:'pending',phraseIdx:getPhraseIdx(ts),hoverScale:1});
+        barData.push({height:Math.max(10,(0.3+0.7*Math.abs(Math.sin(i*.43+.6)))*(0.5+0.5*r2())*120),timestamp:ts,state:'pending',phraseIdx:getPhraseIdx(ts),hoverScale:1});
       }
       render();
     }
@@ -2143,8 +2143,8 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   /* ── Canvas attribute pins — always visible, animate when active ── */
   function drawPins(W, MID) {
     const t      = heroVideo ? heroVideo.currentTime % duration : 0;
-    const labelY = 22;   // moved down so labels are clearly visible
-    const dotY   = 37;   // dot just below label
+    const labelY = 12;   // sits above the peak of tallest bars
+    const dotY   = 26;   // dot just below label, both above bar tops
 
     PHRASES.forEach(p => {
       const pinX  = (p.start / duration) * W;

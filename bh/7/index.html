@@ -230,31 +230,95 @@
     left: 0;
     right: 0;
     z-index: 3;
-    overflow: hidden;
     line-height: 0;
   }
-  .waveform-phrase-slot {
-    text-align: center;
-    padding: 0 40px 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 20px;
-    font-style: italic;
-    color: rgba(255,255,255,0.92);
-    letter-spacing: -0.01em;
-    min-height: 36px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  .waveform-phrase-slot { display: none; }
   .waveform-canvas {
     width: 100%;
-    height: 110px;
+    height: 160px;
     display: block;
     cursor: pointer;
   }
+
+  /* ── Phrase Card (right side of hero) ── */
+  .phrase-card {
+    position: absolute;
+    right: 48px;
+    bottom: 190px;
+    width: 272px;
+    background: rgba(10,20,38,0.82);
+    border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 14px;
+    padding: 20px 22px 18px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: none;
+    z-index: 5;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .phrase-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .phrase-card-attr {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .phrase-card-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .phrase-card-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .phrase-card-quote {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-style: italic;
+    color: rgba(255,255,255,0.93);
+    line-height: 1.55;
+    margin: 0 0 14px;
+    quotes: '\201C' '\201D';
+  }
+  .phrase-card-quote::before { content: open-quote; }
+  .phrase-card-quote::after  { content: close-quote; }
+  .phrase-card-metric {
+    border-top: 1px solid rgba(255,255,255,0.09);
+    padding-top: 13px;
+  }
+  .phrase-card-curve {
+    display: block;
+    width: 100%;
+    height: 44px;
+    overflow: visible;
+  }
+  .phrase-card-pct-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+  }
+  .phrase-card-pct-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+  }
+  .phrase-card-pct-value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  @media (max-width: 900px) { .phrase-card { display: none; } }
 
   /* ── Stats Strip ── */
   .stats-strip {
@@ -1095,6 +1159,22 @@
       <a href="../playbook.pdf" class="btn-ghost" target="_blank">Download playbook →</a>
     </div>
   </div>
+  <!-- Phrase insight card — top-right during playback -->
+  <div class="phrase-card" id="phraseCard">
+    <div class="phrase-card-attr">
+      <span class="phrase-card-dot" id="phraseCardDot"></span>
+      <span class="phrase-card-label" id="phraseCardLabel"></span>
+    </div>
+    <blockquote class="phrase-card-quote" id="phraseCardQuote"></blockquote>
+    <div class="phrase-card-metric">
+      <svg class="phrase-card-curve" id="phraseCardCurve" viewBox="0 0 228 44" preserveAspectRatio="none"></svg>
+      <div class="phrase-card-pct-row">
+        <span class="phrase-card-pct-label">Among all responses</span>
+        <span class="phrase-card-pct-value" id="phraseCardPct"></span>
+      </div>
+    </div>
+  </div>
+
   <div class="waveform-divider" id="waveformSection">
     <div class="waveform-phrase-slot" id="waveformPhrase"></div>
     <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
@@ -1950,330 +2030,255 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
    KARAOKE — reset on video end/seek
 ────────────────────────────── */
 /* ─────────────────────────────────────────────────────────────────
-   HERO WAVEFORM — SPEC BUILD
-   Real MP3 amplitude via Web Audio API + Whisper phrase sync
-   rAF only (NO timeupdate) per spec §3
-   Audio: ../audio/calexico-hero.mp3
-   Phrases from real Whisper timestamps (calexico-v7.mp4)
+   HERO WAVEFORM v2 — synced to hero video (no click needed)
+   Bars: real Web Audio API amplitude from MP3
+   Timing: heroVideo.currentTime via rAF (NO timeupdate)
+   Phrase card: right-side floating card with bell curve metric
 ──────────────────────────────────────────────────────────────────*/
 (() => {
   const canvas = document.getElementById('waveformCanvas');
   if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const phraseSlot = document.getElementById('waveformPhrase');
+  const ctx    = canvas.getContext('2d');
+  const card   = document.getElementById('phraseCard');
   const MOBILE = window.innerWidth < 768;
   const NUM_BARS = MOBILE ? 70 : 140;
   const AUDIO_SRC = '../audio/calexico-hero.mp3';
 
-  /* ── Phrase map (4 attribute pins) ── */
+  // Sync to the hero background video (already autoplays muted)
+  const heroVideo = document.querySelector('.hero-video-wrap video');
+
+  /* ── Phrase map: 4 attribute moments with percentile scores ── */
   const PHRASES = [
-    { text: 'The reason I get out of bed every morning', label: 'Self-Insight',        color: '#F37163', start: 1.30, end: 3.94 },
-    { text: 'I want to achieve my goals',               label: 'Reflective Growth',    color: '#638EC5', start: 5.08, end: 7.04 },
-    { text: 'be able to help other people',             label: 'Relational Awareness',  color: '#8B6FB8', start: 8.70, end: 11.6 },
-    { text: 'small changes will make a big difference', label: 'Reflective Growth',    color: '#638EC5', start: 17.1, end: 19.84},
+    { text: 'The reason I get out of bed every morning', label: 'Self-Insight',        color: '#F37163', start: 1.30, end: 3.94, pct: 87 },
+    { text: 'I want to achieve my goals',               label: 'Reflective Growth',    color: '#638EC5', start: 5.08, end: 7.04, pct: 82 },
+    { text: 'be able to help other people',             label: 'Relational Awareness', color: '#8B6FB8', start: 8.70, end: 11.6, pct: 91 },
+    { text: 'small changes will make a big difference', label: 'Reflective Growth',    color: '#638EC5', start: 17.1, end: 19.84,pct: 79 },
   ];
   const NON_PHRASE_COLOR = '#638EC5';
 
-  /* ── Seeded PRNG (mulberry32) — deterministic bar layout ── */
-  function mulberry32(seed) {
-    return function() {
-      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
-      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
-      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-      return ((t ^ t >>> 14) >>> 0) / 4294967296;
-    };
+  /* ── Seeded PRNG — deterministic bar layout every load ── */
+  function mulberry32(s) {
+    return () => { s|=0; s=s+0x6D2B79F5|0; let t=Math.imul(s^s>>>15,1|s); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
   }
-  const seed = AUDIO_SRC.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-  const rng  = mulberry32(seed);
+  const rng = mulberry32(AUDIO_SRC.split('').reduce((a,c)=>a+c.charCodeAt(0),0));
 
-  /* ── Pre-compute bar visual properties ── */
   const barProps = [];
   for (let i = 0; i < NUM_BARS; i++) {
     const r = rng();
     let width, isGap = false;
-    if      (r < 0.038)  { isGap = true; width = 0; }          // ~1/26 gap
-    else if (r < 0.149)  { width = MOBILE ? 3   : 5;   }       // ~1/9 wide
-    else if (r < 0.226)  { width = MOBILE ? 1.5 : 2;   }       // ~1/13 narrow
-    else                 { width = MOBILE ? 2   : 3;   }        // default
+    if      (r < 0.038) { isGap=true; width=0; }
+    else if (r < 0.149) { width = MOBILE ? 3 : 5; }
+    else if (r < 0.226) { width = MOBILE ? 1.5 : 2; }
+    else                { width = MOBILE ? 2 : 3; }
     barProps.push({ width, isGap, gapPx: 2 });
   }
 
   /* ── State ── */
-  let barData    = [];   // { height, timestamp, state, phraseIdx, hoverScale }
-  let duration   = 20.13;
+  let barData   = [];
+  let duration  = 20.13;
   let lastPhrase = null;
-  let rafId      = null;
-  const audio    = new Audio(AUDIO_SRC);
-  audio.preload  = 'auto';
 
-  /* ── Helper: which phrase does timestamp t belong to? ── */
   function getPhraseIdx(t) {
-    for (let i = 0; i < PHRASES.length; i++) {
-      if (t >= PHRASES[i].start && t <= PHRASES[i].end) return i;
-    }
+    for (let i = 0; i < PHRASES.length; i++) if (t >= PHRASES[i].start && t <= PHRASES[i].end) return i;
     return -1;
   }
-
-  function getBarColor(bar) {
-    return bar.phraseIdx >= 0 ? PHRASES[bar.phraseIdx].color : NON_PHRASE_COLOR;
-  }
-
+  function getBarColor(bar) { return bar.phraseIdx >= 0 ? PHRASES[bar.phraseIdx].color : NON_PHRASE_COLOR; }
   function hexRgba(hex, a) {
-    const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
     return `rgba(${r},${g},${b},${a})`;
   }
 
-  /* ── Load real amplitude data from MP3 ── */
+  /* ── Amplitude decode ── */
   async function loadAmplitude() {
     try {
-      const AudioCtx   = window.AudioContext || window.webkitAudioContext;
-      const audioCtx   = new AudioCtx();
-      const res        = await fetch(AUDIO_SRC);
-      const buf        = await res.arrayBuffer();
-      const decoded    = await audioCtx.decodeAudioData(buf);
-      duration         = decoded.duration;
-      const ch         = decoded.getChannelData(0);
-      const sPerBar    = Math.floor(ch.length / NUM_BARS);
-
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const audioCtx = new AudioCtx();
+      const res = await fetch(AUDIO_SRC);
+      const buf = await res.arrayBuffer();
+      const decoded = await audioCtx.decodeAudioData(buf);
+      duration = decoded.duration;
+      const ch = decoded.getChannelData(0);
+      const sPerBar = Math.floor(ch.length / NUM_BARS);
       barData = [];
       for (let i = 0; i < NUM_BARS; i++) {
         const bp = barProps[i];
         const ts = (i / NUM_BARS) * duration;
-        if (bp.isGap) { barData.push({ height:0, timestamp:ts, state:'pending', phraseIdx:-1, hoverScale:1 }); continue; }
-        let sum = 0;
-        for (let j = 0; j < sPerBar; j++) sum += Math.abs(ch[i * sPerBar + j]);
-        const amp = sum / sPerBar;
-        // Wider gap at troughs
+        if (bp.isGap) { barData.push({height:0,timestamp:ts,state:'pending',phraseIdx:-1,hoverScale:1}); continue; }
+        let sum=0; for (let j=0;j<sPerBar;j++) sum+=Math.abs(ch[i*sPerBar+j]);
+        const amp = sum/sPerBar;
         if (amp < 0.05) bp.gapPx = 5;
-        barData.push({ height: Math.max(8, amp * 200), timestamp: ts, state:'pending', phraseIdx: getPhraseIdx(ts), hoverScale:1 });
+        // Scale up by 380 so bars are tall and dramatic
+        barData.push({height:Math.max(10, amp*380), timestamp:ts, state:'pending', phraseIdx:getPhraseIdx(ts), hoverScale:1});
       }
       audioCtx.close();
       render();
     } catch(e) {
-      console.warn('[Hero Waveform] Using synthesized amplitude — replace with real Whisper output for accurate sync.', e);
-      synthesize();
+      console.warn('[Hero Waveform] Using synthesized bars.', e);
+      const r2 = mulberry32(99);
+      barData = [];
+      for (let i=0;i<NUM_BARS;i++) {
+        const bp=barProps[i], ts=(i/NUM_BARS)*duration;
+        if (bp.isGap){barData.push({height:0,timestamp:ts,state:'pending',phraseIdx:-1,hoverScale:1});continue;}
+        barData.push({height:Math.max(10,(0.3+0.7*Math.abs(Math.sin(i*.43+.6)))*(0.5+0.5*r2())*120),timestamp:ts,state:'pending',phraseIdx:getPhraseIdx(ts),hoverScale:1});
+      }
+      render();
     }
   }
 
-  function synthesize() {
-    const r2 = mulberry32(99);
-    barData = [];
-    for (let i = 0; i < NUM_BARS; i++) {
-      const bp = barProps[i];
-      const ts = (i / NUM_BARS) * duration;
-      if (bp.isGap) { barData.push({ height:0, timestamp:ts, state:'pending', phraseIdx:-1, hoverScale:1 }); continue; }
-      const env  = 0.3 + 0.7 * Math.abs(Math.sin(i * 0.43 + 0.6));
-      const nz   = 0.5 + 0.5 * r2();
-      barData.push({ height: Math.max(8, env * nz * 80), timestamp:ts, state:'pending', phraseIdx: getPhraseIdx(ts), hoverScale:1 });
-    }
-    render();
-  }
-
-  /* ── Canvas sizing ── */
+  /* ── Canvas resize ── */
   function resize() {
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width  = canvas.offsetWidth  * dpr;
-    canvas.height = canvas.offsetHeight * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    render();
+    const dpr=window.devicePixelRatio||1;
+    canvas.width=canvas.offsetWidth*dpr; canvas.height=canvas.offsetHeight*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0); render();
   }
-  resize();
-  window.addEventListener('resize', resize);
+  resize(); window.addEventListener('resize', resize);
 
   /* ── Render ── */
   function render() {
-    const W   = canvas.offsetWidth;
-    const H   = canvas.offsetHeight;
-    ctx.clearRect(0, 0, W, H);
+    const W=canvas.offsetWidth, H=canvas.offsetHeight;
+    ctx.clearRect(0,0,W,H);
     if (!barData.length) return;
+    const slotW = W/NUM_BARS;
+    const MID   = H*0.48;
 
-    const slotW = W / NUM_BARS;  // each bar occupies this width slot
-    const MID   = H * 0.50;      // centerline
-
-    for (let i = 0; i < barData.length; i++) {
-      const bar = barData[i];
-      const bp  = barProps[i];
+    for (let i=0;i<barData.length;i++) {
+      const bar=barData[i], bp=barProps[i];
       if (bp.isGap) continue;
-
-      const bw   = Math.min(bp.width, slotW - 1.5);
-      const x    = i * slotW + (slotW - bw) / 2;
-      const hs   = bar.hoverScale;
-      const barH = Math.min(bar.height * hs, MID * 1.85);
+      const bw   = Math.min(bp.width, slotW-1.5);
+      const x    = i*slotW + (slotW-bw)/2;
+      const barH = Math.min(bar.height*bar.hoverScale, MID*1.9);
       const y    = MID - barH;
 
       let color, opacity;
-      if      (bar.state === 'pending') { color = '#D6E7F1'; opacity = 0.25; }
-      else if (bar.state === 'playing') { color = getBarColor(bar); opacity = 1.0; }
-      else                              { color = getBarColor(bar); opacity = 0.80; }
+      if      (bar.state==='pending') { color='#D6E7F1'; opacity=0.22; }
+      else if (bar.state==='playing') { color=getBarColor(bar); opacity=1.0; }
+      else                            { color=getBarColor(bar); opacity=0.80; }
 
-      /* — Main bar — */
-      ctx.globalAlpha = opacity;
-      ctx.fillStyle   = color;
-      ctx.beginPath();
-      ctx.roundRect ? ctx.roundRect(x, y, bw, barH, 2) : ctx.rect(x, y, bw, barH);
-      ctx.fill();
+      ctx.globalAlpha=opacity; ctx.fillStyle=color;
+      ctx.beginPath(); ctx.roundRect?ctx.roundRect(x,y,bw,barH,2):ctx.rect(x,y,bw,barH); ctx.fill();
 
-      /* — Glow on active playhead bar — */
-      if (bar.state === 'playing') {
-        ctx.shadowColor = color;
-        ctx.shadowBlur  = 10;
-        ctx.globalAlpha = 0.5;
-        ctx.beginPath();
-        ctx.roundRect ? ctx.roundRect(x, y, bw, barH, 2) : ctx.rect(x, y, bw, barH);
-        ctx.fill();
-        ctx.shadowBlur = 0;
+      if (bar.state==='playing') {
+        ctx.shadowColor=color; ctx.shadowBlur=12; ctx.globalAlpha=0.45;
+        ctx.beginPath(); ctx.roundRect?ctx.roundRect(x,y,bw,barH,2):ctx.rect(x,y,bw,barH); ctx.fill();
+        ctx.shadowBlur=0;
       }
 
-      /* — Reflection (mirrored below MID at 30% opacity, fading out) — */
-      const reflH = barH * 0.6;
-      const grad  = ctx.createLinearGradient(0, MID, 0, MID + reflH);
-      grad.addColorStop(0,   hexRgba(color, opacity * 0.30));
-      grad.addColorStop(0.8, hexRgba(color, 0));
-      ctx.globalAlpha = 1;
-      ctx.fillStyle   = grad;
-      ctx.beginPath();
-      ctx.roundRect ? ctx.roundRect(x, MID, bw, reflH, 2) : ctx.rect(x, MID, bw, reflH);
-      ctx.fill();
+      // Reflection
+      const reflH=barH*0.55;
+      const grad=ctx.createLinearGradient(0,MID,0,MID+reflH);
+      grad.addColorStop(0,hexRgba(color,opacity*0.28)); grad.addColorStop(0.8,hexRgba(color,0));
+      ctx.globalAlpha=1; ctx.fillStyle=grad;
+      ctx.beginPath(); ctx.roundRect?ctx.roundRect(x,MID,bw,reflH,2):ctx.rect(x,MID,bw,reflH); ctx.fill();
     }
-
-    ctx.globalAlpha = 1;
+    ctx.globalAlpha=1;
     drawPins(W, MID);
   }
 
-  /* ── Attribute pins ── */
+  /* ── Canvas attribute pins ── */
   function drawPins(W, MID) {
-    if (audio.paused && audio.currentTime === 0) return; // only during/after play
-    const t = audio.currentTime;
-
+    const t = heroVideo ? heroVideo.currentTime : 0;
+    if (t === 0) return;
     PHRASES.forEach(p => {
-      const pinX        = (p.start / duration) * W;
-      const fadeInStart = p.start - 0.2;
-      const fadeOutEnd  = p.end   + 0.4;
-      let op = 0;
-      if      (t >= fadeInStart && t < p.start) op = (t - fadeInStart) / 0.2;
-      else if (t >= p.start     && t <= p.end ) op = 1.0;
-      else if (t >  p.end       && t <= fadeOutEnd) op = 1 - (t - p.end) / 0.4;
-      if (op <= 0) return;
-
-      // Clamp label x so it doesn't clip edges
-      const labelSize = MOBILE ? 11 : 14;
-      const safeX = Math.max(48, Math.min(W - 48, pinX));
-      const dotY  = MID - 22;
-
-      // Pulse ring
-      if (t >= p.start && t <= p.end) {
-        const pulse = ((t - p.start) * 1.5) % 1;
-        ctx.globalAlpha = op * (1 - pulse) * 0.7;
-        ctx.strokeStyle = p.color;
-        ctx.lineWidth   = 1.5;
-        ctx.beginPath();
-        ctx.arc(pinX, dotY, 6 + pulse * 12, 0, Math.PI * 2);
-        ctx.stroke();
+      const pinX=(p.start/duration)*W;
+      const fi=p.start-0.2, fo=p.end+0.4;
+      let op=0;
+      if      (t>=fi && t<p.start) op=(t-fi)/0.2;
+      else if (t>=p.start && t<=p.end) op=1;
+      else if (t>p.end && t<=fo) op=1-(t-p.end)/0.4;
+      if (op<=0) return;
+      const safeX=Math.max(50,Math.min(W-50,pinX));
+      const dotY=MID-24;
+      if (t>=p.start && t<=p.end) {
+        const pulse=((t-p.start)*1.4)%1;
+        ctx.globalAlpha=op*(1-pulse)*0.65; ctx.strokeStyle=p.color; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.arc(pinX,dotY,6+pulse*14,0,Math.PI*2); ctx.stroke();
       }
-
-      // Dot
-      ctx.globalAlpha = op;
-      ctx.fillStyle   = p.color;
-      ctx.beginPath();
-      ctx.arc(pinX, dotY, 6, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Label
-      ctx.fillStyle = p.color;
-      ctx.font      = `600 ${labelSize}px 'DM Sans', sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.fillText(p.label.toUpperCase(), safeX, dotY - 12);
-      ctx.textAlign = 'left';
+      ctx.globalAlpha=op; ctx.fillStyle=p.color;
+      ctx.beginPath(); ctx.arc(pinX,dotY,6,0,Math.PI*2); ctx.fill();
+      ctx.font=`600 ${MOBILE?11:13}px 'DM Sans',sans-serif`; ctx.textAlign='center'; ctx.fillStyle=p.color;
+      ctx.fillText(p.label.toUpperCase(), safeX, dotY-13);
+      ctx.textAlign='left'; ctx.globalAlpha=1;
     });
-
-    ctx.globalAlpha = 1;
   }
 
-  /* ── Phrase overlay (above bars) ── */
-  function updatePhraseSlot(t) {
+  /* ── Bell curve SVG for phrase card ── */
+  function buildCurveSVG(pct, color) {
+    const W=228, H=44, x=pct/100*W;
+    // Normal-ish bell curve path
+    const curve=`M0,${H} C30,${H} 50,4 ${W/2},4 C${W-50},4 ${W-30},${H} ${W},${H}`;
+    // Shaded fill up to marker
+    const fill=`M0,${H} C30,${H} 50,4 ${x<W/2?x:W/2},${x<W/2?H-(x/(W/2))*(H-4):4} ${x>=W/2?`C${W/2+(x-W/2)*0.8},${4+(x-W/2)/(W/2)*(H-4)} ${x},${H} ${x},${H}`:'L'+x+','+H} Z`;
+    return `
+      <defs>
+        <linearGradient id="cg${pct}" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stop-color="${color}" stop-opacity="0.12"/>
+          <stop offset="100%" stop-color="${color}" stop-opacity="0.38"/>
+        </linearGradient>
+        <clipPath id="cc${pct}"><rect x="0" y="0" width="${x}" height="${H}"/></clipPath>
+      </defs>
+      <path d="${curve}" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+      <path d="${curve}" fill="none" stroke="${color}" stroke-width="1.5" clip-path="url(#cc${pct})" opacity="0.7"/>
+      <rect x="0" y="0" width="${x}" height="${H}" fill="url(#cg${pct})" clip-path="url(#cc${pct})"/>
+      <line x1="${x}" y1="2" x2="${x}" y2="${H}" stroke="${color}" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="${x}" cy="4" r="3.5" fill="${color}"/>`;
+  }
+
+  /* ── Phrase card update ── */
+  function updateCard(t) {
     const active = PHRASES.find(p => t >= p.start && t <= p.end) || null;
     if (active === lastPhrase) return;
     lastPhrase = active;
+    if (!card) return;
     if (active) {
-      phraseSlot.innerHTML = `${active.text} <span style="color:${active.color};font-style:normal;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em">— ${active.label}</span>`;
-      phraseSlot.style.opacity = '0';
-      requestAnimationFrame(() => { phraseSlot.style.opacity = '1'; });
+      card.querySelector('#phraseCardDot').style.background = active.color;
+      card.querySelector('#phraseCardLabel').textContent = active.label.toUpperCase();
+      card.querySelector('#phraseCardLabel').style.color = active.color;
+      card.querySelector('#phraseCardQuote').textContent = active.text;
+      card.querySelector('#phraseCardCurve').innerHTML = buildCurveSVG(active.pct, active.color);
+      card.querySelector('#phraseCardPct').textContent = `${active.pct}th percentile`;
+      card.querySelector('#phraseCardPct').style.color = active.color;
+      card.classList.add('visible');
     } else {
-      phraseSlot.style.opacity = '0';
+      card.classList.remove('visible');
     }
   }
 
-  /* ── rAF animation loop (NO timeupdate, per spec §3) ── */
+  /* ── rAF loop — synced to hero video ── */
   function animLoop() {
-    rafId = requestAnimationFrame(animLoop);
-    if (audio.paused) return;
-    const t = audio.currentTime;
+    requestAnimationFrame(animLoop);
+    if (!heroVideo || heroVideo.paused) return;
+    const t = heroVideo.currentTime % duration; // loop sync if video loops
 
     barData.forEach(bar => {
       const dt = bar.timestamp - t;
-      if      (dt > 0.05)  bar.state = 'pending';
-      else if (dt > -0.05) bar.state = 'playing';
+      if      (dt > 0.06)  bar.state = 'pending';
+      else if (dt > -0.06) bar.state = 'playing';
       else                 bar.state = 'played';
     });
 
-    updatePhraseSlot(t);
+    updateCard(t);
     render();
   }
 
-  audio.addEventListener('play',  () => { if (!rafId) animLoop(); });
-  audio.addEventListener('pause', () => { render(); });
-  audio.addEventListener('ended', () => {
-    barData.forEach(b => { if (!barProps[barData.indexOf(b)].isGap) b.state = 'played'; });
-    phraseSlot.style.opacity = '0';
-    lastPhrase = null;
-    render();
-  });
-
-  /* ── Scroll-progress mode (audio paused) ── */
+  /* ── Scroll-progress mode (video paused / page at top) ── */
   window.addEventListener('scroll', () => {
-    if (!audio.paused) return;
+    if (heroVideo && !heroVideo.paused) return;
     const pct = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight);
     const idx = Math.floor(pct * barData.length);
     barData.forEach((bar, i) => { bar.state = i < idx ? 'played' : 'pending'; });
     render();
   }, { passive: true });
 
-  /* ── Mouse hover (desktop only) ── */
+  /* ── Hover effect (desktop) ── */
   if (!MOBILE) {
     canvas.addEventListener('mousemove', e => {
-      const rect   = canvas.getBoundingClientRect();
-      const curX   = e.clientX - rect.left;
-      const slotW  = canvas.offsetWidth / NUM_BARS;
-      barData.forEach((bar, i) => {
-        const cx = i * slotW + slotW / 2;
-        const d  = Math.abs(cx - curX);
-        bar.hoverScale = d < 40 ? 1.15 : d < 80 ? 1.05 : 1.0;
-      });
-      if (audio.paused) render();
+      const rect=canvas.getBoundingClientRect(), curX=e.clientX-rect.left;
+      const slotW=canvas.offsetWidth/NUM_BARS;
+      barData.forEach((bar,i)=>{const d=Math.abs(i*slotW+slotW/2-curX); bar.hoverScale=d<40?1.15:d<80?1.05:1.0;});
+      if (!heroVideo||heroVideo.paused) render();
     });
-    canvas.addEventListener('mouseleave', () => {
-      barData.forEach(b => b.hoverScale = 1.0);
-      if (audio.paused) render();
-    });
+    canvas.addEventListener('mouseleave',()=>{barData.forEach(b=>b.hoverScale=1.0); if(!heroVideo||heroVideo.paused)render();});
   }
-
-  /* ── Click-to-play + scroll to Voice Intelligence ── */
-  function playAndScroll() {
-    if (!audio.paused) { audio.pause(); return; }
-    audio.currentTime = 0;
-    audio.play().catch(err => console.warn('[Hero Waveform] play() blocked:', err));
-    document.querySelector('#voice-intelligence')?.scrollIntoView({ behavior:'smooth', block:'start' });
-  }
-
-  canvas.addEventListener('click', playAndScroll);
-
-  // Wire "Hear It in Action" CTA button (same behavior)
-  document.querySelectorAll('a[href="#voice-intelligence"], .btn-primary').forEach(el => {
-    el.addEventListener('click', e => {
-      e.preventDefault();
-      playAndScroll();
-    });
-  });
 
   /* ── Boot ── */
   loadAmplitude();

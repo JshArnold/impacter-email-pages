@@ -2143,8 +2143,8 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   /* ── Canvas attribute pins — always visible, animate when active ── */
   function drawPins(W, MID) {
     const t      = heroVideo ? heroVideo.currentTime % duration : 0;
-    const labelY = 12;   // sits above the peak of tallest bars
-    const dotY   = 26;   // dot just below label, both above bar tops
+    const labelY = 38;   // moved down into visible canvas area
+    const dotY   = 54;   // dot just below label
 
     PHRASES.forEach(p => {
       const pinX  = (p.start / duration) * W;

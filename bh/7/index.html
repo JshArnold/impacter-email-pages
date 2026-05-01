@@ -235,7 +235,7 @@
   .waveform-phrase-slot { display: none; }
   .waveform-canvas {
     width: 100%;
-    height: 220px;
+    height: 265px;
     display: block;
     cursor: pointer;
   }
@@ -2089,7 +2089,7 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
     ctx.clearRect(0,0,W,H);
     if (!barData.length) return;
     const slotW  = W / NUM_BARS;
-    const MID     = H * 0.82;        // center sits low — tall bars above, tiny mirror below
+    const MID     = H * 0.68;        // anchored so bars occupy same visual zone as before
     const MAX_BAR = MID - 14;        // bars can reach almost to canvas top
     const now     = Date.now();
 
@@ -2143,8 +2143,8 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   /* ── Canvas attribute pins — always visible, animate when active ── */
   function drawPins(W, MID) {
     const t      = heroVideo ? heroVideo.currentTime % duration : 0;
-    const labelY = 52;   // moved down slightly more
-    const dotY   = 68;   // dot just below label
+    const dotY   = MID + Math.min(barData.reduce((a,b)=>Math.max(a,b.height),0)*0.14, 20) + 18;  // below mirror zone
+    const labelY = dotY + 18;  // label sits below dot
 
     PHRASES.forEach(p => {
       const pinX  = (p.start / duration) * W;
@@ -2174,11 +2174,11 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
       // Label — always visible at low opacity, full when active
       const labelOp = isActive ? 1.0 : isFadeIn ? dotOp : isFadeOut ? dotOp : 0.28;
       ctx.globalAlpha = labelOp;
-      // Label ABOVE dot
+      // Label BELOW dot
       ctx.fillStyle = p.color;
       ctx.font = `600 ${MOBILE ? 10 : 11}px 'DM Sans',sans-serif`;
       ctx.textAlign = 'center';
-      ctx.fillText(p.label.toUpperCase(), safeX, labelY);
+      ctx.fillText(p.label.toUpperCase(), safeX, labelY + 4); // +4 for baseline offset
       ctx.textAlign = 'left';
     });
     ctx.globalAlpha = 1;

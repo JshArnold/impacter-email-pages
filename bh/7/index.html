@@ -2089,9 +2089,8 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
     ctx.clearRect(0,0,W,H);
     if (!barData.length) return;
     const slotW  = W / NUM_BARS;
-    const PIN_TOP = 62;              // pins sit here — just above tallest bar tops
-    const MID     = H * 0.72;       // baseline at 72% down
-    const MAX_BAR = MID - PIN_TOP;  // bars capped so they don't overshoot the pins
+    const MID     = H * 0.50;        // dead center — symmetric waveform
+    const MAX_BAR = MID * 0.88;      // bars can use 88% of each half
 
     for (let i=0;i<barData.length;i++) {
       const bar=barData[i], bp=barProps[i];
@@ -2099,28 +2098,29 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
       const bw   = Math.min(bp.width, slotW-1.5);
       const x    = i*slotW + (slotW-bw)/2;
       const barH = Math.min(bar.height*bar.hoverScale, MAX_BAR);
-      const y    = MID - barH;
 
       let color, opacity;
       if      (bar.state==='pending') { color='#D6E7F1'; opacity=0.22; }
       else if (bar.state==='playing') { color=getBarColor(bar); opacity=1.0; }
       else                            { color=getBarColor(bar); opacity=0.80; }
 
-      ctx.globalAlpha=opacity; ctx.fillStyle=color;
-      ctx.beginPath(); ctx.roundRect?ctx.roundRect(x,y,bw,barH,2):ctx.rect(x,y,bw,barH); ctx.fill();
+      const rr = (x,y,w,h) => { ctx.beginPath(); ctx.roundRect?ctx.roundRect(x,y,w,h,2):ctx.rect(x,y,w,h); ctx.fill(); };
 
+      // ── Top half (above center) ──
+      ctx.globalAlpha=opacity; ctx.fillStyle=color;
+      rr(x, MID-barH, bw, barH);
+
+      // ── Bottom half (mirror, slightly softer) ──
+      ctx.globalAlpha=opacity*0.72;
+      rr(x, MID, bw, barH);
+
+      // Glow on playhead bar (both halves)
       if (bar.state==='playing') {
-        ctx.shadowColor=color; ctx.shadowBlur=12; ctx.globalAlpha=0.45;
-        ctx.beginPath(); ctx.roundRect?ctx.roundRect(x,y,bw,barH,2):ctx.rect(x,y,bw,barH); ctx.fill();
+        ctx.shadowColor=color; ctx.shadowBlur=14; ctx.globalAlpha=0.4;
+        rr(x, MID-barH, bw, barH);
+        rr(x, MID, bw, barH);
         ctx.shadowBlur=0;
       }
-
-      // Reflection
-      const reflH=Math.min(barH*0.35, H-MID-2); // stay within canvas bottom
-      const grad=ctx.createLinearGradient(0,MID,0,MID+reflH);
-      grad.addColorStop(0,hexRgba(color,opacity*0.28)); grad.addColorStop(0.8,hexRgba(color,0));
-      ctx.globalAlpha=1; ctx.fillStyle=grad;
-      ctx.beginPath(); ctx.roundRect?ctx.roundRect(x,MID,bw,reflH,2):ctx.rect(x,MID,bw,reflH); ctx.fill();
     }
     ctx.globalAlpha=1;
     drawPins(W, MID);
@@ -2129,8 +2129,8 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   /* ── Canvas attribute pins — always visible, animate when active ── */
   function drawPins(W, MID) {
     const t      = heroVideo ? heroVideo.currentTime % duration : 0;
-    const labelY = 60;   // just above tallest bar tops — almost touching waveform
-    const dotY   = 75;   // dot just below label
+    const labelY = 82;   // upper zone of symmetric waveform — bars frame the label
+    const dotY   = 97;   // dot just below, near the visual center of upper bars
 
     PHRASES.forEach(p => {
       const pinX  = (p.start / duration) * W;

@@ -137,7 +137,7 @@
     z-index: 2;
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 40px 100px;
+    padding: 0 40px 230px;
     width: 100%;
   }
 
@@ -240,85 +240,40 @@
     cursor: pointer;
   }
 
-  /* ── Phrase Card (right side of hero) ── */
+  /* ── Phrase Card — pitch-deck style ── */
   .phrase-card {
     position: absolute;
     right: 48px;
-    bottom: 190px;
-    width: 272px;
-    background: rgba(10,20,38,0.82);
-    border: 1px solid rgba(255,255,255,0.13);
-    border-radius: 14px;
-    padding: 20px 22px 18px;
+    bottom: 220px;
+    width: 264px;
+    background: rgba(6,14,28,0.93);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 16px;
+    padding: 16px 18px 15px;
     opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.35s ease, transform 0.35s ease;
+    transform: translateY(14px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
     pointer-events: none;
     z-index: 5;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45);
   }
-  .phrase-card.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .phrase-card-attr {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  .phrase-card-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .phrase-card-label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-  }
-  .phrase-card-quote {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-style: italic;
-    color: rgba(255,255,255,0.93);
-    line-height: 1.55;
-    margin: 0 0 14px;
-    quotes: '\201C' '\201D';
-  }
-  .phrase-card-quote::before { content: open-quote; }
-  .phrase-card-quote::after  { content: close-quote; }
-  .phrase-card-metric {
-    border-top: 1px solid rgba(255,255,255,0.09);
-    padding-top: 13px;
-  }
-  .phrase-card-curve {
-    display: block;
-    width: 100%;
-    height: 44px;
-    overflow: visible;
-  }
-  .phrase-card-pct-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 6px;
-  }
-  .phrase-card-pct-label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
-    color: rgba(255,255,255,0.45);
-  }
-  .phrase-card-pct-value {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-  }
-  @media (max-width: 900px) { .phrase-card { display: none; } }
+  .phrase-card.visible { opacity: 1; transform: translateY(0); }
+  /* inner elements built by JS */
+  .pc-header { display:flex; align-items:center; gap:7px; margin-bottom:13px; }
+  .pc-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .pc-title { font-family:'DM Sans',sans-serif; font-size:10px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:rgba(255,255,255,0.45); }
+  .pc-score-row { display:grid; grid-template-columns:1fr 80px 28px; align-items:center; gap:8px; margin-bottom:8px; }
+  .pc-score-name { font-family:'DM Sans',sans-serif; font-size:13px; color:rgba(255,255,255,0.82); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pc-bar-wrap { height:3px; background:rgba(255,255,255,0.10); border-radius:2px; overflow:hidden; }
+  .pc-bar { height:100%; border-radius:2px; }
+  .pc-score-num { font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; text-align:right; }
+  .pc-sep { border:none; border-top:1px solid rgba(255,255,255,0.08); margin:11px 0 10px; }
+  .pc-cohort-head { font-family:'DM Sans',sans-serif; font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,0.30); margin-bottom:8px; }
+  .pc-curve { display:block; width:100%; height:50px; }
+  .pc-cohort-tag { font-family:'DM Sans',sans-serif; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; margin-top:8px; }
+  @media (max-width: 960px) { .phrase-card { display:none; } }
 
   /* ── Stats Strip ── */
   .stats-strip {
@@ -1156,24 +1111,11 @@
     <p class="hero-sub">Voice-based behavioral health screening for K–12, built so the conversation that identifies the need is the same one that begins the support. Your students, in their own words, at scale.</p>
     <div class="hero-actions">
       <a href="#voice-intelligence" class="btn-primary">Hear It in Action ↓</a>
-      <a href="../playbook.pdf" class="btn-ghost" target="_blank">Download playbook →</a>
+      <a href="../playbook.pdf" class="btn-ghost" target="_blank">Download Playbook →</a>
     </div>
   </div>
-  <!-- Phrase insight card — top-right during playback -->
-  <div class="phrase-card" id="phraseCard">
-    <div class="phrase-card-attr">
-      <span class="phrase-card-dot" id="phraseCardDot"></span>
-      <span class="phrase-card-label" id="phraseCardLabel"></span>
-    </div>
-    <blockquote class="phrase-card-quote" id="phraseCardQuote"></blockquote>
-    <div class="phrase-card-metric">
-      <svg class="phrase-card-curve" id="phraseCardCurve" viewBox="0 0 228 44" preserveAspectRatio="none"></svg>
-      <div class="phrase-card-pct-row">
-        <span class="phrase-card-pct-label">Among all responses</span>
-        <span class="phrase-card-pct-value" id="phraseCardPct"></span>
-      </div>
-    </div>
-  </div>
+  <!-- Phrase insight card — populated by JS, pitch-deck style -->
+  <div class="phrase-card" id="phraseCard"></div>
 
   <div class="waveform-divider" id="waveformSection">
     <div class="waveform-phrase-slot" id="waveformPhrase"></div>
@@ -2047,12 +1989,20 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   // Sync to the hero background video (already autoplays muted)
   const heroVideo = document.querySelector('.hero-video-wrap video');
 
-  /* ── Phrase map: 4 attribute moments with percentile scores ── */
+  /* ── Phrase map: 4 attribute moments with score rows + cohort position ── */
   const PHRASES = [
-    { text: 'The reason I get out of bed every morning', label: 'Self-Insight',        color: '#F37163', start: 1.30, end: 3.94, pct: 87 },
-    { text: 'I want to achieve my goals',               label: 'Reflective Growth',    color: '#638EC5', start: 5.08, end: 7.04, pct: 82 },
-    { text: 'be able to help other people',             label: 'Relational Awareness', color: '#8B6FB8', start: 8.70, end: 11.6, pct: 91 },
-    { text: 'small changes will make a big difference', label: 'Reflective Growth',    color: '#638EC5', start: 17.1, end: 19.84,pct: 79 },
+    { text: 'The reason I get out of bed every morning', label: 'Self-Insight',        color: '#F37163', start: 1.30, end: 3.94,
+      pct: 87, cohortTag: 'TOP 13% OF COHORT',
+      scores: [{name:'Self-Insight',val:87},{name:'Motivation',val:79},{name:'Purpose',val:74}] },
+    { text: 'I want to achieve my goals',               label: 'Reflective Growth',    color: '#638EC5', start: 5.08, end: 7.04,
+      pct: 82, cohortTag: 'TOP 18% OF COHORT',
+      scores: [{name:'Reflective Growth',val:82},{name:'Goal-Setting',val:76},{name:'Growth Mindset',val:88}] },
+    { text: 'be able to help other people',             label: 'Relational Awareness', color: '#8B6FB8', start: 8.70, end: 11.6,
+      pct: 91, cohortTag: 'TOP 9% OF COHORT',
+      scores: [{name:'Relational Awareness',val:91},{name:'Empathy',val:85},{name:'Collaboration',val:78}] },
+    { text: 'small changes will make a big difference', label: 'Reflective Growth',    color: '#638EC5', start: 17.1, end: 19.84,
+      pct: 79, cohortTag: 'TOP 21% OF COHORT',
+      scores: [{name:'Reflective Growth',val:79},{name:'Resilience',val:83},{name:'Purpose',val:88}] },
   ];
   const NON_PHRASE_COLOR = '#638EC5';
 
@@ -2174,69 +2124,87 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
     drawPins(W, MID);
   }
 
-  /* ── Canvas attribute pins ── */
+  /* ── Canvas attribute pins — always visible, animate when active ── */
   function drawPins(W, MID) {
-    const t = heroVideo ? heroVideo.currentTime : 0;
-    if (t === 0) return;
+    const t = heroVideo ? heroVideo.currentTime % duration : 0;
+    const dotY = MID - 22;
+
     PHRASES.forEach(p => {
-      const pinX=(p.start/duration)*W;
-      const fi=p.start-0.2, fo=p.end+0.4;
-      let op=0;
-      if      (t>=fi && t<p.start) op=(t-fi)/0.2;
-      else if (t>=p.start && t<=p.end) op=1;
-      else if (t>p.end && t<=fo) op=1-(t-p.end)/0.4;
-      if (op<=0) return;
-      const safeX=Math.max(50,Math.min(W-50,pinX));
-      const dotY=MID-24;
-      if (t>=p.start && t<=p.end) {
-        const pulse=((t-p.start)*1.4)%1;
-        ctx.globalAlpha=op*(1-pulse)*0.65; ctx.strokeStyle=p.color; ctx.lineWidth=1.5;
-        ctx.beginPath(); ctx.arc(pinX,dotY,6+pulse*14,0,Math.PI*2); ctx.stroke();
+      const pinX  = (p.start / duration) * W;
+      const safeX = Math.max(52, Math.min(W - 52, pinX));
+      const isActive = t >= p.start && t <= p.end;
+      const isFadeIn  = t >= p.start - 0.2 && t < p.start;
+      const isFadeOut = t > p.end && t <= p.end + 0.4;
+
+      // Always draw dot at base opacity; brighten during active phrase
+      let dotOp = 0.28; // always-on resting state
+      if (isFadeIn)   dotOp = 0.28 + (t - (p.start-0.2)) / 0.2 * 0.72;
+      if (isActive)   dotOp = 1.0;
+      if (isFadeOut)  dotOp = 1.0 - (t - p.end) / 0.4 * 0.72;
+
+      // Pulse ring only during active
+      if (isActive) {
+        const pulse = ((t - p.start) * 1.4) % 1;
+        ctx.globalAlpha = (1 - pulse) * 0.55;
+        ctx.strokeStyle = p.color; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(pinX, dotY, 6 + pulse * 14, 0, Math.PI*2); ctx.stroke();
       }
-      ctx.globalAlpha=op; ctx.fillStyle=p.color;
-      ctx.beginPath(); ctx.arc(pinX,dotY,6,0,Math.PI*2); ctx.fill();
-      ctx.font=`600 ${MOBILE?11:13}px 'DM Sans',sans-serif`; ctx.textAlign='center'; ctx.fillStyle=p.color;
-      ctx.fillText(p.label.toUpperCase(), safeX, dotY-13);
-      ctx.textAlign='left'; ctx.globalAlpha=1;
+
+      // Dot
+      ctx.globalAlpha = dotOp; ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(pinX, dotY, 5.5, 0, Math.PI*2); ctx.fill();
+
+      // Label — always visible at low opacity, full when active
+      const labelOp = isActive ? 1.0 : isFadeIn ? dotOp : isFadeOut ? dotOp : 0.28;
+      ctx.globalAlpha = labelOp;
+      ctx.fillStyle = p.color;
+      ctx.font = `600 ${MOBILE ? 10 : 12}px 'DM Sans',sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText(p.label.toUpperCase(), safeX, dotY - 12);
+      ctx.textAlign = 'left';
     });
+    ctx.globalAlpha = 1;
   }
 
-  /* ── Bell curve SVG for phrase card ── */
+  /* ── Bell curve SVG (cohort position) ── */
   function buildCurveSVG(pct, color) {
-    const W=228, H=44, x=pct/100*W;
-    // Normal-ish bell curve path
-    const curve=`M0,${H} C30,${H} 50,4 ${W/2},4 C${W-50},4 ${W-30},${H} ${W},${H}`;
-    // Shaded fill up to marker
-    const fill=`M0,${H} C30,${H} 50,4 ${x<W/2?x:W/2},${x<W/2?H-(x/(W/2))*(H-4):4} ${x>=W/2?`C${W/2+(x-W/2)*0.8},${4+(x-W/2)/(W/2)*(H-4)} ${x},${H} ${x},${H}`:'L'+x+','+H} Z`;
-    return `
-      <defs>
-        <linearGradient id="cg${pct}" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0%" stop-color="${color}" stop-opacity="0.12"/>
-          <stop offset="100%" stop-color="${color}" stop-opacity="0.38"/>
-        </linearGradient>
-        <clipPath id="cc${pct}"><rect x="0" y="0" width="${x}" height="${H}"/></clipPath>
-      </defs>
-      <path d="${curve}" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-      <path d="${curve}" fill="none" stroke="${color}" stroke-width="1.5" clip-path="url(#cc${pct})" opacity="0.7"/>
-      <rect x="0" y="0" width="${x}" height="${H}" fill="url(#cg${pct})" clip-path="url(#cc${pct})"/>
-      <line x1="${x}" y1="2" x2="${x}" y2="${H}" stroke="${color}" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="${x}" cy="4" r="3.5" fill="${color}"/>`;
+    const CW=228, CH=50, markerX = pct/100 * CW;
+    const curve = `M0,${CH} C35,${CH} 55,4 ${CW/2},4 C${CW-55},4 ${CW-35},${CH} ${CW},${CH}`;
+    const uid = `c${pct}${color.slice(1)}`;
+    return `<defs>
+      <linearGradient id="g${uid}" x1="0" x2="1"><stop offset="0%" stop-color="${color}" stop-opacity="0.08"/><stop offset="100%" stop-color="${color}" stop-opacity="0.35"/></linearGradient>
+      <clipPath id="cp${uid}"><rect x="0" y="0" width="${markerX}" height="${CH}"/></clipPath>
+    </defs>
+    <path d="${curve}" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+    <path d="${curve}" fill="none" stroke="${color}" stroke-width="1.5" clip-path="url(#cp${uid})" opacity="0.75"/>
+    <rect x="0" y="0" width="${markerX}" height="${CH}" fill="url(#g${uid})" clip-path="url(#cp${uid})"/>
+    <line x1="${markerX}" y1="0" x2="${markerX}" y2="${CH}" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+    <circle cx="${markerX}" cy="4" r="4" fill="${color}"/>`;
   }
 
-  /* ── Phrase card update ── */
+  /* ── Phrase card — pitch-deck style, fully built by JS ── */
   function updateCard(t) {
     const active = PHRASES.find(p => t >= p.start && t <= p.end) || null;
     if (active === lastPhrase) return;
     lastPhrase = active;
     if (!card) return;
     if (active) {
-      card.querySelector('#phraseCardDot').style.background = active.color;
-      card.querySelector('#phraseCardLabel').textContent = active.label.toUpperCase();
-      card.querySelector('#phraseCardLabel').style.color = active.color;
-      card.querySelector('#phraseCardQuote').textContent = active.text;
-      card.querySelector('#phraseCardCurve').innerHTML = buildCurveSVG(active.pct, active.color);
-      card.querySelector('#phraseCardPct').textContent = `${active.pct}th percentile`;
-      card.querySelector('#phraseCardPct').style.color = active.color;
+      const scoreRows = active.scores.map(s => `
+        <div class="pc-score-row">
+          <span class="pc-score-name">${s.name}</span>
+          <div class="pc-bar-wrap"><div class="pc-bar" style="width:${s.val}%;background:${active.color}"></div></div>
+          <span class="pc-score-num" style="color:${active.color}">${s.val}</span>
+        </div>`).join('');
+      card.innerHTML = `
+        <div class="pc-header">
+          <span class="pc-dot" style="background:${active.color}"></span>
+          <span class="pc-title">Voice Intelligence</span>
+        </div>
+        <div class="pc-scores">${scoreRows}</div>
+        <hr class="pc-sep">
+        <div class="pc-cohort-head">Cohort Position</div>
+        <svg class="pc-curve" viewBox="0 0 228 50" preserveAspectRatio="none">${buildCurveSVG(active.pct, active.color)}</svg>
+        <div class="pc-cohort-tag" style="color:${active.color}">${active.cohortTag}</div>`;
       card.classList.add('visible');
     } else {
       card.classList.remove('visible');

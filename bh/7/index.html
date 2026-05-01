@@ -230,22 +230,30 @@
     left: 0;
     right: 0;
     z-index: 3;
-    pointer-events: none;
     overflow: hidden;
     line-height: 0;
   }
+  .waveform-phrase-slot {
+    text-align: center;
+    padding: 0 40px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    font-style: italic;
+    color: rgba(255,255,255,0.92);
+    letter-spacing: -0.01em;
+    min-height: 36px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .waveform-canvas {
     width: 100%;
-    height: 120px;
+    height: 110px;
     display: block;
-  }
-  .wave-bar {
-    transform-origin: bottom center;
-    animation: wavePulse 1.8s ease-in-out infinite;
-  }
-  @keyframes wavePulse {
-    0%, 100% { transform: scaleY(1); opacity: 0.6; }
-    50% { transform: scaleY(0.4); opacity: 1; }
+    cursor: pointer;
   }
 
   /* ── Stats Strip ── */
@@ -1080,14 +1088,15 @@
   <div class="hero-gradient"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">Universal Behavioral Health Screening</div>
-    <h1 class="hero-headline">What If Close Listening<br>Was Where Authentic<br><em>Student Support Began?</em></h1>
+    <h1 class="hero-headline">What If Just Listening<br>Was Where Authentic<br><em>Student Support Began?</em></h1>
     <p class="hero-sub">Voice-based behavioral health screening for K–12, built so the conversation that identifies the need is the same one that begins the support. Your students, in their own words, at scale.</p>
     <div class="hero-actions">
       <a href="#voice-intelligence" class="btn-primary">Hear It in Action ↓</a>
       <a href="../playbook.pdf" class="btn-ghost" target="_blank">Download playbook →</a>
     </div>
   </div>
-  <div class="waveform-divider" aria-hidden="true">
+  <div class="waveform-divider" id="waveformSection">
+    <div class="waveform-phrase-slot" id="waveformPhrase"></div>
     <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
   </div>
 </section>
@@ -1940,109 +1949,335 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
 /* ──────────────────────────────
    KARAOKE — reset on video end/seek
 ────────────────────────────── */
-/* ─────────────────────────────────────────────
-   WHISPER-SYNCED WAVEFORM (calexico-v7.mp4)
-   Word timestamps from Whisper small model.
-   getAmp(t) returns 0..1 based on whether t
-   falls inside a spoken word or silence.
-───────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────
+   HERO WAVEFORM — SPEC BUILD
+   Real MP3 amplitude via Web Audio API + Whisper phrase sync
+   rAF only (NO timeupdate) per spec §3
+   Audio: ../audio/calexico-hero.mp3
+   Phrases from real Whisper timestamps (calexico-v7.mp4)
+──────────────────────────────────────────────────────────────────*/
 (() => {
-  // Whisper word timestamps: {t: start, end: end}
-  const WORDS = [
-    {t:4.08,end:4.68},{t:4.68,end:5.02},{t:5.02,end:5.66},{t:5.66,end:5.9},
-    {t:5.9,end:6.16},{t:6.16,end:6.48},{t:6.48,end:6.78},{t:6.78,end:7.06},
-    {t:7.86,end:8.14},{t:8.14,end:8.54},{t:8.54,end:8.92},{t:8.92,end:9.22},
-    {t:9.22,end:9.4},{t:9.4,end:9.5},{t:9.5,end:9.78},{t:9.78,end:9.94},
-    {t:9.94,end:9.94},{t:9.94,end:10.26},{t:10.38,end:10.48},{t:10.48,end:10.58},
-    {t:10.58,end:10.78},{t:10.78,end:10.98},{t:10.98,end:11.0},{t:11.0,end:11.18},
-    {t:11.18,end:11.4},{t:12.2,end:12.8},{t:12.8,end:13.4},{t:13.4,end:13.96},
-    {t:13.96,end:14.3},{t:14.3,end:14.84},{t:14.84,end:14.88},{t:14.88,end:15.28},
-    {t:15.62,end:16.16},{t:16.16,end:16.36},{t:16.36,end:16.72},{t:16.72,end:17.06},
-    {t:17.06,end:17.4},{t:17.4,end:17.98},{t:17.98,end:18.38},{t:18.38,end:18.76},
-    {t:18.76,end:18.86},{t:18.86,end:19.06},{t:19.06,end:19.18},{t:19.18,end:19.38},
-    {t:19.38,end:19.72}
-  ];
-
   const canvas = document.getElementById('waveformCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const heroVideo = document.querySelector('.hero-video-wrap video');
-  const NUM_BARS = 80;
-  const SILENCE = 0.06;
-  let smoothed = new Array(NUM_BARS).fill(SILENCE);
-  let lastWordEnd = 0;
+  const phraseSlot = document.getElementById('waveformPhrase');
+  const MOBILE = window.innerWidth < 768;
+  const NUM_BARS = MOBILE ? 70 : 140;
+  const AUDIO_SRC = '../audio/calexico-hero.mp3';
 
+  /* ── Phrase map (4 attribute pins) ── */
+  const PHRASES = [
+    { text: 'The reason I get out of bed every morning', label: 'Self-Insight',        color: '#F37163', start: 1.30, end: 3.94 },
+    { text: 'I want to achieve my goals',               label: 'Reflective Growth',    color: '#638EC5', start: 5.08, end: 7.04 },
+    { text: 'be able to help other people',             label: 'Relational Awareness',  color: '#8B6FB8', start: 8.70, end: 11.6 },
+    { text: 'small changes will make a big difference', label: 'Reflective Growth',    color: '#638EC5', start: 17.1, end: 19.84},
+  ];
+  const NON_PHRASE_COLOR = '#638EC5';
+
+  /* ── Seeded PRNG (mulberry32) — deterministic bar layout ── */
+  function mulberry32(seed) {
+    return function() {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  const seed = AUDIO_SRC.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const rng  = mulberry32(seed);
+
+  /* ── Pre-compute bar visual properties ── */
+  const barProps = [];
+  for (let i = 0; i < NUM_BARS; i++) {
+    const r = rng();
+    let width, isGap = false;
+    if      (r < 0.038)  { isGap = true; width = 0; }          // ~1/26 gap
+    else if (r < 0.149)  { width = MOBILE ? 3   : 5;   }       // ~1/9 wide
+    else if (r < 0.226)  { width = MOBILE ? 1.5 : 2;   }       // ~1/13 narrow
+    else                 { width = MOBILE ? 2   : 3;   }        // default
+    barProps.push({ width, isGap, gapPx: 2 });
+  }
+
+  /* ── State ── */
+  let barData    = [];   // { height, timestamp, state, phraseIdx, hoverScale }
+  let duration   = 20.13;
+  let lastPhrase = null;
+  let rafId      = null;
+  const audio    = new Audio(AUDIO_SRC);
+  audio.preload  = 'auto';
+
+  /* ── Helper: which phrase does timestamp t belong to? ── */
+  function getPhraseIdx(t) {
+    for (let i = 0; i < PHRASES.length; i++) {
+      if (t >= PHRASES[i].start && t <= PHRASES[i].end) return i;
+    }
+    return -1;
+  }
+
+  function getBarColor(bar) {
+    return bar.phraseIdx >= 0 ? PHRASES[bar.phraseIdx].color : NON_PHRASE_COLOR;
+  }
+
+  function hexRgba(hex, a) {
+    const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${a})`;
+  }
+
+  /* ── Load real amplitude data from MP3 ── */
+  async function loadAmplitude() {
+    try {
+      const AudioCtx   = window.AudioContext || window.webkitAudioContext;
+      const audioCtx   = new AudioCtx();
+      const res        = await fetch(AUDIO_SRC);
+      const buf        = await res.arrayBuffer();
+      const decoded    = await audioCtx.decodeAudioData(buf);
+      duration         = decoded.duration;
+      const ch         = decoded.getChannelData(0);
+      const sPerBar    = Math.floor(ch.length / NUM_BARS);
+
+      barData = [];
+      for (let i = 0; i < NUM_BARS; i++) {
+        const bp = barProps[i];
+        const ts = (i / NUM_BARS) * duration;
+        if (bp.isGap) { barData.push({ height:0, timestamp:ts, state:'pending', phraseIdx:-1, hoverScale:1 }); continue; }
+        let sum = 0;
+        for (let j = 0; j < sPerBar; j++) sum += Math.abs(ch[i * sPerBar + j]);
+        const amp = sum / sPerBar;
+        // Wider gap at troughs
+        if (amp < 0.05) bp.gapPx = 5;
+        barData.push({ height: Math.max(8, amp * 200), timestamp: ts, state:'pending', phraseIdx: getPhraseIdx(ts), hoverScale:1 });
+      }
+      audioCtx.close();
+      render();
+    } catch(e) {
+      console.warn('[Hero Waveform] Using synthesized amplitude — replace with real Whisper output for accurate sync.', e);
+      synthesize();
+    }
+  }
+
+  function synthesize() {
+    const r2 = mulberry32(99);
+    barData = [];
+    for (let i = 0; i < NUM_BARS; i++) {
+      const bp = barProps[i];
+      const ts = (i / NUM_BARS) * duration;
+      if (bp.isGap) { barData.push({ height:0, timestamp:ts, state:'pending', phraseIdx:-1, hoverScale:1 }); continue; }
+      const env  = 0.3 + 0.7 * Math.abs(Math.sin(i * 0.43 + 0.6));
+      const nz   = 0.5 + 0.5 * r2();
+      barData.push({ height: Math.max(8, env * nz * 80), timestamp:ts, state:'pending', phraseIdx: getPhraseIdx(ts), hoverScale:1 });
+    }
+    render();
+  }
+
+  /* ── Canvas sizing ── */
   function resize() {
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = canvas.offsetWidth * dpr;
+    canvas.width  = canvas.offsetWidth  * dpr;
     canvas.height = canvas.offsetHeight * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    render();
   }
   resize();
   window.addEventListener('resize', resize);
 
-  // Returns 0..1: 1.0 during word, decays after, near 0 in silence
-  function getAmp(t) {
-    // Check if we're inside a word
-    for (const w of WORDS) {
-      if (t >= w.t && t <= w.end) {
-        // Slight variation within word based on position
-        const pos = (t - w.t) / Math.max(0.01, w.end - w.t);
-        return 0.65 + 0.35 * Math.sin(pos * Math.PI); // envelope: ramps up then down
-      }
-    }
-    // Post-word decay
-    let decay = SILENCE;
-    for (const w of WORDS) {
-      if (t > w.end && t < w.end + 0.25) {
-        const d = (t - w.end) / 0.25;
-        decay = Math.max(decay, 0.65 * (1 - d));
-      }
-    }
-    return decay;
-  }
-
-  function draw() {
-    const W = canvas.offsetWidth;
-    const H = canvas.offsetHeight;
+  /* ── Render ── */
+  function render() {
+    const W   = canvas.offsetWidth;
+    const H   = canvas.offsetHeight;
     ctx.clearRect(0, 0, W, H);
-    const t = heroVideo ? (heroVideo.currentTime % 20.125) : 0;
-    const baseAmp = getAmp(t);
-    const barW = W / NUM_BARS;
-    const gap = barW * 0.28;
-    const barPx = barW - gap;
-    const now = Date.now();
+    if (!barData.length) return;
 
-    for (let i = 0; i < NUM_BARS; i++) {
-      // Each bar oscillates independently at a different frequency — genuinely jagged
-      const f1 = 0.003 + (i % 11) * 0.00055;
-      const f2 = 0.007 + (i % 7)  * 0.00091;
-      const f3 = 0.013 + (i % 5)  * 0.00120;
-      const p1 = Math.sin(now * f1 + i * 1.7);
-      const p2 = Math.sin(now * f2 + i * 2.9 + 1.0);
-      const p3 = Math.sin(now * f3 + i * 0.8 + 2.3);
-      // Combine three waves — different weights for organic feel
-      const combo = p1 * 0.5 + p2 * 0.35 + p3 * 0.15;
-      // Static envelope — gives each bar a fixed personality (some naturally tall, some short)
-      const envelope = 0.25 + 0.75 * Math.abs(Math.sin(i * 0.43 + 0.6));
-      // Push toward extremes: sqrt makes low bars shorter, high bars taller
-      const normalized = (combo + 1) / 2;        // 0..1
-      const jagged = Math.pow(normalized, 0.6);   // exaggerate highs, compress lows
-      const localAmp = baseAmp * envelope * (0.15 + 0.85 * jagged);
-      // No smoothing — raw per-frame changes = hard jagged look
-      const barH = Math.max(3, localAmp * H * 0.95);
-      const x = i * barW + gap / 2;
-      const y = H - barH;
-      const alpha = 0.35 + localAmp * 0.65;
-      ctx.fillStyle = "rgba(243,113,99," + alpha.toFixed(2) + ")";
+    const slotW = W / NUM_BARS;  // each bar occupies this width slot
+    const MID   = H * 0.50;      // centerline
+
+    for (let i = 0; i < barData.length; i++) {
+      const bar = barData[i];
+      const bp  = barProps[i];
+      if (bp.isGap) continue;
+
+      const bw   = Math.min(bp.width, slotW - 1.5);
+      const x    = i * slotW + (slotW - bw) / 2;
+      const hs   = bar.hoverScale;
+      const barH = Math.min(bar.height * hs, MID * 1.85);
+      const y    = MID - barH;
+
+      let color, opacity;
+      if      (bar.state === 'pending') { color = '#D6E7F1'; opacity = 0.25; }
+      else if (bar.state === 'playing') { color = getBarColor(bar); opacity = 1.0; }
+      else                              { color = getBarColor(bar); opacity = 0.80; }
+
+      /* — Main bar — */
+      ctx.globalAlpha = opacity;
+      ctx.fillStyle   = color;
       ctx.beginPath();
-      if (ctx.roundRect) ctx.roundRect(x, y, barPx, barH, 2);
-      else ctx.rect(x, y, barPx, barH);
+      ctx.roundRect ? ctx.roundRect(x, y, bw, barH, 2) : ctx.rect(x, y, bw, barH);
+      ctx.fill();
+
+      /* — Glow on active playhead bar — */
+      if (bar.state === 'playing') {
+        ctx.shadowColor = color;
+        ctx.shadowBlur  = 10;
+        ctx.globalAlpha = 0.5;
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, y, bw, barH, 2) : ctx.rect(x, y, bw, barH);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      /* — Reflection (mirrored below MID at 30% opacity, fading out) — */
+      const reflH = barH * 0.6;
+      const grad  = ctx.createLinearGradient(0, MID, 0, MID + reflH);
+      grad.addColorStop(0,   hexRgba(color, opacity * 0.30));
+      grad.addColorStop(0.8, hexRgba(color, 0));
+      ctx.globalAlpha = 1;
+      ctx.fillStyle   = grad;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(x, MID, bw, reflH, 2) : ctx.rect(x, MID, bw, reflH);
       ctx.fill();
     }
-    requestAnimationFrame(draw);
+
+    ctx.globalAlpha = 1;
+    drawPins(W, MID);
   }
-  draw();
+
+  /* ── Attribute pins ── */
+  function drawPins(W, MID) {
+    if (audio.paused && audio.currentTime === 0) return; // only during/after play
+    const t = audio.currentTime;
+
+    PHRASES.forEach(p => {
+      const pinX        = (p.start / duration) * W;
+      const fadeInStart = p.start - 0.2;
+      const fadeOutEnd  = p.end   + 0.4;
+      let op = 0;
+      if      (t >= fadeInStart && t < p.start) op = (t - fadeInStart) / 0.2;
+      else if (t >= p.start     && t <= p.end ) op = 1.0;
+      else if (t >  p.end       && t <= fadeOutEnd) op = 1 - (t - p.end) / 0.4;
+      if (op <= 0) return;
+
+      // Clamp label x so it doesn't clip edges
+      const labelSize = MOBILE ? 11 : 14;
+      const safeX = Math.max(48, Math.min(W - 48, pinX));
+      const dotY  = MID - 22;
+
+      // Pulse ring
+      if (t >= p.start && t <= p.end) {
+        const pulse = ((t - p.start) * 1.5) % 1;
+        ctx.globalAlpha = op * (1 - pulse) * 0.7;
+        ctx.strokeStyle = p.color;
+        ctx.lineWidth   = 1.5;
+        ctx.beginPath();
+        ctx.arc(pinX, dotY, 6 + pulse * 12, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Dot
+      ctx.globalAlpha = op;
+      ctx.fillStyle   = p.color;
+      ctx.beginPath();
+      ctx.arc(pinX, dotY, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Label
+      ctx.fillStyle = p.color;
+      ctx.font      = `600 ${labelSize}px 'DM Sans', sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText(p.label.toUpperCase(), safeX, dotY - 12);
+      ctx.textAlign = 'left';
+    });
+
+    ctx.globalAlpha = 1;
+  }
+
+  /* ── Phrase overlay (above bars) ── */
+  function updatePhraseSlot(t) {
+    const active = PHRASES.find(p => t >= p.start && t <= p.end) || null;
+    if (active === lastPhrase) return;
+    lastPhrase = active;
+    if (active) {
+      phraseSlot.innerHTML = `${active.text} <span style="color:${active.color};font-style:normal;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em">— ${active.label}</span>`;
+      phraseSlot.style.opacity = '0';
+      requestAnimationFrame(() => { phraseSlot.style.opacity = '1'; });
+    } else {
+      phraseSlot.style.opacity = '0';
+    }
+  }
+
+  /* ── rAF animation loop (NO timeupdate, per spec §3) ── */
+  function animLoop() {
+    rafId = requestAnimationFrame(animLoop);
+    if (audio.paused) return;
+    const t = audio.currentTime;
+
+    barData.forEach(bar => {
+      const dt = bar.timestamp - t;
+      if      (dt > 0.05)  bar.state = 'pending';
+      else if (dt > -0.05) bar.state = 'playing';
+      else                 bar.state = 'played';
+    });
+
+    updatePhraseSlot(t);
+    render();
+  }
+
+  audio.addEventListener('play',  () => { if (!rafId) animLoop(); });
+  audio.addEventListener('pause', () => { render(); });
+  audio.addEventListener('ended', () => {
+    barData.forEach(b => { if (!barProps[barData.indexOf(b)].isGap) b.state = 'played'; });
+    phraseSlot.style.opacity = '0';
+    lastPhrase = null;
+    render();
+  });
+
+  /* ── Scroll-progress mode (audio paused) ── */
+  window.addEventListener('scroll', () => {
+    if (!audio.paused) return;
+    const pct = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight);
+    const idx = Math.floor(pct * barData.length);
+    barData.forEach((bar, i) => { bar.state = i < idx ? 'played' : 'pending'; });
+    render();
+  }, { passive: true });
+
+  /* ── Mouse hover (desktop only) ── */
+  if (!MOBILE) {
+    canvas.addEventListener('mousemove', e => {
+      const rect   = canvas.getBoundingClientRect();
+      const curX   = e.clientX - rect.left;
+      const slotW  = canvas.offsetWidth / NUM_BARS;
+      barData.forEach((bar, i) => {
+        const cx = i * slotW + slotW / 2;
+        const d  = Math.abs(cx - curX);
+        bar.hoverScale = d < 40 ? 1.15 : d < 80 ? 1.05 : 1.0;
+      });
+      if (audio.paused) render();
+    });
+    canvas.addEventListener('mouseleave', () => {
+      barData.forEach(b => b.hoverScale = 1.0);
+      if (audio.paused) render();
+    });
+  }
+
+  /* ── Click-to-play + scroll to Voice Intelligence ── */
+  function playAndScroll() {
+    if (!audio.paused) { audio.pause(); return; }
+    audio.currentTime = 0;
+    audio.play().catch(err => console.warn('[Hero Waveform] play() blocked:', err));
+    document.querySelector('#voice-intelligence')?.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  canvas.addEventListener('click', playAndScroll);
+
+  // Wire "Hear It in Action" CTA button (same behavior)
+  document.querySelectorAll('a[href="#voice-intelligence"], .btn-primary').forEach(el => {
+    el.addEventListener('click', e => {
+      e.preventDefault();
+      playAndScroll();
+    });
+  });
+
+  /* ── Boot ── */
+  loadAmplitude();
+  animLoop();
 })();
 
 viVideo.addEventListener('seeked', () => {

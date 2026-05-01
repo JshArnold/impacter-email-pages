@@ -119,7 +119,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 30% 35%;
+    object-position: 22% 35%;
     opacity: 0.72;
   }
 
@@ -130,9 +130,9 @@
     background: linear-gradient(
       to top,
       var(--navy) 0%,
-      rgba(15,27,46,0.75) 30%,
-      rgba(15,27,46,0.35) 60%,
-      rgba(15,27,46,0.12) 100%
+      rgba(15,27,46,0.82) 30%,
+      rgba(15,27,46,0.45) 62%,
+      rgba(15,27,46,0.18) 100%
     );
   }
 
@@ -229,18 +229,18 @@
 
   /* ── Waveform Divider ── */
   .waveform-divider {
-    width: 100%;
-    padding: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    pointer-events: none;
     overflow: hidden;
     line-height: 0;
-    background: transparent;
-    position: relative;
-    margin-top: -64px;
-    z-index: 10;
   }
   .waveform-canvas {
     width: 100%;
-    height: 80px;
+    height: 120px;
     display: block;
   }
   .wave-bar {
@@ -1069,7 +1069,7 @@
 <!-- Nav -->
 <nav id="main-nav">
   <div class="nav-logo">
-    <a href="/bh/"><img src="../images/impacter-pathway-white.svg" alt="IMPACTER Pathway"></a>
+    <a href="/bh/" style="display:flex;align-items:center;gap:10px;text-decoration:none;"><img src="../images/impacter-circle-icon.png" alt="IMPACTER" style="height:38px;width:auto;"><span style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;color:#fff;letter-spacing:-0.02em;">IMPACTER</span></a>
   </div>
   <a href="#resources" class="nav-cta">See the platform ↗</a>
 </nav>
@@ -1091,12 +1091,10 @@
       <a href="../playbook.pdf" class="btn-ghost" target="_blank">Download playbook →</a>
     </div>
   </div>
+  <div class="waveform-divider" aria-hidden="true">
+    <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
+  </div>
 </section>
-
-<!-- Waveform Divider -->
-<div class="waveform-divider" aria-hidden="true">
-  <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
-</div>
 
 <!-- Stats Strip -->
 <div class="stats-strip" id="stats">
@@ -1947,19 +1945,36 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
    KARAOKE — reset on video end/seek
 ────────────────────────────── */
 /* ─────────────────────────────────────────────
-   AUDIO-SYNCED WAVEFORM (calexico-v7.mp4)
-   201 RMS amplitude values, one per 100ms
+   WHISPER-SYNCED WAVEFORM (calexico-v7.mp4)
+   Word timestamps from Whisper small model.
+   getAmp(t) returns 0..1 based on whether t
+   falls inside a spoken word or silence.
 ───────────────────────────────────────────── */
 (() => {
-  const AMP = [0.152,0.082,0.081,0.081,0.081,0.081,0.082,0.081,0.083,0.083,0.059,0.045,0.059,0.074,0.059,0.423,0.059,0.07,0.062,0.066,0.108,0.054,0.055,0.081,0.034,0.066,0.114,0.051,0.033,0.031,0.042,0.13,0.991,0.224,0.085,0.091,0.114,0.096,0.07,0.059,0.054,0.073,0.082,0.065,0.032,0.164,0.097,0.389,0.347,0.085,0.035,0.057,0.064,0.081,0.059,0.065,0.018,0.068,0.11,0.068,0.053,0.095,0.065,0.069,0.082,0.065,0.061,0.076,0.079,0.055,0.094,0.087,0.082,0.083,0.068,0.057,0.07,0.081,0.105,0.141,0.028,0.07,0.037,0.082,0.076,0.073,0.081,0.098,0.065,0.076,0.071,0.047,0.051,0.083,0.066,0.076,0.09,0.077,0.054,0.064,0.062,0.069,0.058,0.096,0.051,0.073,0.467,0.119,0.073,0.048,0.086,0.554,1.0,0.186,0.269,0.033,0.062,0.065,0.063,0.059,0.055,0.062,0.063,0.069,0.069,0.07,0.068,0.054,0.135,0.059,0.077,0.065,0.054,0.08,0.073,0.059,0.107,0.056,0.057,0.075,0.102,0.075,0.075,0.075,0.07,0.061,0.072,0.065,0.114,0.058,0.075,0.073,0.078,0.081,0.083,0.086,0.087,0.086,0.193,0.07,0.073,0.083,0.082,0.073,0.067,0.071,0.066,0.082,0.033,0.051,0.02,0.033,0.028,0.02,0.065,0.072,0.069,0.072,0.063,0.094,0.049,0.112,0.062,0.071,0.041,0.078,0.068,0.061,0.093,0.055,0.096,0.037,0.181,0.058,0.079,0.153,0.035,0.106,0.068,0.078,0.046];
+  // Whisper word timestamps: {t: start, end: end}
+  const WORDS = [
+    {t:4.08,end:4.68},{t:4.68,end:5.02},{t:5.02,end:5.66},{t:5.66,end:5.9},
+    {t:5.9,end:6.16},{t:6.16,end:6.48},{t:6.48,end:6.78},{t:6.78,end:7.06},
+    {t:7.86,end:8.14},{t:8.14,end:8.54},{t:8.54,end:8.92},{t:8.92,end:9.22},
+    {t:9.22,end:9.4},{t:9.4,end:9.5},{t:9.5,end:9.78},{t:9.78,end:9.94},
+    {t:9.94,end:9.94},{t:9.94,end:10.26},{t:10.38,end:10.48},{t:10.48,end:10.58},
+    {t:10.58,end:10.78},{t:10.78,end:10.98},{t:10.98,end:11.0},{t:11.0,end:11.18},
+    {t:11.18,end:11.4},{t:12.2,end:12.8},{t:12.8,end:13.4},{t:13.4,end:13.96},
+    {t:13.96,end:14.3},{t:14.3,end:14.84},{t:14.84,end:14.88},{t:14.88,end:15.28},
+    {t:15.62,end:16.16},{t:16.16,end:16.36},{t:16.36,end:16.72},{t:16.72,end:17.06},
+    {t:17.06,end:17.4},{t:17.4,end:17.98},{t:17.98,end:18.38},{t:18.38,end:18.76},
+    {t:18.76,end:18.86},{t:18.86,end:19.06},{t:19.06,end:19.18},{t:19.18,end:19.38},
+    {t:19.38,end:19.72}
+  ];
 
   const canvas = document.getElementById('waveformCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const heroVideo = document.querySelector('.hero-video-wrap video');
   const NUM_BARS = 80;
-  const MIN_H = 0.08;
-  let smoothed = new Array(NUM_BARS).fill(MIN_H);
+  const SILENCE = 0.06;
+  let smoothed = new Array(NUM_BARS).fill(SILENCE);
+  let lastWordEnd = 0;
 
   function resize() {
     const dpr = window.devicePixelRatio || 1;
@@ -1970,31 +1985,45 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   resize();
   window.addEventListener('resize', resize);
 
+  // Returns 0..1: 1.0 during word, decays after, near 0 in silence
   function getAmp(t) {
-    const idx = Math.floor(t * 10);
-    if (idx < 0 || idx >= AMP.length) return MIN_H;
-    const frac = (t * 10) - idx;
-    const a = AMP[idx];
-    const b = AMP[Math.min(idx + 1, AMP.length - 1)];
-    return Math.max(MIN_H, a + (b - a) * frac);
+    // Check if we're inside a word
+    for (const w of WORDS) {
+      if (t >= w.t && t <= w.end) {
+        // Slight variation within word based on position
+        const pos = (t - w.t) / Math.max(0.01, w.end - w.t);
+        return 0.65 + 0.35 * Math.sin(pos * Math.PI); // envelope: ramps up then down
+      }
+    }
+    // Post-word decay
+    let decay = SILENCE;
+    for (const w of WORDS) {
+      if (t > w.end && t < w.end + 0.25) {
+        const d = (t - w.end) / 0.25;
+        decay = Math.max(decay, 0.65 * (1 - d));
+      }
+    }
+    return decay;
   }
 
   function draw() {
     const W = canvas.offsetWidth;
     const H = canvas.offsetHeight;
     ctx.clearRect(0, 0, W, H);
-    const t = heroVideo ? heroVideo.currentTime : 0;
+    const t = heroVideo ? (heroVideo.currentTime % 20.125) : 0;
     const barW = W / NUM_BARS;
-    const gap = barW * 0.3;
+    const gap = barW * 0.28;
     const barPx = barW - gap;
+
     for (let i = 0; i < NUM_BARS; i++) {
-      const offset = (i - NUM_BARS / 2) * 0.04;
-      const target = getAmp(Math.max(0, t + offset));
-      smoothed[i] += (target - smoothed[i]) * 0.18;
-      const barH = Math.max(4, smoothed[i] * H * 0.88);
+      // Spread bars across ±0.15s window so neighbors show adjacent speech energy
+      const spread = ((i / (NUM_BARS - 1)) - 0.5) * 0.3;
+      const target = getAmp(Math.max(0, t + spread));
+      smoothed[i] += (target - smoothed[i]) * 0.22;
+      const barH = Math.max(3, smoothed[i] * H * 0.95);
       const x = i * barW + gap / 2;
       const y = H - barH;
-      const alpha = 0.3 + smoothed[i] * 0.7;
+      const alpha = 0.25 + smoothed[i] * 0.75;
       ctx.fillStyle = "rgba(243,113,99," + alpha.toFixed(2) + ")";
       ctx.beginPath();
       if (ctx.roundRect) ctx.roundRect(x, y, barPx, barH, 2);

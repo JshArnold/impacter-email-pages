@@ -137,7 +137,7 @@
     z-index: 2;
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 40px 230px;
+    padding: 0 40px 160px;
     width: 100%;
   }
 
@@ -235,7 +235,7 @@
   .waveform-phrase-slot { display: none; }
   .waveform-canvas {
     width: 100%;
-    height: 160px;
+    height: 200px;
     display: block;
     cursor: pointer;
   }
@@ -244,7 +244,7 @@
   .phrase-card {
     position: absolute;
     right: 48px;
-    bottom: 220px;
+    bottom: 230px;
     width: 264px;
     background: rgba(6,14,28,0.93);
     border: 1px solid rgba(255,255,255,0.10);
@@ -2088,15 +2088,17 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
     const W=canvas.offsetWidth, H=canvas.offsetHeight;
     ctx.clearRect(0,0,W,H);
     if (!barData.length) return;
-    const slotW = W/NUM_BARS;
-    const MID   = H*0.48;
+    const slotW  = W / NUM_BARS;
+    const PIN_TOP = 28;              // px reserved at top for pin dots + labels
+    const MID     = H * 0.66;       // baseline sits 2/3 down — taller bar zone above
+    const MAX_BAR = MID - PIN_TOP;  // bars can't exceed this, keeping labels clear
 
     for (let i=0;i<barData.length;i++) {
       const bar=barData[i], bp=barProps[i];
       if (bp.isGap) continue;
       const bw   = Math.min(bp.width, slotW-1.5);
       const x    = i*slotW + (slotW-bw)/2;
-      const barH = Math.min(bar.height*bar.hoverScale, MID*1.9);
+      const barH = Math.min(bar.height*bar.hoverScale, MAX_BAR);
       const y    = MID - barH;
 
       let color, opacity;
@@ -2126,8 +2128,8 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
 
   /* ── Canvas attribute pins — always visible, animate when active ── */
   function drawPins(W, MID) {
-    const t = heroVideo ? heroVideo.currentTime % duration : 0;
-    const dotY = MID - 22;
+    const t  = heroVideo ? heroVideo.currentTime % duration : 0;
+    const dotY = 16;   // fixed near top of canvas — always above bar tops
 
     PHRASES.forEach(p => {
       const pinX  = (p.start / duration) * W;
@@ -2158,9 +2160,9 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
       const labelOp = isActive ? 1.0 : isFadeIn ? dotOp : isFadeOut ? dotOp : 0.28;
       ctx.globalAlpha = labelOp;
       ctx.fillStyle = p.color;
-      ctx.font = `600 ${MOBILE ? 10 : 12}px 'DM Sans',sans-serif`;
+      ctx.font = `600 ${MOBILE ? 10 : 11}px 'DM Sans',sans-serif`;
       ctx.textAlign = 'center';
-      ctx.fillText(p.label.toUpperCase(), safeX, dotY - 12);
+      ctx.fillText(p.label.toUpperCase(), safeX, dotY + 19); // label below dot
       ctx.textAlign = 'left';
     });
     ctx.globalAlpha = 1;

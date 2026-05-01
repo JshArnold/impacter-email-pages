@@ -1321,65 +1321,98 @@
   </div>
 </section>
 
-<!-- What Surveys Miss -->
-<section class="section" id="surveys">
+<!-- YouTube BHS Video -->
+<section class="section" id="yt-video" data-streamer-label="See It In Action">
+  <div class="section-inner" style="max-width:860px">
+    <div class="section-eyebrow">See It In Action</div>
+    <h2 class="section-heading reveal">The Behavioral Health Screener in 3 minutes.</h2>
+    <p class="section-body reveal" style="transition-delay:0.1s">Watch the full product overview — how prompts work, how scoring happens, and how districts use it.</p>
+    <div class="reveal" style="transition-delay:0.2s;position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,0.08);box-shadow:0 24px 64px rgba(0,0,0,0.5);margin-top:32px;">
+      <iframe src="https://www.youtube.com/embed/HXtIlzYY3hg?rel=0&modestbranding=1" title="IMPACTER Behavioral Health Screener" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- Surveys Miss — with visual GIFs -->
+<section class="section section-alt" id="surveys">
   <div class="section-inner">
     <div class="section-eyebrow">The Signal Gap</div>
     <h2 class="section-heading reveal">Likert scales were never built for this.</h2>
     <p class="section-body reveal" style="transition-delay:0.1s">A student who rates their stress a 3 out of 5 and a student who's masking crisis behind a composed exterior both select 3. The screener goes further.</p>
-    <div class="compare-grid">
-      <div class="compare-col col-miss reveal" style="transition-delay:0.1s">
-        <div class="compare-col-label">What a 1–5 scale captures</div>
-        <div class="compare-item">
-          <div class="compare-icon">—</div>
-          <div class="compare-text">A single number in the moment of response</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:40px;" class="reveal">
+      <div style="text-align:center;">
+        <div style="position:relative;border-radius:12px;overflow:hidden;border:2px solid rgba(255,80,60,0.4);box-shadow:0 0 40px rgba(255,80,60,0.15);">
+          <img src="../images/likert-anim.gif" alt="Likert scale survey" style="width:100%;display:block;opacity:0.85;">
+          <div style="position:absolute;top:12px;right:12px;background:#e53e3e;color:#fff;font-size:11px;font-weight:800;letter-spacing:0.1em;padding:4px 10px;border-radius:99px;">MISSES THE SIGNAL</div>
         </div>
-        <div class="compare-item">
-          <div class="compare-icon">—</div>
-          <div class="compare-text">Self-report bias — students who mask perform fine on paper</div>
-        </div>
-        <div class="compare-item">
-          <div class="compare-icon">—</div>
-          <div class="compare-text">Aggregate trends, but no individual narrative</div>
-        </div>
-        <div class="compare-item">
-          <div class="compare-icon">—</div>
-          <div class="compare-text">Answers that feel safe, not necessarily honest</div>
-        </div>
-        <div class="compare-item">
-          <div class="compare-icon">—</div>
-          <div class="compare-text">No signal about how a student thinks about themselves</div>
-        </div>
+        <p style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.45);font-style:italic;">A single number captures nothing about how a student actually thinks or feels</p>
       </div>
-      <div class="compare-col col-voice reveal" style="transition-delay:0.2s">
-        <div class="compare-col-label">What voice reveals</div>
-        <div class="compare-item">
-          <div class="compare-icon">+</div>
-          <div class="compare-text">The words students actually choose to describe their experience</div>
+      <div style="text-align:center;">
+        <div style="position:relative;border-radius:12px;overflow:hidden;border:2px solid rgba(243,113,99,0.4);box-shadow:0 0 40px rgba(243,113,99,0.15);">
+          <img src="../images/bh-student.gif" alt="Student responding to behavioral health prompt" style="width:100%;display:block;">
+          <div style="position:absolute;top:12px;right:12px;background:#F37163;color:#fff;font-size:11px;font-weight:800;letter-spacing:0.1em;padding:4px 10px;border-radius:99px;">VOICE REVEALS</div>
         </div>
-        <div class="compare-item">
-          <div class="compare-icon">+</div>
-          <div class="compare-text">Self-awareness, contradiction, hedging, and emotional framing</div>
-        </div>
-        <div class="compare-item">
-          <div class="compare-icon">+</div>
-          <div class="compare-text">Domain-level scores with verbatim evidence for counselors</div>
-        </div>
-        <div class="compare-item">
-          <div class="compare-icon">+</div>
-          <div class="compare-text">Longitudinal change across screening intervals</div>
-        </div>
-        <div class="compare-item">
-          <div class="compare-icon">+</div>
-          <div class="compare-text">Insight into who is genuinely open to help — and who needs to be reached</div>
-        </div>
+        <p style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.45);font-style:italic;">26 seconds of authentic voice — every word scored for behavioral health signals</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Rubric + Scoring -->
+<section class="section" id="rubric" data-streamer-label="Scoring Preview">
+  <div class="section-inner">
+    <div class="section-eyebrow">Scoring System</div>
+    <h2 class="section-heading reveal">Every response scored 1–4 against a validated engagement rubric.</h2>
+    <p class="section-body reveal" style="transition-delay:0.1s">Total score out of 24 across six behavioral health domains. MTSS tier assignment is automatic — no manual review required.</p>
+    <div class="reveal" style="transition-delay:0.2s;margin-top:32px;">
+      <img src="../images/scoring-ui.png" alt="IMPACTER scoring interface" style="width:100%;max-width:800px;display:block;margin:0 auto;border-radius:12px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 16px 48px rgba(0,0,0,0.5);">
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px;" class="reveal" style="transition-delay:0.3s">
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;">
+        <div style="font-size:28px;font-weight:900;color:rgba(255,255,255,0.3);margin-bottom:8px;">1</div>
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Minimal</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.5;">Surface-level or one-word response. Limited engagement with the prompt.</div>
+      </div>
+      <div style="background:rgba(99,142,197,0.08);border:1px solid rgba(99,142,197,0.2);border-radius:12px;padding:20px;">
+        <div style="font-size:28px;font-weight:900;color:#638EC5;margin-bottom:8px;">2</div>
+        <div style="font-size:12px;font-weight:700;color:#638EC5;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Basic</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5;">Some elaboration, limited personal reflection. Beginning to engage.</div>
+      </div>
+      <div style="background:rgba(243,113,99,0.08);border:1px solid rgba(243,113,99,0.2);border-radius:12px;padding:20px;">
+        <div style="font-size:28px;font-weight:900;color:#F37163;margin-bottom:8px;">3</div>
+        <div style="font-size:12px;font-weight:700;color:#F37163;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Developing</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;">Clear reflection, some emotional vocabulary. Growth orientation emerging.</div>
+      </div>
+      <div style="background:rgba(243,113,99,0.15);border:1px solid rgba(243,113,99,0.4);border-radius:12px;padding:20px;">
+        <div style="font-size:28px;font-weight:900;color:#fff;margin-bottom:8px;">4</div>
+        <div style="font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Extended</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.85);line-height:1.5;">Nuanced, emotionally specific, growth-oriented thinking. High signal.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dashboard -->
+<section class="section section-alt" id="dashboard" data-streamer-label="District Summary">
+  <div class="section-inner">
+    <div class="section-eyebrow">Administrator Dashboard</div>
+    <h2 class="section-heading reveal">From screener to counselor action in 1.4 days.</h2>
+    <p class="section-body reveal" style="transition-delay:0.1s">Every screened student appears in the dashboard with their domain scores, MTSS tier assignment, and flag status. Counselors see individual narratives, not just numbers.</p>
+    <div class="reveal" style="transition-delay:0.2s;margin-top:32px;display:grid;grid-template-columns:2fr 1fr;gap:24px;align-items:start;">
+      <div>
+        <img src="../images/dashboard-percy.png" alt="IMPACTER administrator dashboard" style="width:100%;border-radius:12px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 16px 48px rgba(0,0,0,0.5);">
+        <p style="margin-top:10px;font-size:12px;color:rgba(255,255,255,0.35);text-align:center;">Administrator dashboard — cohort scores, tier assignments, urgent flags</p>
+      </div>
+      <div>
+        <img src="../images/screener-demo.gif" alt="IMPACTER screener interface" style="width:100%;border-radius:12px;border:1px solid rgba(255,255,255,0.08);">
+        <p style="margin-top:10px;font-size:12px;color:rgba(255,255,255,0.35);text-align:center;">The student-facing screener</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Sample Prompts -->
-<section class="section section-alt" id="prompts" data-streamer-label="Screening in Progress">
+<section class="section" id="prompts" data-streamer-label="Screening in Progress">
   <div class="section-inner">
     <div class="section-eyebrow">Sample Prompts</div>
     <h2 class="section-heading reveal">Hear what students say when you give them space to talk.</h2>
@@ -1468,6 +1501,29 @@
       </div>
 
       <p class="cybhi-prose reveal" style="transition-delay:0.3s">Our team handles the documentation support to help districts configure their billing workflow. For most districts we work with, <strong>the screener pays for itself within the first screening window</strong>. We can walk through your district's specific reimbursement scenario on a call.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Playbook -->
+<section class="section section-alt" id="playbook" data-streamer-label="Ready to Launch">
+  <div class="section-inner">
+    <div class="section-eyebrow">Implementation</div>
+    <h2 class="section-heading reveal">Everything a district needs to launch.</h2>
+    <div style="display:grid;grid-template-columns:280px 1fr;gap:48px;align-items:start;margin-top:40px;" class="reveal">
+      <div>
+        <img src="../images/playbook-cover.png" alt="BHS Implementation Playbook" style="width:100%;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.08);">
+      </div>
+      <div>
+        <p style="font-size:18px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:24px;">The Implementation Playbook walks district and site leadership through every step — from first conversation to first screening window.</p>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:12px;margin-bottom:32px;">
+          <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:#F37163;font-weight:800;flex-shrink:0;">✓</span><span style="color:rgba(255,255,255,0.7);">Practitioner training and credentialing requirements</span></li>
+          <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:#F37163;font-weight:800;flex-shrink:0;">✓</span><span style="color:rgba(255,255,255,0.7);">CYBHI billing setup and CPT 96127 documentation guide</span></li>
+          <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:#F37163;font-weight:800;flex-shrink:0;">✓</span><span style="color:rgba(255,255,255,0.7);">District data governance and FERPA compliance checklist</span></li>
+          <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:#F37163;font-weight:800;flex-shrink:0;">✓</span><span style="color:rgba(255,255,255,0.7);">Screening window planning and MTSS integration protocols</span></li>
+        </ul>
+        <a href="../playbook.pdf" download style="display:inline-flex;align-items:center;gap:10px;background:#F37163;color:#fff;font-weight:800;font-size:15px;padding:14px 28px;border-radius:99px;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Download Implementation Playbook (PDF) →</a>
+      </div>
     </div>
   </div>
 </section>

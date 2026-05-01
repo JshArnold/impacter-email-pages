@@ -1992,16 +1992,16 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   /* ── Phrase map: 4 attribute moments with score rows + cohort position ── */
   const PHRASES = [
     { text: 'The reason I get out of bed every morning', label: 'Self-Insight',        color: '#F37163', start: 1.30, end: 3.94,
-      pct: 87, cohortTag: 'TOP 13% OF COHORT',
+      pct: 87,
       scores: [{name:'Self-Insight',val:87},{name:'Motivation',val:79},{name:'Purpose',val:74}] },
     { text: 'I want to achieve my goals',               label: 'Reflective Growth',    color: '#638EC5', start: 5.08, end: 7.04,
-      pct: 82, cohortTag: 'TOP 18% OF COHORT',
+      pct: 82,
       scores: [{name:'Reflective Growth',val:82},{name:'Goal-Setting',val:76},{name:'Growth Mindset',val:88}] },
     { text: 'be able to help other people',             label: 'Relational Awareness', color: '#8B6FB8', start: 8.70, end: 11.6,
-      pct: 91, cohortTag: 'TOP 9% OF COHORT',
+      pct: 91,
       scores: [{name:'Relational Awareness',val:91},{name:'Empathy',val:85},{name:'Collaboration',val:78}] },
     { text: 'small changes will make a big difference', label: 'Reflective Growth',    color: '#638EC5', start: 17.1, end: 19.84,
-      pct: 79, cohortTag: 'TOP 21% OF COHORT',
+      pct: 79,
       scores: [{name:'Reflective Growth',val:79},{name:'Resilience',val:83},{name:'Purpose',val:88}] },
   ];
   const NON_PHRASE_COLOR = '#638EC5';
@@ -2166,20 +2166,35 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
     ctx.globalAlpha = 1;
   }
 
-  /* ── Bell curve SVG (cohort position) ── */
-  function buildCurveSVG(pct, color) {
-    const CW=228, CH=50, markerX = pct/100 * CW;
-    const curve = `M0,${CH} C35,${CH} 55,4 ${CW/2},4 C${CW-55},4 ${CW-35},${CH} ${CW},${CH}`;
-    const uid = `c${pct}${color.slice(1)}`;
+  /* ── Mastery bar SVG (Approaching / Meeting / Exceeding) ── */
+  function buildMasteryBar(pct, color) {
+    const W=228, BH=8;
+    const mX = pct/100 * W;          // marker x
+    const meetX  = W * 0.58;         // Meeting threshold
+    const exceedX = W * 0.76;        // Exceeding threshold
+    const uid = `mb${pct}${color.slice(1,4)}`;
     return `<defs>
-      <linearGradient id="g${uid}" x1="0" x2="1"><stop offset="0%" stop-color="${color}" stop-opacity="0.08"/><stop offset="100%" stop-color="${color}" stop-opacity="0.35"/></linearGradient>
-      <clipPath id="cp${uid}"><rect x="0" y="0" width="${markerX}" height="${CH}"/></clipPath>
+      <linearGradient id="${uid}g" x1="0" x2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0.72"/>
+      </linearGradient>
+      <clipPath id="${uid}c"><rect x="0" y="0" width="${mX}" height="${BH}"/></clipPath>
     </defs>
-    <path d="${curve}" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
-    <path d="${curve}" fill="none" stroke="${color}" stroke-width="1.5" clip-path="url(#cp${uid})" opacity="0.75"/>
-    <rect x="0" y="0" width="${markerX}" height="${CH}" fill="url(#g${uid})" clip-path="url(#cp${uid})"/>
-    <line x1="${markerX}" y1="0" x2="${markerX}" y2="${CH}" stroke="${color}" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
-    <circle cx="${markerX}" cy="4" r="4" fill="${color}"/>`;
+    <rect x="0" y="0" width="${W}" height="${BH}" rx="4" fill="rgba(255,255,255,0.07)"/>
+    <rect x="0" y="0" width="${W}" height="${BH}" rx="4" fill="url(#${uid}g)" clip-path="url(#${uid}c)"/>
+    <rect x="${meetX}"   y="0" width="1.5" height="${BH}" fill="rgba(255,255,255,0.18)" rx="1"/>
+    <rect x="${exceedX}" y="0" width="1.5" height="${BH}" fill="rgba(255,255,255,0.18)" rx="1"/>
+    <circle cx="${mX}" cy="${BH/2}" r="6.5" fill="${color}"/>
+    <circle cx="${mX}" cy="${BH/2}" r="2.8" fill="white" opacity="0.9"/>
+    <text x="${meetX/2}"              y="${BH+13}" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.28)" font-family="DM Sans,sans-serif" font-weight="700" letter-spacing="0.07em">APPROACHING</text>
+    <text x="${(meetX+exceedX)/2}"    y="${BH+13}" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.28)" font-family="DM Sans,sans-serif" font-weight="700" letter-spacing="0.07em">MEETING</text>
+    <text x="${(exceedX+W)/2}"        y="${BH+13}" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.28)" font-family="DM Sans,sans-serif" font-weight="700" letter-spacing="0.07em">EXCEEDING</text>`;
+  }
+
+  function masteryTag(pct) {
+    if (pct >= 78) return 'EXCEEDS STANDARD';
+    if (pct >= 62) return 'MEETS STANDARD';
+    return 'APPROACHING STANDARD';
   }
 
   /* ── Phrase card — pitch-deck style, fully built by JS ── */
@@ -2202,9 +2217,9 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
         </div>
         <div class="pc-scores">${scoreRows}</div>
         <hr class="pc-sep">
-        <div class="pc-cohort-head">Cohort Position</div>
-        <svg class="pc-curve" viewBox="0 0 228 50" preserveAspectRatio="none">${buildCurveSVG(active.pct, active.color)}</svg>
-        <div class="pc-cohort-tag" style="color:${active.color}">${active.cohortTag}</div>`;
+        <div class="pc-cohort-head">Mastery Level</div>
+        <svg class="pc-curve" viewBox="0 0 228 28" preserveAspectRatio="none">${buildMasteryBar(active.pct, active.color)}</svg>
+        <div class="pc-cohort-tag" style="color:${active.color}">${masteryTag(active.pct)}</div>`;
       card.classList.add('visible');
     } else {
       card.classList.remove('visible');

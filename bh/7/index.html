@@ -2058,7 +2058,7 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
         const amp = sum/sPerBar;
         if (amp < 0.05) bp.gapPx = 5;
         // Scale up by 380 so bars are tall and dramatic
-        barData.push({height:Math.max(10, amp*380), timestamp:ts, state:'pending', phraseIdx:getPhraseIdx(ts), hoverScale:1});
+        barData.push({height:Math.max(10, amp*800), timestamp:ts, state:'pending', phraseIdx:getPhraseIdx(ts), hoverScale:1});
       }
       audioCtx.close();
       render();
@@ -2089,38 +2089,52 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
     ctx.clearRect(0,0,W,H);
     if (!barData.length) return;
     const slotW  = W / NUM_BARS;
-    const MID     = H * 0.50;        // dead center — symmetric waveform
-    const MAX_BAR = MID * 0.88;      // bars can use 88% of each half
+    const MID     = H * 0.82;        // center sits low — tall bars above, tiny mirror below
+    const MAX_BAR = MID - 14;        // bars can reach almost to canvas top
+    const now     = Date.now();
 
     for (let i=0;i<barData.length;i++) {
       const bar=barData[i], bp=barProps[i];
       if (bp.isGap) continue;
       const bw   = Math.min(bp.width, slotW-1.5);
       const x    = i*slotW + (slotW-bw)/2;
-      const barH = Math.min(bar.height*bar.hoverScale, MAX_BAR);
 
-      let color, opacity;
-      if      (bar.state==='pending') { color='#D6E7F1'; opacity=0.22; }
-      else if (bar.state==='playing') { color=getBarColor(bar); opacity=1.0; }
-      else                            { color=getBarColor(bar); opacity=0.80; }
+      // Organic breath: each bar gently sways at its own slow frequency
+      const breath = 1 + Math.sin(now * 0.00085 + i * 0.71) * 0.055;
+      const barH = Math.min(bar.height * bar.hoverScale * breath, MAX_BAR);
 
-      const rr = (x,y,w,h) => { ctx.beginPath(); ctx.roundRect?ctx.roundRect(x,y,w,h,2):ctx.rect(x,y,w,h); ctx.fill(); };
+      let color, baseOp;
+      if      (bar.state==='pending') { color='#D6E7F1'; baseOp=0.22; }
+      else if (bar.state==='playing') { color=getBarColor(bar); baseOp=1.0; }
+      else                            { color=getBarColor(bar); baseOp=0.82; }
 
-      // ── Top half (above center) ──
-      ctx.globalAlpha=opacity; ctx.fillStyle=color;
-      rr(x, MID-barH, bw, barH);
+      const drawBar = (y, h, alphaScale=1) => {
+        ctx.globalAlpha = baseOp * alphaScale;
+        // Gradient within bar: brighter at peak, fades toward baseline
+        const g = ctx.createLinearGradient(0, y, 0, y + h);
+        g.addColorStop(0,   hexRgba(color, 1.0));
+        g.addColorStop(0.6, hexRgba(color, 0.75));
+        g.addColorStop(1,   hexRgba(color, 0.4));
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, y, bw, h, 2) : ctx.rect(x, y, bw, h);
+        ctx.fill();
+      };
 
-      // ── Bottom half (mirror, slightly softer) ──
-      ctx.globalAlpha=opacity*0.72;
-      rr(x, MID, bw, barH);
+      // ── Main bar (upward from MID) ──
+      drawBar(MID - barH, barH);
 
-      // Glow on playhead bar (both halves)
+      // ── Glow on playhead bar ──
       if (bar.state==='playing') {
-        ctx.shadowColor=color; ctx.shadowBlur=14; ctx.globalAlpha=0.4;
-        rr(x, MID-barH, bw, barH);
-        rr(x, MID, bw, barH);
+        ctx.shadowColor=color; ctx.shadowBlur=16; ctx.globalAlpha=0.35;
+        ctx.fillStyle=color;
+        ctx.beginPath(); ctx.roundRect?ctx.roundRect(x,MID-barH,bw,barH,2):ctx.rect(x,MID-barH,bw,barH); ctx.fill();
         ctx.shadowBlur=0;
       }
+
+      // ── Bottom mirror: very short, fades fast (minimal bottom padding) ──
+      const mirrorH = Math.min(barH * 0.14, H - MID - 4);
+      drawBar(MID, mirrorH, 0.55);
     }
     ctx.globalAlpha=1;
     drawPins(W, MID);
@@ -2129,8 +2143,8 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   /* ── Canvas attribute pins — always visible, animate when active ── */
   function drawPins(W, MID) {
     const t      = heroVideo ? heroVideo.currentTime % duration : 0;
-    const labelY = 82;   // upper zone of symmetric waveform — bars frame the label
-    const dotY   = 97;   // dot just below, near the visual center of upper bars
+    const labelY = 12;   // sits above the peak of tallest bars
+    const dotY   = 26;   // dot just below label, both above bar tops
 
     PHRASES.forEach(p => {
       const pinX  = (p.start / duration) * W;
@@ -2230,10 +2244,10 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
     }
   }
 
-  /* ── rAF loop — synced to hero video ── */
+  /* ── rAF loop — renders continuously for breath anim, syncs to video when playing ── */
   function animLoop() {
     requestAnimationFrame(animLoop);
-    if (!heroVideo || heroVideo.paused) return;
+    if (!heroVideo || heroVideo.paused) { render(); return; } // breath still animates
     const t = heroVideo.currentTime % duration; // loop sync if video loops
 
     barData.forEach(bar => {

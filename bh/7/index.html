@@ -2089,9 +2089,9 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
     ctx.clearRect(0,0,W,H);
     if (!barData.length) return;
     const slotW  = W / NUM_BARS;
-    const PIN_TOP = 28;              // px reserved at top for pin dots + labels
-    const MID     = H * 0.72;       // baseline sits lower — more bar height, less dead bottom
-    const MAX_BAR = MID - PIN_TOP;  // bars can't exceed this, keeping labels clear
+    const PIN_TOP = 62;              // pins sit here — just above tallest bar tops
+    const MID     = H * 0.72;       // baseline at 72% down
+    const MAX_BAR = MID - PIN_TOP;  // bars capped so they don't overshoot the pins
 
     for (let i=0;i<barData.length;i++) {
       const bar=barData[i], bp=barProps[i];
@@ -2129,8 +2129,8 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   /* ── Canvas attribute pins — always visible, animate when active ── */
   function drawPins(W, MID) {
     const t      = heroVideo ? heroVideo.currentTime % duration : 0;
-    const labelY = 14;   // text baseline — label sits at top of reserved zone
-    const dotY   = labelY + 16; // dot sits below label
+    const labelY = 60;   // just above tallest bar tops — almost touching waveform
+    const dotY   = 75;   // dot just below label
 
     PHRASES.forEach(p => {
       const pinX  = (p.start / duration) * W;

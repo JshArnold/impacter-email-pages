@@ -965,6 +965,10 @@
     background: var(--coral);
     animation: pulse 1.8s ease-in-out infinite;
   }
+  @keyframes pulse-coral {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:0.4; transform:scale(0.8); }
+  }
   @keyframes pulse {
     0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(243,113,99,0.4); }
     50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(243,113,99,0); }
@@ -1041,6 +1045,7 @@
     .footer-inner { flex-direction: column; align-items: flex-start; }
     .footer-copy { text-align: left; }
     .streamer { display: none; }
+  #streamer-recall { display: none !important; }
   }
   @media (max-width: 480px) {
     .prompts-grid { grid-template-columns: 1fr; }
@@ -1574,42 +1579,95 @@
 <div class="streamer" id="streamer" aria-live="polite">
   <div class="streamer-header">
     <span class="streamer-label" id="streamer-label">Live Analysis</span>
-    <div class="streamer-pulse"></div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="streamer-pulse"></div>
+      <button onclick="dismissStreamer()" aria-label="Dismiss" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.3);font-size:14px;line-height:1;padding:2px 4px;border-radius:4px;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.8)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">✕</button>
+    </div>
   </div>
   <div class="streamer-context" id="streamer-context">Behavioral Health Screener</div>
 
-  <div class="streamer-domain">
-    <span class="sd-name">Emotional Resilience</span>
-    <div class="sd-score" id="sd-er">
-      <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
+  <!-- Domain scores panel (default) -->
+  <div id="streamer-domains">
+    <div class="streamer-domain">
+      <span class="sd-name">Emotional Resilience</span>
+      <div class="sd-score" id="sd-er">
+        <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
+      </div>
     </div>
-  </div>
-  <div class="streamer-domain">
-    <span class="sd-name">Self-Insight</span>
-    <div class="sd-score" id="sd-si">
-      <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
+    <div class="streamer-domain">
+      <span class="sd-name">Self-Insight</span>
+      <div class="sd-score" id="sd-si">
+        <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
+      </div>
     </div>
-  </div>
-  <div class="streamer-domain">
-    <span class="sd-name">Reflective Growth</span>
-    <div class="sd-score" id="sd-rg">
-      <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
+    <div class="streamer-domain">
+      <span class="sd-name">Reflective Growth</span>
+      <div class="sd-score" id="sd-rg">
+        <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
+      </div>
     </div>
-  </div>
-  <div class="streamer-domain">
-    <span class="sd-name">Relational Awareness</span>
-    <div class="sd-score" id="sd-ra">
-      <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot"></div>
+    <div class="streamer-domain">
+      <span class="sd-name">Relational Awareness</span>
+      <div class="sd-score" id="sd-ra">
+        <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot"></div>
+      </div>
     </div>
-  </div>
-  <div class="streamer-domain">
-    <span class="sd-name">Help-Seeking</span>
-    <div class="sd-score" id="sd-hs">
-      <div class="sd-dot lit-blue"></div><div class="sd-dot lit-blue"></div><div class="sd-dot"></div><div class="sd-dot"></div>
+    <div class="streamer-domain">
+      <span class="sd-name">Help-Seeking</span>
+      <div class="sd-score" id="sd-hs">
+        <div class="sd-dot lit-blue"></div><div class="sd-dot lit-blue"></div><div class="sd-dot"></div><div class="sd-dot"></div>
+      </div>
     </div>
   </div>
 
+  <!-- MTSS panel -->
+  <div id="streamer-mtss" style="display:none;">
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(74,222,128,0.08);border-radius:8px;border:1px solid rgba(74,222,128,0.15);">
+        <span style="font-size:11px;color:rgba(255,255,255,0.6);">Tier 1 — Universal</span>
+        <span style="font-size:13px;font-weight:800;color:#4ade80;">118</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(251,191,36,0.08);border-radius:8px;border:1px solid rgba(251,191,36,0.15);">
+        <span style="font-size:11px;color:rgba(255,255,255,0.6);">Tier 2 — Targeted</span>
+        <span style="font-size:13px;font-weight:800;color:#fbbf24;">7</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(243,113,99,0.08);border-radius:8px;border:1px solid rgba(243,113,99,0.15);">
+        <span style="font-size:11px;color:rgba(255,255,255,0.6);">Tier 3 — Intensive</span>
+        <span style="font-size:13px;font-weight:800;color:#F37163;">2</span>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:10px;color:rgba(255,255,255,0.25);font-style:italic;">Auto-assigned on score completion</div>
+  </div>
+
+  <!-- District summary panel -->
+  <div id="streamer-district" style="display:none;">
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+      <div style="display:flex;justify-content:space-between;"><span style="font-size:11px;color:rgba(255,255,255,0.5);">Students screened</span><span style="font-size:14px;font-weight:900;color:#fff;">127</span></div>
+      <div style="display:flex;justify-content:space-between;"><span style="font-size:11px;color:rgba(255,255,255,0.5);">Flagged for review</span><span style="font-size:14px;font-weight:900;color:#fbbf24;">12</span></div>
+      <div style="display:flex;justify-content:space-between;"><span style="font-size:11px;color:rgba(255,255,255,0.5);">Urgent signals</span><span style="font-size:14px;font-weight:900;color:#F37163;">2</span></div>
+      <div style="display:flex;justify-content:space-between;"><span style="font-size:11px;color:rgba(255,255,255,0.5);">Avg. days to support</span><span style="font-size:14px;font-weight:900;color:#4ade80;">1.4</span></div>
+    </div>
+    <div style="margin-top:12px;font-size:10px;color:rgba(255,255,255,0.25);font-style:italic;">EDCOE Pilot · This window</div>
+  </div>
+
+  <!-- Playbook panel -->
+  <div id="streamer-launch" style="display:none;">
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+      <div style="display:flex;gap:8px;align-items:center;"><span style="color:#4ade80;font-weight:800;">✓</span><span style="font-size:12px;color:rgba(255,255,255,0.65);">Practitioners trained</span></div>
+      <div style="display:flex;gap:8px;align-items:center;"><span style="color:#4ade80;font-weight:800;">✓</span><span style="font-size:12px;color:rgba(255,255,255,0.65);">CYBHI enrolled</span></div>
+      <div style="display:flex;gap:8px;align-items:center;"><span style="color:#4ade80;font-weight:800;">✓</span><span style="font-size:12px;color:rgba(255,255,255,0.65);">Consent collected</span></div>
+      <div style="display:flex;gap:8px;align-items:center;"><span style="color:#4ade80;font-weight:800;">✓</span><span style="font-size:12px;color:rgba(255,255,255,0.65);">Data governance confirmed</span></div>
+    </div>
+    <div style="margin-top:12px;font-size:10px;color:rgba(255,255,255,0.25);font-style:italic;">Implementation guide available</div>
+  </div>
+
   <div class="streamer-footer">IMPACTER · Human Skills Analytics</div>
+</div>
+
+<!-- Streamer recall pill -->
+<div id="streamer-recall" style="display:none;position:fixed;bottom:32px;right:32px;z-index:200;background:rgba(10,14,20,0.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.08);border-radius:99px;padding:10px 18px;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,0.4);transition:opacity 0.3s,transform 0.3s;" onclick="recallStreamer()" onmouseover="this.style.borderColor='rgba(243,113,99,0.4)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'">
+  <span style="width:6px;height:6px;border-radius:50%;background:#F37163;display:inline-block;animation:pulse-coral 1.4s ease-in-out infinite;"></span>
+  <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:0.06em;">BH Scores ↗</span>
 </div>
 
 <!-- VideoAsk Modal -->
@@ -1886,52 +1944,78 @@ const SECTION_LABELS = {
   'resources': { label: 'Get Started', context: 'Schedule a district walkthrough' },
 };
 
-let streamerVisible = false;
+let streamerDismissed = false;
+const recallPill = document.getElementById('streamer-recall');
+
+function dismissStreamer() {
+  streamerDismissed = true;
+  streamer.classList.remove('visible');
+  recallPill.style.display = 'flex';
+}
+function recallStreamer() {
+  streamerDismissed = false;
+  recallPill.style.display = 'none';
+  streamer.classList.add('visible');
+}
+
+// Panel swap logic
+const PANELS = {
+  domains: document.getElementById('streamer-domains'),
+  mtss: document.getElementById('streamer-mtss'),
+  district: document.getElementById('streamer-district'),
+  launch: document.getElementById('streamer-launch'),
+};
+
+function showPanel(name) {
+  Object.entries(PANELS).forEach(([k, el]) => {
+    if (el) el.style.display = k === name ? '' : 'none';
+  });
+}
+
+// Section → streamer state map
+const SECTION_STATES = {
+  'voice-intelligence': { label: 'LIVE ANALYSIS', context: 'NC Portrait · Adaptability', panel: 'domains' },
+  'rubric':             { label: 'SCORING PREVIEW', context: 'Engagement Rubric · 4-point scale', panel: 'domains' },
+  'mtss':               { label: 'MTSS ROUTING', context: 'Auto-assigned on score complete', panel: 'mtss' },
+  'dashboard':          { label: 'DISTRICT SUMMARY', context: 'EDCOE Pilot · This window', panel: 'district' },
+  'playbook':           { label: 'READY TO LAUNCH', context: 'Implementation guide available', panel: 'launch' },
+  'stats':              { label: 'PILOT OUTCOMES', context: '97% participation · EDCOE', panel: 'district' },
+  'bhssa':              { label: 'STATE SELECTED', context: 'BHSSA-002 · BHSOAC + SCCOE', panel: 'domains' },
+  'prompts':            { label: 'SAMPLE SCREENER', context: 'Try any domain prompt', panel: 'domains' },
+};
 
 const streamerSectionObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
-      const id = e.target.id || e.target.dataset.streamerId;
-      const cfg = SECTION_LABELS[id];
-      if (cfg) {
-        streamerLabel.textContent = cfg.label;
-        streamerContext.textContent = cfg.context;
+      const state = SECTION_STATES[e.target.id];
+      if (state) {
+        streamerLabel.textContent = state.label;
+        streamerContext.textContent = state.context;
+        showPanel(state.panel);
       }
     }
   });
 }, { threshold: 0.3 });
 
-// Show/hide streamer after hero
+// Show/hide streamer after hero (respects dismissed state)
 const heroSection = document.querySelector('.hero');
 const heroObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
-    if (!e.isIntersecting) {
+    if (!e.isIntersecting && !streamerDismissed) {
       streamer.classList.add('visible');
-    } else {
+    } else if (e.isIntersecting) {
       streamer.classList.remove('visible');
+      recallPill.style.display = 'none';
+      streamerDismissed = false; // reset on return to hero
     }
   });
 }, { threshold: 0.1 });
 heroObs.observe(heroSection);
 
-// Observe each labeled section
-document.querySelectorAll('[data-streamer-label]').forEach(sec => {
+// Observe all sections
+document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #rubric, #mtss, #dashboard, #prompts, #bhssa, #playbook').forEach(sec => {
   streamerSectionObs.observe(sec);
 });
-
-// Also handle stats section
-const statsSection = document.getElementById('stats');
-if (statsSection) {
-  const statsObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        streamerLabel.textContent = 'Student Data';
-        streamerContext.textContent = 'Pilot window outcomes';
-      }
-    });
-  }, { threshold: 0.4 });
-  statsObs.observe(statsSection);
-}
 
 /* ──────────────────────────────
    KARAOKE — reset on video end/seek

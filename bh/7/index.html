@@ -1756,7 +1756,9 @@
     position: absolute;
     inset: 0;
     background: url('../images/impacter-chevron-bg.png') center center / contain no-repeat;
-    opacity: 0.06;
+    opacity: 0.04;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
     pointer-events: none;
   }
   .cta-listening-inner {

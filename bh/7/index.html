@@ -1087,6 +1087,16 @@
     margin-left: 16px;
   }
 
+  /* Clock arc SVG */
+  .s-clock-svg {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    overflow: visible;
+    display: block;
+    margin: 8px 0 16px;
+  }
+
   /* Credits pills — role tags with accent colors */
   .s-credits-list {
     display: flex;
@@ -1830,50 +1840,77 @@
         </div>
       </div>
 
-      <!-- Scene 3 — tier outcome, two images -->
+      <!-- Scene 3 — clock arc timeline -->
       <div class="scene-pane" data-scene="2">
         <div class="scene-callout">
-          <div class="s-anno-eyebrow">→ The Counselor's View</div>
-          <div class="s-anno-rows">
+          <div class="s-anno-eyebrow">→ Screening to Support</div>
 
-            <div class="s-anno-row">
-              <div class="s-anno-cell">
-                <div class="s-anno-cell-name">Percy Purpose</div>
-                <div class="s-anno-cell-sub">11th Grade</div>
-              </div>
-              <div class="s-anno-connector"></div>
-              <div class="s-anno-note">The student,<br/>not a row in a sheet</div>
-            </div>
+          <svg class="s-clock-svg" viewBox="0 0 300 310" xmlns="http://www.w3.org/2000/svg">
 
-            <div class="s-anno-row">
-              <div class="s-anno-cell">
-                <div class="s-anno-cell-tier">Tier 2 — Targeted</div>
-                <div class="s-anno-cell-score">Score: 12 / 24</div>
-                <div class="s-anno-cell-level">Developing</div>
-              </div>
-              <div class="s-anno-connector"></div>
-              <div class="s-anno-note">Auto-assigned the<br/>moment the score completes</div>
-            </div>
+            <!-- Background ghost circle -->
+            <circle cx="150" cy="155" r="112" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="2 7"/>
 
-            <div class="s-anno-row">
-              <div class="s-anno-cell">
-                <div class="s-anno-cell-flags">3 of 6 domains<br/>flagged for review</div>
-              </div>
-              <div class="s-anno-connector"></div>
-              <div class="s-anno-note">Domain-level evidence,<br/>not a single grade</div>
-            </div>
+            <!-- Inner ring -->
+            <circle cx="150" cy="155" r="62" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
 
-            <div class="s-anno-row">
-              <div class="s-anno-cell">
-                <div class="s-anno-cell-btn">▸ Listen to responses</div>
-              </div>
-              <div class="s-anno-connector"></div>
-              <div class="s-anno-note">One click to the<br/>student's actual words</div>
-            </div>
+            <!-- Tick marks (12 positions) -->
+            <g stroke="rgba(255,255,255,0.1)" stroke-width="1">
+              <line x1="150" y1="43" x2="150" y2="52"/>
+              <line x1="205" y1="57" x2="200" y2="65"/>
+              <line x1="246" y1="100" x2="239" y2="105"/>
+              <line x1="262" y1="155" x2="253" y2="155"/>
+              <line x1="246" y1="210" x2="239" y2="205"/>
+              <line x1="205" y1="253" x2="200" y2="245"/>
+              <line x1="150" y1="267" x2="150" y2="258"/>
+              <line x1="95" y1="253" x2="100" y2="245"/>
+              <line x1="54" y1="210" x2="61" y2="205"/>
+              <line x1="38" y1="155" x2="47" y2="155"/>
+              <line x1="54" y1="100" x2="61" y2="105"/>
+              <line x1="95" y1="57" x2="100" y2="65"/>
+            </g>
 
-          </div>
-          <div class="s-anno-demo">Teaching Example</div>
-          <p style="margin-top:16px">This is what the counselor opens at 8:30 AM. Not a roster of scores — a roster of students, each one a click away from the language that drove the assignment.</p>
+            <!-- Arc 1: SCREENED → TIER ASSIGNED (coral, top to bottom-right) -->
+            <path d="M 150 43 A 112 112 0 0 1 247 211" fill="none" stroke="rgba(243,113,99,0.7)" stroke-width="2"/>
+
+            <!-- Arc 2: TIER ASSIGNED → SUPPORT (amber, bottom-right to bottom-left) -->
+            <path d="M 247 211 A 112 112 0 0 1 53 211" fill="none" stroke="rgba(244,201,122,0.6)" stroke-width="2"/>
+
+            <!-- Arc 3: SUPPORT → loop close (very faint dashed) -->
+            <path d="M 53 211 A 112 112 0 0 1 150 43" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3 6"/>
+
+            <!-- Spoke lines from center to nodes (very faint) -->
+            <line x1="150" y1="155" x2="150" y2="48" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="150" y1="155" x2="242" y2="206" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="150" y1="155" x2="58" y2="206" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+            <!-- Node: SCREENED (top) -->
+            <circle cx="150" cy="43" r="6" fill="#F37163"/>
+            <circle cx="150" cy="43" r="11" fill="none" stroke="rgba(243,113,99,0.25)" stroke-width="1"/>
+            <text x="150" y="22" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="15" font-weight="800" fill="rgba(255,255,255,0.95)">8:14 AM</text>
+            <text x="150" y="33" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" font-weight="700" fill="rgba(243,113,99,0.8)" letter-spacing="0.1em">SCREENED</text>
+
+            <!-- Node: TIER ASSIGNED (bottom-right) -->
+            <circle cx="247" cy="211" r="6" fill="#F37163"/>
+            <circle cx="247" cy="211" r="11" fill="none" stroke="rgba(243,113,99,0.25)" stroke-width="1"/>
+            <text x="272" y="205" text-anchor="start" font-family="DM Sans,sans-serif" font-size="15" font-weight="800" fill="rgba(255,255,255,0.95)">8:31</text>
+            <text x="272" y="216" text-anchor="start" font-family="DM Sans,sans-serif" font-size="8" font-weight="700" fill="rgba(243,113,99,0.7)" letter-spacing="0.08em">TIER ASSIGNED</text>
+
+            <!-- Node: SUPPORT (bottom-left) -->
+            <circle cx="53" cy="211" r="6" fill="#9DBEEA"/>
+            <circle cx="53" cy="211" r="11" fill="none" stroke="rgba(99,142,197,0.25)" stroke-width="1"/>
+            <text x="28" y="205" text-anchor="end" font-family="DM Sans,sans-serif" font-size="15" font-weight="800" fill="rgba(255,255,255,0.95)">9:48</text>
+            <text x="28" y="216" text-anchor="end" font-family="DM Sans,sans-serif" font-size="8" font-weight="700" fill="rgba(99,142,197,0.8)" letter-spacing="0.08em">SUPPORT PLAN</text>
+
+            <!-- Center text -->
+            <text x="150" y="147" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="800" fill="rgba(255,255,255,0.2)" letter-spacing="0.18em">SAME</text>
+            <text x="150" y="163" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="800" fill="rgba(255,255,255,0.2)" letter-spacing="0.18em">DAY</text>
+
+            <!-- Sub-label below -->
+            <text x="150" y="295" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="rgba(255,255,255,0.2)" letter-spacing="0.08em">screening → support · within one school day</text>
+
+          </svg>
+
+          <p>This is what the counselor opens. Not a spreadsheet — a student. Action starts at the name, not the number.</p>
         </div>
         <div class="scene-img-panel scene-img-panel--full">
           <img src="../images/bhs-dashboard-ets.png" alt="Behavioral Health Screener Dashboard" class="s-scene-img">

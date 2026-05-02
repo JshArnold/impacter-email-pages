@@ -336,7 +336,8 @@
   /* Row 2 — 4 metrics */
   .cred-metrics {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, auto);
+    justify-content: center;
     width: 100%;
     margin-bottom: 36px;
   }
@@ -345,7 +346,7 @@
     border-right: 1px solid rgba(0,0,0,0.1);
     text-align: left;
   }
-  .cred-metric:first-child { padding-left: 0; }
+  .cred-metric:first-child { padding-left: 36px; }
   .cred-metric:last-child  { border-right: none; }
   .cred-num {
     font-size: clamp(2.4rem, 4.2vw, 3.4rem);

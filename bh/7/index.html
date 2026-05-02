@@ -761,54 +761,218 @@
     max-width: 440px;
   }
 
-  /* ── What Surveys Miss ── */
-  .compare-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    margin-top: 64px;
-  }
+  /* ── What Surveys Miss — pinned scene controller ── */
+  --font-mono: 'Courier New', Courier, monospace;
+  --ease-emphasized: cubic-bezier(0.4, 0, 0.2, 1);
 
-  .compare-col {}
-  .compare-col-label {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
+  .surveys-pin {
+    position: relative;
+    background: #0A0E14;
+    padding: 0;
+  }
+  .surveys-stage {
+    position: relative;
+    height: 320vh;
+  }
+  .surveys-pin-inner {
+    position: sticky; top: 0;
+    height: 100vh;
+    display: flex; align-items: center;
+    overflow: hidden;
+    padding: 0 clamp(20px, 4vw, 56px);
+  }
+  .surveys-headline {
+    position: absolute;
+    top: 80px; left: clamp(20px, 4vw, 56px); right: clamp(20px, 4vw, 56px);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(28px, 3.4vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: #fff;
+    display: flex; gap: 24px; align-items: baseline;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .surveys-headline .s-label {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.22em;
     text-transform: uppercase;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 28px;
+    color: rgba(255,255,255,0.4);
+    align-self: center;
   }
-  .compare-col.col-miss .compare-col-label { color: var(--text-dim); }
-  .compare-col.col-voice .compare-col-label { color: var(--coral); }
-
-  .compare-item {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    margin-bottom: 22px;
+  .surveys-headline .s-switcher {
+    position: relative;
+    display: inline-block;
   }
-  .compare-icon {
-    flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    display: flex;
+  .surveys-headline .s-switcher span {
+    display: inline-block;
+    background: linear-gradient(120deg, var(--coral), #FFB1A6);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .scene-pane {
+    position: absolute; inset: 0;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 48px;
     align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    margin-top: 1px;
+    padding: 120px clamp(20px, 4vw, 56px) 60px;
+    opacity: 0;
+    transition: opacity .5s var(--ease-emphasized);
+    pointer-events: none;
   }
-  .col-miss .compare-icon { background: rgba(255,255,255,0.06); color: var(--text-dim); }
-  .col-voice .compare-icon { background: rgba(243,113,99,0.15); color: var(--coral); }
-
-  .compare-text {
-    font-size: 15px;
-    font-weight: 400;
-    color: rgba(214,231,241,0.75);
-    line-height: 1.55;
+  .scene-pane.active { opacity: 1; pointer-events: auto; }
+  .scene-likert {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 32px;
+    font-family: var(--font-mono);
+    color: rgba(255,255,255,0.55);
+    filter: grayscale(0.7);
+    max-width: 500px;
+    justify-self: end;
+    transition: opacity .8s, filter .8s, transform .8s var(--ease-emphasized);
   }
-  .col-voice .compare-text { color: var(--text); }
+  .scene-likert.dying { opacity: 0.25; filter: grayscale(1) blur(2px); transform: translateY(20px); }
+  .scene-likert .s-head {
+    display: flex; justify-content: space-between;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    padding-bottom: 14px;
+    border-bottom: 1px dashed rgba(255,255,255,0.12);
+    margin-bottom: 20px;
+  }
+  .scene-likert h4 {
+    font-family: var(--font-mono);
+    font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.85);
+    margin: 0 0 28px;
+  }
+  .scene-likert .s-q { margin-bottom: 22px; }
+  .scene-likert .s-q-text { font-size: 13px; margin-bottom: 10px; color: rgba(255,255,255,0.7); }
+  .scene-likert .s-scale { display: flex; align-items: center; gap: 8px; }
+  .scene-likert .s-scale .s-end { font-size: 10px; color: rgba(255,255,255,0.4); }
+  .scene-likert .s-opt {
+    width: 28px; height: 28px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: rgba(255,255,255,0.5);
+  }
+  .scene-likert .s-opt.selected {
+    background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.3);
+  }
+  .scene-likert .s-foot {
+    font-size: 11px; color: rgba(255,255,255,0.4);
+    margin-top: 18px; padding-top: 14px;
+    border-top: 1px dashed rgba(255,255,255,0.12);
+    font-style: italic;
+  }
+  .scene-callout {
+    display: flex; flex-direction: column; gap: 28px;
+    max-width: 500px;
+  }
+  .scene-callout .s-num {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(80px, 12vw, 200px);
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+    color: rgba(255,255,255,0.06);
+    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+  }
+  .scene-callout h3 {
+    font-family: var(--font-display);
+    font-weight: 800; font-size: clamp(28px, 3vw, 44px);
+    letter-spacing: -0.025em;
+    color: #fff; margin: 0;
+    line-height: 1.05;
+  }
+  .scene-callout p {
+    font-family: var(--font-display); font-weight: 300;
+    font-size: 17px; line-height: 1.5;
+    color: rgba(232,234,240,0.6);
+    max-width: 44ch;
+  }
+  .scene-voice-media {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    max-width: 380px;
+    justify-self: end;
+    background: linear-gradient(160deg, #15294A, #0A0E14);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.08);
+    transform: scale(0.94);
+    transition: transform .6s var(--ease-emphasized);
+  }
+  .scene-voice-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .scene-pane.active .scene-voice-media { transform: scale(1); }
+  .scene-voice-media .s-vm-label {
+    position: absolute; bottom: 14px; left: 0; right: 0;
+    text-align: center;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(255,255,255,0.7);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  }
+  .scene-voice-text {
+    display: flex; flex-direction: column; gap: 20px;
+    max-width: 540px;
+  }
+  .scene-voice-text .s-stat {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: 14px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--coral);
+  }
+  .scene-voice-text blockquote {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(20px, 2.2vw, 32px);
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    color: #fff;
+    margin: 0;
+  }
+  .scene-voice-text blockquote .s-pill {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin: 0 4px;
+    vertical-align: 2px;
+    transition: all .4s;
+  }
+  .scene-voice-text blockquote .s-pill.er { background: rgba(99,142,197,0.2); color: #9DBEEA; border: 1px solid rgba(99,142,197,0.4); }
+  .scene-voice-text blockquote .s-pill.si { background: rgba(243,113,99,0.18); color: #F89A8E; border: 1px solid rgba(243,113,99,0.4); }
+  .scene-voice-text blockquote .s-pill.rg { background: rgba(95,168,118,0.18); color: #7BC096; border: 1px solid rgba(95,168,118,0.4); }
+  .scene-voice-text blockquote .s-hl {
+    background: linear-gradient(120deg, transparent 50%, rgba(243,113,99,0.25) 50%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    transition: background-position 1s var(--ease-emphasized) .3s;
+  }
+  .scene-pane.active .scene-voice-text blockquote .s-hl { background-position: 0 0; }
+  .surveys-progress {
+    position: absolute;
+    bottom: 40px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 12px;
+    z-index: 5;
+  }
+  .surveys-progress .s-dot {
+    width: 32px; height: 4px; border-radius: 2px;
+    background: rgba(255,255,255,0.15);
+    transition: background .3s;
+  }
+  .surveys-progress .s-dot.active { background: var(--coral); }
+  @media (max-width: 768px) {
+    .surveys-stage { height: 240vh; }
+    .scene-pane { grid-template-columns: 1fr; gap: 28px; padding-top: 100px; }
+    .scene-voice-media { max-width: 100%; justify-self: stretch; aspect-ratio: 16/9; }
+    .scene-callout .s-num { font-size: 80px; }
+  }
 
   /* ── Sample Prompts ── */
   .prompts-tabs {
@@ -1214,7 +1378,10 @@
     .mtss-sticky-media { position: relative; top: auto; order: 1; }
     .mtss-img-stack::before { padding-top: 62.5%; }
     .mtss-subsection { min-height: auto; padding: 28px 0; }
-    .compare-grid { grid-template-columns: 1fr; gap: 40px; }
+    .surveys-stage { height: 240vh; }
+    .scene-pane { grid-template-columns: 1fr; gap: 28px; padding-top: 100px; }
+    .scene-voice-media { max-width: 100%; justify-self: stretch; aspect-ratio: 16/9; }
+    .scene-callout .s-num { font-size: 80px; }
     .prompts-grid { grid-template-columns: 1fr 1fr; }
     .bhssa-layout { grid-template-columns: 1fr; gap: 40px; }
     .cybhi-grid { grid-template-columns: 1fr 1fr; }
@@ -1468,26 +1635,103 @@
 </section>
 
 <!-- Surveys Miss — with visual GIFs -->
-<section class="section section-alt" id="surveys">
-  <div class="section-inner">
-    <div class="section-eyebrow">The Signal Gap</div>
-    <h2 class="section-heading reveal">Likert scales were never built for this.</h2>
-    <p class="section-body reveal" style="transition-delay:0.1s">A student who rates their stress a 3 out of 5 and a student who's masking crisis behind a composed exterior both select 3. The screener goes further.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:40px;" class="reveal">
-      <div style="text-align:center;">
-        <div style="position:relative;border-radius:12px;overflow:hidden;border:2px solid rgba(255,80,60,0.4);box-shadow:0 0 40px rgba(255,80,60,0.15);">
-          <img src="../images/likert-anim.gif" alt="Likert scale survey" style="width:100%;display:block;opacity:0.85;">
-          <div style="position:absolute;top:12px;right:12px;background:#e53e3e;color:#fff;font-size:11px;font-weight:800;letter-spacing:0.1em;padding:4px 10px;border-radius:99px;">MISSES THE SIGNAL</div>
-        </div>
-        <p style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.45);font-style:italic;">A single number captures nothing about how a student actually thinks or feels</p>
+<!-- What Surveys Miss — pinned scene controller -->
+<section class="surveys-pin" id="surveys" data-streamer-label="Signal Gap">
+  <div class="surveys-stage" id="surveysStage">
+    <div class="surveys-pin-inner">
+
+      <div class="surveys-headline">
+        <span class="s-label">What surveys miss</span>
+        <span class="s-switcher"><span id="surveysWord">A scale of 1 to 5.</span></span>
       </div>
-      <div style="text-align:center;">
-        <div style="position:relative;border-radius:12px;overflow:hidden;border:2px solid rgba(243,113,99,0.4);box-shadow:0 0 40px rgba(243,113,99,0.15);">
-          <img src="../images/bh-student.gif" alt="Student responding to behavioral health prompt" style="width:100%;display:block;">
-          <div style="position:absolute;top:12px;right:12px;background:#F37163;color:#fff;font-size:11px;font-weight:800;letter-spacing:0.1em;padding:4px 10px;border-radius:99px;">VOICE REVEALS</div>
+
+      <!-- Scene 1 — Likert dies -->
+      <div class="scene-pane active" data-scene="0">
+        <div class="scene-likert" id="likertCard">
+          <div class="s-head"><span>Question 12 of 47</span><span>↺ Restart</span></div>
+          <h4>I feel hopeful about my future.</h4>
+          <div class="s-q">
+            <div class="s-scale">
+              <span class="s-end">Strongly disagree</span>
+              <span class="s-opt">1</span>
+              <span class="s-opt">2</span>
+              <span class="s-opt selected">3</span>
+              <span class="s-opt">4</span>
+              <span class="s-opt">5</span>
+              <span class="s-end">Strongly agree</span>
+            </div>
+          </div>
+          <div class="s-q">
+            <div class="s-q-text">My friends understand me.</div>
+            <div class="s-scale">
+              <span class="s-opt">1</span>
+              <span class="s-opt">2</span>
+              <span class="s-opt selected">3</span>
+              <span class="s-opt">4</span>
+              <span class="s-opt">5</span>
+            </div>
+          </div>
+          <div class="s-q">
+            <div class="s-q-text">I have someone to talk to when I'm sad.</div>
+            <div class="s-scale">
+              <span class="s-opt">1</span>
+              <span class="s-opt selected">2</span>
+              <span class="s-opt">3</span>
+              <span class="s-opt">4</span>
+              <span class="s-opt">5</span>
+            </div>
+          </div>
+          <div class="s-foot">"3" tells you nothing about why.</div>
         </div>
-        <p style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.45);font-style:italic;">26 seconds of authentic voice — every word scored for behavioral health signals</p>
+        <div class="scene-callout">
+          <div class="s-num">47</div>
+          <h3>Likert items.<br/>Zero stories.</h3>
+          <p>Forced-choice surveys collapse a student's actual experience into a number that no counselor can act on. The middle of the scale is where the truth gets buried.</p>
+        </div>
       </div>
+
+      <!-- Scene 2 — voice replaces it -->
+      <div class="scene-pane" data-scene="1">
+        <div class="scene-voice-media">
+          <img src="../images/bh-student.gif" alt="Student responding to behavioral health prompt" />
+          <div class="s-vm-label">26 seconds. One prompt.</div>
+        </div>
+        <div class="scene-voice-text">
+          <div class="s-stat">→ One spoken response</div>
+          <blockquote>
+            <span class="s-hl">"I tend to stay in my comfort zone and stand behind the yellow caution tape."</span>
+            <br/><br/>
+            Three signals. Six domains.<br/>
+            <span class="s-pill er">Emotional Resilience</span>
+            <span class="s-pill si">Self-Insight</span>
+            <span class="s-pill rg">Reflective Growth</span>
+          </blockquote>
+        </div>
+      </div>
+
+      <!-- Scene 3 — outcome -->
+      <div class="scene-pane" data-scene="2">
+        <div class="scene-callout">
+          <div class="s-num">9/24</div>
+          <h3>Tier mapping.<br/>Real-time.</h3>
+          <p>One spoken response yields a rubric-aligned score, three detected behavioral health signals, and an MTSS tier recommendation — before the student stands up.</p>
+        </div>
+        <div class="scene-voice-text">
+          <div class="s-stat">→ MTSS recommendation</div>
+          <blockquote>
+            Tier 1 — universal support.<br/>
+            Strength-based reflection.<br/>
+            Optional peer-mentor pathway.
+          </blockquote>
+        </div>
+      </div>
+
+      <div class="surveys-progress" id="surveysProgress">
+        <div class="s-dot active"></div>
+        <div class="s-dot"></div>
+        <div class="s-dot"></div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -2136,6 +2380,36 @@ const revealObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 
 document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ──────────────────────────────
+   WHAT SURVEYS MISS — pinned scene controller
+────────────────────────────── */
+(() => {
+  const stage = document.getElementById('surveysStage');
+  const panes = document.querySelectorAll('.scene-pane');
+  const dots = document.querySelectorAll('#surveysProgress .s-dot');
+  const wordEl = document.getElementById('surveysWord');
+  const likertCard = document.getElementById('likertCard');
+  const SCENES = ['A scale of 1 to 5.', 'A 26-second story.', 'A tier. A plan. Today.'];
+  if (!stage) return;
+  function update() {
+    const r = stage.getBoundingClientRect();
+    const total = stage.offsetHeight - window.innerHeight;
+    const progress = Math.max(0, Math.min(1, -r.top / total));
+    let scene = 0;
+    if (progress > 0.66) scene = 2;
+    else if (progress > 0.33) scene = 1;
+    panes.forEach((p, i) => p.classList.toggle('active', i === scene));
+    dots.forEach((d, i) => d.classList.toggle('active', i === scene));
+    if (wordEl.dataset.scene !== String(scene)) {
+      wordEl.dataset.scene = scene;
+      wordEl.textContent = SCENES[scene];
+    }
+    likertCard?.classList.toggle('dying', scene > 0);
+  }
+  document.addEventListener('scroll', update, { passive: true });
+  update();
+})();
 
 /* ──────────────────────────────
    MTSS SCROLLYTELLING — IMAGE SWAP + REVEAL

@@ -1904,50 +1904,19 @@
     .cybhi-grid { grid-template-columns: 1fr; }
     .hero-headline { font-size: 2.2rem; }
   }
-  /* ── #prompts LIGHT CREAM OVERRIDE ── */
-  #prompts { background: #F5F4F3; }
-  #prompts .section-eyebrow { color: var(--coral); }
-  #prompts .section-heading { color: #0F1B2E; }
-  #prompts .section-body { color: #5A6270; }
+  /* ── #prompts DARK SHIFTED ── */
+  #prompts { background: #111e30; }
 
   /* Grade toggle tabs */
-  #prompts .prompt-tab { color: #5A6270; border: 1.5px solid rgba(15,27,46,0.18); }
-  #prompts .prompt-tab:hover { background: rgba(15,27,46,0.06); color: #0F1B2E; border-color: rgba(15,27,46,0.3); }
+  #prompts .prompt-tab { color: var(--text-dim); border: 1.5px solid rgba(255,255,255,0.14); }
+  #prompts .prompt-tab:hover { background: rgba(255,255,255,0.06); color: #fff; border-color: rgba(255,255,255,0.25); }
   #prompts .prompt-tab.active { background: var(--coral); color: #fff; border-color: transparent; }
 
-  /* Card front — white card on cream bg */
-  #prompts .pc-front {
-    background: #fff;
-    border: 1px solid rgba(15,27,46,0.09);
-  }
-  #prompts .prompt-card:hover .pc-front { border-color: rgba(15,27,46,0.18); }
-  #prompts .prompt-card:hover .pc-front::before { opacity: 0.7; }
-
-  /* Text on front */
-  #prompts .prompt-card h4 { color: #0F1B2E; }
-  #prompts .prompt-card p  { color: rgba(15,27,46,0.55); }
-
-  /* Arrow badge */
-  #prompts .pc-front .pc-arrow {
-    background: rgba(15,27,46,0.05);
-    border: 1px solid rgba(15,27,46,0.12);
-    color: #0F1B2E;
-  }
-
-  /* Comp chips — darker text for cream/white bg */
-  #prompts .prompt-card        .comp { background: rgba(99,142,197,0.12);  color: #3A6FAB; }
-  #prompts .prompt-card.coral  .comp { background: rgba(243,113,99,0.12);  color: #C44035; }
-  #prompts .prompt-card.green  .comp { background: rgba(95,168,118,0.12);  color: #39875A; }
-  #prompts .prompt-card.gold   .comp { background: rgba(224,176,70,0.12);  color: #8A6A10; }
-  #prompts .prompt-card.blue   .comp { background: rgba(99,142,197,0.12);  color: #3A6FAB; }
-  #prompts .prompt-card.purple .comp { background: rgba(178,122,182,0.12); color: #7A3E82; }
-  #prompts .prompt-card.teal   .comp { background: rgba(79,164,122,0.12);  color: #2A7A5E; }
-
   /* ── SURVEYS MISS SECTION ── */
-  .surveys-miss-section { background: #F5F4F3; }
+  .surveys-miss-section { background: #0d1a2e; }
   .surveys-miss-section .section-eyebrow { color: var(--coral) !important; }
-  .surveys-miss-section .section-heading { color: #0F1B2E; max-width: none; white-space: nowrap; }
-  .surveys-miss-section .section-body { color: #5A6270; }
+  .surveys-miss-section .section-heading { color: #fff; max-width: none; white-space: nowrap; }
+  .surveys-miss-section .section-body { color: rgba(214,231,241,0.7); }
 
   .sm-split {
     display: grid; grid-template-columns: 1fr 1fr; gap: 0;
@@ -1956,12 +1925,12 @@
     align-items: stretch;
   }
   .sm-left {
-    background: #F0F0EF; padding: 28px 36px;
+    background: #162840; padding: 28px 36px;
     display: flex; flex-direction: column; gap: 14px;
     justify-content: space-between;
   }
   .sm-right {
-    background: #0F1B2E; padding: 28px 36px;
+    background: #0a1525; padding: 28px 36px;
     display: flex; flex-direction: column; gap: 14px;
   }
   .sm-tag {
@@ -1970,47 +1939,48 @@
     font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
     padding: 5px 12px; border-radius: 8px; width: fit-content;
   }
-  .sm-tag-old { background: #E0DFDE; color: #6A6F76; }
+  .sm-tag-old { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.4); }
   .sm-tag-new { background: rgba(243,113,99,0.18); color: #F37163; }
   .sm-h3 {
     font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 28px;
     line-height: 1.1; letter-spacing: -0.025em;
   }
-  .sm-h3-old { color: #9BA0A8; }
+  .sm-h3-old { color: rgba(255,255,255,0.3); }
   .sm-h3-new { color: #fff; }
 
   /* Fake survey widget */
   .sm-fake-survey {
-    background: #E8E7E6; border-radius: 10px; padding: 18px 20px;
-    font-family: monospace; font-size: 13px; color: #9BA0A8;
+    background: rgba(255,255,255,0.05); border-radius: 10px; padding: 18px 20px;
+    font-family: monospace; font-size: 13px; color: rgba(255,255,255,0.4);
     display: flex; flex-direction: column; gap: 12px;
+    border: 1px solid rgba(255,255,255,0.07);
   }
   .sm-survey-header {
-    font-size: 10px; color: #C0C4C9; letter-spacing: 0.08em; text-transform: uppercase;
+    font-size: 10px; color: rgba(255,255,255,0.25); letter-spacing: 0.08em; text-transform: uppercase;
     display: flex; justify-content: space-between; padding-bottom: 10px;
-    border-bottom: 1px solid #DDDCDA;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
   }
   .sm-q-block { display: flex; flex-direction: column; gap: 7px; }
-  .sm-question { font-size: 12px; color: #A8ADB5; line-height: 1.5; }
+  .sm-question { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.5; }
   .sm-likert-row { display: flex; gap: 6px; align-items: center; }
-  .sm-likert-label { font-size: 10px; color: #C0C4C9; margin: 0 4px; flex-shrink: 0; }
+  .sm-likert-label { font-size: 10px; color: rgba(255,255,255,0.2); margin: 0 4px; flex-shrink: 0; }
   .sm-likert-dot {
-    width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #D0CECC;
+    width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.12);
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; color: #C0C4C9; cursor: pointer; flex-shrink: 0;
+    font-size: 11px; color: rgba(255,255,255,0.25); cursor: pointer; flex-shrink: 0;
     transition: background 0.15s, border-color 0.15s;
   }
-  .sm-likert-dot:hover { border-color: #B8B5B2; background: #DDDCDA; }
-  .sm-likert-dot.sm-selected { background: #C8C5C2; border-color: #C8C5C2; color: #8A8F97; }
+  .sm-likert-dot:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.06); }
+  .sm-likert-dot.sm-selected { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.5); }
   .sm-submit-btn {
     margin-top: 4px; width: 100%; padding: 10px;
-    background: #DDDCDA; border: none; border-radius: 6px;
-    font-family: monospace; font-size: 12px; color: #A8ADB5;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
+    font-family: monospace; font-size: 12px; color: rgba(255,255,255,0.3);
     cursor: pointer; transition: background 0.15s;
   }
-  .sm-submit-btn:hover { background: #D5D3D1; }
-  .sm-submit-btn.sm-submitted { background: #D0CECC; color: #9BA0A8; cursor: default; }
-  .sm-note { font-size: 11px; color: #B0B5BC; margin-top: 4px; font-style: italic; }
+  .sm-submit-btn:hover { background: rgba(255,255,255,0.1); }
+  .sm-submit-btn.sm-submitted { opacity: 0.6; cursor: default; }
+  .sm-note { font-size: 11px; color: rgba(255,255,255,0.25); margin-top: 4px; font-style: italic; }
 
   /* Flip card — right side */
   .sm-flip { perspective: 1000px; cursor: pointer; position: relative; }
@@ -2586,7 +2556,7 @@
           <button class="sm-submit-btn" id="smSubmit">Submit responses →</button>
           <div class="sm-note" id="smNote">Student answered in ~8 seconds. No qualitative signal captured.</div>
         </div>
-        <p style="font-size:14px;color:#9BA0A8;line-height:1.7">A score of "3" doesn't tell you <em>why</em> a student is motivated — or whether they're one tough week away from disengaging entirely.</p>
+        <p style="font-size:14px;color:rgba(255,255,255,0.35);line-height:1.7">A score of "3" doesn't tell you <em>why</em> a student is motivated — or whether they're one tough week away from disengaging entirely.</p>
       </div>
       <!-- RIGHT: Authentic Voice -->
       <div class="sm-right">

@@ -648,7 +648,20 @@
   .lsp-tier-badge.t1 { background: rgba(16,185,129,0.18); color: #34D399; }
   .lsp-tier-badge.t2 { background: rgba(245,158,11,0.18); color: #FCD34D; }
   .lsp-tier-badge.t3 { background: rgba(239,68,68,0.18); color: #FCA5A5; }
-  .analysis-card { transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s; }
+  .analysis-card { transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s; cursor: pointer; }
+  .analysis-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.18); }
+  .analysis-card .ac-seek-hint {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.28);
+    margin-top: 12px;
+    transition: color 0.2s;
+  }
+  .analysis-card:hover .ac-seek-hint { color: rgba(255,255,255,0.6); }
+  .analysis-card .ac-seek-hint::before {
+    content: '▶';
+    font-size: 9px;
+  }
   .analysis-card.card-active { animation: cardpulse 2s ease-in-out infinite; }
   .analysis-card.card-active.resilience-card { border-color: rgba(110,231,183,0.45); box-shadow: 0 0 24px rgba(110,231,183,0.1); }
   .analysis-card.card-active.insight-card    { border-color: rgba(252,211,77,0.45);  box-shadow: 0 0 24px rgba(252,211,77,0.1); }
@@ -1618,16 +1631,19 @@
           <div class="ac-pill resilience">Emotional Resilience</div>
           <h5>Reframing Failure</h5>
           <p>"My biggest failure would be not taking enough risk to experience true failure." The model flags this as a resilience marker: failure recast as an unmet aspiration; not a catastrophe. There is no self-blame. Her attention is on what's next, not what went wrong.</p>
+          <div class="ac-seek-hint">Jump to 0:09</div>
         </div>
         <div class="analysis-card insight-card" id="card-insight">
           <div class="ac-pill insight">Self-Insight</div>
           <h5>Avoidance Pattern Named</h5>
           <p>"I tend to stay in my comfort zone and stand behind the yellow caution tape." A spontaneous, original metaphor for her own avoidance behavior — the model isn't looking for key words; it's looking for the naming precision that signals genuine self-awareness.</p>
+          <div class="ac-seek-hint">Jump to 0:20</div>
         </div>
         <div class="analysis-card rgrowth-card" id="card-rgrowth">
           <div class="ac-pill rgrowth">Reflective Growth</div>
           <h5>Present-Tense Growth Commitment</h5>
           <p>"Every day I'm trying to expand the barriers of my comfort zone… I'd like to experience a lot more failures." This present-tense growth orientation is fused with a desire to increase risk exposure. She is narrating an active, ongoing process.</p>
+          <div class="ac-seek-hint">Jump to 0:55</div>
         </div>
       </div>
     </div>
@@ -1656,22 +1672,15 @@
         </div>
       </div>
 
-      <!-- Scene 2 — voice response -->
+      <!-- Scene 2 — rubric -->
       <div class="scene-pane" data-scene="1">
-        <div class="scene-voice-media">
-          <img src="../images/bh-student.gif" alt="Student responding to behavioral health prompt" />
-          <div class="s-vm-label">26 seconds. One prompt.</div>
+        <div class="scene-callout">
+          <div class="s-num"></div>
+          <h3></h3>
+          <p></p>
         </div>
-        <div class="scene-voice-text">
-          <div class="s-stat">→ One spoken response</div>
-          <blockquote>
-            <span class="s-hl">"I tend to stay in my comfort zone and stand behind the yellow caution tape."</span>
-            <br/><br/>
-            Three signals. Six domains.<br/>
-            <span class="s-pill er">Emotional Resilience</span>
-            <span class="s-pill si">Self-Insight</span>
-            <span class="s-pill rg">Reflective Growth</span>
-          </blockquote>
+        <div class="scene-img-panel scene-img-panel--full">
+          <img src="../images/mtss-rubric-correct.png" alt="SDCOE Behavioral Health Rubric" class="s-scene-img">
         </div>
       </div>
 
@@ -2150,6 +2159,17 @@ const lspTier       = document.getElementById('lspTier');
 const cardResilience = document.getElementById('card-resilience');
 const cardInsight    = document.getElementById('card-insight');
 const cardRgrowth    = document.getElementById('card-rgrowth');
+
+// Card click → seek video to insight timestamp and play
+function seekToInsight(t) {
+  ncgirl.currentTime = t;
+  ncgirl.play();
+  // Scroll video into view smoothly
+  ncgirl.closest('.video-player-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+cardResilience.addEventListener('click', () => seekToInsight(NC_ML[0].start));
+cardInsight.addEventListener('click',    () => seekToInsight(NC_ML[1].start));
+cardRgrowth.addEventListener('click',    () => seekToInsight(NC_ML[2].start));
 
 // Score targets (out of 4 each, total /12)
 const SCORES = { resilience: 3, insight: 4, rgrowth: 4 };

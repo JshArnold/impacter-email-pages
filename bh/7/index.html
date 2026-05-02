@@ -1204,9 +1204,47 @@
     justify-self: end;
   }
   /* Card 3 video */
-  .scene-vid-panel { background: #000; align-self: center; }
+  .scene-vid-panel { background: #000; align-self: center; position: relative; }
+  /* Card 3 video controls */
+  .vid-ctrl {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 40px 14px 10px;
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.75));
+    border-radius: 0 0 16px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .vid-seek {
+    width: 100%; height: 3px; cursor: pointer;
+    -webkit-appearance: none; appearance: none;
+    background: rgba(255,255,255,0.22); border-radius: 99px;
+    outline: none; border: none; margin: 0; display: block;
+  }
+  .vid-seek::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 11px; height: 11px; border-radius: 50%;
+    background: #fff; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  }
+  .vid-seek::-moz-range-thumb {
+    width: 11px; height: 11px; border-radius: 50%;
+    background: #fff; cursor: pointer; border: none;
+  }
+  .vid-actions {
+    display: flex; align-items: center; justify-content: space-between; padding-top: 2px;
+  }
+  .vid-left { display: flex; align-items: center; gap: 4px; }
+  .vid-btn {
+    background: none; border: none; color: rgba(255,255,255,0.8);
+    cursor: pointer; padding: 3px; display: flex; align-items: center;
+    justify-content: center; transition: color 0.15s; line-height: 1;
+  }
+  .vid-btn:hover { color: #fff; }
+  .vid-skip {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.02em;
+    font-family: var(--font-display); padding: 3px 5px; color: rgba(255,255,255,0.65);
+  }
+  .vid-skip:hover { color: #fff; }
   /* Card 3 left col — start near video top, visually centered against video */
-  [data-scene="2"] .scene-callout { align-self: start; padding-top: 40px; }
+  [data-scene="2"] .scene-callout { align-self: start; padding-top: 65px; gap: 12px; }
   .s-scene-vid {
     width: 100%;
     height: auto;
@@ -1978,9 +2016,26 @@
           </div>
         </div>
         <div class="scene-img-panel scene-img-panel--full scene-vid-panel">
-          <video class="s-scene-vid" autoplay muted loop playsinline>
+          <video class="s-scene-vid" id="c3Vid" autoplay muted loop playsinline>
             <source src="../images/bhs-promo.mp4" type="video/mp4">
           </video>
+          <div class="vid-ctrl">
+            <input type="range" class="vid-seek" id="c3Seek" min="0" max="1000" step="1" value="0">
+            <div class="vid-actions">
+              <div class="vid-left">
+                <button class="vid-btn" id="c3Play" aria-label="Play/Pause">
+                  <svg id="c3PlayIco" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>
+                  <svg id="c3PauseIco" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="display:none"><path fill-rule="evenodd" d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm5-2.25A.75.75 0 017.75 7h.5a.75.75 0 01.75.75v4.5a.75.75 0 01-.75.75h-.5a.75.75 0 01-.75-.75v-4.5zm4 0a.75.75 0 01.75-.75h.5a.75.75 0 01.75.75v4.5a.75.75 0 01-.75.75h-.5a.75.75 0 01-.75-.75v-4.5z" clip-rule="evenodd"/></svg>
+                </button>
+                <button class="vid-btn vid-skip" id="c3Rew" aria-label="Back 10s">−10</button>
+                <button class="vid-btn vid-skip" id="c3Fwd" aria-label="Forward 10s">+10</button>
+              </div>
+              <button class="vid-btn" id="c3Mute" aria-label="Toggle mute">
+                <svg id="c3MutedIco" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M9.547 3.062A.75.75 0 0110 3.75v12.5a.75.75 0 01-1.264.546L4.703 13H3.167A1.75 1.75 0 011.5 11.25v-2.5A1.75 1.75 0 013.167 7H4.7l4.033-3.796a.75.75 0 01.814-.142zM13.28 7.22a.75.75 0 10-1.06 1.06L13.94 10l-1.72 1.72a.75.75 0 001.06 1.06L15 11.06l1.72 1.72a.75.75 0 101.06-1.06L16.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L15 8.94l-1.72-1.72z"/></svg>
+                <svg id="c3SoundIco" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="display:none"><path d="M9.547 3.062A.75.75 0 0110 3.75v12.5a.75.75 0 01-1.264.546L4.703 13H3.167A1.75 1.75 0 011.5 11.25v-2.5A1.75 1.75 0 013.167 7H4.7l4.033-3.796a.75.75 0 01.814-.142zm3.953 4.068a.75.75 0 011.069.949 2.75 2.75 0 000 3.842.75.75 0 01-1.068.95 4.25 4.25 0 010-5.74zm3.384-1.164a.75.75 0 011.06.04 6.75 6.75 0 010 9.128.75.75 0 01-1.1-1.02 5.25 5.25 0 000-7.088.75.75 0 01.04-1.06z"/></svg>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -3168,6 +3223,43 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   /* ── Boot ── */
   loadAmplitude();
   animLoop();
+})();
+
+/* ── Card 3 Video Controls ── */
+(function() {
+  var vid = document.getElementById('c3Vid');
+  var seek = document.getElementById('c3Seek');
+  var playBtn = document.getElementById('c3Play');
+  var playIco = document.getElementById('c3PlayIco');
+  var pauseIco = document.getElementById('c3PauseIco');
+  var rewBtn = document.getElementById('c3Rew');
+  var fwdBtn = document.getElementById('c3Fwd');
+  var muteBtn = document.getElementById('c3Mute');
+  var mutedIco = document.getElementById('c3MutedIco');
+  var soundIco = document.getElementById('c3SoundIco');
+  if (!vid || !seek) return;
+
+  function updateFill() {
+    if (!vid.duration) return;
+    var pct = (vid.currentTime / vid.duration) * 100;
+    seek.style.background = 'linear-gradient(to right,rgba(255,255,255,.85) ' + pct + '%,rgba(255,255,255,.2) ' + pct + '%)';
+    seek.value = pct * 10;
+  }
+  (function tick() { updateFill(); requestAnimationFrame(tick); })();
+
+  seek.addEventListener('input', function() {
+    if (vid.duration) vid.currentTime = (seek.value / 1000) * vid.duration;
+  });
+  playBtn.addEventListener('click', function() { vid.paused ? vid.play() : vid.pause(); });
+  vid.addEventListener('play', function() { playIco.style.display = 'none'; pauseIco.style.display = ''; });
+  vid.addEventListener('pause', function() { playIco.style.display = ''; pauseIco.style.display = 'none'; });
+  rewBtn.addEventListener('click', function() { vid.currentTime = Math.max(0, vid.currentTime - 10); });
+  fwdBtn.addEventListener('click', function() { vid.currentTime = Math.min(vid.duration || 0, vid.currentTime + 10); });
+  muteBtn.addEventListener('click', function() {
+    vid.muted = !vid.muted;
+    mutedIco.style.display = vid.muted ? '' : 'none';
+    soundIco.style.display = vid.muted ? 'none' : '';
+  });
 })();
 
 </script>

@@ -835,7 +835,7 @@
     position: absolute; inset: 0;
     display: grid; grid-template-columns: 2fr 3fr;
     gap: 40px;
-    align-items: center;
+    align-items: start;
     padding: 160px 40px 20px;
     opacity: 0;
     transition: opacity .5s var(--ease-emphasized);
@@ -1202,6 +1202,16 @@
     gap: 14px;
     max-width: 560px;
     justify-self: end;
+  }
+  /* Card 3 video */
+  .scene-vid-panel { background: #000; }
+  .s-scene-vid {
+    width: 100%;
+    height: auto;
+    max-height: 620px;
+    display: block;
+    border-radius: 16px;
+    object-fit: cover;
   }
   /* Full-bleed right column — locked to surveys-lock box dimensions (820px tall, 160px padding) */
   .scene-img-panel--full {
@@ -1973,8 +1983,10 @@
 
           <p>From the moment the student stops speaking, the pipeline runs without a human hand on it — until the counselor opens the list.</p>
         </div>
-        <div class="scene-img-panel scene-img-panel--full">
-          <img src="../images/bhs-dashboard-ets.png" alt="Behavioral Health Screener Dashboard" class="s-scene-img">
+        <div class="scene-img-panel scene-img-panel--full scene-vid-panel">
+          <video class="s-scene-vid" autoplay muted loop playsinline>
+            <source src="../images/bhs-promo.mp4" type="video/mp4">
+          </video>
         </div>
       </div>
 

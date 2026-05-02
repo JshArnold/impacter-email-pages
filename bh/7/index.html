@@ -2924,7 +2924,7 @@ const cardDescs = {
 function renderPrompts(list) {
   const grid = document.getElementById('prompts-grid');
   grid.innerHTML = list.map((p, i) => `
-    <div class="prompt-card ${cardColors[i % cardColors.length]} reveal" style="transition-delay:${0.05 * i}s">
+    <div class="prompt-card ${cardColors[i % cardColors.length]} in-view" style="transition-delay:${0.05 * i}s">
       <div class="pc-inner">
         <div class="pc-front">
           <span class="comp">${p.domain}</span>

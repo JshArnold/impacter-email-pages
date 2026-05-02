@@ -299,13 +299,9 @@
   /* ── Trust bar ── */
   .trust-bar {
     background: #eceae4;
-    padding: 40px 40px;
+    padding: 36px 0 40px;
     border-top: 1px solid rgba(0,0,0,0.06);
-    border-bottom: none;
-  }
-  .trust-bar-inner {
-    max-width: 1100px;
-    margin: 0 auto;
+    overflow: hidden;
   }
   .trust-label {
     font-size: 0.68rem;
@@ -314,22 +310,45 @@
     color: #9eaab8;
     text-transform: uppercase;
     text-align: center;
-    margin-bottom: 22px;
+    margin-bottom: 28px;
+    padding: 0 40px;
   }
-  .trust-logos {
+  .marquee-track {
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px 40px;
+    width: max-content;
+    animation: marquee 52s linear infinite;
   }
-  .trust-name {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--coral);
-    letter-spacing: 0.01em;
-    white-space: nowrap;
+  .marquee-track:hover { animation-play-state: paused; }
+  @keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
+  .marquee-logo {
+    height: 52px;
+    width: auto;
+    margin: 0 48px;
+    opacity: 0.55;
+    mix-blend-mode: multiply;
+    filter: grayscale(20%);
+    transition: opacity 0.3s;
+    flex-shrink: 0;
+  }
+  .marquee-logo:hover { opacity: 0.9; }
+  /* Edge fade masks */
+  .marquee-wrap {
+    position: relative;
+  }
+  .marquee-wrap::before, .marquee-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 120px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .marquee-wrap::before { left: 0;  background: linear-gradient(to right, #eceae4, transparent); }
+  .marquee-wrap::after  { right: 0; background: linear-gradient(to left,  #eceae4, transparent); }
 
   .stat-number {
     font-size: clamp(2.8rem, 5vw, 3.8rem);
@@ -1098,8 +1117,7 @@
     .stat-item:nth-child(odd) { padding-left: 0; }
     .stat-item:nth-child(even) { border-right: none; }
     .stat-item:nth-last-child(-n+2) { border-bottom: none; }
-    .trust-logos { gap: 10px 24px; }
-    .trust-name { font-size: 0.88rem; }
+    .marquee-logo { height: 40px; margin: 0 32px; }
     .vi-layout { grid-template-columns: 1fr; gap: 40px; }
     .vi-video-wrap { max-width: 100%; }
     .mtss-layout { grid-template-columns: 1fr; gap: 40px; }
@@ -1186,15 +1204,33 @@
 
 <!-- Trust Bar -->
 <div class="trust-bar">
-  <div class="trust-bar-inner">
-    <div class="trust-label">Trusted by Districts and County Offices</div>
-    <div class="trust-logos">
-      <span class="trust-name">San Diego COE</span>
-      <span class="trust-name">El Dorado COE</span>
-      <span class="trust-name">Santa Clara COE</span>
-      <span class="trust-name">San Diego USD</span>
-      <span class="trust-name">Vista USD</span>
-      <span class="trust-name">CA BHSOAC</span>
+  <div class="trust-label">Trusted by Districts and County Offices</div>
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="marqueeTrack">
+      <!-- Set 1 -->
+      <img class="marquee-logo" src="../images/logos/logo-sccoe.png"        alt="Santa Clara County Office of Education">
+      <img class="marquee-logo" src="../images/logos/logo-edcoe.png"        alt="El Dorado County Office of Education">
+      <img class="marquee-logo" src="../images/logos/logo-smfcsd.png"       alt="San Mateo-Foster City School District">
+      <img class="marquee-logo" src="../images/logos/logo-vista-unified.png" alt="Vista Unified School District">
+      <img class="marquee-logo" src="../images/logos/logo-ventura.png"      alt="Ventura County Office of Education">
+      <img class="marquee-logo" src="../images/logos/logo-cbh.png"          alt="Commission for Behavioral Health">
+      <img class="marquee-logo" src="../images/logos/logo-south-bay.png"    alt="South Bay Union School District">
+      <img class="marquee-logo" src="../images/logos/logo-esc2.png"         alt="ESC Region 2">
+      <img class="marquee-logo" src="../images/logos/logo-rio.png"          alt="Rio School District">
+      <img class="marquee-logo" src="../images/logos/logo-nyc-public.png"   alt="NYC Public Schools">
+      <img class="marquee-logo" src="../images/logos/logo-calexico.png"     alt="Calexico Unified School District">
+      <!-- Set 2 — duplicate for seamless loop -->
+      <img class="marquee-logo" src="../images/logos/logo-sccoe.png"        alt="Santa Clara County Office of Education">
+      <img class="marquee-logo" src="../images/logos/logo-edcoe.png"        alt="El Dorado County Office of Education">
+      <img class="marquee-logo" src="../images/logos/logo-smfcsd.png"       alt="San Mateo-Foster City School District">
+      <img class="marquee-logo" src="../images/logos/logo-vista-unified.png" alt="Vista Unified School District">
+      <img class="marquee-logo" src="../images/logos/logo-ventura.png"      alt="Ventura County Office of Education">
+      <img class="marquee-logo" src="../images/logos/logo-cbh.png"          alt="Commission for Behavioral Health">
+      <img class="marquee-logo" src="../images/logos/logo-south-bay.png"    alt="South Bay Union School District">
+      <img class="marquee-logo" src="../images/logos/logo-esc2.png"         alt="ESC Region 2">
+      <img class="marquee-logo" src="../images/logos/logo-rio.png"          alt="Rio School District">
+      <img class="marquee-logo" src="../images/logos/logo-nyc-public.png"   alt="NYC Public Schools">
+      <img class="marquee-logo" src="../images/logos/logo-calexico.png"     alt="Calexico Unified School District">
     </div>
   </div>
 </div>

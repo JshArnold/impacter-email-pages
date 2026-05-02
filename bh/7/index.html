@@ -1413,46 +1413,74 @@
   }
 
   /* ── bh/2-style prompt cards ── */
+  /* ── Prompt cards: 3D flip ── */
   .prompt-card {
+    min-height: 260px;
+    perspective: 1000px;
+    cursor: pointer;
+    border-radius: 14px;
     position: relative;
-    display: block;
+    --prompt-glow: rgba(99,142,197,0.25);
+  }
+  .prompt-card.coral  { --prompt-glow: rgba(243,113,99,0.25); }
+  .prompt-card.green  { --prompt-glow: rgba(95,168,118,0.25); }
+  .prompt-card.gold   { --prompt-glow: rgba(224,176,70,0.25); }
+  .prompt-card.blue   { --prompt-glow: rgba(99,142,197,0.25); }
+  .prompt-card.purple { --prompt-glow: rgba(178,122,182,0.25); }
+  .prompt-card.teal   { --prompt-glow: rgba(79,164,122,0.25); }
+
+  /* Flipper */
+  .pc-inner {
+    position: relative;
+    width: 100%; min-height: 260px;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    border-radius: 14px;
+  }
+  .prompt-card:hover .pc-inner { transform: rotateY(180deg); }
+
+  /* Both faces */
+  .pc-front, .pc-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  /* Front face */
+  .pc-front {
     padding: 28px 28px 80px;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px;
-    color: inherit;
-    text-decoration: none;
     isolation: isolate;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform .35s var(--ease-emphasized), border-color .35s, background .35s;
-    --prompt-glow: rgba(99,142,197,0.25);
+    transition: border-color .35s;
   }
-  .prompt-card::before {
+  .pc-front::before {
     content: "";
     position: absolute; inset: 0; z-index: -1;
     background: radial-gradient(60% 80% at 100% 100%, var(--prompt-glow), transparent 70%);
-    opacity: 0;
-    transition: opacity .4s;
+    opacity: 0; transition: opacity .4s;
   }
-  .prompt-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.2); }
-  .prompt-card:hover::before { opacity: 1; }
+  .prompt-card:hover .pc-front { border-color: rgba(255,255,255,0.18); }
+  .prompt-card:hover .pc-front::before { opacity: 1; }
+
+  /* Comp chips */
   .prompt-card .comp {
     display: inline-block;
     font-size: 10px; font-weight: 800; letter-spacing: 0.16em;
-    text-transform: uppercase;
-    padding: 5px 10px;
-    border-radius: 999px;
-    margin-bottom: 18px;
-    background: rgba(99,142,197,0.16);
-    color: #9DBEEA;
+    text-transform: uppercase; padding: 5px 10px;
+    border-radius: 999px; margin-bottom: 18px;
+    background: rgba(99,142,197,0.16); color: #9DBEEA;
   }
-  .prompt-card.coral .comp { background: rgba(243,113,99,0.16); color: #F89A8E; --prompt-glow: rgba(243,113,99,0.25); }
-  .prompt-card.green .comp { background: rgba(95,168,118,0.16); color: #7BC096; --prompt-glow: rgba(95,168,118,0.25); }
-  .prompt-card.gold .comp  { background: rgba(224,176,70,0.16); color: #E8C26C; --prompt-glow: rgba(224,176,70,0.25); }
-  .prompt-card.blue .comp  { background: rgba(99,142,197,0.16); color: #9DBEEA; --prompt-glow: rgba(99,142,197,0.25); }
-  .prompt-card.purple .comp{ background: rgba(178,122,182,0.16); color: #D2A2D7; --prompt-glow: rgba(178,122,182,0.25); }
-  .prompt-card.teal .comp  { background: rgba(79,164,122,0.16); color: #7BC096; --prompt-glow: rgba(79,164,122,0.25); }
+  .prompt-card.coral  .comp { background: rgba(243,113,99,0.16);  color: #F89A8E; }
+  .prompt-card.green  .comp { background: rgba(95,168,118,0.16);  color: #7BC096; }
+  .prompt-card.gold   .comp { background: rgba(224,176,70,0.16);  color: #E8C26C; }
+  .prompt-card.blue   .comp { background: rgba(99,142,197,0.16);  color: #9DBEEA; }
+  .prompt-card.purple .comp { background: rgba(178,122,182,0.16); color: #D2A2D7; }
+  .prompt-card.teal   .comp { background: rgba(79,164,122,0.16);  color: #7BC096; }
+
   .prompt-card h4 {
     font-family: var(--font-display); font-weight: 700;
     font-size: 22px; letter-spacing: -0.02em;
@@ -1463,79 +1491,49 @@
     font-size: 14px; line-height: 1.5;
     color: rgba(232,234,240,0.6); margin: 0;
   }
-  .prompt-card .pc-arrow {
-    position: absolute;
-    bottom: 24px; right: 28px;
-    width: 36px; height: 36px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.16);
+  .pc-front .pc-arrow {
+    position: absolute; bottom: 24px; right: 28px;
+    width: 36px; height: 36px; border-radius: 999px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.16);
     display: flex; align-items: center; justify-content: center;
     color: #fff; font-size: 14px;
-    transition: transform .35s var(--ease-emphasized), background .35s, border-color .35s;
   }
-  .prompt-card:hover .pc-arrow {
-    transform: translate(4px, -4px) rotate(-12deg);
-    background: var(--color-coral); border-color: var(--color-coral);
-  }
-  /* arrow icon swap: ↗ → ▶ */
-  .pc-ai, .pc-av {
-    transition: opacity .22s ease, transform .22s ease;
-    line-height: 1;
-  }
-  .pc-av { position: absolute; opacity: 0; transform: scale(0.6); font-size: 11px; }
-  .prompt-card:hover .pc-ai { opacity: 0; transform: scale(0.6); }
-  .prompt-card:hover .pc-av { opacity: 1; transform: scale(1); }
 
-  /* ── Question reveal ── */
-  .pc-text-swap {
-    display: grid;
-    min-height: 54px;
-    margin: 0 0 8px;
+  /* Back face */
+  .pc-back {
+    transform: rotateY(180deg);
+    background: #060911;
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
   }
-  .pc-desc, .pc-question {
-    grid-row: 1; grid-column: 1;
-    margin: 0;
-    font-family: var(--font-body); font-weight: 300;
-    font-size: 14px; line-height: 1.55;
-    transition: opacity .3s ease, transform .3s ease;
+  .pc-vid {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
   }
-  .pc-desc { color: rgba(232,234,240,0.6); }
-  .pc-question {
-    font-style: italic;
-    color: rgba(255,255,255,0.85);
-    opacity: 0;
-    transform: translateY(7px);
-    pointer-events: none;
+  .pc-back-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px 22px 22px;
+    background: linear-gradient(to bottom, rgba(5,8,18,0.1) 0%, rgba(5,8,18,0.75) 60%, rgba(5,8,18,0.92) 100%);
   }
-  .prompt-card:hover .pc-desc   { opacity: 0; transform: translateY(-7px); }
-  .prompt-card:hover .pc-question { opacity: 1; transform: translateY(0); }
-
-  /* ── Waveform ── */
-  .pc-wave {
-    position: absolute;
-    bottom: 30px; left: 28px;
-    display: flex; gap: 3px; align-items: flex-end;
-    height: 18px;
-    opacity: 0;
-    transition: opacity .3s ease;
+  .pc-back-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.16em;
+    text-transform: uppercase; color: rgba(255,255,255,0.5);
+    margin-bottom: 10px;
+    font-family: var(--font-display);
   }
-  .prompt-card:hover .pc-wave { opacity: 1; }
-  .pc-wave span {
-    display: block; width: 3px; border-radius: 2px;
-    background: rgba(255,255,255,0.5);
-    transform-origin: bottom;
-    animation: pcWaveBar .8s ease-in-out infinite alternate;
+  .pc-back-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    align-self: flex-start;
+    background: var(--color-coral); color: #fff;
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 13px; letter-spacing: 0.03em;
+    padding: 10px 20px; border-radius: 999px;
+    transition: transform .2s, filter .2s;
   }
-  .pc-wave span:nth-child(1) { height: 7px;  animation-delay: 0s; }
-  .pc-wave span:nth-child(2) { height: 14px; animation-delay: 0.18s; }
-  .pc-wave span:nth-child(3) { height: 10px; animation-delay: 0.09s; }
-  .pc-wave span:nth-child(4) { height: 16px; animation-delay: 0.27s; }
-  .pc-wave span:nth-child(5) { height: 8px;  animation-delay: 0.13s; }
-  @keyframes pcWaveBar {
-    from { transform: scaleY(0.3); }
-    to   { transform: scaleY(1); }
-  }
+  .prompt-card:hover .pc-back-cta { transform: scale(1.04); filter: brightness(1.08); }
 
   /* ── Modal ── */
   .modal-backdrop {
@@ -2231,65 +2229,107 @@
     </div>
 
     <div class="prompts-grid" id="prompts-grid">
-      <div class="prompt-card blue reveal" style="transition-delay:0.05s" onclick="openModal('https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX')">
-        <span class="comp">Self-Insight</span>
-        <h4>Self-Insight Reflection</h4>
-        <div class="pc-text-swap">
-          <p class="pc-desc">Recognizing self, naming choices, describing growth.</p>
-          <p class="pc-question">"What's something you've gotten better at this year — and what did it take to get there?"</p>
+      <div class="prompt-card blue reveal" style="transition-delay:0.05s">
+        <div class="pc-inner">
+          <div class="pc-front">
+            <span class="comp">Self-Insight</span>
+            <h4>Self-Insight Reflection</h4>
+            <p>Recognizing self, naming choices, describing growth.</p>
+            <span class="pc-arrow">↗</span>
+          </div>
+          <div class="pc-back" onclick="openModal('https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+            <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-preview.mp4" type="video/mp4"></video>
+            <div class="pc-back-overlay">
+              <div class="pc-back-label">Self-Insight</div>
+              <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
+            </div>
+          </div>
         </div>
-        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
-        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
-      <div class="prompt-card coral reveal" style="transition-delay:0.1s" onclick="openModal('https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX')">
-        <span class="comp">Emotional Resilience</span>
-        <h4>The Hard Days</h4>
-        <div class="pc-text-swap">
-          <p class="pc-desc">Naming emotions, coping strategies, perseverance.</p>
-          <p class="pc-question">"Tell me about a time things didn't go the way you planned. What did you do?"</p>
+      <div class="prompt-card coral reveal" style="transition-delay:0.1s">
+        <div class="pc-inner">
+          <div class="pc-front">
+            <span class="comp">Emotional Resilience</span>
+            <h4>The Hard Days</h4>
+            <p>Naming emotions, coping strategies, perseverance.</p>
+            <span class="pc-arrow">↗</span>
+          </div>
+          <div class="pc-back" onclick="openModal('https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+            <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-preview.mp4" type="video/mp4"></video>
+            <div class="pc-back-overlay">
+              <div class="pc-back-label">Emotional Resilience</div>
+              <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
+            </div>
+          </div>
         </div>
-        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
-        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
-      <div class="prompt-card green reveal" style="transition-delay:0.15s" onclick="openModal('https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX')">
-        <span class="comp">Relational Awareness</span>
-        <h4>Something Changed</h4>
-        <div class="pc-text-swap">
-          <p class="pc-desc">Noticing change in relationships, demonstrating empathy.</p>
-          <p class="pc-question">"Is there someone at school you feel like you could actually talk to if something was wrong?"</p>
+      <div class="prompt-card green reveal" style="transition-delay:0.15s">
+        <div class="pc-inner">
+          <div class="pc-front">
+            <span class="comp">Relational Awareness</span>
+            <h4>Something Changed</h4>
+            <p>Noticing change in relationships, demonstrating empathy.</p>
+            <span class="pc-arrow">↗</span>
+          </div>
+          <div class="pc-back" onclick="openModal('https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+            <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-preview.mp4" type="video/mp4"></video>
+            <div class="pc-back-overlay">
+              <div class="pc-back-label">Relational Awareness</div>
+              <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
+            </div>
+          </div>
         </div>
-        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
-        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
-      <div class="prompt-card gold reveal" style="transition-delay:0.2s" onclick="openModal('https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX')">
-        <span class="comp">Conflict Resolution</span>
-        <h4>Fixing What Broke</h4>
-        <div class="pc-text-swap">
-          <p class="pc-desc">Taking responsibility, practicing repair, persistence.</p>
-          <p class="pc-question">"Tell me about a disagreement you had with someone. How did you handle it?"</p>
+      <div class="prompt-card gold reveal" style="transition-delay:0.2s">
+        <div class="pc-inner">
+          <div class="pc-front">
+            <span class="comp">Conflict Resolution</span>
+            <h4>Fixing What Broke</h4>
+            <p>Taking responsibility, practicing repair, persistence.</p>
+            <span class="pc-arrow">↗</span>
+          </div>
+          <div class="pc-back" onclick="openModal('https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+            <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-preview.mp4" type="video/mp4"></video>
+            <div class="pc-back-overlay">
+              <div class="pc-back-label">Conflict Resolution</div>
+              <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
+            </div>
+          </div>
         </div>
-        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
-        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
-      <div class="prompt-card purple reveal" style="transition-delay:0.25s" onclick="openModal('https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX')">
-        <span class="comp">Help-Seeking</span>
-        <h4>Stronger Together</h4>
-        <div class="pc-text-swap">
-          <p class="pc-desc">Knowing when to ask for help and using available supports.</p>
-          <p class="pc-question">"When something's hard — like really hard — do you usually talk to someone about it or handle it on your own?"</p>
+      <div class="prompt-card purple reveal" style="transition-delay:0.25s">
+        <div class="pc-inner">
+          <div class="pc-front">
+            <span class="comp">Help-Seeking</span>
+            <h4>Stronger Together</h4>
+            <p>Knowing when to ask for help and using available supports.</p>
+            <span class="pc-arrow">↗</span>
+          </div>
+          <div class="pc-back" onclick="openModal('https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+            <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-preview.mp4" type="video/mp4"></video>
+            <div class="pc-back-overlay">
+              <div class="pc-back-label">Help-Seeking</div>
+              <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
+            </div>
+          </div>
         </div>
-        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
-        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
-      <div class="prompt-card teal reveal" style="transition-delay:0.3s" onclick="openModal('https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX')">
-        <span class="comp">Reflective Growth</span>
-        <h4>Not the Same Person</h4>
-        <div class="pc-text-swap">
-          <p class="pc-desc">Describing personal growth, identifying change, setting goals.</p>
-          <p class="pc-question">"If you could go back and handle one situation differently this year, what would it be — and what would you do instead?"</p>
+      <div class="prompt-card teal reveal" style="transition-delay:0.3s">
+        <div class="pc-inner">
+          <div class="pc-front">
+            <span class="comp">Reflective Growth</span>
+            <h4>Not the Same Person</h4>
+            <p>Describing personal growth, identifying change, setting goals.</p>
+            <span class="pc-arrow">↗</span>
+          </div>
+          <div class="pc-back" onclick="openModal('https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX')">
+            <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-preview.mp4" type="video/mp4"></video>
+            <div class="pc-back-overlay">
+              <div class="pc-back-label">Reflective Growth</div>
+              <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
+            </div>
+          </div>
         </div>
-        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
-        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
     </div>
   </div>
@@ -2884,17 +2924,34 @@ const cardDescs = {
 function renderPrompts(list) {
   const grid = document.getElementById('prompts-grid');
   grid.innerHTML = list.map((p, i) => `
-    <div class="prompt-card ${cardColors[i % cardColors.length]} reveal" style="transition-delay:${0.05 * i}s" onclick="openModal('${p.url}')">
-      <span class="comp">${p.domain}</span>
-      <h4>${cardTitles[p.domain] || p.domain}</h4>
-      <div class="pc-text-swap">
-        <p class="pc-desc">${cardDescs[p.domain] || ''}</p>
-        <p class="pc-question">${p.q || ''}</p>
+    <div class="prompt-card ${cardColors[i % cardColors.length]} reveal" style="transition-delay:${0.05 * i}s">
+      <div class="pc-inner">
+        <div class="pc-front">
+          <span class="comp">${p.domain}</span>
+          <h4>${cardTitles[p.domain] || p.domain}</h4>
+          <p>${cardDescs[p.domain] || ''}</p>
+          <span class="pc-arrow">↗</span>
+        </div>
+        <div class="pc-back" onclick="openModal('${p.url}')">
+          <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-preview.mp4" type="video/mp4"></video>
+          <div class="pc-back-overlay">
+            <div class="pc-back-label">${p.domain}</div>
+            <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
+          </div>
+        </div>
       </div>
-      <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
-      <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
     </div>
   `).join('');
+  bindCardVideos();
+}
+
+function bindCardVideos() {
+  document.querySelectorAll('.prompt-card').forEach(card => {
+    const vid = card.querySelector('.pc-vid');
+    if (!vid) return;
+    card.addEventListener('mouseenter', () => vid.play().catch(() => {}));
+    card.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
+  });
 }
 
 function setGrade(grade) {
@@ -2902,6 +2959,9 @@ function setGrade(grade) {
   event.target.classList.add('active');
   renderPrompts(grade === '3-12' ? prompts312 : promptsTK2);
 }
+
+/* bind video hover for initial static cards */
+document.addEventListener('DOMContentLoaded', bindCardVideos);
 
 /* ──────────────────────────────
    SCROLL PROGRESS

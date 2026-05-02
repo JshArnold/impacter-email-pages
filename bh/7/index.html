@@ -2896,9 +2896,9 @@ const prompts312 = [
 ];
 
 const promptsTK2 = [
-  { domain: 'Emotional Resilience',   url: 'https://flex.impacterpathway.com/fi4mgwelx', q: '"What do you do when you feel sad or upset at school?"',                    vid: '/bh/images/prompt-2.mp4' },
-  { domain: 'Relational Awareness',   url: 'https://flex.impacterpathway.com/fjzzdvxk8', q: '"Who is a grown-up at school that makes you feel safe? Tell me about them."', vid: '/bh/images/prompt-3.mp4' },
-  { domain: 'Effective Help-Seeking', url: 'https://flex.impacterpathway.com/f96z46iz7', q: '"If something was bothering you, who would you tell?"',                      vid: '/bh/images/prompt-5.mp4' },
+  { domain: 'Relational Awareness',   url: 'https://flex.impacterpathway.com/fjzzdvxk8', title: 'Noticing The People Around You',  desc: 'Noticing how others feel and choosing how to show up for them.',       q: '"Think about a time you saw someone who was really upset. What did you notice, and what did you do about it?"', vid: '/bh/images/prompt-3.mp4' },
+  { domain: 'Emotional Resilience',   url: 'https://flex.impacterpathway.com/fi4mgwelx', title: 'All About Your Bounce Back',      desc: 'Finding what helps you keep going when things get tough.',              q: '"Tell me about a time you kept trying something hard even when you felt like quitting. What made you keep going?"', vid: '/bh/images/prompt-2.mp4' },
+  { domain: 'Effective Help-Seeking', url: 'https://flex.impacterpathway.com/f96z46iz7', title: "Why It's Better Together",        desc: 'Knowing when to ask for help, and what it feels like to learn together.', q: '"Think about a time you asked someone to help you with something new. Who did you ask? And how did it feel to learn together?"', vid: '/bh/images/prompt-5.mp4' },
 ];
 
 const cardColors = ['blue','coral','green','gold','purple','teal'];
@@ -2925,14 +2925,14 @@ function renderPrompts(list) {
       <div class="pc-inner">
         <div class="pc-front">
           <span class="comp">${p.domain}</span>
-          <h4>${cardTitles[p.domain] || p.domain}</h4>
-          <p>${cardDescs[p.domain] || ''}</p>
+          <h4>${p.title || cardTitles[p.domain] || p.domain}</h4>
+          <p>${p.desc || cardDescs[p.domain] || ''}</p>
           <span class="pc-arrow">↗</span>
         </div>
         <div class="pc-back" onclick="openModal('${p.url}','${p.domain}')">
           <video class="pc-vid" muted loop playsinline preload="none"><source src="${p.vid || '/bh/images/prompt-1.mp4'}" type="video/mp4"></video>
           <div class="pc-back-overlay">
-            <div class="pc-back-label">${p.domain}</div>
+            <div class="pc-back-label">${p.title || p.domain}</div>
             <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
           </div>
         </div>

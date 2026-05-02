@@ -1906,6 +1906,7 @@
   .sm-left {
     background: #F0F0EF; padding: 28px 36px;
     display: flex; flex-direction: column; gap: 14px;
+    justify-content: space-between;
   }
   .sm-right {
     background: #0F1B2E; padding: 28px 36px;
@@ -1960,13 +1961,9 @@
   .sm-note { font-size: 11px; color: #B0B5BC; margin-top: 4px; font-style: italic; }
 
   /* Flip card — right side */
-  .sm-flip {
-    perspective: 1000px; cursor: pointer;
-    position: relative; flex: 1; min-height: 0;
-    display: flex; flex-direction: column;
-  }
+  .sm-flip { perspective: 1000px; cursor: pointer; position: relative; }
   .sm-flip-inner {
-    position: relative; flex: 1; height: 100%;
+    position: relative; width: 100%;
     transition: transform 0.65s cubic-bezier(0.4,0.2,0.2,1);
     transform-style: preserve-3d;
   }
@@ -1975,8 +1972,8 @@
     border-radius: 12px; overflow: hidden;
     backface-visibility: hidden; -webkit-backface-visibility: hidden;
   }
-  .sm-flip-front { position: absolute; inset: 0; }
-  .sm-flip-front img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 12px; }
+  .sm-flip-front { position: relative; }
+  .sm-flip-front img { width: 100%; height: auto; display: block; border-radius: 12px; }
   .sm-flip-back {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     transform: rotateY(180deg);
@@ -2479,7 +2476,7 @@
         <div class="sm-fake-survey" id="smFakeSurvey">
           <div class="sm-survey-header">
             <span>Student Wellness Check-In</span>
-            <span>4 of 4</span>
+            <span>3 of 3</span>
           </div>
           <div class="sm-q-block">
             <div class="sm-question">Q1. I am motivated to succeed in school.</div>
@@ -2512,18 +2509,6 @@
               <div class="sm-likert-dot" data-v="1">1</div>
               <div class="sm-likert-dot sm-selected" data-v="2">2</div>
               <div class="sm-likert-dot" data-v="3">3</div>
-              <div class="sm-likert-dot" data-v="4">4</div>
-              <div class="sm-likert-dot" data-v="5">5</div>
-              <span class="sm-likert-label">SA</span>
-            </div>
-          </div>
-          <div class="sm-q-block">
-            <div class="sm-question">Q4. I feel safe expressing how I really feel.</div>
-            <div class="sm-likert-row" data-smq="4">
-              <span class="sm-likert-label">SD</span>
-              <div class="sm-likert-dot" data-v="1">1</div>
-              <div class="sm-likert-dot" data-v="2">2</div>
-              <div class="sm-likert-dot sm-selected" data-v="3">3</div>
               <div class="sm-likert-dot" data-v="4">4</div>
               <div class="sm-likert-dot" data-v="5">5</div>
               <span class="sm-likert-label">SA</span>

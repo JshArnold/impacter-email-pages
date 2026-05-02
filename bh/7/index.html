@@ -1521,8 +1521,15 @@
   .pc-back-label {
     font-size: 10px; font-weight: 800; letter-spacing: 0.16em;
     text-transform: uppercase; color: rgba(255,255,255,0.5);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-family: var(--font-display);
+  }
+  .pc-back-q {
+    font-family: var(--font-body); font-weight: 300;
+    font-size: 13px; line-height: 1.55;
+    color: rgba(255,255,255,0.88);
+    font-style: italic;
+    margin-bottom: 16px;
   }
   .pc-back-cta {
     display: inline-flex; align-items: center; gap: 8px;
@@ -2247,6 +2254,7 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-1.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Self-Insight</div>
+              <div class="pc-back-q">"What's something you've gotten better at this year — and what did it take to get there?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2264,6 +2272,7 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-2.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Emotional Resilience</div>
+              <div class="pc-back-q">"Tell me about a time things didn't go the way you planned. What did you do?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2281,6 +2290,7 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-3.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Relational Awareness</div>
+              <div class="pc-back-q">"Is there someone at school you feel like you could actually talk to if something was wrong?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2298,6 +2308,7 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-4.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Conflict Resolution</div>
+              <div class="pc-back-q">"Tell me about a disagreement you had with someone. How did you handle it?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2315,6 +2326,7 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-5.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Effective Help-Seeking</div>
+              <div class="pc-back-q">"When something's hard — like really hard — do you usually talk to someone about it or handle it on your own?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2332,6 +2344,7 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-6.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Reflective Growth</div>
+              <div class="pc-back-q">"If you could go back and handle one situation differently this year, what would it be — and what would you do instead?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2945,6 +2958,7 @@ function renderPrompts(list) {
           <video class="pc-vid" muted loop playsinline preload="none"><source src="${p.vid || '/bh/images/prompt-1.mp4'}" type="video/mp4"></video>
           <div class="pc-back-overlay">
             <div class="pc-back-label">${p.title || p.domain}</div>
+            <div class="pc-back-q">${p.q || ''}</div>
             <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
           </div>
         </div>

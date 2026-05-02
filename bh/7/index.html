@@ -981,6 +981,59 @@
   }
   .surveys-progress .s-dot.active { background: var(--coral); }
 
+  /* Student profile registry card — scene 2 left column */
+  .s-profile-eyebrow {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .s-profile-eyebrow::before {
+    content: '→';
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+  .s-profile-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 28px;
+    border-left: 2px solid rgba(255,255,255,0.08);
+    padding-left: 20px;
+  }
+  .s-profile-line {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 2.4vw, 34px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+  .s-profile-line.pl-name  { color: rgba(255,255,255,0.95); }
+  .s-profile-line.pl-grade { color: rgba(255,255,255,0.45); font-size: clamp(15px, 1.4vw, 19px); font-weight: 500; margin-top: 4px; }
+  .s-profile-line.pl-tier  { color: #F89A8E; margin-top: 14px; }
+  .s-profile-line.pl-level { color: #F4C97A; font-size: clamp(15px, 1.4vw, 19px); font-weight: 600; margin-top: 2px; }
+  .s-profile-demo {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    padding: 3px 7px;
+    margin-top: 14px;
+    width: fit-content;
+  }
+
   /* Credits pills — role tags with accent colors */
   .s-credits-list {
     display: flex;
@@ -1697,24 +1750,18 @@
         </div>
       </div>
 
-      <!-- Scene 2 — rubric -->
+      <!-- Scene 2 — counselor profile view -->
       <div class="scene-pane" data-scene="1">
         <div class="scene-callout">
-          <div class="s-credits-list">
-            <span class="s-cpill s-cpill-coral">Counselors</span>
-            <span class="s-cpill s-cpill-blue">School Psychologists</span>
-            <span class="s-cpill s-cpill-green">School Psychologists</span>
-            <span class="s-cpill s-cpill-amber">County Office Staff</span>
-            <span class="s-cpill s-cpill-lavender">SELPA Directors</span>
-            <span class="s-cpill s-cpill-coral">Special Education Teachers</span>
-            <span class="s-cpill s-cpill-blue">Social Workers</span>
-            <span class="s-cpill s-cpill-amber">Site Administrators</span>
-            <span class="s-cpill s-cpill-green">District Leadership</span>
-            <span class="s-cpill s-cpill-lavender">Mental Health Specialists</span>
-            <span class="s-cpill s-cpill-blue">Student Support Teams</span>
-            <span class="s-cpill s-cpill-coral">Counselors</span>
+          <div class="s-profile-eyebrow">The Counselor's View</div>
+          <div class="s-profile-card">
+            <div class="s-profile-line pl-name">Percy Purpose.</div>
+            <div class="s-profile-line pl-grade">11th Grade</div>
+            <div class="s-profile-line pl-tier">Tier 2 — Targeted.</div>
+            <div class="s-profile-line pl-level">Developing.</div>
+            <div class="s-profile-demo">Teaching Example</div>
           </div>
-          <p>Built by expert educators at the San Diego County Office of Education. Validated against more than 5 billion words of student voice data over the course of 2 years.</p>
+          <p>This is what the counselor sees. Not a roster of scores — a roster of students, each with a tier, a rubric level, and the language that drove the assignment. Action starts at the name, not the number.</p>
         </div>
         <div class="scene-img-panel scene-img-panel--full">
           <img src="../images/mtss-rubric-correct.png?v=2" alt="SDCOE Behavioral Health Rubric" class="s-scene-img">

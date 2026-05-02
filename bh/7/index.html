@@ -564,61 +564,74 @@
   }
   .vi3-play-btn:hover { opacity: 0.85; }
 
-  /* Right column — transcript + signals stacked, no card containers */
-  .vi3-right-col { display: flex; flex-direction: column; gap: 0; }
+  /* Right column — signal blocks only, no transcript */
+  .vi3-right-col { display: flex; flex-direction: column; }
 
-  /* Transcript band */
+  /* Signal blocks — flat text on navy, NO card containers */
+  .vi3-signals {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* Full-width editorial transcript band — below the main grid */
+  .vi3-tx-band {
+    margin-top: 60px;
+    padding-top: 44px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+
   .vi3-tx-label {
     font-size: 10px; font-weight: 700;
     letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--coral); margin-bottom: 12px;
+    color: var(--coral); margin-bottom: 20px;
     display: flex; align-items: center; gap: 8px;
   }
   .vi3-tx-label::before {
     content: ''; display: block; width: 16px; height: 1px; background: var(--coral);
   }
 
+  /* Stanza window — fixed height, editorial large type */
   .vi3-tx-window {
-    height: 110px;
+    height: 160px;
     overflow: hidden;
     position: relative;
   }
   .vi3-stanza {
     position: absolute;
     top: 0; left: 0; right: 0;
-    font-size: 0.95rem;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
     font-weight: 400;
-    line-height: 1.7;
+    line-height: 1.5;
     transition: opacity 0.7s ease;
-    color: rgba(214,231,241,0.55);
+    max-width: 900px;
   }
   .vi3-stanza.hidden { opacity: 0; pointer-events: none; }
 
   /* Transcript word states */
   .vw { transition: color 0.18s ease, opacity 0.18s ease, filter 0.15s ease; }
-  .vw { opacity: 0.28; color: #fff; }
+  .vw { opacity: 0.25; color: #fff; }
   .vw.domain   { color: var(--blue);  opacity: 0.45; }
   .vw.metaphor { color: var(--coral); opacity: 0.5; }
   .vw.metaphor-standout { color: var(--coral); opacity: 0.55; font-size: 1.03em; }
-  .vw.past { opacity: 0.65 !important; color: rgba(255,255,255,0.65); }
+  .vw.past { opacity: 0.6 !important; color: rgba(255,255,255,0.6); }
   .vw.domain.past   { color: var(--blue)  !important; opacity: 0.8 !important; }
   .vw.metaphor.past { color: var(--coral) !important; opacity: 0.9 !important; }
   .vw.metaphor-standout.past {
     color: var(--coral) !important; opacity: 0.95 !important;
-    filter: drop-shadow(0 0 4px rgba(243,113,99,0.25));
+    filter: drop-shadow(0 0 6px rgba(243,113,99,0.3));
   }
   .vw.active { opacity: 1 !important; color: #fff !important; animation: vwPulse 0.22s ease-out; }
   .vw.domain.active   { color: var(--blue)  !important; }
   .vw.metaphor.active, .vw.metaphor-standout.active { color: var(--coral) !important; }
   @keyframes vwPulse { 0% { filter:brightness(1.6); } 100% { filter:brightness(1); } }
 
-  /* Progress dots */
+  /* Progress dots — below transcript */
   .vi3-dots {
     display: flex;
-    gap: 7px;
+    gap: 8px;
     align-items: center;
-    margin-top: 12px;
-    margin-bottom: 36px;
+    margin-top: 16px;
   }
   .vi3-dot {
     width: 6px; height: 6px;
@@ -629,15 +642,6 @@
   }
   .vi3-dot.past  { background: rgba(243,113,99,0.28); border-color: rgba(243,113,99,0.28); }
   .vi3-dot.active{ background: var(--coral); border-color: var(--coral); }
-
-  /* Signal blocks — flat text on navy, NO card containers */
-  .vi3-signals {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    padding-top: 28px;
-    border-top: 1px solid rgba(255,255,255,0.07);
-  }
   /* No border, no background, no radius — flat on navy */
   .vi3-signal-block { }
 
@@ -1264,7 +1268,8 @@
     .vi3-main { grid-template-columns: 1fr; gap: 36px; }
     .vi3-video-wrap { width: 100%; max-height: none; }
     .vi3-signals { gap: 28px; }
-    .vi3-tx-window { height: auto; min-height: 72px; }
+    .vi3-tx-window { height: auto; min-height: 80px; }
+    .vi3-tx-band { margin-top: 40px; padding-top: 32px; }
     .mtss-layout { grid-template-columns: 1fr; gap: 40px; }
     .compare-grid { grid-template-columns: 1fr; gap: 40px; }
     .prompts-grid { grid-template-columns: 1fr 1fr; }
@@ -1415,23 +1420,8 @@
         </div>
       </div>
 
-      <!-- Right: transcript + signals (flat, no card containers) -->
+      <!-- Right: signal blocks only — flat text on navy, always present, body swaps on fire -->
       <div class="vi3-right-col reveal" style="transition-delay:0.12s">
-
-        <!-- Transcript window -->
-        <div class="vi3-tx-label">WHISPER-SYNCED TRANSCRIPT</div>
-        <div class="vi3-tx-window" id="vi3-tx-window">
-          <!-- Five stanzas built by JS -->
-        </div>
-        <div class="vi3-dots" id="vi3-dots">
-          <div class="vi3-dot active" id="vi3-dot-0"></div>
-          <div class="vi3-dot" id="vi3-dot-1"></div>
-          <div class="vi3-dot" id="vi3-dot-2"></div>
-          <div class="vi3-dot" id="vi3-dot-3"></div>
-          <div class="vi3-dot" id="vi3-dot-4"></div>
-        </div>
-
-        <!-- Three signal blocks — flat text on navy, always present, body text swaps on fire -->
         <div class="vi3-signals">
 
           <div class="vi3-signal-block" id="vi3-card-er">
@@ -1473,9 +1463,24 @@
         </div><!-- /vi3-signals -->
       </div><!-- /vi3-right-col -->
 
+    </div><!-- /vi3-main -->
+
+    <!-- Full-width editorial transcript — below the video+signals row -->
+    <div class="vi3-tx-band reveal" style="transition-delay:0.2s">
+      <div class="vi3-tx-label">WHISPER-SYNCED TRANSCRIPT</div>
+      <div class="vi3-tx-window" id="vi3-tx-window">
+        <!-- Five stanzas built by JS -->
+      </div>
+      <div class="vi3-dots" id="vi3-dots">
+        <div class="vi3-dot active" id="vi3-dot-0"></div>
+        <div class="vi3-dot" id="vi3-dot-1"></div>
+        <div class="vi3-dot" id="vi3-dot-2"></div>
+        <div class="vi3-dot" id="vi3-dot-3"></div>
+        <div class="vi3-dot" id="vi3-dot-4"></div>
+      </div>
     </div>
 
-    <!-- Closing payoff line — present from load at 40% opacity, fades full after playback -->
+    <!-- Closing payoff line -->
     <div class="vi3-closing" id="vi3-closing">
       In 13 seconds, the model heard what a 5-question Likert survey would have missed entirely.
     </div>

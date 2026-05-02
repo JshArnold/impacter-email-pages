@@ -483,159 +483,70 @@
     margin-bottom: 48px;
   }
 
-  /* ── Voice Intelligence Section ── */
-  .vi-layout {
+  /* ── Voice Intelligence v3 — Narrative ── */
+  .vi3-header { max-width: 640px; margin-bottom: 56px; }
+
+  .vi3-main {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
+    grid-template-columns: 2fr 3fr;
+    gap: 56px;
     align-items: start;
   }
 
-  .vi-video-col { position: relative; }
+  .vi3-video-col { position: relative; }
 
-  .vi-video-wrap {
+  .vi3-video-wrap {
     position: relative;
     width: 100%;
+    max-width: 310px;
     aspect-ratio: 9/16;
     border-radius: 20px;
     overflow: hidden;
     background: #000;
-    max-width: 360px;
+    box-shadow: 0 24px 56px rgba(0,0,0,0.5);
   }
+  .vi3-video-wrap video { width:100%; height:100%; object-fit:cover; }
 
-  .vi-video-wrap video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Karaoke caption overlay */
-  .vi-caption-bar {
+  .vi3-caption-bar {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    padding: 60px 20px 24px;
+    padding: 60px 18px 20px;
     background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
     z-index: 5;
   }
-  .vi-caption-text {
+  .vi3-caption-text {
     font-family: 'DM Sans', sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 500;
     line-height: 1.5;
     color: #fff;
-    text-align: left;
-    min-height: 48px;
+    min-height: 40px;
   }
-  .vi-caption-text .word { transition: color 0.15s, opacity 0.15s; opacity: 0.4; }
-  .vi-caption-text .word.active { opacity: 1; color: #fff; }
-  .vi-caption-text .word.past { opacity: 0.75; color: rgba(255,255,255,0.75); }
+  .vi3-caption-text .vw { transition: color 0.15s, opacity 0.15s; opacity: 0.4; }
+  .vi3-caption-text .vw.active { opacity: 1; color: #fff; }
+  .vi3-caption-text .vw.past { opacity: 0.72; }
 
-  /* Floating score chip on video */
-  .vi-score-chip {
+  .vi3-signals-pill {
     position: absolute;
-    top: 20px; left: 20px;
+    bottom: 18px; right: 14px;
     background: rgba(10,14,20,0.82);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 14px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 100px;
+    padding: 5px 12px;
     z-index: 10;
-    opacity: 0;
-    transform: translateY(-8px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-  .vi-score-chip.show { opacity: 1; transform: translateY(0); }
-  .vi-chip-label {
     font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 4px;
-  }
-  .vi-chip-domain {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--coral);
-  }
-  .vi-chip-score {
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.55);
     display: flex;
-    gap: 3px;
-    margin-top: 5px;
-  }
-  .vi-chip-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    transition: background 0.3s;
-  }
-  .vi-chip-dot.lit { background: var(--coral); }
-
-  /* Domain bars (right column) */
-  .vi-domains-col {}
-  .vi-domains-header {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 28px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .vi-domain-row {
-    margin-bottom: 24px;
-    opacity: 0.4;
-    transition: opacity 0.5s ease;
-  }
-  .vi-domain-row.active { opacity: 1; }
-
-  .vi-domain-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 8px;
-  }
-  .vi-domain-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-  }
-  .vi-domain-score-text {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--coral);
-  }
-  .vi-domain-bar-bg {
-    height: 4px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 100px;
-    overflow: hidden;
-  }
-  .vi-domain-bar-fill {
-    height: 100%;
-    border-radius: 100px;
-    background: var(--coral);
-    width: 0%;
-    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .vi-domain-tag {
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--text-dim);
-    margin-top: 5px;
-    font-style: italic;
-  }
-
-  .vi-controls {
-    margin-top: 24px;
-    display: flex;
-    gap: 12px;
     align-items: center;
+    gap: 6px;
   }
-  .vi-play-btn {
+  .vi3-sig-dot { width:5px; height:5px; border-radius:50%; background:var(--coral); flex-shrink:0; }
+
+  .vi3-play-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -644,33 +555,208 @@
     font-family: 'DM Sans', sans-serif;
     font-weight: 600;
     font-size: 14px;
-    padding: 10px 20px;
+    padding: 10px 22px;
     border-radius: 100px;
     border: none;
     cursor: pointer;
     transition: opacity 0.2s;
   }
-  .vi-play-btn:hover { opacity: 0.85; }
+  .vi3-play-btn:hover { opacity: 0.85; }
 
-  .vi-accuracy-note {
-    margin-top: 32px;
-    padding: 16px 20px;
-    background: rgba(99,142,197,0.08);
-    border: 1px solid rgba(99,142,197,0.15);
+  .vi3-notes-col { min-height: 280px; }
+
+  .vi3-notes-empty {
+    padding: 28px 24px;
+    border: 1px dashed rgba(255,255,255,0.08);
     border-radius: 12px;
+    transition: opacity 0.4s ease;
   }
-  .vi-accuracy-num {
-    font-size: 1.8rem;
+  .vi3-notes-empty p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.2);
+    font-style: italic;
+    line-height: 1.65;
+    margin: 0;
+  }
+  .vi3-notes-empty.hidden { opacity: 0; pointer-events: none; }
+
+  .vi3-note {
+    padding: 16px 18px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.025);
+    margin-bottom: 14px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  }
+  .vi3-note.visible { opacity: 1; transform: translateY(0); }
+  .vi3-note-eyebrow {
+    font-size: 10px;
     font-weight: 700;
-    color: var(--blue);
-    letter-spacing: -0.03em;
-    line-height: 1;
-    margin-bottom: 4px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 7px;
   }
-  .vi-accuracy-label {
-    font-size: 12px;
-    color: var(--text-dim);
+  .vi3-note-text {
+    font-size: 13.5px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.65;
+  }
+
+  /* Transcript band */
+  .vi3-transcript-band {
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .vi3-transcript-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 22px;
+  }
+  .vi3-transcript-text {
+    font-size: clamp(1.4rem, 2.8vw, 2.1rem);
     font-weight: 400;
+    line-height: 1.55;
+  }
+
+  /* Transcript word states */
+  .vw { transition: color 0.18s ease, opacity 0.18s ease, filter 0.15s ease; opacity: 0.28; color: #fff; }
+  .vw.domain   { color: var(--blue);  opacity: 0.35; }
+  .vw.metaphor { color: var(--coral); opacity: 0.4;  }
+  .vw.metaphor-standout { color: var(--coral); opacity: 0.42; font-size: 1.05em; }
+
+  .vw.past { opacity: 0.65 !important; color: rgba(255,255,255,0.65); }
+  .vw.domain.past   { color: var(--blue)  !important; opacity: 0.78 !important; }
+  .vw.metaphor.past { color: var(--coral) !important; opacity: 0.85 !important; }
+  .vw.metaphor-standout.past {
+    color: var(--coral) !important; opacity: 0.9 !important;
+    filter: drop-shadow(0 0 6px rgba(243,113,99,0.3));
+  }
+
+  .vw.active { opacity: 1 !important; color: #fff !important; animation: vwPulse 0.22s ease-out; }
+  .vw.domain.active   { color: var(--blue)  !important; }
+  .vw.metaphor.active, .vw.metaphor-standout.active { color: var(--coral) !important; }
+
+  @keyframes vwPulse {
+    0%   { filter: brightness(1.7); }
+    100% { filter: brightness(1);   }
+  }
+
+  /* Closing line + affordances */
+  .vi3-closing {
+    margin-top: 48px;
+    text-align: center;
+    font-size: 1.05rem;
+    font-style: italic;
+    color: rgba(255,255,255,0.8);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+  .vi3-closing.visible { opacity: 1; transform: translateY(0); }
+
+  .vi3-affordances {
+    margin-top: 22px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.5s ease-out 0.25s, transform 0.5s ease-out 0.25s;
+  }
+  .vi3-affordances.visible { opacity: 1; transform: translateY(0); }
+
+  .vi3-ghost-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    padding: 9px 22px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .vi3-ghost-btn:hover { border-color: rgba(255,255,255,0.45); color: rgba(255,255,255,0.95); }
+
+  /* VI Score corner panel */
+  #vi3-score-panel {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    z-index: 201;
+    width: 272px;
+    background: rgba(10,14,20,0.91);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 18px 20px 16px;
+    opacity: 0;
+    transform: translateX(320px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2,0.8,0.2,1);
+    box-shadow: 0 24px 56px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.03);
+    pointer-events: none;
+  }
+  #vi3-score-panel.visible { opacity:1; transform:translateX(0); pointer-events:auto; }
+
+  .vi3-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .vi3-panel-label {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--coral);
+  }
+  .vi3-panel-pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--coral);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  .vi3-panel-context {
+    font-size: 10px; color: var(--text-dim);
+    margin-bottom: 14px; font-style: italic;
+  }
+  .vi3-pdomain {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 9px;
+  }
+  .vi3-pdomain-name {
+    font-size: 11px; font-weight: 500;
+    color: rgba(214,231,241,0.7);
+    width: 132px; flex-shrink: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .vi3-pdomain-bar-bg {
+    flex: 1; height: 3px;
+    background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden;
+  }
+  .vi3-pdomain-bar-fill {
+    height: 100%; border-radius: 2px; width: 0%;
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .vi3-pdomain-score {
+    font-size: 11px; font-weight: 700;
+    color: rgba(255,255,255,0.45);
+    width: 24px; text-align: right; flex-shrink: 0;
+  }
+  .vi3-panel-footer {
+    margin-top: 13px; padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    font-size: 9px; color: rgba(139,164,190,0.3);
+    letter-spacing: 0.04em;
   }
 
   /* ── MTSS Pyramid ── */
@@ -1186,8 +1272,10 @@
     .cred-metric:nth-child(odd) { padding-left: 0; }
     .cred-metric:nth-last-child(-n+2) { border-bottom: none; }
     .cred-band { padding: 40px 24px; }
-    .vi-layout { grid-template-columns: 1fr; gap: 40px; }
-    .vi-video-wrap { max-width: 100%; }
+    .vi3-main { grid-template-columns: 1fr; gap: 40px; }
+    .vi3-video-wrap { max-width: 100%; }
+    .vi3-transcript-text { font-size: 1.25rem; }
+    #vi3-score-panel { display: none; }
     .mtss-layout { grid-template-columns: 1fr; gap: 40px; }
     .compare-grid { grid-template-columns: 1fr; gap: 40px; }
     .prompts-grid { grid-template-columns: 1fr 1fr; }
@@ -1305,96 +1393,65 @@
 </div>
 
 
-<!-- Voice Intelligence Section -->
+<!-- Voice Intelligence Section — Narrative v3 -->
 <section class="section" id="voice-intelligence" data-streamer-label="Live Analysis">
   <div class="section-inner">
-    <div class="section-eyebrow">Voice Intelligence</div>
-    <div class="vi-layout">
-      <div class="vi-video-col reveal">
-        <div class="vi-video-wrap" id="vi-video-container">
-          <video id="viVideo" src="../images/nc-girl.mp4" playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;"></video>
-          <div class="vi-caption-bar">
-            <div class="vi-caption-text" id="vi-caption"></div>
+
+    <!-- Header -->
+    <div class="vi3-header reveal">
+      <div class="section-eyebrow">Voice Intelligence</div>
+      <h2 class="section-heading">Every word carries signal.</h2>
+      <p class="section-body" style="margin-bottom:0;">Listen to a real student. Then read what the model heard.</p>
+    </div>
+
+    <!-- Main 2-col: video left, analyst notes right -->
+    <div class="vi3-main">
+
+      <!-- Left: Video -->
+      <div class="vi3-video-col reveal">
+        <div class="vi3-video-wrap">
+          <video id="vi3Video" src="../images/nc-girl.mp4" playsinline preload="metadata"></video>
+          <div class="vi3-caption-bar">
+            <div class="vi3-caption-text" id="vi3-caption"></div>
           </div>
-          <!-- Score chip -->
-          <div class="vi-score-chip" id="vi-score-chip">
-            <div class="vi-chip-label">Detected signal</div>
-            <div class="vi-chip-domain" id="vi-chip-domain">Emotional Resilience</div>
-            <div class="vi-chip-score" id="vi-chip-dots"></div>
+          <div class="vi3-signals-pill">
+            <span class="vi3-sig-dot"></span>
+            <span id="vi3-sig-count">0 signals detected</span>
           </div>
         </div>
-        <div class="vi-controls" style="margin-top:16px;">
-          <button class="vi-play-btn" id="vi-play-btn" onclick="toggleVI()">
-            <span id="vi-btn-icon">▶</span> Play response
+        <div style="margin-top:16px;">
+          <button class="vi3-play-btn" id="vi3-play-btn" onclick="toggleVI3()">
+            <span id="vi3-btn-icon">▶</span> Play response
           </button>
         </div>
       </div>
-      <div class="vi-domains-col reveal" style="transition-delay:0.15s">
-        <h2 class="section-heading" style="font-size:1.8rem;margin-bottom:14px;">Every word carries signal.</h2>
-        <p class="section-body" style="font-size:0.95rem;margin-bottom:36px;">Our model reads hesitation, self-correction, emotional framing, and insight — in real time. Watch domain scores emerge as a student speaks.</p>
-        <div class="vi-domains-header">Domain Scores — Live Session</div>
 
-        <div class="vi-domain-row active" data-domain="ra">
-          <div class="vi-domain-top">
-            <span class="vi-domain-name">Relational Awareness</span>
-            <span class="vi-domain-score-text" id="score-ra">3/4</span>
-          </div>
-          <div class="vi-domain-bar-bg">
-            <div class="vi-domain-bar-fill" id="bar-ra" style="width:75%"></div>
-          </div>
-          <div class="vi-domain-tag">Pre-scored from earlier prompt</div>
-        </div>
-
-        <div class="vi-domain-row active" data-domain="hs">
-          <div class="vi-domain-top">
-            <span class="vi-domain-name">Help-Seeking</span>
-            <span class="vi-domain-score-text" id="score-hs">2/4</span>
-          </div>
-          <div class="vi-domain-bar-bg">
-            <div class="vi-domain-bar-fill" id="bar-hs" style="width:50%;background: var(--blue)"></div>
-          </div>
-          <div class="vi-domain-tag">Pre-scored from earlier prompt</div>
-        </div>
-
-        <div class="vi-domain-row" data-domain="er" id="row-er">
-          <div class="vi-domain-top">
-            <span class="vi-domain-name">Emotional Resilience</span>
-            <span class="vi-domain-score-text" id="score-er">—</span>
-          </div>
-          <div class="vi-domain-bar-bg">
-            <div class="vi-domain-bar-fill" id="bar-er" style="width:0%"></div>
-          </div>
-          <div class="vi-domain-tag">Scoring this prompt…</div>
-        </div>
-
-        <div class="vi-domain-row" data-domain="si" id="row-si">
-          <div class="vi-domain-top">
-            <span class="vi-domain-name">Self-Insight</span>
-            <span class="vi-domain-score-text" id="score-si">—</span>
-          </div>
-          <div class="vi-domain-bar-bg">
-            <div class="vi-domain-bar-fill" id="bar-si" style="width:0%"></div>
-          </div>
-          <div class="vi-domain-tag">Scoring this prompt…</div>
-        </div>
-
-        <div class="vi-domain-row" data-domain="rg" id="row-rg">
-          <div class="vi-domain-top">
-            <span class="vi-domain-name">Reflective Growth</span>
-            <span class="vi-domain-score-text" id="score-rg">—</span>
-          </div>
-          <div class="vi-domain-bar-bg">
-            <div class="vi-domain-bar-fill" id="bar-rg" style="width:0%"></div>
-          </div>
-          <div class="vi-domain-tag">Scoring this prompt…</div>
-        </div>
-
-        <div class="vi-accuracy-note reveal" style="transition-delay:0.3s">
-          <div class="vi-accuracy-num">.918 QWK</div>
-          <div class="vi-accuracy-label">Model accuracy vs. human expert raters (Quadratic Weighted Kappa)</div>
+      <!-- Right: Analyst notes — empty until audio plays -->
+      <div class="vi3-notes-col reveal" style="transition-delay:0.15s" id="vi3-notes-col">
+        <div class="vi3-notes-empty" id="vi3-notes-empty">
+          <p>Signal analysis fires as Madison speaks —<br>press Play to begin.</p>
         </div>
       </div>
+
     </div>
+
+    <!-- Full-width transcript band -->
+    <div class="vi3-transcript-band reveal" style="transition-delay:0.2s">
+      <div class="vi3-transcript-label">— · Whisper-Synced Transcript</div>
+      <div class="vi3-transcript-text" id="vi3-transcript"></div>
+    </div>
+
+    <!-- Closing line — fades in 600ms after playback ends -->
+    <div class="vi3-closing" id="vi3-closing">
+      In 13 seconds, the model heard what a 5-question Likert survey would have missed entirely.
+    </div>
+
+    <!-- Affordances — appear 800ms after closing line -->
+    <div class="vi3-affordances" id="vi3-affordances">
+      <button class="vi3-ghost-btn" onclick="replayVI3()">↻ Play Again</button>
+      <button class="vi3-ghost-btn" onclick="document.getElementById('prompts').scrollIntoView({behavior:'smooth'})">Hear Another Student ↓</button>
+    </div>
+
   </div>
 </section>
 
@@ -1785,6 +1842,17 @@
   <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:0.06em;">BH Scores ↗</span>
 </div>
 
+<!-- VI Score Corner Panel -->
+<div id="vi3-score-panel">
+  <div class="vi3-panel-header">
+    <span class="vi3-panel-label">Live BH Score</span>
+    <div class="vi3-panel-pulse"></div>
+  </div>
+  <div class="vi3-panel-context" id="vi3-panel-ctx">Awaiting response…</div>
+  <div id="vi3-panel-domains"></div>
+  <div class="vi3-panel-footer">IMPACTER · NC Portrait · Madison H.</div>
+</div>
+
 <!-- VideoAsk Modal -->
 <div class="modal-backdrop" id="modal" onclick="closeModalOnBackdrop(event)">
   <div class="modal-panel">
@@ -1795,150 +1863,274 @@
 
 <script>
 /* ──────────────────────────────
-   WORD TIMESTAMPS
+   VOICE INTELLIGENCE v3 — NARRATIVE
+   Word timestamps (verbatim from nc-girl.mp4 / Whisper)
 ────────────────────────────── */
-const WORDS = [
-  {t:0.0, text:'When'}, {t:0.2, text:'given'}, {t:0.45, text:'some'},
-  {t:0.65, text:'thought'}, {t:0.85, text:'to'}, {t:0.95, text:'this'},
-  {t:1.15, text:'question,'}, {t:1.55, text:'I'}, {t:1.7, text:'realize'},
-  {t:2.05, text:'I'}, {t:2.2, text:"don't"}, {t:2.5, text:'have'},
-  {t:2.7, text:'as'}, {t:2.85, text:'much'}, {t:3.05, text:'failures', tag:'er'},
-  {t:3.5, text:'as'}, {t:3.65, text:'I'}, {t:3.8, text:'would'},
-  {t:4.0, text:'have'}, {t:4.2, text:'expected.'},
-  {t:4.95, text:'My'}, {t:5.1, text:'biggest'}, {t:5.45, text:'failure', tag:'er'},
-  {t:5.85, text:'would'}, {t:6.05, text:'be'}, {t:6.2, text:'not'},
-  {t:6.4, text:'taking'}, {t:6.65, text:'enough'}, {t:6.95, text:'risk'},
-  {t:7.25, text:'to'}, {t:7.4, text:'experience'}, {t:7.85, text:'true'},
-  {t:8.1, text:'failure.'}, {t:8.75, text:'I'}, {t:8.95, text:'think', tag:'si'},
-  {t:9.35, text:'I'}, {t:9.55, text:'guard'}, {t:9.85, text:'myself'},
-  {t:10.2, text:'from'}, {t:10.45, text:'it.'},
-  {t:11.2, text:'Part'}, {t:11.4, text:'of'}, {t:11.6, text:'me'},
-  {t:11.8, text:'does'}, {t:12.0, text:"n't"}, {t:12.15, text:'want'},
-  {t:12.4, text:'to'}, {t:12.6, text:'fail.'},
-  {t:13.3, text:'But'}, {t:13.6, text:'another', tag:'rg'}, {t:13.9, text:'part'},
-  {t:14.2, text:'of'}, {t:14.35, text:'me'}, {t:14.55, text:'understands'},
-  {t:14.95, text:'that'}, {t:15.15, text:'failure'}, {t:15.5, text:'is'},
-  {t:15.7, text:'the'}, {t:15.9, text:'only'}, {t:16.2, text:'way'},
-  {t:16.5, text:'to'}, {t:16.7, text:'truly'}, {t:17.0, text:'succeed.'},
+const VI3_WORDS = [
+  {t:0.0,  text:'When'},   {t:0.2,  text:'given'}, {t:0.45, text:'some'},
+  {t:0.65, text:'thought'},{t:0.85, text:'to'},     {t:0.95, text:'this'},
+  {t:1.15, text:'question,'},{t:1.55,text:'I'},     {t:1.7,  text:'realize'},
+  {t:2.05, text:'I'},      {t:2.2,  text:"don't"}, {t:2.5,  text:'have'},
+  {t:2.7,  text:'as'},     {t:2.85, text:'much'},  {t:3.05, text:'failures',          tag:'domain'},
+  {t:3.5,  text:'as'},     {t:3.65, text:'I'},     {t:3.8,  text:'would'},
+  {t:4.0,  text:'have'},   {t:4.2,  text:'expected.'},
+  {t:4.95, text:'My'},     {t:5.1,  text:'biggest'},{t:5.45,text:'failure',           tag:'domain'},
+  {t:5.85, text:'would'},  {t:6.05, text:'be'},    {t:6.2,  text:'not'},
+  {t:6.4,  text:'taking'}, {t:6.65, text:'enough'},{t:6.95, text:'risk'},
+  {t:7.25, text:'to'},     {t:7.4,  text:'experience'},{t:7.85,text:'true'},
+  {t:8.1,  text:'failure.',                                  tag:'domain'},
+  {t:8.85, text:'I'},      {t:9.0,  text:'tend'},  {t:9.25, text:'to'},
+  {t:9.4,  text:'stay'},   {t:9.65, text:'in'},    {t:9.8,  text:'my'},
+  {t:9.95, text:'comfort',                                   tag:'metaphor'},
+  {t:10.3, text:'zone',                                      tag:'metaphor'},
+  {t:10.6, text:'and'},    {t:10.8, text:'stand'}, {t:11.1, text:'behind'},
+  {t:11.45,text:'the'},
+  {t:11.6, text:'yellow',                                    tag:'metaphor-standout'},
+  {t:11.95,text:'caution',                                   tag:'metaphor-standout'},
+  {t:12.3, text:'tape.',                                     tag:'metaphor-standout'},
+  {t:13.0, text:'Every'},  {t:13.25,text:'day'},
+  {t:13.5, text:"I'm"},    {t:13.7, text:'trying'},
+  {t:14.0, text:'to'},     {t:14.15,text:'expand'},
+  {t:14.55,text:'the'},    {t:14.7, text:'barriers'},
+  {t:15.05,text:'of'},     {t:15.2, text:'my'},
+  {t:15.35,text:'comfort',                                   tag:'metaphor'},
+  {t:15.7, text:'zone.',                                     tag:'metaphor'},
 ];
 
-/* Domain trigger timestamps */
-const DOMAIN_TRIGGERS = [
-  { time: 3.5, domain: 'er', name: 'Emotional Resilience', score: 4 },
-  { time: 9.0, domain: 'si', name: 'Self-Insight', score: 4 },
-  { time: 13.0, domain: 'rg', name: 'Reflective Growth', score: 4 },
+/* Analyst signal notes — fire at specified timestamps */
+const VI3_SIGNALS = [
+  {
+    time: 3.0,
+    eyebrow: 'SIGNAL · 0:03 · EMOTIONAL RESILIENCE',
+    text: 'She inverts the conventional definition of failure — refusing to count avoidance as success, naming restraint itself as the actual danger.',
+    domain: 'er',
+  },
+  {
+    time: 7.0,
+    eyebrow: 'SIGNAL · 0:07 · SELF-INSIGHT',
+    text: 'Names her own avoidance pattern out loud, unprompted. The "yellow caution tape" metaphor is hers — not language the screener gave her.',
+    domain: 'si',
+  },
+  {
+    time: 11.0,
+    eyebrow: 'SIGNAL · 0:11 · REFLECTIVE GROWTH',
+    text: 'Present-tense growth commitment: "every day I\'m trying to expand the barriers." Not aspiration — ongoing practice.',
+    domain: 'rg',
+  },
 ];
 
-const WINDOW_SIZE = 6; // words visible at once
+/* Corner panel domain rows */
+const VI3_PANEL_DOMAINS = [
+  { name:'Relational Awareness', key:'ra', score:3, fill:75,  color:'var(--blue)',  pre:true  },
+  { name:'Help-Seeking',         key:'hs', score:2, fill:50,  color:'var(--blue)',  pre:true  },
+  { name:'Emotional Resilience', key:'er', score:4, fill:100, color:'var(--coral)', pre:false },
+  { name:'Self-Insight',         key:'si', score:4, fill:100, color:'var(--coral)', pre:false },
+  { name:'Reflective Growth',    key:'rg', score:4, fill:100, color:'var(--coral)', pre:false },
+];
 
-/* ──────────────────────────────
-   VOICE INTELLIGENCE PLAYER
-────────────────────────────── */
-const viVideo = document.getElementById('viVideo');
-const captionEl = document.getElementById('vi-caption');
-const playBtn = document.getElementById('vi-play-btn');
-const btnIcon = document.getElementById('vi-btn-icon');
-const scoreChip = document.getElementById('vi-score-chip');
-const chipDomain = document.getElementById('vi-chip-domain');
-const chipDots = document.getElementById('vi-chip-dots');
+/* ── VI3 DOM refs ── */
+const vi3Video      = document.getElementById('vi3Video');
+const vi3Caption    = document.getElementById('vi3-caption');
+const vi3PlayBtn    = document.getElementById('vi3-play-btn');
+const vi3BtnIcon    = document.getElementById('vi3-btn-icon');
+const vi3SigCount   = document.getElementById('vi3-sig-count');
+const vi3NotesCol   = document.getElementById('vi3-notes-col');
+const vi3NotesEmpty = document.getElementById('vi3-notes-empty');
+const vi3Transcript = document.getElementById('vi3-transcript');
+const vi3Closing    = document.getElementById('vi3-closing');
+const vi3Affordances= document.getElementById('vi3-affordances');
+const vi3ScorePanel = document.getElementById('vi3-score-panel');
+const vi3PanelCtx   = document.getElementById('vi3-panel-ctx');
+const vi3PanelDoms  = document.getElementById('vi3-panel-domains');
 
-let rafId = null;
-let viPlaying = false;
-let triggeredDomains = new Set();
-let chipTimeout = null;
+let vi3Playing = false;
+let vi3RafId = null;
+let vi3FiredSignals = new Set();
+let vi3SigCountNum = 0;
 
-function buildCaption() {
-  captionEl.innerHTML = WORDS.map((w, i) =>
-    `<span class="word" id="w${i}">${w.text} </span>`
+/* Build caption spans (sliding window) */
+function vi3BuildCaption() {
+  vi3Caption.innerHTML = VI3_WORDS.map((w, i) =>
+    `<span class="vw" id="vc${i}">${w.text} </span>`
   ).join('');
 }
-buildCaption();
+vi3BuildCaption();
 
-function updateCaption(ct) {
-  // Find active word index
+/* Build transcript spans (full, bicolor) */
+function vi3BuildTranscript() {
+  vi3Transcript.innerHTML = VI3_WORDS.map((w, i) => {
+    let cls = 'vw';
+    if (w.tag) cls += ' ' + w.tag;
+    return `<span class="${cls}" id="vt${i}">${w.text} </span>`;
+  }).join('');
+}
+vi3BuildTranscript();
+
+/* Build corner panel */
+function vi3BuildPanel() {
+  vi3PanelDoms.innerHTML = VI3_PANEL_DOMAINS.map(d => `
+    <div class="vi3-pdomain">
+      <span class="vi3-pdomain-name">${d.name}</span>
+      <div class="vi3-pdomain-bar-bg">
+        <div class="vi3-pdomain-bar-fill" id="vp-${d.key}"
+          style="background:${d.color};width:${d.pre ? d.fill + '%' : '0%'}"></div>
+      </div>
+      <span class="vi3-pdomain-score" id="vps-${d.key}">${d.pre ? d.score + '/4' : '—'}</span>
+    </div>
+  `).join('');
+}
+vi3BuildPanel();
+
+/* Caption: sliding window of 5 words */
+const VI3_WIN = 5;
+function vi3UpdateCaption(ct) {
   let activeIdx = -1;
-  for (let i = 0; i < WORDS.length; i++) {
-    if (WORDS[i].t <= ct) activeIdx = i;
-    else break;
+  for (let i = 0; i < VI3_WORDS.length; i++) {
+    if (VI3_WORDS[i].t <= ct) activeIdx = i; else break;
   }
-
-  const windowStart = Math.max(0, activeIdx - 2);
-  const windowEnd = Math.min(WORDS.length - 1, windowStart + WINDOW_SIZE - 1);
-
-  WORDS.forEach((w, i) => {
-    const el = document.getElementById('w' + i);
+  const ws = Math.max(0, activeIdx - 1);
+  const we = Math.min(VI3_WORDS.length - 1, ws + VI3_WIN - 1);
+  VI3_WORDS.forEach((w, i) => {
+    const el = document.getElementById('vc' + i);
     if (!el) return;
-    if (i < windowStart || i > windowEnd) {
-      el.style.display = 'none';
-    } else {
-      el.style.display = 'inline';
-      el.classList.remove('active', 'past');
-      if (i === activeIdx) el.classList.add('active');
-      else if (i < activeIdx) el.classList.add('past');
-    }
+    if (i < ws || i > we) { el.style.display = 'none'; return; }
+    el.style.display = 'inline';
+    el.classList.remove('active', 'past');
+    if (i === activeIdx) el.classList.add('active');
+    else if (i < activeIdx) el.classList.add('past');
   });
 }
 
-function checkDomainTriggers(ct) {
-  DOMAIN_TRIGGERS.forEach(trigger => {
-    if (ct >= trigger.time && !triggeredDomains.has(trigger.domain)) {
-      triggeredDomains.add(trigger.domain);
-      activateDomain(trigger.domain, trigger.name, trigger.score);
-    }
+/* Transcript: all words visible, highlight current */
+function vi3UpdateTranscript(ct) {
+  let activeIdx = -1;
+  for (let i = 0; i < VI3_WORDS.length; i++) {
+    if (VI3_WORDS[i].t <= ct) activeIdx = i; else break;
+  }
+  VI3_WORDS.forEach((w, i) => {
+    const el = document.getElementById('vt' + i);
+    if (!el) return;
+    el.classList.remove('active', 'past');
+    if (i === activeIdx) el.classList.add('active');
+    else if (i < activeIdx) el.classList.add('past');
   });
 }
 
-function activateDomain(domain, name, score) {
-  // Animate bar
-  const barEl = document.getElementById('bar-' + domain);
-  const scoreEl = document.getElementById('score-' + domain);
-  const rowEl = document.getElementById('row-' + domain);
-  if (barEl) { barEl.style.width = (score / 4 * 100) + '%'; }
-  if (scoreEl) { scoreEl.textContent = score + '/4'; }
-  if (rowEl) { rowEl.classList.add('active'); }
+/* Fire a signal analyst note */
+function vi3FireSignal(idx) {
+  const sig = VI3_SIGNALS[idx];
+  if (!sig) return;
 
-  // Show chip
-  chipDomain.textContent = name;
-  chipDots.innerHTML = Array.from({length: 4}, (_, i) =>
-    `<div class="vi-chip-dot${i < score ? ' lit' : ''}"></div>`
-  ).join('');
-  scoreChip.classList.add('show');
+  if (vi3FiredSignals.size === 0) vi3NotesEmpty.classList.add('hidden');
+  vi3FiredSignals.add(idx);
+  vi3SigCountNum++;
+  vi3SigCount.textContent = vi3SigCountNum + ' signal' + (vi3SigCountNum > 1 ? 's' : '') + ' detected';
+  vi3PanelCtx.textContent = 'Scoring this response in real time…';
 
-  clearTimeout(chipTimeout);
-  chipTimeout = setTimeout(() => {
-    scoreChip.classList.remove('show');
-  }, 2500);
+  /* Fill panel bar */
+  const dom = VI3_PANEL_DOMAINS.find(d => d.key === sig.domain);
+  if (dom) {
+    setTimeout(() => {
+      const b = document.getElementById('vp-' + dom.key);
+      const s = document.getElementById('vps-' + dom.key);
+      if (b) b.style.width = dom.fill + '%';
+      if (s) s.textContent = dom.score + '/4';
+    }, 200);
+  }
+
+  /* Inject note card */
+  const note = document.createElement('div');
+  note.className = 'vi3-note';
+  note.innerHTML = `<div class="vi3-note-eyebrow">${sig.eyebrow}</div>
+    <div class="vi3-note-text">${sig.text}</div>`;
+  vi3NotesCol.appendChild(note);
+  requestAnimationFrame(() => requestAnimationFrame(() => note.classList.add('visible')));
 }
 
-function rafLoop() {
-  if (!viPlaying) return;
-  const ct = viVideo.currentTime;
-  updateCaption(ct);
-  checkDomainTriggers(ct);
-  rafId = requestAnimationFrame(rafLoop);
+/* Check signal triggers */
+function vi3CheckSignals(ct) {
+  VI3_SIGNALS.forEach((sig, idx) => {
+    if (ct >= sig.time && !vi3FiredSignals.has(idx)) vi3FireSignal(idx);
+  });
 }
 
-function toggleVI() {
-  if (viVideo.paused) {
-    viVideo.play();
-    viPlaying = true;
-    btnIcon.textContent = '⏸';
-    playBtn.querySelector('span:last-child') && (playBtn.lastChild.textContent = ' Pause');
-    playBtn.innerHTML = '<span id="vi-btn-icon">⏸</span> Pause';
-    rafId = requestAnimationFrame(rafLoop);
+/* rAF loop — never uses timeupdate */
+function vi3RafLoop() {
+  if (!vi3Playing) return;
+  const ct = vi3Video.currentTime;
+  vi3UpdateCaption(ct);
+  vi3UpdateTranscript(ct);
+  vi3CheckSignals(ct);
+  vi3RafId = requestAnimationFrame(vi3RafLoop);
+}
+
+/* Play / Pause */
+function toggleVI3() {
+  if (vi3Video.paused) {
+    vi3Video.play();
+    vi3Playing = true;
+    vi3PlayBtn.innerHTML = '<span id="vi3-btn-icon">⏸</span> Pause';
+    vi3RafId = requestAnimationFrame(vi3RafLoop);
   } else {
-    viVideo.pause();
-    viPlaying = false;
-    playBtn.innerHTML = '<span id="vi-btn-icon">▶</span> Play response';
-    cancelAnimationFrame(rafId);
+    vi3Video.pause();
+    vi3Playing = false;
+    vi3PlayBtn.innerHTML = '<span id="vi3-btn-icon">▶</span> Play response';
+    cancelAnimationFrame(vi3RafId);
   }
 }
 
-viVideo.addEventListener('ended', () => {
-  viPlaying = false;
-  playBtn.innerHTML = '<span id="vi-btn-icon">▶</span> Play response';
-  cancelAnimationFrame(rafId);
+/* Replay */
+function replayVI3() {
+  vi3FiredSignals.clear();
+  vi3SigCountNum = 0;
+  vi3SigCount.textContent = '0 signals detected';
+  vi3Closing.classList.remove('visible');
+  vi3Affordances.classList.remove('visible');
+  VI3_PANEL_DOMAINS.filter(d => !d.pre).forEach(d => {
+    const b = document.getElementById('vp-' + d.key);
+    const s = document.getElementById('vps-' + d.key);
+    if (b) b.style.width = '0%';
+    if (s) s.textContent = '—';
+  });
+  vi3PanelCtx.textContent = 'Awaiting response…';
+  vi3NotesCol.querySelectorAll('.vi3-note').forEach(n => n.remove());
+  vi3NotesEmpty.classList.remove('hidden');
+  vi3UpdateTranscript(-1);
+  vi3UpdateCaption(-1);
+  vi3Video.currentTime = 0;
+  if (vi3Playing) {
+    vi3Video.pause();
+    vi3Playing = false;
+    cancelAnimationFrame(vi3RafId);
+  }
+  toggleVI3();
+}
+
+/* On ended — show closing line + affordances */
+vi3Video.addEventListener('ended', () => {
+  vi3Playing = false;
+  vi3PlayBtn.innerHTML = '<span id="vi3-btn-icon">▶</span> Play response';
+  cancelAnimationFrame(vi3RafId);
+  vi3UpdateTranscript(999);
+  setTimeout(() => {
+    vi3Closing.classList.add('visible');
+    setTimeout(() => vi3Affordances.classList.add('visible'), 800);
+  }, 600);
 });
+
+/* Corner panel — show when VI section is in viewport */
+const vi3Section = document.getElementById('voice-intelligence');
+const vi3PanelObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      vi3ScorePanel.classList.add('visible');
+      if (typeof streamer !== 'undefined' && streamer) streamer.classList.remove('visible');
+    } else {
+      vi3ScorePanel.classList.remove('visible');
+    }
+  });
+}, { threshold: 0.08 });
+if (vi3Section) vi3PanelObs.observe(vi3Section);
 
 /* ──────────────────────────────
    MODAL
@@ -2480,20 +2672,17 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   animLoop();
 })();
 
-viVideo.addEventListener('seeked', () => {
-  triggeredDomains.clear();
-  // Reset domain rows
-  ['er','si','rg'].forEach(d => {
-    const bar = document.getElementById('bar-' + d);
-    const score = document.getElementById('score-' + d);
-    const row = document.getElementById('row-' + d);
-    if (bar && viVideo.currentTime < (d === 'er' ? 3.5 : d === 'si' ? 9.0 : 13.0)) {
-      bar.style.width = '0%';
-      score.textContent = '—';
-      if (row) row.classList.remove('active');
+/* vi3Video seeked — reset signals that haven't fired yet */
+vi3Video.addEventListener('seeked', () => {
+  const ct = vi3Video.currentTime;
+  VI3_SIGNALS.forEach((sig, idx) => {
+    if (ct < sig.time && vi3FiredSignals.has(idx)) {
+      /* Remove the note card if seek went backward past this signal */
+      vi3FiredSignals.delete(idx);
     }
   });
-  updateCaption(viVideo.currentTime);
+  vi3UpdateCaption(ct);
+  vi3UpdateTranscript(ct);
 });
 </script>
 </body>

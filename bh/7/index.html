@@ -162,7 +162,7 @@
 
   .hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 4;
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 40px 210px;
@@ -2254,7 +2254,6 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-1.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Self-Insight</div>
-              <div class="pc-back-q">"What's something you've gotten better at this year — and what did it take to get there?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2272,7 +2271,6 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-2.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Emotional Resilience</div>
-              <div class="pc-back-q">"Tell me about a time things didn't go the way you planned. What did you do?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2290,7 +2288,6 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-3.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Relational Awareness</div>
-              <div class="pc-back-q">"Is there someone at school you feel like you could actually talk to if something was wrong?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2308,7 +2305,6 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-4.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Conflict Resolution</div>
-              <div class="pc-back-q">"Tell me about a disagreement you had with someone. How did you handle it?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2326,7 +2322,6 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-5.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Effective Help-Seeking</div>
-              <div class="pc-back-q">"When something's hard — like really hard — do you usually talk to someone about it or handle it on your own?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2344,7 +2339,6 @@
             <video class="pc-vid" muted loop playsinline preload="none"><source src="/bh/images/prompt-6.mp4" type="video/mp4"></video>
             <div class="pc-back-overlay">
               <div class="pc-back-label">Reflective Growth</div>
-              <div class="pc-back-q">"If you could go back and handle one situation differently this year, what would it be — and what would you do instead?"</div>
               <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
             </div>
           </div>
@@ -2958,7 +2952,6 @@ function renderPrompts(list) {
           <video class="pc-vid" muted loop playsinline preload="none"><source src="${p.vid || '/bh/images/prompt-1.mp4'}" type="video/mp4"></video>
           <div class="pc-back-overlay">
             <div class="pc-back-label">${p.title || p.domain}</div>
-            <div class="pc-back-q">${p.q || ''}</div>
             <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
           </div>
         </div>

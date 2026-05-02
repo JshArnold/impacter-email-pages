@@ -904,6 +904,26 @@
     color: rgba(232,234,240,0.6);
     max-width: 44ch;
   }
+  .s-stat-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .s-stat-line {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.0;
+  }
+  .s-stat-validated {
+    font-size: clamp(32px, 4vw, 56px);
+    color: rgba(255,255,255,0.9);
+  }
+  .s-stat-skills {
+    font-size: clamp(26px, 3.2vw, 44px);
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255,255,255,0.35);
+  }
   .scene-voice-media {
     position: relative;
     border-radius: 16px;
@@ -1781,7 +1801,10 @@
       <div class="scene-pane active" data-scene="0">
         <div class="scene-callout">
           <div class="s-num">24</div>
-          <h3>One number.<br/>Three pathways.</h3>
+          <div class="s-stat-stack">
+            <div class="s-stat-line s-stat-validated">Validated</div>
+            <div class="s-stat-line s-stat-skills">Skills Signals</div>
+          </div>
           <p>Every score maps automatically to one of three MTSS tiers — Universal, Targeted, or Intensive. No triage meeting, no manual override, no spreadsheet. The student who needs Tier 2 support is on the counselor's list before the student leaves the room. And the counselor already has next steps.</p>
         </div>
         <div class="scene-img-panel scene-img-panel--full">

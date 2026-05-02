@@ -1108,7 +1108,20 @@
     border: 1px solid rgba(255,255,255,0.08);
     background: rgba(255,255,255,0.03);
     position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
   }
+  .s-flow-node-main { display: flex; flex-direction: column; }
+  .s-flow-node-detail {
+    text-align: right;
+    font-size: 11px; line-height: 1.65;
+    color: rgba(255,255,255,0.38);
+    font-family: var(--font-display); font-weight: 400;
+    flex-shrink: 0;
+  }
+  .s-flow-node-detail span { display: block; }
   .s-flow-node--coral {
     border-color: rgba(243,113,99,0.3);
     background: rgba(243,113,99,0.05);
@@ -1991,26 +2004,50 @@
           <div class="s-flow-wrap">
 
             <div class="s-flow-node s-flow-node--coral">
-              <div class="s-flow-node-label">Student Speaks</div>
-              <div class="s-flow-node-value">8:14 AM</div>
+              <div class="s-flow-node-main">
+                <div class="s-flow-node-label">Student Speaks</div>
+                <div class="s-flow-node-value">8:14 AM</div>
+              </div>
+              <div class="s-flow-node-detail">
+                <span>6 prompts · 1 minute each</span>
+                <span>Total response time: 5:38</span>
+              </div>
             </div>
             <div class="s-flow-connector"></div>
 
             <div class="s-flow-node s-flow-node--coral">
-              <div class="s-flow-node-label">Tier Assigned</div>
-              <div class="s-flow-node-value">Tier 2 · Auto</div>
+              <div class="s-flow-node-main">
+                <div class="s-flow-node-label">Tier Assigned</div>
+                <div class="s-flow-node-value">Tier 2 · Auto</div>
+              </div>
+              <div class="s-flow-node-detail">
+                <span>Auto-assigned in 0.3 seconds.</span>
+                <span>No counselor review required.</span>
+              </div>
             </div>
             <div class="s-flow-connector"></div>
 
             <div class="s-flow-node s-flow-node--amber">
-              <div class="s-flow-node-label">Counselor List</div>
-              <div class="s-flow-node-value">Updated · 8:14</div>
+              <div class="s-flow-node-main">
+                <div class="s-flow-node-label">Counselor List</div>
+                <div class="s-flow-node-value">Updated · 8:14</div>
+              </div>
+              <div class="s-flow-node-detail">
+                <span>One click → Percy's profile</span>
+                <span>One click → Recommended Action</span>
+              </div>
             </div>
             <div class="s-flow-connector s-flow-connector--amber"></div>
 
             <div class="s-flow-node s-flow-node--green">
-              <div class="s-flow-node-label">Support Scheduled</div>
-              <div class="s-flow-node-value">By 9:48 AM</div>
+              <div class="s-flow-node-main">
+                <div class="s-flow-node-label">Support Scheduled</div>
+                <div class="s-flow-node-value">By 9:48 AM</div>
+              </div>
+              <div class="s-flow-node-detail">
+                <span>Traditional cycle: 3 weeks</span>
+                <span>IMPACTER cycle: 90 minutes</span>
+              </div>
             </div>
 
           </div>
@@ -2730,8 +2767,8 @@ document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
   const wordEl = document.getElementById('surveysWord');
   const labelEl = document.getElementById('surveysLabel');
   const likertCard = document.getElementById('likertCard');
-  const SCENES = ['Tier Assignment In Real Time.', 'From The People Who Run MTSS.', 'A tier. A plan. Today.'];
-  const LABELS = ['MTSS Integrations', 'Designed By The Field', 'MTSS Integrations'];
+  const SCENES = ['Tier Assignment In Real Time.', 'From The People Who Run MTSS.', 'The Screener Counselors Trust.'];
+  const LABELS = ['MTSS Integrations', 'Designed By The Field', 'REAL-TIME INSIGHTS'];
   if (!stage) return;
   function update() {
     const r = stage.getBoundingClientRect();

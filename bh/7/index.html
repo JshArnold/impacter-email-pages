@@ -1478,6 +1478,64 @@
     transform: translate(4px, -4px) rotate(-12deg);
     background: var(--color-coral); border-color: var(--color-coral);
   }
+  /* arrow icon swap: ↗ → ▶ */
+  .pc-ai, .pc-av {
+    transition: opacity .22s ease, transform .22s ease;
+    line-height: 1;
+  }
+  .pc-av { position: absolute; opacity: 0; transform: scale(0.6); font-size: 11px; }
+  .prompt-card:hover .pc-ai { opacity: 0; transform: scale(0.6); }
+  .prompt-card:hover .pc-av { opacity: 1; transform: scale(1); }
+
+  /* ── Question reveal ── */
+  .pc-text-swap {
+    display: grid;
+    min-height: 54px;
+    margin: 0 0 8px;
+  }
+  .pc-desc, .pc-question {
+    grid-row: 1; grid-column: 1;
+    margin: 0;
+    font-family: var(--font-body); font-weight: 300;
+    font-size: 14px; line-height: 1.55;
+    transition: opacity .3s ease, transform .3s ease;
+  }
+  .pc-desc { color: rgba(232,234,240,0.6); }
+  .pc-question {
+    font-style: italic;
+    color: rgba(255,255,255,0.85);
+    opacity: 0;
+    transform: translateY(7px);
+    pointer-events: none;
+  }
+  .prompt-card:hover .pc-desc   { opacity: 0; transform: translateY(-7px); }
+  .prompt-card:hover .pc-question { opacity: 1; transform: translateY(0); }
+
+  /* ── Waveform ── */
+  .pc-wave {
+    position: absolute;
+    bottom: 30px; left: 28px;
+    display: flex; gap: 3px; align-items: flex-end;
+    height: 18px;
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+  .prompt-card:hover .pc-wave { opacity: 1; }
+  .pc-wave span {
+    display: block; width: 3px; border-radius: 2px;
+    background: rgba(255,255,255,0.5);
+    transform-origin: bottom;
+    animation: pcWaveBar .8s ease-in-out infinite alternate;
+  }
+  .pc-wave span:nth-child(1) { height: 7px;  animation-delay: 0s; }
+  .pc-wave span:nth-child(2) { height: 14px; animation-delay: 0.18s; }
+  .pc-wave span:nth-child(3) { height: 10px; animation-delay: 0.09s; }
+  .pc-wave span:nth-child(4) { height: 16px; animation-delay: 0.27s; }
+  .pc-wave span:nth-child(5) { height: 8px;  animation-delay: 0.13s; }
+  @keyframes pcWaveBar {
+    from { transform: scaleY(0.3); }
+    to   { transform: scaleY(1); }
+  }
 
   /* ── Modal ── */
   .modal-backdrop {
@@ -2176,38 +2234,62 @@
       <div class="prompt-card blue reveal" style="transition-delay:0.05s" onclick="openModal('https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX')">
         <span class="comp">Self-Insight</span>
         <h4>Self-Insight Reflection</h4>
-        <p>Recognizing self, naming choices, describing growth.</p>
-        <span class="pc-arrow">↗</span>
+        <div class="pc-text-swap">
+          <p class="pc-desc">Recognizing self, naming choices, describing growth.</p>
+          <p class="pc-question">"What's something you've gotten better at this year — and what did it take to get there?"</p>
+        </div>
+        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
       <div class="prompt-card coral reveal" style="transition-delay:0.1s" onclick="openModal('https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX')">
         <span class="comp">Emotional Resilience</span>
         <h4>The Hard Days</h4>
-        <p>Naming emotions, coping strategies, perseverance.</p>
-        <span class="pc-arrow">↗</span>
+        <div class="pc-text-swap">
+          <p class="pc-desc">Naming emotions, coping strategies, perseverance.</p>
+          <p class="pc-question">"Tell me about a time things didn't go the way you planned. What did you do?"</p>
+        </div>
+        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
       <div class="prompt-card green reveal" style="transition-delay:0.15s" onclick="openModal('https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX')">
         <span class="comp">Relational Awareness</span>
         <h4>Something Changed</h4>
-        <p>Noticing change in relationships, demonstrating empathy.</p>
-        <span class="pc-arrow">↗</span>
+        <div class="pc-text-swap">
+          <p class="pc-desc">Noticing change in relationships, demonstrating empathy.</p>
+          <p class="pc-question">"Is there someone at school you feel like you could actually talk to if something was wrong?"</p>
+        </div>
+        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
       <div class="prompt-card gold reveal" style="transition-delay:0.2s" onclick="openModal('https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX')">
         <span class="comp">Conflict Resolution</span>
         <h4>Fixing What Broke</h4>
-        <p>Taking responsibility, practicing repair, persistence.</p>
-        <span class="pc-arrow">↗</span>
+        <div class="pc-text-swap">
+          <p class="pc-desc">Taking responsibility, practicing repair, persistence.</p>
+          <p class="pc-question">"Tell me about a disagreement you had with someone. How did you handle it?"</p>
+        </div>
+        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
       <div class="prompt-card purple reveal" style="transition-delay:0.25s" onclick="openModal('https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX')">
         <span class="comp">Help-Seeking</span>
         <h4>Stronger Together</h4>
-        <p>Knowing when to ask for help and using available supports.</p>
-        <span class="pc-arrow">↗</span>
+        <div class="pc-text-swap">
+          <p class="pc-desc">Knowing when to ask for help and using available supports.</p>
+          <p class="pc-question">"When something's hard — like really hard — do you usually talk to someone about it or handle it on your own?"</p>
+        </div>
+        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
       <div class="prompt-card teal reveal" style="transition-delay:0.3s" onclick="openModal('https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX')">
         <span class="comp">Reflective Growth</span>
         <h4>Not the Same Person</h4>
-        <p>Describing personal growth, identifying change, setting goals.</p>
-        <span class="pc-arrow">↗</span>
+        <div class="pc-text-swap">
+          <p class="pc-desc">Describing personal growth, identifying change, setting goals.</p>
+          <p class="pc-question">"If you could go back and handle one situation differently this year, what would it be — and what would you do instead?"</p>
+        </div>
+        <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
       </div>
     </div>
   </div>
@@ -2775,10 +2857,10 @@ const prompts312 = [
 
 const promptsTK2 = [
   { domain: 'Self-Insight', url: 'https://sdcoe.impacterpathway.com/fg1zetskz#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"Tell me something you learned how to do that was tricky at first."' },
-  { domain: 'Emotional Resilience', url: 'https://sdcoe.impacterpathway.com/feney4fez#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"What do you do when you feel sad or upset at school?"' },
-  { domain: 'Relational Awareness', url: 'https://sdcoe.impacterpathway.com/fd3l5wact#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"Who is a grown-up at school that makes you feel safe? Tell me about them."' },
+  { domain: 'Emotional Resilience', url: 'https://flex.impacterpathway.com/fi4mgwelx', q: '"What do you do when you feel sad or upset at school?"' },
+  { domain: 'Relational Awareness', url: 'https://flex.impacterpathway.com/fjzzdvxk8', q: '"Who is a grown-up at school that makes you feel safe? Tell me about them."' },
   { domain: 'Conflict Resolution', url: 'https://sdcoe.impacterpathway.com/ffl6uxruw#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"What do you do when you and a friend disagree about something?"' },
-  { domain: 'Help-Seeking', url: 'https://sdcoe.impacterpathway.com/fhquns046#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"If something was bothering you, who would you tell?"' },
+  { domain: 'Help-Seeking', url: 'https://flex.impacterpathway.com/f96z46iz7', q: '"If something was bothering you, who would you tell?"' },
   { domain: 'Reflective Growth', url: 'https://sdcoe.impacterpathway.com/fnt8m3e2o#contact_email=X%2540XXXX.com&unit_id=XXXX', q: '"Is there something you wish you had done differently this week?"' },
 ];
 
@@ -2802,11 +2884,15 @@ const cardDescs = {
 function renderPrompts(list) {
   const grid = document.getElementById('prompts-grid');
   grid.innerHTML = list.map((p, i) => `
-    <div class="prompt-card ${cardColors[i % cardColors.length]}" style="transition-delay:${0.05 * i}s" onclick="openModal('${p.url}')">
+    <div class="prompt-card ${cardColors[i % cardColors.length]} reveal" style="transition-delay:${0.05 * i}s" onclick="openModal('${p.url}')">
       <span class="comp">${p.domain}</span>
       <h4>${cardTitles[p.domain] || p.domain}</h4>
-      <p>${cardDescs[p.domain] || ''}</p>
-      <span class="pc-arrow">↗</span>
+      <div class="pc-text-swap">
+        <p class="pc-desc">${cardDescs[p.domain] || ''}</p>
+        <p class="pc-question">${p.q || ''}</p>
+      </div>
+      <div class="pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
+      <span class="pc-arrow"><span class="pc-ai">↗</span><span class="pc-av">▶</span></span>
     </div>
   `).join('');
 }

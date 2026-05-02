@@ -22,6 +22,14 @@
     --text: #E8EFF6;
     --text-dim: #8BA4BE;
     --border: rgba(255,255,255,0.08);
+    /* /bh/ compat vars */
+    --font-display: 'DM Sans', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --radius-lg: 14px;
+    --radius-pill: 999px;
+    --color-coral: #F37163;
+    --surface-inverse-deep: #0F1B2E;
+    --gutter: 48px;
   }
 
   html { scroll-behavior: smooth; }
@@ -483,275 +491,169 @@
     margin-bottom: 48px;
   }
 
-  /* ── Voice Intelligence v5 — Flat Typography Layout ── */
-  .vi3-header { max-width: 640px; margin-bottom: 52px; }
-
-  /* ~420px video column, rest goes to right column */
-  .vi3-main {
-    display: grid;
-    grid-template-columns: 420px 1fr;
-    gap: 64px;
-    align-items: start;
+  /* ── Voice Intelligence — ported from /bh/ ── */
+  .voice-section { background: var(--surface-inverse-deep); padding: 96px var(--gutter); }
+  .voice-section .section-h2 { color: #fff; }
+  .voice-section .section-body { color: rgba(255,255,255,0.5); }
+  .voice-player-wrap {
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px;
+    margin-top: 48px; align-items: stretch;
   }
-
-  .vi3-video-col { position: relative; }
-
-  .vi3-video-wrap {
-    position: relative;
-    width: 420px;
-    aspect-ratio: 9/16;
-    max-height: 740px;
-    border-radius: 16px;
-    overflow: hidden;
-    background: #000;
-    box-shadow: 0 24px 56px rgba(0,0,0,0.5);
+  .video-player-card {
+    border-radius: var(--radius-lg); overflow: hidden;
+    box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+    background: #000; position: relative;
+    display: flex; flex-direction: column;
   }
-  .vi3-video-wrap video { width:100%; height:100%; object-fit:cover; }
-
-  .vi3-caption-bar {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    padding: 60px 16px 18px;
-    background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%);
-    z-index: 5;
+  .video-player-card video {
+    width: 100%; display: block; flex: 1; min-height: 0;
+    object-fit: cover; object-position: top center;
   }
-  .vi3-caption-text {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    line-height: 1.5;
-    color: #fff;
-    min-height: 36px;
+  .ml-card-overlay {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(11,31,58,0.95); border-radius: 10px;
+    padding: 10px 14px; max-width: 200px;
+    border: 1px solid rgba(99,142,197,0.35);
+    font-family: var(--font-body); pointer-events: none;
+    transition: opacity 0.3s;
   }
-  .vi3-caption-text .vw { transition: color 0.15s, opacity 0.15s; opacity: 0.4; }
-  .vi3-caption-text .vw.active { opacity: 1; color: #fff; }
-  .vi3-caption-text .vw.past { opacity: 0.72; }
-
-  .vi3-signals-pill {
-    position: absolute;
-    bottom: 16px; right: 12px;
-    background: rgba(10,14,20,0.82);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 100px;
-    padding: 4px 11px;
-    z-index: 10;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    color: rgba(255,255,255,0.55);
-    display: flex;
-    align-items: center;
-    gap: 6px;
+  .ml-card-label {
+    font-family: var(--font-display); font-weight: 800; font-size: 9px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: #6EE7B7;
+    margin-bottom: 5px;
   }
-  .vi3-sig-dot { width:5px; height:5px; border-radius:50%; background:var(--coral); flex-shrink:0; }
-
-  .vi3-play-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--coral);
-    color: #fff;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    padding: 10px 22px;
-    border-radius: 100px;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.2s;
+  .ml-card-text { font-size: 11px; color: rgba(255,255,255,0.78); line-height: 1.5; }
+  .ml-card-quote { font-size: 11px; color: #6EE7B7; font-style: italic; margin-top: 4px; }
+  .rec-pill {
+    position: absolute; top: 12px; left: 12px;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(0,0,0,0.55); border-radius: 6px; padding: 4px 10px;
+    font-family: var(--font-display); font-weight: 700; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.8);
   }
-  .vi3-play-btn:hover { opacity: 0.85; }
-
-  /* Right column — signal blocks only, no transcript */
-  .vi3-right-col { display: flex; flex-direction: column; }
-
-  /* Signal blocks — flat text on navy, NO card containers */
-  .vi3-signals {
-    display: flex;
-    flex-direction: column;
-    gap: 36px;
+  .rec-dot { width: 6px; height: 6px; border-radius: 50%; background: #F37163; animation: recpulse 1.2s ease-in-out infinite; }
+  @keyframes recpulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .transcript-panel {
+    background: rgba(255,255,255,0.04); border-radius: var(--radius-lg);
+    padding: 28px; border: 1px solid rgba(255,255,255,0.06);
+    max-height: 420px; overflow-y: auto;
   }
-
-  /* Full-width editorial transcript band — below the main grid */
-  .vi3-tx-band {
-    margin-top: 60px;
-    padding-top: 44px;
-    border-top: 1px solid rgba(255,255,255,0.07);
+  .transcript-panel::-webkit-scrollbar { width: 4px; }
+  .transcript-panel::-webkit-scrollbar-track { background: transparent; }
+  .transcript-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+  .tp-eyebrow {
+    font-family: var(--font-display); font-weight: 900; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.35);
+    margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
   }
-
-  .vi3-tx-label {
-    font-size: 10px; font-weight: 700;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--coral); margin-bottom: 20px;
-    display: flex; align-items: center; gap: 8px;
+  .tp-eyebrow::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+  .transcript-word {
+    font-family: var(--font-body); font-size: 16px; line-height: 2.1;
+    color: rgba(255,255,255,0.28); display: inline;
+    transition: color 0.06s, background 0.06s;
+    cursor: default;
   }
-  .vi3-tx-label::before {
-    content: ''; display: block; width: 16px; height: 1px; background: var(--coral);
+  .transcript-word.active {
+    color: #fff; background: rgba(99,142,197,0.25);
+    border-radius: 3px; padding: 1px 3px;
   }
-
-  /* Stanza window — fixed height, editorial large type */
-  .vi3-tx-window {
-    height: 160px;
-    overflow: hidden;
-    position: relative;
+  .transcript-word.resilience-word.active { background: rgba(110,231,183,0.22); color: #6EE7B7; }
+  .transcript-word.insight-word.active    { background: rgba(252,211,77,0.22);  color: #FCD34D; }
+  .transcript-word.rgrowth-word.active    { background: rgba(147,197,253,0.22); color: #93C5FD; }
+  .transcript-word + .transcript-word { margin-left: 4px; }
+  .voice-analysis {
+    grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
   }
-  .vi3-stanza {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    font-size: clamp(1.5rem, 2.4vw, 2rem);
-    font-weight: 400;
-    line-height: 1.5;
-    transition: opacity 0.7s ease;
-    max-width: 900px;
+  .analysis-card {
+    background: rgba(255,255,255,0.04); border-radius: var(--radius-lg);
+    padding: 24px; border: 1px solid rgba(255,255,255,0.06);
   }
-  .vi3-stanza.hidden { opacity: 0; pointer-events: none; }
-
-  /* Transcript word states */
-  .vw { transition: color 0.18s ease, opacity 0.18s ease, filter 0.15s ease; }
-  .vw { opacity: 0.25; color: #fff; }
-  .vw.domain   { color: var(--blue);  opacity: 0.45; }
-  .vw.metaphor { color: var(--coral); opacity: 0.5; }
-  .vw.metaphor-standout { color: var(--coral); opacity: 0.55; font-size: 1.03em; }
-  .vw.past { opacity: 0.6 !important; color: rgba(255,255,255,0.6); }
-  .vw.domain.past   { color: var(--blue)  !important; opacity: 0.8 !important; }
-  .vw.metaphor.past { color: var(--coral) !important; opacity: 0.9 !important; }
-  .vw.metaphor-standout.past {
-    color: var(--coral) !important; opacity: 0.95 !important;
-    filter: drop-shadow(0 0 6px rgba(243,113,99,0.3));
+  .analysis-card h5 {
+    font-family: var(--font-display); font-weight: 700; font-size: 15px; color: #fff; margin-bottom: 8px;
   }
-  .vw.active { opacity: 1 !important; color: #fff !important; animation: vwPulse 0.22s ease-out; }
-  .vw.domain.active   { color: var(--blue)  !important; }
-  .vw.metaphor.active, .vw.metaphor-standout.active { color: var(--coral) !important; }
-  @keyframes vwPulse { 0% { filter:brightness(1.6); } 100% { filter:brightness(1); } }
-
-  /* Progress dots — below transcript */
-  .vi3-dots {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-top: 16px;
+  .analysis-card p { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+  .ac-pill {
+    display: inline-block; padding: 3px 10px; border-radius: var(--radius-pill);
+    font-family: var(--font-display); font-weight: 800; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px;
   }
-  .vi3-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    border: 1px solid rgba(243,113,99,0.35);
-    background: transparent;
-    transition: background 0.35s ease, border-color 0.35s ease;
+  .ac-pill.resilience { background: rgba(110,231,183,0.15); color: #6EE7B7; }
+  .ac-pill.insight    { background: rgba(252,211,77,0.15);  color: #FCD34D; }
+  .ac-pill.rgrowth    { background: rgba(147,197,253,0.15); color: #93C5FD; }
+  .vi-progress-wrap {
+    position: relative; padding: 0 14px; height: 32px;
+    background: rgba(0,0,0,0.55); display: flex; align-items: center;
+    cursor: pointer; user-select: none;
   }
-  .vi3-dot.past  { background: rgba(243,113,99,0.28); border-color: rgba(243,113,99,0.28); }
-  .vi3-dot.active{ background: var(--coral); border-color: var(--coral); }
-  /* No border, no background, no radius — flat on navy */
-  .vi3-signal-block { }
-
-  /* Eyebrow: "— · 0:03 · EMOTIONAL RESILIENCE" dash-prefix style matching /bh/7 vocab */
-  .vi3-signal-eyebrow {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.13em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    display: flex; align-items: center; gap: 7px;
-    opacity: 0.55;
-    transition: opacity 0.5s ease;
+  .vi-progress-track {
+    position: relative; height: 3px; background: rgba(255,255,255,0.12);
+    border-radius: 2px; flex: 1;
   }
-  .vi3-signal-block.active .vi3-signal-eyebrow { opacity: 1; }
-  .vi3-signal-eyebrow::before {
-    content: ''; display: block; width: 14px; height: 1px; flex-shrink: 0;
+  .vi-progress-fill {
+    position: absolute; left: 0; top: 0; height: 100%;
+    background: var(--color-coral); border-radius: 2px;
+    pointer-events: none; width: 0%;
   }
-  .vi3-eyebrow-er { color: #F89A8E; }
-  .vi3-eyebrow-er::before { background: #F89A8E; }
-  .vi3-eyebrow-si { color: #F4C97A; }
-  .vi3-eyebrow-si::before { background: #F4C97A; }
-  .vi3-eyebrow-rg { color: #9DBEEA; }
-  .vi3-eyebrow-rg::before { background: #9DBEEA; }
-
-  /* Pulsing dot that appears when signal is actively firing */
-  .vi3-fire-dot {
-    width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
-    opacity: 0; transition: opacity 0.3s ease;
-    animation: pulse 1.8s ease-in-out infinite;
+  .vi-dot {
+    position: absolute; top: 50%; width: 11px; height: 11px;
+    border-radius: 50%; border: 2px solid rgba(0,0,0,0.7);
+    transform: translate(-50%, -50%);
+    transition: box-shadow 0.25s, transform 0.25s;
+    pointer-events: none;
   }
-  .vi3-eyebrow-er .vi3-fire-dot { background: #F89A8E; }
-  .vi3-eyebrow-si .vi3-fire-dot { background: #F4C97A; }
-  .vi3-eyebrow-rg .vi3-fire-dot { background: #9DBEEA; }
-  .vi3-signal-block.firing .vi3-fire-dot { opacity: 1; }
-
-  /* Signal title */
-  .vi3-signal-title {
-    font-size: 22px; font-weight: 600; letter-spacing: -0.02em;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 10px;
-    line-height: 1.2;
-    transition: color 0.5s ease;
+  .vi-dot.dot-active {
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 0 10px currentColor;
+    transform: translate(-50%, -50%) scale(1.3);
   }
-  .vi3-signal-block.active .vi3-signal-title { color: #fff; }
-
-  /* Signal body — grid overlap: pending ↔ active text, footprint always held by active text */
-  .vi3-signal-body {
-    display: grid;
-    font-size: 15px; font-weight: 300; line-height: 1.65;
+  .vi-time-label {
+    font-family: var(--font-display); font-weight: 700; font-size: 10px;
+    color: rgba(255,255,255,0.35); margin-left: 10px; white-space: nowrap;
   }
-  .vi3-body-pending,
-  .vi3-body-content {
-    grid-area: 1 / 1;
-    transition: opacity 0.6s ease;
-  }
-  .vi3-body-pending {
-    font-style: italic;
-    color: rgba(214,231,241,0.3);
-    opacity: 1;
-  }
-  .vi3-body-content {
-    color: rgba(214,231,241,0.82);
-    opacity: 0;
-  }
-  .vi3-signal-block.active .vi3-body-pending { opacity: 0; pointer-events: none; }
-  .vi3-signal-block.active .vi3-body-content { opacity: 1; }
-
-  /* Closing payoff line — present from load at 40%, rises to 100% post-playback */
-  .vi3-closing {
-    margin-top: 52px;
-    text-align: center;
-    font-size: 1.05rem;
-    font-style: italic;
-    color: rgba(255,255,255,0.75);
-    opacity: 0.4;
-    transition: opacity 0.8s ease-out;
-    max-width: 560px;
+  .next-insight-btn {
     margin-left: auto;
-    margin-right: auto;
+    background: rgba(99,142,197,0.15); border: 1px solid rgba(99,142,197,0.25);
+    border-radius: 5px; padding: 3px 9px;
+    font-family: var(--font-display); font-weight: 700; font-size: 10px;
+    letter-spacing: 0.06em; text-transform: uppercase; color: rgba(214,231,241,0.6);
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
   }
-  .vi3-closing.visible { opacity: 1; }
-
-  /* Affordances — ghost buttons below closing line */
-  .vi3-affordances {
-    display: flex;
-    gap: 24px;
-    justify-content: center;
-    align-items: center;
-    margin-top: 28px;
+  .next-insight-btn:hover { background: rgba(99,142,197,0.3); color: #fff; border-color: rgba(99,142,197,0.5); }
+  .voice-right-col { display: flex; flex-direction: column; gap: 16px; }
+  .voice-right-col .transcript-panel { flex: 1; min-height: 0; max-height: 300px; }
+  .live-score-panel {
+    background: rgba(255,255,255,0.04); border-radius: var(--radius-lg);
+    padding: 18px 20px; border: 1px solid rgba(255,255,255,0.06);
   }
-  .vi3-btn-ghost {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px; font-weight: 500;
-    color: rgba(255,255,255,0.5);
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 100px;
-    padding: 8px 20px;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
+  .lsp-eyebrow {
+    font-family: var(--font-display); font-weight: 900; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.3);
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
   }
-  .vi3-btn-ghost:hover { border-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.85); }
-  .vi3-btn-text {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px; font-weight: 500;
-    color: rgba(255,255,255,0.4);
-    background: none; border: none;
-    cursor: pointer;
-    transition: color 0.2s;
+  .lsp-eyebrow::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+  .lsp-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .lsp-bar-label { font-size: 10px; color: rgba(255,255,255,0.38); width: 118px; flex-shrink: 0; letter-spacing: 0.01em; }
+  .lsp-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+  .lsp-bar-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+  .lsp-bar-val { font-family: var(--font-display); font-weight: 700; font-size: 11px; color: rgba(255,255,255,0.3); width: 20px; text-align: right; flex-shrink: 0; transition: color 0.4s; }
+  .lsp-bar-val.scored { color: rgba(255,255,255,0.7); }
+  .lsp-footer { display: flex; align-items: flex-end; justify-content: space-between; margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; }
+  .lsp-total-num { font-family: var(--font-display); font-weight: 800; font-size: 26px; color: #fff; line-height: 1; }
+  .lsp-total-denom { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.3); margin-left: 2px; }
+  .lsp-tier-badge {
+    padding: 4px 12px; border-radius: var(--radius-pill);
+    font-family: var(--font-display); font-weight: 800; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.4s;
   }
-  .vi3-btn-text:hover { color: rgba(255,255,255,0.7); }
+  .lsp-tier-badge.pending { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.2); }
+  .lsp-tier-badge.t1 { background: rgba(16,185,129,0.18); color: #34D399; }
+  .lsp-tier-badge.t2 { background: rgba(245,158,11,0.18); color: #FCD34D; }
+  .lsp-tier-badge.t3 { background: rgba(239,68,68,0.18); color: #FCA5A5; }
+  .analysis-card { transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s; }
+  .analysis-card.card-active { animation: cardpulse 2s ease-in-out infinite; }
+  .analysis-card.card-active.resilience-card { border-color: rgba(110,231,183,0.45); box-shadow: 0 0 24px rgba(110,231,183,0.1); }
+  .analysis-card.card-active.insight-card    { border-color: rgba(252,211,77,0.45);  box-shadow: 0 0 24px rgba(252,211,77,0.1); }
+  .analysis-card.card-active.rgrowth-card    { border-color: rgba(147,197,253,0.45); box-shadow: 0 0 24px rgba(147,197,253,0.1); }
+  @keyframes cardpulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.015)} }
 
   /* ── MTSS Pyramid ── */
   .mtss-layout {
@@ -1266,11 +1168,8 @@
     .cred-metric:nth-child(odd) { padding-left: 0; }
     .cred-metric:nth-last-child(-n+2) { border-bottom: none; }
     .cred-band { padding: 40px 24px; }
-    .vi3-main { grid-template-columns: 1fr; gap: 40px; }
-    .vi3-video-wrap { width: 100%; max-height: none; }
-    .vi3-signals { gap: 28px; }
-    .vi3-tx-window { height: auto; min-height: 80px; }
-    .vi3-tx-band { margin-top: 40px; padding-top: 32px; }
+    .voice-player-wrap { grid-template-columns: 1fr; gap: 32px; }
+    .voice-analysis { grid-template-columns: 1fr; gap: 16px; }
     .mtss-layout { grid-template-columns: 1fr; gap: 40px; }
     .compare-grid { grid-template-columns: 1fr; gap: 40px; }
     .prompts-grid { grid-template-columns: 1fr 1fr; }
@@ -1389,108 +1288,83 @@
 
 
 <!-- Voice Intelligence Section — v3 Full-Presence -->
-<section class="section" id="voice-intelligence" data-streamer-label="Live Analysis">
+<section class="voice-section section" id="voice-intelligence" data-streamer-label="Live Analysis">
   <div class="section-inner">
-
-    <!-- Header -->
-    <div class="vi3-header reveal">
-      <div class="section-eyebrow">Voice Intelligence</div>
-      <h2 class="section-heading">Every word carries signal.</h2>
-      <p class="section-body" style="margin-bottom:0;">Watch the transcript sync word-for-word as Madison speaks — and watch the model surface three behavioral health signals no survey could capture.</p>
-    </div>
-
-    <!-- Main 2-col: video | transcript + score -->
-    <div class="vi3-main">
-
-      <!-- Left: Video (9:16) -->
-      <div class="vi3-video-col reveal">
-        <div class="vi3-video-wrap">
-          <video id="vi3Video" src="../images/nc-girl.mp4" playsinline preload="metadata"></video>
-          <div class="vi3-caption-bar">
-            <div class="vi3-caption-text" id="vi3-caption"></div>
-          </div>
-          <div class="vi3-signals-pill">
-            <span class="vi3-sig-dot"></span>
-            <span id="vi3-sig-count">0 signals detected</span>
-          </div>
+    <span class="section-eyebrow" style="color:rgba(214,231,241,0.6)">Voice Intelligence Analysis</span>
+    <h2 class="section-heading" style="color:#fff;max-width:22ch">What Authentic Language Reveals That Numbers Can't.</h2>
+    <p class="section-body" style="color:rgba(255,255,255,0.5)">NC Portrait Assessment. Adaptability competency. Watch the transcript sync word-for-word as she speaks — and watch the model surface three behavioral health signals no survey could capture.</p>
+    <div class="voice-player-wrap">
+      <div class="video-player-card">
+        <video id="ncgirl" controls preload="metadata" src="../images/nc-girl.mp4">
+          Your browser does not support video.
+        </video>
+        <div class="rec-pill"><div class="rec-dot"></div> Live scoring</div>
+        <div class="ml-card-overlay" id="mlOverlay" style="opacity:0">
+          <div class="ml-card-label" id="mlLabel">—</div>
+          <div class="ml-card-text" id="mlText">—</div>
+          <div class="ml-card-quote" id="mlQuote"></div>
         </div>
-        <div style="margin-top:16px;">
-          <button class="vi3-play-btn" id="vi3-play-btn" onclick="toggleVI3()">
-            <span id="vi3-btn-icon">▶</span> Play response
-          </button>
+        <!-- Custom progress bar with insight dots -->
+        <div class="vi-progress-wrap" id="viProgress">
+          <div class="vi-progress-track" id="viTrack">
+            <div class="vi-progress-fill" id="viFill"></div>
+            <div class="vi-dot" id="viDot0" style="left:11.4%;background:#6EE7B7;color:#6EE7B7" title="Emotional Resilience — 9s"></div>
+            <div class="vi-dot" id="viDot1" style="left:24.2%;background:#FCD34D;color:#FCD34D" title="Self-Insight — 20s"></div>
+            <div class="vi-dot" id="viDot2" style="left:66.5%;background:#93C5FD;color:#93C5FD" title="Reflective Growth — 55s"></div>
+          </div>
+          <span class="vi-time-label" id="viTimeLabel">0:00</span>
         </div>
       </div>
-
-      <!-- Right: signal blocks only — flat text on navy, always present, body swaps on fire -->
-      <div class="vi3-right-col reveal" style="transition-delay:0.12s">
-        <div class="vi3-signals">
-
-          <div class="vi3-signal-block" id="vi3-card-er">
-            <div class="vi3-signal-eyebrow vi3-eyebrow-er">
-              <span class="vi3-fire-dot"></span>
-              0:03 &middot; EMOTIONAL RESILIENCE
-            </div>
-            <div class="vi3-signal-title">Failure reframing</div>
-            <div class="vi3-signal-body">
-              <span class="vi3-body-pending">Awaiting playback&hellip;</span>
-              <span class="vi3-body-content">"My biggest failure would be not taking enough risk to experience true failure." The model flags this as a resilience marker: failure recast as an unmet aspiration — not a catastrophe. There is no self-blame. The causal arrow runs forward, not backward.</span>
-            </div>
+      <div class="voice-right-col">
+        <div class="transcript-panel">
+          <div class="tp-eyebrow">Whisper-synced transcript <button class="next-insight-btn" id="nextInsightBtn">⟶ Next insight</button></div>
+          <div id="transcript-words"></div>
+        </div>
+        <!-- Live BH Score Panel -->
+        <div class="live-score-panel">
+          <div class="lsp-eyebrow">Live BH domain score</div>
+          <div class="lsp-bar-row">
+            <span class="lsp-bar-label">Emotional Resilience</span>
+            <div class="lsp-bar-track"><div class="lsp-bar-fill" id="barResilience" style="background:#6EE7B7"></div></div>
+            <span class="lsp-bar-val" id="valResilience">—</span>
           </div>
-
-          <div class="vi3-signal-block" id="vi3-card-si">
-            <div class="vi3-signal-eyebrow vi3-eyebrow-si">
-              <span class="vi3-fire-dot"></span>
-              0:07 &middot; SELF-INSIGHT
-            </div>
-            <div class="vi3-signal-title">Avoidance pattern named</div>
-            <div class="vi3-signal-body">
-              <span class="vi3-body-pending">Awaiting playback&hellip;</span>
-              <span class="vi3-body-content">"I tend to stay in my comfort zone and stand behind the yellow caution tape." A spontaneous, original metaphor for her own avoidance behavior. The encoder isn't looking for key words — it's looking for the naming precision that signals genuine self-awareness. This is it.</span>
-            </div>
+          <div class="lsp-bar-row">
+            <span class="lsp-bar-label">Self-Insight</span>
+            <div class="lsp-bar-track"><div class="lsp-bar-fill" id="barInsight" style="background:#FCD34D"></div></div>
+            <span class="lsp-bar-val" id="valInsight">—</span>
           </div>
-
-          <div class="vi3-signal-block" id="vi3-card-rg">
-            <div class="vi3-signal-eyebrow vi3-eyebrow-rg">
-              <span class="vi3-fire-dot"></span>
-              0:11 &middot; REFLECTIVE GROWTH
-            </div>
-            <div class="vi3-signal-title">Present-tense growth commitment</div>
-            <div class="vi3-signal-body">
-              <span class="vi3-body-pending">Awaiting playback&hellip;</span>
-              <span class="vi3-body-content">"Every day I'm trying to expand the barriers of my comfort zone." Present-tense growth orientation fused with a desire to increase risk exposure. She isn't describing past growth — she's narrating an active, ongoing process.</span>
-            </div>
+          <div class="lsp-bar-row">
+            <span class="lsp-bar-label">Reflective Growth</span>
+            <div class="lsp-bar-track"><div class="lsp-bar-fill" id="barRgrowth" style="background:#93C5FD"></div></div>
+            <span class="lsp-bar-val" id="valRgrowth">—</span>
           </div>
-
-        </div><!-- /vi3-signals -->
-      </div><!-- /vi3-right-col -->
-
-    </div><!-- /vi3-main -->
-
-    <!-- Full-width editorial transcript — below the video+signals row -->
-    <div class="vi3-tx-band reveal" style="transition-delay:0.2s">
-      <div class="vi3-tx-label">WHISPER-SYNCED TRANSCRIPT</div>
-      <div class="vi3-tx-window" id="vi3-tx-window">
-        <!-- Five stanzas built by JS -->
+          <div class="lsp-footer">
+            <div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-bottom:4px;letter-spacing:0.08em;text-transform:uppercase;font-family:var(--font-display);font-weight:700">Total score</div>
+              <span class="lsp-total-num" id="lspScore">0</span><span class="lsp-total-denom">/12</span>
+            </div>
+            <div class="lsp-tier-badge pending" id="lspTier">Scoring…</div>
+          </div>
+        </div>
       </div>
-      <div class="vi3-dots" id="vi3-dots">
-        <div class="vi3-dot active" id="vi3-dot-0"></div>
-        <div class="vi3-dot" id="vi3-dot-1"></div>
-        <div class="vi3-dot" id="vi3-dot-2"></div>
-        <div class="vi3-dot" id="vi3-dot-3"></div>
-        <div class="vi3-dot" id="vi3-dot-4"></div>
+      <div class="voice-analysis">
+        <div class="analysis-card resilience-card" id="card-resilience">
+          <div class="ac-pill resilience">Emotional Resilience</div>
+          <h5>Failure reframing</h5>
+          <p>"My biggest failure would be not taking enough risk to experience true failure." The model flags this as a resilience marker: failure is recast as an unmet aspiration — not a catastrophe. There is no self-blame. The causal arrow runs forward, not backward.</p>
+        </div>
+        <div class="analysis-card insight-card" id="card-insight">
+          <div class="ac-pill insight">Self-Insight</div>
+          <h5>Avoidance pattern named</h5>
+          <p>"I tend to stay in my comfort zone and stand behind the yellow caution tape." A spontaneous, original metaphor for her own avoidance behavior. The encoder isn't looking for key words — it's looking for the naming precision that signals genuine self-awareness. This is it.</p>
+        </div>
+        <div class="analysis-card rgrowth-card" id="card-rgrowth">
+          <div class="ac-pill rgrowth">Reflective Growth</div>
+          <h5>Present-tense growth commitment</h5>
+          <p>"Every day I'm trying to expand the barriers of my comfort zone... I'd like to experience a lot more failures." Present-tense growth orientation fused with a desire to increase risk exposure. She isn't describing past growth — she's narrating an active, ongoing process.</p>
+        </div>
       </div>
     </div>
-
-    <!-- Closing payoff line -->
-    <div class="vi3-closing" id="vi3-closing">
-      In 13 seconds, the model heard what a 5-question Likert survey would have missed entirely.
-    </div>
-
-    <!-- Affordances -->
-    <div class="vi3-affordances">
-      <button class="vi3-btn-ghost" onclick="replayVI3()">↻ Play Again</button>
-    </div>
-
   </div>
 </section>
 
@@ -1891,240 +1765,232 @@
 
 <script>
 /* ──────────────────────────────
-   VOICE INTELLIGENCE v3 — FULL-PRESENCE
-   Word timestamps (verbatim from nc-girl.mp4 / Whisper)
+   VOICE INTELLIGENCE — NC Girl (ported from /bh/)
+   Real Whisper word-level timestamps
 ────────────────────────────── */
-const VI3_WORDS = [
-  {t:0.0,  text:'When'},   {t:0.2,  text:'given'}, {t:0.45, text:'some'},
-  {t:0.65, text:'thought'},{t:0.85, text:'to'},     {t:0.95, text:'this'},
-  {t:1.15, text:'question,'},{t:1.55,text:'I'},     {t:1.7,  text:'realize'},
-  {t:2.05, text:'I'},      {t:2.2,  text:"don't"}, {t:2.5,  text:'have'},
-  {t:2.7,  text:'as'},     {t:2.85, text:'much'},  {t:3.05, text:'failures',          tag:'domain'},
-  {t:3.5,  text:'as'},     {t:3.65, text:'I'},     {t:3.8,  text:'would'},
-  {t:4.0,  text:'have'},   {t:4.2,  text:'expected.'},
-  {t:4.95, text:'My'},     {t:5.1,  text:'biggest'},{t:5.45,text:'failure',           tag:'domain'},
-  {t:5.85, text:'would'},  {t:6.05, text:'be'},    {t:6.2,  text:'not'},
-  {t:6.4,  text:'taking'}, {t:6.65, text:'enough'},{t:6.95, text:'risk'},
-  {t:7.25, text:'to'},     {t:7.4,  text:'experience'},{t:7.85,text:'true'},
-  {t:8.1,  text:'failure.',                                  tag:'domain'},
-  {t:8.85, text:'I'},      {t:9.0,  text:'tend'},  {t:9.25, text:'to'},
-  {t:9.4,  text:'stay'},   {t:9.65, text:'in'},    {t:9.8,  text:'my'},
-  {t:9.95, text:'comfort',                                   tag:'metaphor'},
-  {t:10.3, text:'zone',                                      tag:'metaphor'},
-  {t:10.6, text:'and'},    {t:10.8, text:'stand'}, {t:11.1, text:'behind'},
-  {t:11.45,text:'the'},
-  {t:11.6, text:'yellow',                                    tag:'metaphor-standout'},
-  {t:11.95,text:'caution',                                   tag:'metaphor-standout'},
-  {t:12.3, text:'tape.',                                     tag:'metaphor-standout'},
-  {t:13.0, text:'Every'},  {t:13.25,text:'day'},
-  {t:13.5, text:"I'm"},    {t:13.7, text:'trying'},
-  {t:14.0, text:'to'},     {t:14.15,text:'expand'},
-  {t:14.55,text:'the'},    {t:14.7, text:'barriers'},
-  {t:15.05,text:'of'},     {t:15.2, text:'my'},
-  {t:15.35,text:'comfort',                                   tag:'metaphor'},
-  {t:15.7, text:'zone.',                                     tag:'metaphor'},
+// Source: pitch/src/slides/06-product.tsx WORD_TS array
+// resilience = 9.32–19.14 | insight = 19.86–53.98 | rgrowth = 54.52–82.0
+const NC_WORDS = [
+  {w:"When",s:0.74},{w:"given",s:1.38},{w:"some",s:1.58},{w:"thought",s:1.8},{w:"to",s:2.12},{w:"this",s:2.3},{w:"question,",s:2.44},
+  {w:"I",s:3.52},{w:"realize",s:3.52},{w:"that",s:3.8},{w:"I",s:4.14},{w:"don't",s:4.48},{w:"have",s:4.7},{w:"any",s:4.88},{w:"as",s:5.14},{w:"much",s:5.86},{w:"failures",s:6.36},{w:"as",s:6.72},{w:"I",s:7.14},{w:"would",s:7.24},{w:"have",s:7.44},{w:"expected",s:7.7},{w:"to",s:8.26},{w:"have,",s:8.54},
+  // resilience segment starts 9.32
+  {w:"and",s:9.32,cls:"resilience"},{w:"when",s:10.02,cls:"resilience"},{w:"given",s:10.5,cls:"resilience"},{w:"the",s:10.74,cls:"resilience"},{w:"question,",s:10.92,cls:"resilience"},{w:"what's",s:11.94,cls:"resilience"},{w:"your",s:12.62,cls:"resilience"},{w:"biggest",s:12.68,cls:"resilience"},{w:"failure?",s:12.86,cls:"resilience"},
+  {w:"I",s:13.86,cls:"resilience"},{w:"think",s:13.98,cls:"resilience"},{w:"my",s:14.12,cls:"resilience"},{w:"answer",s:14.3,cls:"resilience"},{w:"would",s:14.58,cls:"resilience"},{w:"be",s:14.8,cls:"resilience"},{w:"not",s:15.06,cls:"resilience"},{w:"taking",s:15.88,cls:"resilience"},{w:"enough",s:16.2,cls:"resilience"},{w:"risk",s:16.64,cls:"resilience"},{w:"to",s:16.96,cls:"resilience"},{w:"experience",s:17.52,cls:"resilience"},{w:"true",s:18.1,cls:"resilience"},{w:"failure.",s:18.72,cls:"resilience"},
+  // insight segment starts 19.86
+  {w:"I",s:19.86,cls:"insight"},{w:"feel",s:20.14,cls:"insight"},{w:"like",s:20.3,cls:"insight"},{w:"I've",s:20.52,cls:"insight"},{w:"always",s:21.2,cls:"insight"},{w:"been",s:21.44,cls:"insight"},{w:"so",s:21.66,cls:"insight"},{w:"afraid",s:21.88,cls:"insight"},{w:"of",s:22.26,cls:"insight"},{w:"facing",s:22.8,cls:"insight"},{w:"someone",s:23.56,cls:"insight"},{w:"saying",s:24.82,cls:"insight"},{w:"no",s:25.06,cls:"insight"},{w:"or",s:25.34,cls:"insight"},{w:"facing",s:25.6,cls:"insight"},{w:"failures",s:25.88,cls:"insight"},{w:"that",s:26.38,cls:"insight"},
+  {w:"I",s:27.28,cls:"insight"},{w:"tend",s:27.88,cls:"insight"},{w:"to",s:28.12,cls:"insight"},{w:"kind",s:28.36,cls:"insight"},{w:"of",s:29.24,cls:"insight"},{w:"stay",s:29.4,cls:"insight"},{w:"in",s:29.7,cls:"insight"},{w:"my",s:29.94,cls:"insight"},{w:"comfort",s:30.08,cls:"insight"},{w:"zone",s:30.34,cls:"insight"},{w:"and",s:30.84,cls:"insight"},{w:"stand",s:31.16,cls:"insight"},{w:"behind",s:31.38,cls:"insight"},{w:"the",s:31.82,cls:"insight"},{w:"yellow",s:33.56,cls:"insight"},{w:"caution",s:33.76,cls:"insight"},{w:"tape",s:34.14,cls:"insight"},{w:"and",s:34.46,cls:"insight"},{w:"not",s:34.64,cls:"insight"},{w:"let",s:34.82,cls:"insight"},{w:"myself",s:35.62,cls:"insight"},{w:"explore",s:36.12,cls:"insight"},{w:"the",s:37.04,cls:"insight"},{w:"world",s:37.24,cls:"insight"},{w:"or",s:37.48,cls:"insight"},{w:"explore",s:37.72,cls:"insight"},{w:"niche",s:38.66,cls:"insight"},{w:"challenges,",s:39.32,cls:"insight"},{w:"new",s:40.08,cls:"insight"},{w:"experiences",s:40.08,cls:"insight"},{w:"because",s:40.8,cls:"insight"},{w:"I'm",s:41.4,cls:"insight"},{w:"afraid",s:41.7,cls:"insight"},{w:"of",s:42.02,cls:"insight"},{w:"someone",s:42.72,cls:"insight"},{w:"saying",s:42.94,cls:"insight"},{w:"no",s:43.16,cls:"insight"},{w:"to",s:43.38,cls:"insight"},{w:"me.",s:43.56,cls:"insight"},
+  {w:"I",s:44.52,cls:"insight"},{w:"feel",s:44.6,cls:"insight"},{w:"like",s:44.76,cls:"insight"},{w:"that's",s:44.88,cls:"insight"},{w:"a",s:45.14,cls:"insight"},{w:"constant",s:45.22,cls:"insight"},{w:"battle",s:45.54,cls:"insight"},{w:"that",s:45.92,cls:"insight"},{w:"I'm",s:46.22,cls:"insight"},{w:"always",s:46.62,cls:"insight"},{w:"trying",s:47.04,cls:"insight"},{w:"to",s:47.42,cls:"insight"},{w:"combat,",s:47.78,cls:"insight"},
+  {w:"and",s:49.04,cls:"insight"},{w:"I",s:49.24,cls:"insight"},{w:"feel",s:49.32,cls:"insight"},{w:"like",s:49.48,cls:"insight"},{w:"that's",s:49.62,cls:"insight"},{w:"always",s:49.9,cls:"insight"},{w:"going",s:50.12,cls:"insight"},{w:"to",s:50.3,cls:"insight"},{w:"be",s:50.38,cls:"insight"},{w:"something",s:50.46,cls:"insight"},{w:"that's",s:50.74,cls:"insight"},{w:"going",s:51.06,cls:"insight"},{w:"to",s:51.16,cls:"insight"},{w:"be",s:51.24,cls:"insight"},{w:"present",s:51.4,cls:"insight"},{w:"throughout",s:51.92,cls:"insight"},{w:"the",s:52.26,cls:"insight"},{w:"whole",s:52.56,cls:"insight"},{w:"of",s:52.76,cls:"insight"},{w:"my",s:53.02,cls:"insight"},{w:"entire",s:53.16,cls:"insight"},{w:"life.",s:53.5,cls:"insight"},
+  // reflective growth segment starts 54.52
+  {w:"And",s:54.52,cls:"rgrowth"},{w:"even",s:54.8,cls:"rgrowth"},{w:"taking",s:55.08,cls:"rgrowth"},{w:"this",s:55.28,cls:"rgrowth"},{w:"course",s:55.5,cls:"rgrowth"},{w:"was",s:55.8,cls:"rgrowth"},{w:"me",s:56.08,cls:"rgrowth"},{w:"kind",s:56.26,cls:"rgrowth"},{w:"of",s:56.38,cls:"rgrowth"},{w:"stepping",s:56.52,cls:"rgrowth"},{w:"out",s:56.7,cls:"rgrowth"},{w:"of",s:56.92,cls:"rgrowth"},{w:"my",s:56.96,cls:"rgrowth"},{w:"comfort",s:57.1,cls:"rgrowth"},{w:"zone",s:57.4,cls:"rgrowth"},{w:"and",s:57.76,cls:"rgrowth"},{w:"letting",s:58.26,cls:"rgrowth"},{w:"myself",s:58.46,cls:"rgrowth"},{w:"learn",s:58.86,cls:"rgrowth"},{w:"with",s:59.2,cls:"rgrowth"},{w:"other",s:59.38,cls:"rgrowth"},{w:"people",s:59.56,cls:"rgrowth"},{w:"and",s:60.0,cls:"rgrowth"},{w:"letting",s:60.26,cls:"rgrowth"},{w:"myself",s:60.76,cls:"rgrowth"},{w:"kind",s:61.22,cls:"rgrowth"},{w:"of",s:61.9,cls:"rgrowth"},{w:"expose",s:62.28,cls:"rgrowth"},{w:"myself",s:63.06,cls:"rgrowth"},{w:"and",s:63.58,cls:"rgrowth"},{w:"talk",s:64.04,cls:"rgrowth"},{w:"about",s:64.68,cls:"rgrowth"},{w:"my",s:64.9,cls:"rgrowth"},{w:"feelings",s:65.06,cls:"rgrowth"},{w:"like",s:65.34,cls:"rgrowth"},{w:"I",s:65.64,cls:"rgrowth"},{w:"am",s:65.8,cls:"rgrowth"},{w:"right",s:65.94,cls:"rgrowth"},{w:"now.",s:66.1,cls:"rgrowth"},
+  {w:"So",s:66.98,cls:"rgrowth"},{w:"I",s:67.24,cls:"rgrowth"},{w:"feel",s:67.44,cls:"rgrowth"},{w:"like",s:67.62,cls:"rgrowth"},{w:"every",s:67.92,cls:"rgrowth"},{w:"day",s:69.44,cls:"rgrowth"},{w:"I'm",s:69.64,cls:"rgrowth"},{w:"trying",s:69.92,cls:"rgrowth"},{w:"to",s:70.08,cls:"rgrowth"},{w:"expand",s:70.3,cls:"rgrowth"},{w:"the",s:71.66,cls:"rgrowth"},{w:"barriers",s:71.92,cls:"rgrowth"},{w:"of",s:72.3,cls:"rgrowth"},{w:"my",s:72.62,cls:"rgrowth"},{w:"comfort",s:72.82,cls:"rgrowth"},{w:"zone.",s:73.14,cls:"rgrowth"},
+  {w:"And",s:74.24,cls:"rgrowth"},{w:"I",s:74.62,cls:"rgrowth"},{w:"like",s:76.84,cls:"rgrowth"},{w:"to",s:77.78,cls:"rgrowth"},{w:"experience",s:78.0,cls:"rgrowth"},{w:"a",s:78.68,cls:"rgrowth"},{w:"lot",s:79.16,cls:"rgrowth"},{w:"more",s:79.3,cls:"rgrowth"},{w:"failures",s:79.48,cls:"rgrowth"},{w:"than",s:79.8,cls:"rgrowth"},{w:"I",s:80.08,cls:"rgrowth"},{w:"am",s:80.2,cls:"rgrowth"},{w:"right",s:80.46,cls:"rgrowth"},{w:"now.",s:80.8,cls:"rgrowth"}
 ];
 
-/* Signal timestamps — aligned to word occurrence */
-const VI3_SIGNAL_TIMES = [
-  { time: 3.0,  domain: 'er', cardId: 'vi3-card-er', barId: 'vb3-er', scoreId: 'vs3-er', score: 4 },
-  { time: 9.95, domain: 'si', cardId: 'vi3-card-si', barId: 'vb3-si', scoreId: 'vs3-si', score: 4 },
-  { time: 13.0, domain: 'rg', cardId: 'vi3-card-rg', barId: 'vb3-rg', scoreId: 'vs3-rg', score: 4 },
+// ML annotation cards mapped to time segments
+const NC_ML = [
+  { start:9.32, end:19.14, label:"EMOTIONAL RESILIENCE", color:"#6EE7B7",
+    text:"Reframing failure as unmet risk appetite — not a catastrophic event. Ownership without self-blame. The causal arrow points forward.",
+    quote:'"not taking enough risk to experience true failure"' },
+  { start:19.86, end:53.98, label:"SELF-INSIGHT", color:"#FCD34D",
+    text:'"Yellow caution tape" is a spontaneous, original metaphor for her own avoidance behavior. The model identifies this naming precision as explicit behavioral self-awareness.',
+    quote:'"yellow caution tape"' },
+  { start:54.52, end:82.0, label:"REFLECTIVE GROWTH", color:"#93C5FD",
+    text:"Present-tense commitment to growth fused with a desire to increase risk exposure. 'Expand the barriers' is a high-signal growth orientation phrase.",
+    quote:'"expand the barriers of my comfort zone"' },
 ];
 
-/* 5-stanza boundaries (word index ranges) and switch timestamps */
-/* Stanza 0 (0-19):  "When given...expected."       t:0.0  → 4.2  — switch at 4.6  */
-/* Stanza 1 (20-32): "My biggest failure...failure." t:4.95 → 8.1  — switch at 8.5  */
-/* Stanza 2 (33-40): "I tend to stay...comfort zone" t:8.85 → 10.3 — switch at 10.45 */
-/* Stanza 3 (41-47): "...behind the yellow caution tape." t:10.6→12.3 — switch at 12.6 */
-/* Stanza 4 (48-59): "Every day...comfort zone."    t:13.0 → 15.7                     */
-const VI3_STANZAS = [
-  { from:  0, to: 20, switchAt: 4.6   },
-  { from: 20, to: 33, switchAt: 8.5   },
-  { from: 33, to: 41, switchAt: 10.45 },
-  { from: 41, to: 48, switchAt: 12.6  },
-  { from: 48, to: 60, switchAt: Infinity },
-];
+const container = document.getElementById('transcript-words');
+NC_WORDS.forEach((w, i) => {
+  const span = document.createElement('span');
+  span.className = 'transcript-word' + (w.cls ? ` ${w.cls}-word` : '');
+  span.dataset.start = w.s;
+  span.dataset.idx = i;
+  span.textContent = w.w;
+  container.appendChild(span);
+  if (i < NC_WORDS.length - 1) container.appendChild(document.createTextNode(' '));
+});
 
-/* ── VI3 DOM refs ── */
-const vi3Video    = document.getElementById('vi3Video');
-const vi3Caption  = document.getElementById('vi3-caption');
-const vi3PlayBtn  = document.getElementById('vi3-play-btn');
-const vi3SigCount = document.getElementById('vi3-sig-count');
-const vi3TxWindow = document.getElementById('vi3-tx-window');
-const vi3Closing  = document.getElementById('vi3-closing');
+const vid        = document.getElementById('ncgirl');
+const wordSpans  = container.querySelectorAll('.transcript-word');
+const mlOverlay  = document.getElementById('mlOverlay');
+const mlLabel    = document.getElementById('mlLabel');
+const mlText     = document.getElementById('mlText');
+const mlQuote    = document.getElementById('mlQuote');
 
-let vi3Playing    = false;
-let vi3RafId      = null;
-let vi3FiredSigs  = new Set();
-let vi3SigNum     = 0;
-let vi3StanzaIdx  = 0; /* 0-4 — which stanza is active */
+// Progress bar elements
+const viFill      = document.getElementById('viFill');
+const viTimeLabel = document.getElementById('viTimeLabel');
+const viTrack     = document.getElementById('viTrack');
+const viProgress  = document.getElementById('viProgress');
+const viDots      = [document.getElementById('viDot0'), document.getElementById('viDot1'), document.getElementById('viDot2')];
+const TOTAL_DUR   = 82.0;
+// dot timestamps matching NC_ML start times
+const DOT_TIMES   = [9.32, 19.86, 54.52];
 
-/* Build caption spans (sliding window, stays in video col) */
-function vi3BuildCaption() {
-  vi3Caption.innerHTML = VI3_WORDS.map((w, i) =>
-    `<span class="vw" id="vc${i}">${w.text} </span>`
-  ).join('');
-}
-vi3BuildCaption();
+// Score panel elements
+const barResilience = document.getElementById('barResilience');
+const barInsight    = document.getElementById('barInsight');
+const barRgrowth    = document.getElementById('barRgrowth');
+const valResilience = document.getElementById('valResilience');
+const valInsight    = document.getElementById('valInsight');
+const valRgrowth    = document.getElementById('valRgrowth');
+const lspScore      = document.getElementById('lspScore');
+const lspTier       = document.getElementById('lspTier');
 
-/* Build five stanzas in the tx-window */
-function vi3BuildStanzas() {
-  VI3_STANZAS.forEach((st, si) => {
-    const spans = VI3_WORDS.slice(st.from, st.to).map((w, j) => {
-      const i = st.from + j;
-      let cls = 'vw'; if (w.tag) cls += ' ' + w.tag;
-      return `<span class="${cls}" id="vt${i}">${w.text} </span>`;
-    }).join('');
-    const div = document.createElement('div');
-    div.className = 'vi3-stanza' + (si === 0 ? '' : ' hidden');
-    div.id = 'vi3-s' + si;
-    div.innerHTML = spans;
-    vi3TxWindow.appendChild(div);
-  });
-}
-vi3BuildStanzas();
+// Analysis card elements
+const cardResilience = document.getElementById('card-resilience');
+const cardInsight    = document.getElementById('card-insight');
+const cardRgrowth    = document.getElementById('card-rgrowth');
 
-/* Caption: sliding window of 5 words */
-const VI3_WIN = 5;
-function vi3UpdateCaption(ct) {
-  let ai = -1;
-  for (let i = 0; i < VI3_WORDS.length; i++) { if (VI3_WORDS[i].t <= ct) ai = i; else break; }
-  const ws = Math.max(0, ai - 1);
-  const we = Math.min(VI3_WORDS.length - 1, ws + VI3_WIN - 1);
-  VI3_WORDS.forEach((w, i) => {
-    const el = document.getElementById('vc' + i); if (!el) return;
-    if (i < ws || i > we) { el.style.display = 'none'; return; }
-    el.style.display = 'inline';
-    el.classList.remove('active', 'past');
-    if (i === ai) el.classList.add('active');
-    else if (i < ai) el.classList.add('past');
-  });
+// Score targets (out of 4 each, total /12)
+const SCORES = { resilience: 3, insight: 4, rgrowth: 4 };
+// Track which domains have been scored
+const scored = { resilience: false, insight: false, rgrowth: false };
+
+function fmt(s) {
+  const m = Math.floor(s/60), sec = Math.floor(s%60);
+  return m + ':' + String(sec).padStart(2,'0');
 }
 
-/* Stanza word highlighting + dot update */
-function vi3UpdateStanza(ct) {
-  let ai = -1;
-  for (let i = 0; i < VI3_WORDS.length; i++) { if (VI3_WORDS[i].t <= ct) ai = i; else break; }
-
-  /* Advance stanza if audio passes switch point */
-  for (let si = vi3StanzaIdx; si < VI3_STANZAS.length - 1; si++) {
-    if (ct >= VI3_STANZAS[si].switchAt) {
-      document.getElementById('vi3-s' + si).classList.add('hidden');
-      document.getElementById('vi3-s' + (si + 1)).classList.remove('hidden');
-      vi3StanzaIdx = si + 1;
-    } else break;
-  }
-
-  /* Update dots */
-  VI3_STANZAS.forEach((st, si) => {
-    const dot = document.getElementById('vi3-dot-' + si); if (!dot) return;
-    dot.classList.remove('active', 'past');
-    if (si === vi3StanzaIdx) dot.classList.add('active');
-    else if (si < vi3StanzaIdx) dot.classList.add('past');
-  });
-
-  /* Highlight words */
-  VI3_WORDS.forEach((w, i) => {
-    const el = document.getElementById('vt' + i); if (!el) return;
-    el.classList.remove('active', 'past');
-    if (i === ai) el.classList.add('active');
-    else if (i < ai) el.classList.add('past');
-  });
+function animateBar(fillEl, valEl, pct, numVal, color) {
+  fillEl.style.width = pct + '%';
+  valEl.textContent = numVal + '/4';
+  valEl.classList.add('scored');
 }
 
-/* Fire signal: illuminate signal block (flat text, no card container) */
-function vi3FireSig(idx) {
-  const sig = VI3_SIGNAL_TIMES[idx];
-  vi3FiredSigs.add(idx);
-  vi3SigNum++;
-  vi3SigCount.textContent = vi3SigNum + ' signal' + (vi3SigNum > 1 ? 's' : '') + ' detected';
-
-  /* Remove .firing from all previous blocks (pulsing dot only on currently-firing block) */
-  VI3_SIGNAL_TIMES.forEach(s => {
-    const b = document.getElementById(s.cardId);
-    if (b) b.classList.remove('firing');
-  });
-
-  /* Illuminate this block — body text crossfades, title brightens, eyebrow fully visible */
-  const block = document.getElementById(sig.cardId);
-  if (block) { block.classList.add('active'); block.classList.add('firing'); }
-
-  /* Show closing line after all three signals fired */
-  if (vi3FiredSigs.size === VI3_SIGNAL_TIMES.length) {
-    setTimeout(() => vi3Closing.classList.add('visible'), 800);
-  }
-}
-
-/* Check all signals each frame */
-function vi3CheckSigs(ct) {
-  VI3_SIGNAL_TIMES.forEach((sig, idx) => {
-    if (ct >= sig.time && !vi3FiredSigs.has(idx)) vi3FireSig(idx);
-  });
-}
-
-/* rAF loop — no timeupdate */
-function vi3RafLoop() {
-  if (!vi3Playing) return;
-  const ct = vi3Video.currentTime;
-  vi3UpdateCaption(ct);
-  vi3UpdateStanza(ct);
-  vi3CheckSigs(ct);
-  vi3RafId = requestAnimationFrame(vi3RafLoop);
-}
-
-/* Play / Pause */
-function toggleVI3() {
-  if (vi3Video.paused) {
-    vi3Video.play();
-    vi3Playing = true;
-    vi3PlayBtn.innerHTML = '<span id="vi3-btn-icon">⏸</span> Pause';
-    vi3RafId = requestAnimationFrame(vi3RafLoop);
+function updateTier(total) {
+  lspScore.textContent = total;
+  lspTier.className = 'lsp-tier-badge';
+  if (total >= 10) {
+    lspTier.textContent = 'Tier 1 — Universal';
+    lspTier.classList.add('t1');
+  } else if (total >= 7) {
+    lspTier.textContent = 'Tier 2 — Targeted';
+    lspTier.classList.add('t2');
+  } else if (total > 0) {
+    lspTier.textContent = 'Tier 3 — Intensive';
+    lspTier.classList.add('t3');
   } else {
-    vi3Video.pause();
-    vi3Playing = false;
-    vi3PlayBtn.innerHTML = '<span id="vi3-btn-icon">▶</span> Play response';
-    cancelAnimationFrame(vi3RafId);
+    lspTier.textContent = 'Scoring…';
+    lspTier.classList.add('pending');
   }
 }
 
-/* Replay */
-function replayVI3() {
-  vi3FiredSigs.clear(); vi3SigNum = 0;
-  vi3SigCount.textContent = '0 signals detected';
-  vi3Closing.classList.remove('visible');
-  vi3StanzaIdx = 0;
-  VI3_STANZAS.forEach((_, si) => {
-    const s = document.getElementById('vi3-s' + si); if (!s) return;
-    if (si === 0) s.classList.remove('hidden'); else s.classList.add('hidden');
+const VI_PAD = 14; // matches vi-progress-wrap padding
+
+function updateProgressBar(t) {
+  const pct = Math.min(t / TOTAL_DUR * 100, 100);
+  viFill.style.width = pct + '%';
+  viTimeLabel.textContent = fmt(t) + ' / ' + fmt(TOTAL_DUR);
+  DOT_TIMES.forEach((dt, i) => {
+    const active = t >= dt && t < (NC_ML[i] ? NC_ML[i].end : TOTAL_DUR);
+    viDots[i].classList.toggle('dot-active', active);
   });
-  VI3_STANZAS.forEach((_, si) => {
-    const d = document.getElementById('vi3-dot-' + si); if (!d) return;
-    d.classList.remove('active','past'); if (si === 0) d.classList.add('active');
-  });
-  /* Reset signal blocks */
-  ['vi3-card-er','vi3-card-si','vi3-card-rg'].forEach(id => {
-    const c = document.getElementById(id);
-    if (c) c.classList.remove('active', 'firing');
-  });
-  vi3UpdateCaption(-1); vi3UpdateStanza(-1);
-  vi3Video.currentTime = 0;
-  if (vi3Playing) { vi3Video.pause(); vi3Playing = false; cancelAnimationFrame(vi3RafId); }
-  toggleVI3();
 }
 
-/* On video end */
-vi3Video.addEventListener('ended', () => {
-  vi3Playing = false;
-  vi3PlayBtn.innerHTML = '<span id="vi3-btn-icon">▶</span> Play response';
-  cancelAnimationFrame(vi3RafId);
-  vi3UpdateStanza(999);
-  /* Mark all dots as past */
-  VI3_STANZAS.forEach((_, si) => {
-    const d = document.getElementById('vi3-dot-' + si); if (d) { d.classList.remove('active'); d.classList.add('past'); }
+vid.addEventListener('seeking', () => updateProgressBar(vid.currentTime));
+vid.addEventListener('seeked',  () => updateProgressBar(vid.currentTime));
+
+vid.addEventListener('timeupdate', () => {
+  const t = vid.currentTime;
+
+  updateProgressBar(t);
+
+  // — Word highlighting —
+  wordSpans.forEach((span, i) => {
+    const start = parseFloat(span.dataset.start);
+    const nextStart = i < wordSpans.length - 1 ? parseFloat(wordSpans[i+1].dataset.start) : 999;
+    if (t >= start && t < nextStart) {
+      span.classList.add('active');
+      span.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    } else {
+      span.classList.remove('active');
+    }
   });
-  /* Ensure closing line shows even if all signals already fired */
-  setTimeout(() => vi3Closing.classList.add('visible'), 600);
+
+  // — ML overlay card —
+  const card = NC_ML.find(c => t >= c.start && t < c.end);
+  if (card) {
+    mlLabel.textContent = '+ ' + card.label;
+    mlLabel.style.color = card.color;
+    mlText.textContent = card.text;
+    mlQuote.textContent = card.quote;
+    mlQuote.style.color = card.color;
+    mlOverlay.style.borderColor = card.color + '55';
+    mlOverlay.style.opacity = '1';
+  } else {
+    mlOverlay.style.opacity = '0';
+  }
+
+  // — Analysis card glow —
+  cardResilience.classList.toggle('card-active', t >= NC_ML[0].start && t < NC_ML[0].end);
+  cardInsight.classList.toggle('card-active',    t >= NC_ML[1].start && t < NC_ML[1].end);
+  cardRgrowth.classList.toggle('card-active',    t >= NC_ML[2].start && t < NC_ML[2].end);
+
+  // — Live score bars (animate once when each segment first plays) —
+  if (!scored.resilience && t >= NC_ML[0].start) {
+    scored.resilience = true;
+    animateBar(barResilience, valResilience, (SCORES.resilience/4)*100, SCORES.resilience, '#6EE7B7');
+  }
+  if (!scored.insight && t >= NC_ML[1].start) {
+    scored.insight = true;
+    animateBar(barInsight, valInsight, (SCORES.insight/4)*100, SCORES.insight, '#FCD34D');
+  }
+  if (!scored.rgrowth && t >= NC_ML[2].start) {
+    scored.rgrowth = true;
+    animateBar(barRgrowth, valRgrowth, (SCORES.rgrowth/4)*100, SCORES.rgrowth, '#93C5FD');
+  }
+
+  // — Running total —
+  const total = (scored.resilience ? SCORES.resilience : 0)
+              + (scored.insight    ? SCORES.insight    : 0)
+              + (scored.rgrowth    ? SCORES.rgrowth    : 0);
+  updateTier(total);
+});
+
+// — Progress bar scrub (mousedown + drag) —
+function seekToEvent(e) {
+  const rect   = viProgress.getBoundingClientRect();
+  const trackW = rect.width - VI_PAD * 2;
+  const pct    = Math.max(0, Math.min(1, (e.clientX - rect.left - VI_PAD) / trackW));
+  vid.currentTime = pct * TOTAL_DUR;
+  updateProgressBar(pct * TOTAL_DUR);
+}
+
+viProgress.addEventListener('mousedown', e => {
+  e.preventDefault();
+  seekToEvent(e);
+  const onMove = ev => { if (ev.buttons & 1) seekToEvent(ev); };
+  const onUp   = ()  => {
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup',   onUp);
+  };
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup',   onUp);
+});
+
+// touch scrub
+viProgress.addEventListener('touchstart', e => {
+  e.preventDefault();
+  seekToEvent(e.touches[0]);
+}, { passive: false });
+viProgress.addEventListener('touchmove', e => {
+  e.preventDefault();
+  seekToEvent(e.touches[0]);
+}, { passive: false });
+
+// — Next insight button —
+document.getElementById('nextInsightBtn').addEventListener('click', () => {
+  const t = vid.currentTime;
+  const next = NC_ML.find(c => c.start > t + 0.5);
+  if (next) {
+    vid.currentTime = next.start;
+    if (vid.paused) vid.play();
+  } else {
+    vid.currentTime = NC_ML[0].start;
+    if (vid.paused) vid.play();
+  }
 });
 
 /* ──────────────────────────────
@@ -2667,19 +2533,6 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   animLoop();
 })();
 
-/* vi3Video seeked — reset signals that haven't fired yet */
-vi3Video.addEventListener('seeked', () => {
-  const ct = vi3Video.currentTime;
-  VI3_SIGNAL_TIMES.forEach((sig, idx) => {
-    if (ct < sig.time && vi3FiredSigs.has(idx)) {
-      vi3FiredSigs.delete(idx);
-      const block = document.getElementById(sig.cardId);
-      if (block) block.classList.remove('active', 'firing');
-    }
-  });
-  vi3UpdateCaption(ct);
-  vi3UpdateStanza(ct);
-});
 </script>
 </body>
 </html>

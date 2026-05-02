@@ -984,9 +984,10 @@
   }
   .scene-img-panel--full .s-scene-img {
     width: 100%;
-    max-height: 68vh;
+    max-height: 80vh;
     object-fit: contain;
     object-position: center;
+    border-radius: 16px;
   }
   .s-img-tag {
     font-size: 10px;
@@ -1643,15 +1644,15 @@
         <span class="s-switcher"><span id="surveysWord">A scale of 1 to 5.</span></span>
       </div>
 
-      <!-- Scene 1 — Pyramid prominent left, Likert text right -->
+      <!-- Scene 1 — Text left, pyramid image right -->
       <div class="scene-pane active" data-scene="0">
-        <div class="scene-img-panel scene-img-panel--full">
-          <img src="../images/mtss-pyramid-sdcoe.png" alt="SDCOE MTSS Tier Assignment Matrix" class="s-scene-img">
-        </div>
         <div class="scene-callout">
           <div class="s-num">47</div>
           <h3>Likert items.<br/>Zero stories.</h3>
           <p>A score of "3" routes to Tier 2. Another "3" routes to Tier 1. The survey can't tell them apart. The screener can — because it heard what the student actually said.</p>
+        </div>
+        <div class="scene-img-panel scene-img-panel--full">
+          <img src="../images/mtss-pyramid-correct.png" alt="SDCOE MTSS Tier Assignment Matrix" class="s-scene-img">
         </div>
       </div>
 

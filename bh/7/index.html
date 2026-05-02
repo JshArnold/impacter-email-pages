@@ -67,39 +67,59 @@
     100% { transform: translate(2px, -1px); }
   }
 
-  /* ── Nav ── */
-  nav {
+  /* ── Nav — floating pill ── */
+  .main-nav {
     position: fixed;
-    top: 0; left: 0; right: 0;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 500;
+    width: min(1200px, calc(100vw - 32px));
+    border-radius: 999px;
+    padding: 10px 14px 10px 20px;
+    background: rgba(12, 20, 34, 0.72);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.09);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 40px;
-    background: linear-gradient(to bottom, rgba(15,27,46,0.95) 0%, rgba(15,27,46,0) 100%);
-    transition: transform 0.35s ease, background 0.3s ease;
+    transition: transform 0.4s ease, opacity 0.3s ease;
   }
-  nav.hidden { transform: translateY(-100%); }
-  nav.solid { background: rgba(15,27,46,0.97); }
+  .main-nav.hidden { transform: translate(-50%, -140%); opacity: 0; }
 
-  .nav-logo img { height: 40px; display: block; }
+  .nav-logo img { height: 32px; display: block; filter: brightness(0) invert(1); }
 
-  .nav-cta {
-    display: inline-flex;
+  .nav-links {
+    display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
+  }
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.68);
+    padding: 9px 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+  }
+  .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.07); }
+  .nav-links .nav-cta {
     background: var(--coral);
     color: #fff;
-    font-family: 'DM Sans', sans-serif;
     font-weight: 600;
-    font-size: 14px;
-    padding: 10px 22px;
-    border-radius: 100px;
-    text-decoration: none;
-    transition: opacity 0.2s, transform 0.2s;
-    letter-spacing: 0.01em;
+    padding: 9px 20px;
+    margin-left: 6px;
   }
-  .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+  .nav-links .nav-cta:hover { background: #e85f50; color: #fff; }
+
+  @media (max-width: 860px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .main-nav { padding: 10px 12px 10px 18px; }
+  }
 
   /* ── Hero ── */
   .hero {
@@ -1195,12 +1215,19 @@
 <div id="grain" aria-hidden="true"></div>
 
 <!-- Nav -->
-<nav id="main-nav">
+<header class="main-nav" id="main-nav">
   <div class="nav-logo">
-    <a href="/bh/" style="display:flex;align-items:center;text-decoration:none;"><img src="../images/impacter-pathway-nav.svg" alt="Impacter Pathway" style="height:56px;width:auto;"></a>
+    <a href="/bh/"><img src="../images/impacter-pathway-nav.svg" alt="Impacter Pathway"></a>
   </div>
-  <a href="#resources" class="nav-cta">See the platform ↗</a>
-</nav>
+  <nav class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#voice-intelligence">Voice intelligence</a>
+    <a href="#prompts">Prompts</a>
+    <a href="#playbook">Playbook</a>
+    <a href="#resources">Resources</a>
+    <a href="#contact" class="nav-cta">Book a demo →</a>
+  </nav>
+</header>
 
 <!-- Hero -->
 <section class="hero">
@@ -1994,9 +2021,6 @@ const nav = document.getElementById('main-nav');
 let lastScroll = 0;
 window.addEventListener('scroll', () => {
   const curr = window.scrollY;
-  if (curr > 80) nav.classList.add('solid');
-  else nav.classList.remove('solid');
-
   if (curr > lastScroll && curr > 200) nav.classList.add('hidden');
   else nav.classList.remove('hidden');
   lastScroll = curr;

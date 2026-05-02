@@ -1197,20 +1197,25 @@
     max-width: 560px;
     justify-self: end;
   }
-  /* Full-bleed right column — image fills full column width */
+  /* Full-bleed right column — image fills full column width, locked to viewport */
   .scene-img-panel--full {
     justify-self: stretch;
     max-width: 100%;
     align-self: center;
     width: 100%;
+    max-height: calc(100vh - 200px);
+    overflow: hidden;
+    border-radius: 16px;
+    display: flex;
+    align-items: flex-start;
   }
   .scene-img-panel--full .s-scene-img {
     width: 100%;
     height: auto;
     display: block;
     border-radius: 16px;
-    max-height: none;
-    object-fit: unset;
+    max-height: calc(100vh - 200px);
+    object-fit: scale-down;
   }
   .s-img-tag {
     font-size: 10px;

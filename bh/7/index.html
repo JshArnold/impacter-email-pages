@@ -706,10 +706,19 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 32px 0;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 0;
   }
-  .mtss-subsection:first-child { border-top: none; padding-top: 0; }
+  /* Sections 2 & 3: pushed below the fold, hidden until scrolled in */
+  .mtss-subsection:not(:first-child) {
+    margin-top: 42vh;
+    opacity: 0;
+    transform: translateY(52px);
+    transition: opacity 700ms cubic-bezier(0.22,1,0.36,1), transform 700ms cubic-bezier(0.22,1,0.36,1);
+  }
+  .mtss-subsection.mtss-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   .mtss-sub-eyebrow {
     font-size: 10px;
@@ -2129,14 +2138,15 @@ const revealObs = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
 /* ──────────────────────────────
-   MTSS SCROLLYTELLING — IMAGE SWAP
+   MTSS SCROLLYTELLING — IMAGE SWAP + REVEAL
 ────────────────────────────── */
 (function() {
   const subsections = document.querySelectorAll('.mtss-subsection');
   const imgs = document.querySelectorAll('.mtss-img-stack img');
   if (!subsections.length || !imgs.length) return;
 
-  const mtssSectionObs = new IntersectionObserver((entries) => {
+  /* Image swap — fires at 40% visible so it feels intentional */
+  const mtssImgObs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
       const idx = parseInt(e.target.dataset.mtssSection, 10);
@@ -2144,7 +2154,19 @@ document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
     });
   }, { threshold: 0.4 });
 
-  subsections.forEach(s => mtssSectionObs.observe(s));
+  /* Reveal — fires as soon as the section peeks up from the bottom */
+  const mtssRevealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('mtss-revealed');
+      mtssRevealObs.unobserve(e.target);
+    });
+  }, { threshold: 0.05 });
+
+  subsections.forEach(s => {
+    mtssImgObs.observe(s);
+    if (s !== subsections[0]) mtssRevealObs.observe(s);
+  });
 })();
 
 /* ──────────────────────────────

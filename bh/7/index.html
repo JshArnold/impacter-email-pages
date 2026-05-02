@@ -1734,6 +1734,83 @@
     line-height: 1.55;
   }
 
+  /* ── CTA Listening ── */
+  #cta-listening {
+    position: relative;
+    background: #0F1B2E;
+    overflow: hidden;
+    padding: 120px 40px;
+    text-align: center;
+  }
+  #cta-listening::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 50%, rgba(99,142,197,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 50%, rgba(243,113,99,0.14) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-listening-inner {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+    z-index: 1;
+  }
+  .cta-listening-heading {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+    margin: 0 0 28px;
+    letter-spacing: -0.02em;
+  }
+  .cta-listening-heading em {
+    font-style: italic;
+    color: var(--coral);
+  }
+  .cta-listening-body {
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto 48px;
+  }
+  .cta-listening-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cta-listening-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 16px 32px;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-listening-btn:hover { transform: translateY(-2px); }
+  .cta-listening-btn--primary {
+    background: var(--coral);
+    color: #fff;
+    box-shadow: 0 0 0 3px rgba(243,113,99,0.35);
+  }
+  .cta-listening-btn--primary:hover {
+    box-shadow: 0 0 0 5px rgba(243,113,99,0.45), 0 8px 24px rgba(243,113,99,0.3);
+  }
+  .cta-listening-btn--secondary {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.75);
+    border: 1.5px solid rgba(255,255,255,0.18);
+  }
+  .cta-listening-btn--secondary:hover {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+  }
+
   /* ── Footer ── */
   footer {
     padding: 60px 40px;
@@ -2702,6 +2779,18 @@
         <div class="resource-title">Talk to our team</div>
         <div class="resource-desc">Schedule a demo or ask a question. We work with district leadership, counseling directors, and MTSS coordinators.</div>
       </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section id="cta-listening">
+  <div class="cta-listening-inner">
+    <h2 class="cta-listening-heading">Ready to start<br><em>listening?</em></h2>
+    <p class="cta-listening-body">Your students have something important to say. IMPACTER creates the conditions where they can say it — and the infrastructure to act on what you hear.</p>
+    <div class="cta-listening-actions">
+      <a href="mailto:info@impacterpathway.com" class="cta-listening-btn cta-listening-btn--primary">Contact Team IMPACTER →</a>
+      <a href="mailto:info@impacterpathway.com" class="cta-listening-btn cta-listening-btn--secondary">info@impacterpathway.com</a>
     </div>
   </div>
 </section>

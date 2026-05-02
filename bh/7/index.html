@@ -276,106 +276,88 @@
   @media (max-width: 960px) { .phrase-card { display:none; } }
 
   /* ── Stats Strip ── */
-  .stats-strip {
+  /* ── Credibility Band (single unified section) ── */
+  .cred-band {
     background: #f5f2ed;
+    padding: 52px 40px;
     border-top: none;
     border-bottom: none;
-    padding: 64px 40px;
   }
-  .stats-inner {
-    max-width: 1100px;
+  .cred-inner {
+    max-width: 1000px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 0;
   }
-  .stat-item {
-    padding: 0 40px;
-    border-right: 1px solid rgba(0,0,0,0.1);
-  }
-  .stat-item:first-child { padding-left: 0; }
-  .stat-item:last-child { border-right: none; }
-
-  /* ── Trust bar ── */
-  .trust-bar {
-    background: #eceae4;
-    padding: 36px 0 40px;
-    border-top: 1px solid rgba(0,0,0,0.06);
-    overflow: hidden;
-  }
-  .trust-label {
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    color: #9eaab8;
+  /* Row 1 — BHSSA credibility headline */
+  .cred-headline {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
+    color: var(--coral);
     text-align: center;
-    margin-bottom: 28px;
-    padding: 0 40px;
+    margin-bottom: 36px;
   }
-  .marquee-track {
-    display: flex;
-    align-items: center;
-    width: max-content;
-    animation: marquee 52s linear infinite;
+  .cred-headline span {
+    color: rgba(0,0,0,0.25);
+    margin: 0 8px;
   }
-  .marquee-track:hover { animation-play-state: paused; }
-  @keyframes marquee {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+  /* Row 2 — 4 metrics */
+  .cred-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    margin-bottom: 36px;
   }
-  .marquee-logo {
-    height: 44px;        /* base — CBH/Rio reference size */
-    width: auto;
-    margin: 0 48px;
-    opacity: 0.6;
-    mix-blend-mode: multiply;
-    transition: opacity 0.3s;
-    flex-shrink: 0;
+  .cred-metric {
+    padding: 0 36px;
+    border-right: 1px solid rgba(0,0,0,0.1);
+    text-align: left;
   }
-  .marquee-logo:hover { opacity: 1; }
-
-  /* Per-logo height tuning */
-  .ml-sccoe      { height: 54px;  }   /* bigger */
-  .ml-nyc        { height: 52px;  }   /* bigger */
-  .ml-cbh        { height: 54px;  }   /* bigger */
-  .ml-smfcsd     { height: 62px;  }   /* much bigger */
-  .ml-edcoe      { height: 66px;  }   /* much bigger */
-  .ml-esc2       { height: 52px;  }
-  .ml-rio        { height: 44px;  }
-  .ml-calexico   { height: 72px;  }   /* much bigger */
-  .ml-vista      { height: 66px;  }   /* a little bigger */
-  .ml-southbay   { height: 58px;  }
-  .ml-ventura    { height: 58px;  }
-  /* Edge fade masks */
-  .marquee-wrap {
-    position: relative;
-  }
-  .marquee-wrap::before, .marquee-wrap::after {
-    content: '';
-    position: absolute;
-    top: 0; bottom: 0;
-    width: 120px;
-    z-index: 2;
-    pointer-events: none;
-  }
-  .marquee-wrap::before { left: 0;  background: linear-gradient(to right, #eceae4, transparent); }
-  .marquee-wrap::after  { right: 0; background: linear-gradient(to left,  #eceae4, transparent); }
-
-  .stat-number {
-    font-size: clamp(2.8rem, 5vw, 3.8rem);
+  .cred-metric:first-child { padding-left: 0; }
+  .cred-metric:last-child  { border-right: none; }
+  .cred-num {
+    font-size: clamp(2.4rem, 4.2vw, 3.4rem);
     font-weight: 700;
     letter-spacing: -0.04em;
     color: #8a9ab0;
     line-height: 1;
     margin-bottom: 8px;
   }
-  .stat-label {
-    font-size: 0.88rem;
-    font-weight: 400;
-    color: #6b7f94;
+  .cred-num sup {
+    font-size: 0.45em;
+    vertical-align: super;
+    letter-spacing: 0;
+    font-weight: 600;
+  }
+  .cred-lbl {
+    font-size: 0.82rem;
+    color: #7a8fa3;
     line-height: 1.4;
-    max-width: 200px;
+    max-width: 160px;
+  }
+  .cred-lbl em {
+    font-style: normal;
+    font-size: 0.75rem;
+    color: #9eaab8;
+    display: block;
+    margin-top: 2px;
+  }
+  /* Row 3 — district names */
+  .cred-districts {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #9eaab8;
+    letter-spacing: 0.04em;
+    text-align: center;
+    line-height: 1.8;
+  }
+  .cred-districts span {
+    margin: 0 10px;
+    opacity: 0.5;
   }
 
   /* ── Section scaffolding ── */
@@ -1124,12 +1106,11 @@
     nav { padding: 16px 20px; }
     .hero-content { padding: 0 20px 80px; }
     .section { padding: 64px 20px; }
-    .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 32px 0; }
-    .stat-item { padding: 0 24px; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
-    .stat-item:nth-child(odd) { padding-left: 0; }
-    .stat-item:nth-child(even) { border-right: none; }
-    .stat-item:nth-last-child(-n+2) { border-bottom: none; }
-    .marquee-logo { height: 40px; margin: 0 32px; }
+    .cred-metrics { grid-template-columns: repeat(2, 1fr); gap: 28px 0; }
+    .cred-metric { padding: 0 20px; border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 20px; }
+    .cred-metric:nth-child(odd) { padding-left: 0; }
+    .cred-metric:nth-last-child(-n+2) { border-bottom: none; }
+    .cred-band { padding: 40px 24px; }
     .vi-layout { grid-template-columns: 1fr; gap: 40px; }
     .vi-video-wrap { max-width: 100%; }
     .mtss-layout { grid-template-columns: 1fr; gap: 40px; }
@@ -1192,58 +1173,52 @@
   </div>
 </section>
 
-<!-- Stats Strip -->
-<div class="stats-strip" id="stats">
-  <div class="stats-inner">
-    <div class="stat-item reveal">
-      <div class="stat-number">97%</div>
-      <div class="stat-label">Student participation rate</div>
-    </div>
-    <div class="stat-item reveal" style="transition-delay:0.1s">
-      <div class="stat-number">1.4 <span style="font-size:1.6rem;font-weight:500">days</span></div>
-      <div class="stat-label">Average time to support connection</div>
-    </div>
-    <div class="stat-item reveal" style="transition-delay:0.2s">
-      <div class="stat-number">$0</div>
-      <div class="stat-label">Net cost after CYBHI reimbursement</div>
-    </div>
-    <div class="stat-item reveal" style="transition-delay:0.3s">
-      <div class="stat-number">.918</div>
-      <div class="stat-label">QWK score vs. human expert raters</div>
-    </div>
-  </div>
-</div>
+<!-- Credibility Band -->
+<div class="cred-band reveal" id="stats">
+  <div class="cred-inner">
 
-<!-- Trust Bar -->
-<div class="trust-bar">
-  <div class="trust-label">Trusted by Districts and County Offices</div>
-  <div class="marquee-wrap">
-    <div class="marquee-track" id="marqueeTrack">
-      <!-- Set 1 -->
-      <img class="marquee-logo ml-sccoe"    src="../images/logos/logo-sccoe.png"         alt="Santa Clara County Office of Education">
-      <img class="marquee-logo ml-edcoe"    src="../images/logos/logo-edcoe.png"         alt="El Dorado County Office of Education">
-      <img class="marquee-logo ml-smfcsd"   src="../images/logos/logo-smfcsd.png"        alt="San Mateo-Foster City School District">
-      <img class="marquee-logo ml-vista"    src="../images/logos/logo-vista-unified.png" alt="Vista Unified School District">
-      <img class="marquee-logo ml-ventura"  src="../images/logos/logo-ventura.png"       alt="Ventura County Office of Education">
-      <img class="marquee-logo ml-cbh"      src="../images/logos/logo-cbh.png"           alt="Commission for Behavioral Health">
-      <img class="marquee-logo ml-southbay" src="../images/logos/logo-south-bay.png"     alt="South Bay Union School District">
-      <img class="marquee-logo ml-esc2"     src="../images/logos/logo-esc2.png"          alt="ESC Region 2">
-      <img class="marquee-logo ml-rio"      src="../images/logos/logo-rio.png"           alt="Rio School District">
-      <img class="marquee-logo ml-nyc"      src="../images/logos/logo-nyc-public.png"    alt="NYC Public Schools">
-      <img class="marquee-logo ml-calexico" src="../images/logos/logo-calexico.png"      alt="Calexico Unified School District">
-      <!-- Set 2 — duplicate for seamless loop -->
-      <img class="marquee-logo ml-sccoe"    src="../images/logos/logo-sccoe.png"         alt="Santa Clara County Office of Education">
-      <img class="marquee-logo ml-edcoe"    src="../images/logos/logo-edcoe.png"         alt="El Dorado County Office of Education">
-      <img class="marquee-logo ml-smfcsd"   src="../images/logos/logo-smfcsd.png"        alt="San Mateo-Foster City School District">
-      <img class="marquee-logo ml-vista"    src="../images/logos/logo-vista-unified.png" alt="Vista Unified School District">
-      <img class="marquee-logo ml-ventura"  src="../images/logos/logo-ventura.png"       alt="Ventura County Office of Education">
-      <img class="marquee-logo ml-cbh"      src="../images/logos/logo-cbh.png"           alt="Commission for Behavioral Health">
-      <img class="marquee-logo ml-southbay" src="../images/logos/logo-south-bay.png"     alt="South Bay Union School District">
-      <img class="marquee-logo ml-esc2"     src="../images/logos/logo-esc2.png"          alt="ESC Region 2">
-      <img class="marquee-logo ml-rio"      src="../images/logos/logo-rio.png"           alt="Rio School District">
-      <img class="marquee-logo ml-nyc"      src="../images/logos/logo-nyc-public.png"    alt="NYC Public Schools">
-      <img class="marquee-logo ml-calexico" src="../images/logos/logo-calexico.png"      alt="Calexico Unified School District">
+    <!-- Row 1: BHSSA credibility headline -->
+    <div class="cred-headline">
+      Selected by California for Statewide Evaluation
+      <span>·</span>
+      April 2026
     </div>
+
+    <!-- Row 2: 4 metrics -->
+    <div class="cred-metrics">
+      <div class="cred-metric">
+        <div class="cred-num">97%</div>
+        <div class="cred-lbl">participation</div>
+      </div>
+      <div class="cred-metric">
+        <div class="cred-num">1.4 <sup>days</sup></div>
+        <div class="cred-lbl">to support</div>
+      </div>
+      <div class="cred-metric">
+        <div class="cred-num">$0</div>
+        <div class="cred-lbl">net cost<em>(CYBHI)</em></div>
+      </div>
+      <div class="cred-metric">
+        <div class="cred-num">4</div>
+        <div class="cred-lbl">BHS attributes<em>scored per student</em></div>
+      </div>
+    </div>
+
+    <!-- Row 3: district names -->
+    <div class="cred-districts">
+      San Diego COE
+      <span>·</span>
+      El Dorado COE
+      <span>·</span>
+      Santa Clara COE
+      <span>·</span>
+      San Diego USD
+      <span>·</span>
+      Vista USD
+      <span>·</span>
+      CA BHSOAC
+    </div>
+
   </div>
 </div>
 

@@ -325,16 +325,28 @@
     100% { transform: translateX(-50%); }
   }
   .marquee-logo {
-    height: 52px;
+    height: 44px;        /* base — CBH/Rio reference size */
     width: auto;
     margin: 0 48px;
-    opacity: 0.55;
+    opacity: 0.6;
     mix-blend-mode: multiply;
-    filter: grayscale(20%);
     transition: opacity 0.3s;
     flex-shrink: 0;
   }
-  .marquee-logo:hover { opacity: 0.9; }
+  .marquee-logo:hover { opacity: 1; }
+
+  /* Per-logo height tuning — compensates for padding, aspect ratio, shape */
+  .ml-sccoe      { height: 40px;  }   /* very wide text — keep short */
+  .ml-nyc        { height: 38px;  }   /* wide flat text */
+  .ml-cbh        { height: 38px;  }   /* wide text (reference) */
+  .ml-smfcsd     { height: 40px;  }   /* wide rectangular */
+  .ml-edcoe      { height: 44px;  }   /* compact box */
+  .ml-esc2       { height: 52px;  }   /* tall square shape */
+  .ml-rio        { height: 44px;  }   /* square (reference) */
+  .ml-calexico   { height: 50px;  }   /* oval with internal padding */
+  .ml-vista      { height: 58px;  }   /* square + lots of whitespace in file */
+  .ml-southbay   { height: 58px;  }   /* circle — needs height */
+  .ml-ventura    { height: 58px;  }   /* circle badge — needs height */
   /* Edge fade masks */
   .marquee-wrap {
     position: relative;
@@ -1208,29 +1220,29 @@
   <div class="marquee-wrap">
     <div class="marquee-track" id="marqueeTrack">
       <!-- Set 1 -->
-      <img class="marquee-logo" src="../images/logos/logo-sccoe.png"        alt="Santa Clara County Office of Education">
-      <img class="marquee-logo" src="../images/logos/logo-edcoe.png"        alt="El Dorado County Office of Education">
-      <img class="marquee-logo" src="../images/logos/logo-smfcsd.png"       alt="San Mateo-Foster City School District">
-      <img class="marquee-logo" src="../images/logos/logo-vista-unified.png" alt="Vista Unified School District">
-      <img class="marquee-logo" src="../images/logos/logo-ventura.png"      alt="Ventura County Office of Education">
-      <img class="marquee-logo" src="../images/logos/logo-cbh.png"          alt="Commission for Behavioral Health">
-      <img class="marquee-logo" src="../images/logos/logo-south-bay.png"    alt="South Bay Union School District">
-      <img class="marquee-logo" src="../images/logos/logo-esc2.png"         alt="ESC Region 2">
-      <img class="marquee-logo" src="../images/logos/logo-rio.png"          alt="Rio School District">
-      <img class="marquee-logo" src="../images/logos/logo-nyc-public.png"   alt="NYC Public Schools">
-      <img class="marquee-logo" src="../images/logos/logo-calexico.png"     alt="Calexico Unified School District">
+      <img class="marquee-logo ml-sccoe"    src="../images/logos/logo-sccoe.png"         alt="Santa Clara County Office of Education">
+      <img class="marquee-logo ml-edcoe"    src="../images/logos/logo-edcoe.png"         alt="El Dorado County Office of Education">
+      <img class="marquee-logo ml-smfcsd"   src="../images/logos/logo-smfcsd.png"        alt="San Mateo-Foster City School District">
+      <img class="marquee-logo ml-vista"    src="../images/logos/logo-vista-unified.png" alt="Vista Unified School District">
+      <img class="marquee-logo ml-ventura"  src="../images/logos/logo-ventura.png"       alt="Ventura County Office of Education">
+      <img class="marquee-logo ml-cbh"      src="../images/logos/logo-cbh.png"           alt="Commission for Behavioral Health">
+      <img class="marquee-logo ml-southbay" src="../images/logos/logo-south-bay.png"     alt="South Bay Union School District">
+      <img class="marquee-logo ml-esc2"     src="../images/logos/logo-esc2.png"          alt="ESC Region 2">
+      <img class="marquee-logo ml-rio"      src="../images/logos/logo-rio.png"           alt="Rio School District">
+      <img class="marquee-logo ml-nyc"      src="../images/logos/logo-nyc-public.png"    alt="NYC Public Schools">
+      <img class="marquee-logo ml-calexico" src="../images/logos/logo-calexico.png"      alt="Calexico Unified School District">
       <!-- Set 2 — duplicate for seamless loop -->
-      <img class="marquee-logo" src="../images/logos/logo-sccoe.png"        alt="Santa Clara County Office of Education">
-      <img class="marquee-logo" src="../images/logos/logo-edcoe.png"        alt="El Dorado County Office of Education">
-      <img class="marquee-logo" src="../images/logos/logo-smfcsd.png"       alt="San Mateo-Foster City School District">
-      <img class="marquee-logo" src="../images/logos/logo-vista-unified.png" alt="Vista Unified School District">
-      <img class="marquee-logo" src="../images/logos/logo-ventura.png"      alt="Ventura County Office of Education">
-      <img class="marquee-logo" src="../images/logos/logo-cbh.png"          alt="Commission for Behavioral Health">
-      <img class="marquee-logo" src="../images/logos/logo-south-bay.png"    alt="South Bay Union School District">
-      <img class="marquee-logo" src="../images/logos/logo-esc2.png"         alt="ESC Region 2">
-      <img class="marquee-logo" src="../images/logos/logo-rio.png"          alt="Rio School District">
-      <img class="marquee-logo" src="../images/logos/logo-nyc-public.png"   alt="NYC Public Schools">
-      <img class="marquee-logo" src="../images/logos/logo-calexico.png"     alt="Calexico Unified School District">
+      <img class="marquee-logo ml-sccoe"    src="../images/logos/logo-sccoe.png"         alt="Santa Clara County Office of Education">
+      <img class="marquee-logo ml-edcoe"    src="../images/logos/logo-edcoe.png"         alt="El Dorado County Office of Education">
+      <img class="marquee-logo ml-smfcsd"   src="../images/logos/logo-smfcsd.png"        alt="San Mateo-Foster City School District">
+      <img class="marquee-logo ml-vista"    src="../images/logos/logo-vista-unified.png" alt="Vista Unified School District">
+      <img class="marquee-logo ml-ventura"  src="../images/logos/logo-ventura.png"       alt="Ventura County Office of Education">
+      <img class="marquee-logo ml-cbh"      src="../images/logos/logo-cbh.png"           alt="Commission for Behavioral Health">
+      <img class="marquee-logo ml-southbay" src="../images/logos/logo-south-bay.png"     alt="South Bay Union School District">
+      <img class="marquee-logo ml-esc2"     src="../images/logos/logo-esc2.png"          alt="ESC Region 2">
+      <img class="marquee-logo ml-rio"      src="../images/logos/logo-rio.png"           alt="Rio School District">
+      <img class="marquee-logo ml-nyc"      src="../images/logos/logo-nyc-public.png"    alt="NYC Public Schools">
+      <img class="marquee-logo ml-calexico" src="../images/logos/logo-calexico.png"      alt="Calexico Unified School District">
     </div>
   </div>
 </div>

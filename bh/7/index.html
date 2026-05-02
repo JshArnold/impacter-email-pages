@@ -800,6 +800,7 @@
     height: 820px;
     position: relative;
     flex-shrink: 0;
+    overflow: hidden;
   }
   .surveys-headline {
     position: absolute;
@@ -835,7 +836,7 @@
     display: grid; grid-template-columns: 2fr 3fr;
     gap: 40px;
     align-items: center;
-    padding: 140px 40px 20px;
+    padding: 160px 40px 20px;
     opacity: 0;
     transition: opacity .5s var(--ease-emphasized);
     pointer-events: none;
@@ -1202,13 +1203,13 @@
     max-width: 560px;
     justify-self: end;
   }
-  /* Full-bleed right column — image fills full column width, locked to viewport */
+  /* Full-bleed right column — locked to surveys-lock box dimensions (820px tall, 160px padding) */
   .scene-img-panel--full {
     justify-self: stretch;
     max-width: 100%;
     align-self: center;
     width: 100%;
-    max-height: calc(100vh - 200px);
+    max-height: 620px;
     overflow: hidden;
     border-radius: 16px;
     display: flex;
@@ -1219,7 +1220,7 @@
     height: auto;
     display: block;
     border-radius: 16px;
-    max-height: calc(100vh - 200px);
+    max-height: 620px;
     object-fit: scale-down;
   }
   .s-img-tag {

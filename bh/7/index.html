@@ -779,11 +779,11 @@
     height: 100vh;
     display: flex; align-items: center;
     overflow: hidden;
-    padding: 0 clamp(20px, 4vw, 56px);
+    padding: 0 clamp(20px, 3vw, 40px);
   }
   .surveys-headline {
     position: absolute;
-    top: 80px; left: clamp(20px, 4vw, 56px); right: clamp(20px, 4vw, 56px);
+    top: 80px; left: clamp(20px, 3vw, 40px); right: clamp(20px, 3vw, 40px);
     font-family: var(--font-display);
     font-weight: 800;
     font-size: clamp(28px, 3.4vw, 56px);
@@ -811,10 +811,10 @@
   }
   .scene-pane {
     position: absolute; inset: 0;
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 48px;
+    display: grid; grid-template-columns: 2fr 3fr;
+    gap: 40px;
     align-items: center;
-    padding: 120px clamp(20px, 4vw, 56px) 60px;
+    padding: 100px clamp(20px, 3vw, 40px) 60px;
     opacity: 0;
     transition: opacity .5s var(--ease-emphasized);
     pointer-events: none;

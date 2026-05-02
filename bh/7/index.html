@@ -2167,6 +2167,32 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   ];
   const NON_PHRASE_COLOR = '#638EC5';
 
+  /* ── Staged reveal state ── */
+  const PAGE_LOAD_TIME = Date.now();
+
+  // 1. Voice Intelligence card: starts at 40% opacity, fades to full after 1.5s
+  if (card) {
+    card.style.transition = 'none';
+    card.style.opacity = '0.4';
+    setTimeout(() => {
+      card.style.transition = 'opacity 0.8s ease';
+      card.style.opacity = '1';
+    }, 1500);
+  }
+
+  // 2. Waveform: bars build left-to-right over 800ms, starting 300ms after load
+  const WAVE_REVEAL_START = PAGE_LOAD_TIME + 300;
+  const WAVE_REVEAL_DURATION = 800;
+
+  // 3. Pins: visible after video plays OR after 5s dwell
+  let pinsVisible = false;
+  let pinsRevealTime = null;
+  const PIN_DWELL_MS = 5000;
+  setTimeout(() => { if (!pinsVisible) { pinsVisible = true; pinsRevealTime = Date.now(); } }, PIN_DWELL_MS);
+  if (heroVideo) {
+    heroVideo.addEventListener('play', () => { if (!pinsVisible) { pinsVisible = true; pinsRevealTime = Date.now(); } }, { once: true });
+  }
+
   /* ── Seeded PRNG — deterministic bar layout every load ── */
   function mulberry32(s) {
     return () => { s|=0; s=s+0x6D2B79F5|0; let t=Math.imul(s^s>>>15,1|s); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
@@ -2254,15 +2280,27 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
     const MAX_BAR = MID - 14;        // bars can reach almost to canvas top
     const now     = Date.now();
 
+    // Left-to-right waveform reveal
+    const waveElapsed  = now - WAVE_REVEAL_START;
+    const waveRevealing = waveElapsed < WAVE_REVEAL_DURATION;
+
     for (let i=0;i<barData.length;i++) {
       const bar=barData[i], bp=barProps[i];
       if (bp.isGap) continue;
       const bw   = Math.min(bp.width, slotW-1.5);
       const x    = i*slotW + (slotW-bw)/2;
 
+      // Left-to-right build: each bar has a staggered reveal threshold
+      let revealScale = 1;
+      if (waveRevealing) {
+        const barRevealAt = (i / NUM_BARS) * WAVE_REVEAL_DURATION;
+        revealScale = Math.max(0, Math.min(1, (waveElapsed - barRevealAt) / 120));
+        if (revealScale === 0) continue;
+      }
+
       // Organic breath: each bar gently sways at its own slow frequency
       const breath = 1 + Math.sin(now * 0.00085 + i * 0.71) * 0.055;
-      const barH = Math.min(bar.height * bar.hoverScale * breath, MAX_BAR);
+      const barH = Math.min(bar.height * bar.hoverScale * breath * revealScale, MAX_BAR);
 
       let color, baseOp;
       if      (bar.state==='pending') { color='#D6E7F1'; baseOp=0.22; }
@@ -2301,8 +2339,13 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
     drawPins(W, MID);
   }
 
-  /* ── Canvas attribute pins — always visible, animate when active ── */
+  /* ── Canvas attribute pins — appear after play or 5s dwell ── */
   function drawPins(W, MID) {
+    if (!pinsVisible) return;
+    // Fade pins in over 600ms from when they become visible
+    const pinFade = pinsRevealTime ? Math.min(1, (Date.now() - pinsRevealTime) / 600) : 1;
+    if (pinFade <= 0) return;
+
     const t      = heroVideo ? heroVideo.currentTime % duration : 0;
     const dotY   = MID + Math.min(barData.reduce((a,b)=>Math.max(a,b.height),0)*0.14, 20) + 18;  // below mirror zone
     const labelY = dotY + 18;  // label sits below dot
@@ -2315,10 +2358,10 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
       const isFadeOut = t > p.end && t <= p.end + 0.4;
 
       // Always draw dot at base opacity; brighten during active phrase
-      let dotOp = 0.28; // always-on resting state
-      if (isFadeIn)   dotOp = 0.28 + (t - (p.start-0.2)) / 0.2 * 0.72;
-      if (isActive)   dotOp = 1.0;
-      if (isFadeOut)  dotOp = 1.0 - (t - p.end) / 0.4 * 0.72;
+      let dotOp = 0.28 * pinFade;
+      if (isFadeIn)   dotOp = (0.28 + (t - (p.start-0.2)) / 0.2 * 0.72) * pinFade;
+      if (isActive)   dotOp = 1.0 * pinFade;
+      if (isFadeOut)  dotOp = (1.0 - (t - p.end) / 0.4 * 0.72) * pinFade;
 
       // Pulse ring only during active
       if (isActive) {
@@ -2333,7 +2376,7 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
       ctx.beginPath(); ctx.arc(pinX, dotY, 5.5, 0, Math.PI*2); ctx.fill();
 
       // Label — always visible at low opacity, full when active
-      const labelOp = isActive ? 1.0 : isFadeIn ? dotOp : isFadeOut ? dotOp : 0.28;
+      const labelOp = (isActive ? 1.0 : isFadeIn ? dotOp/pinFade : isFadeOut ? dotOp/pinFade : 0.28) * pinFade;
       ctx.globalAlpha = labelOp;
       // Label BELOW dot
       ctx.fillStyle = p.color;

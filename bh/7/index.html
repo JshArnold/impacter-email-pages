@@ -2863,15 +2863,8 @@ document.getElementById('nextInsightBtn').addEventListener('click', () => {
 const modal = document.getElementById('modal');
 const modalIframe = document.getElementById('modal-iframe');
 
-function openModal(url, domain) {
+function openModal(url) {
   modalIframe.src = url;
-  if (domain) {
-    const list = currentGrade === 'tk-2' ? promptsTK2 : prompts312;
-    const prompt = list.find(p => p.domain === domain) || {};
-    document.getElementById('modal-right-domain').textContent = domain;
-    document.getElementById('modal-right-title').textContent = cardTitles[domain] || domain;
-    document.getElementById('modal-right-question').textContent = prompt.q || '';
-  }
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 }

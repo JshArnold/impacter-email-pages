@@ -483,13 +483,14 @@
     margin-bottom: 48px;
   }
 
-  /* ── Voice Intelligence v3 — Full-Presence Layout ── */
+  /* ── Voice Intelligence v5 — Flat Typography Layout ── */
   .vi3-header { max-width: 640px; margin-bottom: 52px; }
 
+  /* 340px fixed video column, rest goes to right column */
   .vi3-main {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 52px;
+    grid-template-columns: 340px 1fr;
+    gap: 56px;
     align-items: start;
   }
 
@@ -497,29 +498,30 @@
 
   .vi3-video-wrap {
     position: relative;
-    width: 100%;
+    width: 340px;
     aspect-ratio: 9/16;
-    border-radius: 20px;
+    max-height: 600px;
+    border-radius: 16px;
     overflow: hidden;
     background: #000;
-    box-shadow: 0 24px 56px rgba(0,0,0,0.5);
+    box-shadow: 0 20px 48px rgba(0,0,0,0.45);
   }
   .vi3-video-wrap video { width:100%; height:100%; object-fit:cover; }
 
   .vi3-caption-bar {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    padding: 60px 18px 20px;
-    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+    padding: 60px 16px 18px;
+    background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%);
     z-index: 5;
   }
   .vi3-caption-text {
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
     line-height: 1.5;
     color: #fff;
-    min-height: 40px;
+    min-height: 36px;
   }
   .vi3-caption-text .vw { transition: color 0.15s, opacity 0.15s; opacity: 0.4; }
   .vi3-caption-text .vw.active { opacity: 1; color: #fff; }
@@ -527,13 +529,13 @@
 
   .vi3-signals-pill {
     position: absolute;
-    bottom: 18px; right: 14px;
+    bottom: 16px; right: 12px;
     background: rgba(10,14,20,0.82);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255,255,255,0.12);
     border-radius: 100px;
-    padding: 5px 12px;
+    padding: 4px 11px;
     z-index: 10;
     font-size: 10px;
     font-weight: 700;
@@ -562,13 +564,18 @@
   }
   .vi3-play-btn:hover { opacity: 0.85; }
 
-  /* Right col: transcript window + score bars */
-  .vi3-right-col { display: flex; flex-direction: column; gap: 20px; }
+  /* Right column — transcript + signals stacked, no card containers */
+  .vi3-right-col { display: flex; flex-direction: column; gap: 0; }
 
+  /* Transcript band */
   .vi3-tx-label {
     font-size: 10px; font-weight: 700;
     letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--coral); margin-bottom: 10px;
+    color: var(--coral); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .vi3-tx-label::before {
+    content: ''; display: block; width: 16px; height: 1px; background: var(--coral);
   }
 
   .vi3-tx-window {
@@ -579,177 +586,167 @@
   .vi3-stanza {
     position: absolute;
     top: 0; left: 0; right: 0;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 400;
-    line-height: 1.68;
+    line-height: 1.7;
     transition: opacity 0.7s ease;
+    color: rgba(214,231,241,0.55);
   }
   .vi3-stanza.hidden { opacity: 0; pointer-events: none; }
 
   /* Transcript word states */
   .vw { transition: color 0.18s ease, opacity 0.18s ease, filter 0.15s ease; }
   .vw { opacity: 0.28; color: #fff; }
-  .vw.domain   { color: var(--blue);  opacity: 0.38; }
-  .vw.metaphor { color: var(--coral); opacity: 0.42; }
-  .vw.metaphor-standout { color: var(--coral); opacity: 0.45; font-size: 1.04em; }
+  .vw.domain   { color: var(--blue);  opacity: 0.45; }
+  .vw.metaphor { color: var(--coral); opacity: 0.5; }
+  .vw.metaphor-standout { color: var(--coral); opacity: 0.55; font-size: 1.03em; }
   .vw.past { opacity: 0.65 !important; color: rgba(255,255,255,0.65); }
-  .vw.domain.past   { color: var(--blue)  !important; opacity: 0.78 !important; }
-  .vw.metaphor.past { color: var(--coral) !important; opacity: 0.88 !important; }
+  .vw.domain.past   { color: var(--blue)  !important; opacity: 0.8 !important; }
+  .vw.metaphor.past { color: var(--coral) !important; opacity: 0.9 !important; }
   .vw.metaphor-standout.past {
-    color: var(--coral) !important; opacity: 0.92 !important;
-    filter: drop-shadow(0 0 5px rgba(243,113,99,0.28));
+    color: var(--coral) !important; opacity: 0.95 !important;
+    filter: drop-shadow(0 0 4px rgba(243,113,99,0.25));
   }
   .vw.active { opacity: 1 !important; color: #fff !important; animation: vwPulse 0.22s ease-out; }
   .vw.domain.active   { color: var(--blue)  !important; }
   .vw.metaphor.active, .vw.metaphor-standout.active { color: var(--coral) !important; }
-  @keyframes vwPulse { 0% { filter:brightness(1.7); } 100% { filter:brightness(1); } }
+  @keyframes vwPulse { 0% { filter:brightness(1.6); } 100% { filter:brightness(1); } }
 
-  /* Right-col domain score bars */
-  .vi3-score-right {
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.07);
-  }
-  .vi3-score-right-header {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
-  }
-  .vi3-score-right-label {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--text-dim);
-  }
-  .vi3-score-pulse {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--coral); animation: pulse 1.8s ease-in-out infinite;
-  }
-  .vi3-sdomain { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
-  .vi3-sdomain-name {
-    font-size: 11px; font-weight: 500; color: rgba(214,231,241,0.7);
-    width: 124px; flex-shrink: 0;
-  }
-  .vi3-sdomain-bar-bg {
-    flex: 1; height: 3px; background: rgba(255,255,255,0.08);
-    border-radius: 2px; overflow: hidden;
-  }
-  .vi3-sdomain-bar-fill {
-    height: 100%; border-radius: 2px; width: 0%;
-    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
-  }
-  .vi3-sdomain-score {
-    font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.45);
-    width: 24px; text-align: right; flex-shrink: 0;
-  }
-
-  /* Progress dots (5-stanza tracker) */
+  /* Progress dots */
   .vi3-dots {
     display: flex;
     gap: 7px;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 12px;
+    margin-bottom: 36px;
   }
   .vi3-dot {
     width: 6px; height: 6px;
     border-radius: 50%;
-    border: 1px solid rgba(243,113,99,0.4);
+    border: 1px solid rgba(243,113,99,0.35);
     background: transparent;
     transition: background 0.35s ease, border-color 0.35s ease;
   }
-  .vi3-dot.past  { background: rgba(243,113,99,0.3); border-color: rgba(243,113,99,0.3); }
+  .vi3-dot.past  { background: rgba(243,113,99,0.28); border-color: rgba(243,113,99,0.28); }
   .vi3-dot.active{ background: var(--coral); border-color: var(--coral); }
 
-  /* Three analyst cards — all present from load, skeleton → content on signal fire */
-  .vi3-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 44px;
+  /* Signal blocks — flat text on navy, NO card containers */
+  .vi3-signals {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255,255,255,0.07);
   }
-  .vi3-card {
-    padding: 22px 20px;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px;
-    background: rgba(255,255,255,0.02);
-    transition: border-color 0.5s ease, box-shadow 0.5s ease;
-  }
-  /* Per-card active border glow */
-  #vi3-card-er.active { border-color: rgba(243,113,99,0.32);  box-shadow: 0 0 28px rgba(243,113,99,0.07); }
-  #vi3-card-si.active { border-color: rgba(244,201,122,0.32); box-shadow: 0 0 28px rgba(244,201,122,0.07); }
-  #vi3-card-rg.active { border-color: rgba(99,142,197,0.32);  box-shadow: 0 0 28px rgba(99,142,197,0.07); }
+  /* No border, no background, no radius — flat on navy */
+  .vi3-signal-block { }
 
-  /* Eyebrow: "SIGNAL · 0:03 · EMOTIONAL RESILIENCE" — always visible, opacity lifts on active */
-  .vi3-card-eyebrow {
-    font-size: 9px; font-weight: 800; letter-spacing: 0.16em;
-    text-transform: uppercase; margin-bottom: 14px;
-    opacity: 0.5;
+  /* Eyebrow: "— · 0:03 · EMOTIONAL RESILIENCE" dash-prefix style matching /bh/7 vocab */
+  .vi3-signal-eyebrow {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.13em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 7px;
+    opacity: 0.55;
     transition: opacity 0.5s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
-  .vi3-card.active .vi3-card-eyebrow { opacity: 1; }
+  .vi3-signal-block.active .vi3-signal-eyebrow { opacity: 1; }
+  .vi3-signal-eyebrow::before {
+    content: ''; display: block; width: 14px; height: 1px; flex-shrink: 0;
+  }
   .vi3-eyebrow-er { color: #F89A8E; }
+  .vi3-eyebrow-er::before { background: #F89A8E; }
   .vi3-eyebrow-si { color: #F4C97A; }
+  .vi3-eyebrow-si::before { background: #F4C97A; }
   .vi3-eyebrow-rg { color: #9DBEEA; }
+  .vi3-eyebrow-rg::before { background: #9DBEEA; }
 
-  /* Card body-wrap: grid overlap so pending + active always hold same footprint */
-  .vi3-card-body-wrap {
+  /* Pulsing dot that appears when signal is actively firing */
+  .vi3-fire-dot {
+    width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+    opacity: 0; transition: opacity 0.3s ease;
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  .vi3-eyebrow-er .vi3-fire-dot { background: #F89A8E; }
+  .vi3-eyebrow-si .vi3-fire-dot { background: #F4C97A; }
+  .vi3-eyebrow-rg .vi3-fire-dot { background: #9DBEEA; }
+  .vi3-signal-block.firing .vi3-fire-dot { opacity: 1; }
+
+  /* Signal title */
+  .vi3-signal-title {
+    font-size: 17px; font-weight: 600; letter-spacing: -0.01em;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 8px;
+    transition: color 0.5s ease;
+  }
+  .vi3-signal-block.active .vi3-signal-title { color: #fff; }
+
+  /* Signal body — grid overlap: pending ↔ active text, footprint always held by active text */
+  .vi3-signal-body {
     display: grid;
+    font-size: 13px; font-weight: 300; line-height: 1.65;
   }
-  .vi3-card-pending,
-  .vi3-card-active {
+  .vi3-body-pending,
+  .vi3-body-content {
     grid-area: 1 / 1;
-    transition: opacity 0.55s ease;
+    transition: opacity 0.6s ease;
   }
-  /* Pending state (default) */
-  .vi3-card-pending { opacity: 1; }
-  .vi3-card-active  { opacity: 0; pointer-events: none; }
-  /* Active state */
-  .vi3-card.active .vi3-card-pending { opacity: 0; pointer-events: none; }
-  .vi3-card.active .vi3-card-active  { opacity: 1; pointer-events: auto; }
+  .vi3-body-pending {
+    font-style: italic;
+    color: rgba(214,231,241,0.3);
+    opacity: 1;
+  }
+  .vi3-body-content {
+    color: rgba(214,231,241,0.82);
+    opacity: 0;
+  }
+  .vi3-signal-block.active .vi3-body-pending { opacity: 0; pointer-events: none; }
+  .vi3-signal-block.active .vi3-body-content { opacity: 1; }
 
-  /* Pending title */
-  .vi3-pending-title {
-    font-size: 13px; font-weight: 400; font-style: italic;
-    color: rgba(255,255,255,0.38); margin-bottom: 14px;
-  }
-  /* Skeleton lines */
-  .vi3-skel-lines {
-    display: flex; flex-direction: column; gap: 9px;
-  }
-  .vi3-skel-line {
-    height: 8px; border-radius: 4px;
-    background: rgba(255,255,255,0.1);
-  }
-
-  /* Active content */
-  .vi3-card-title {
-    font-size: 15px; font-weight: 700; letter-spacing: -0.01em;
-    color: #fff; margin-bottom: 10px;
-  }
-  .vi3-card-quote {
-    font-size: 12px; font-style: italic; color: rgba(255,255,255,0.55);
-    line-height: 1.55; padding: 10px 12px;
-    background: rgba(255,255,255,0.03);
-    border-left: 2px solid rgba(255,255,255,0.12);
-    border-radius: 2px 8px 8px 2px; margin-bottom: 10px;
-  }
-  #vi3-card-er .vi3-card-quote { border-left-color: rgba(243,113,99,0.35); }
-  #vi3-card-si .vi3-card-quote { border-left-color: rgba(244,201,122,0.35); }
-  #vi3-card-rg .vi3-card-quote { border-left-color: rgba(99,142,197,0.35); }
-  .vi3-card-body {
-    font-size: 13px; font-weight: 300;
-    color: rgba(214,231,241,0.7); line-height: 1.6;
-  }
-
-  /* Closing payoff line — present from load at 30%, rises to 100% post-playback */
+  /* Closing payoff line — present from load at 40%, rises to 100% post-playback */
   .vi3-closing {
-    margin-top: 44px;
+    margin-top: 52px;
     text-align: center;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-style: italic;
     color: rgba(255,255,255,0.75);
-    opacity: 0.3;
-    transition: opacity 0.7s ease-out;
+    opacity: 0.4;
+    transition: opacity 0.8s ease-out;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
   }
   .vi3-closing.visible { opacity: 1; }
+
+  /* Affordances — ghost buttons below closing line */
+  .vi3-affordances {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 28px;
+  }
+  .vi3-btn-ghost {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.5);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 100px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .vi3-btn-ghost:hover { border-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.85); }
+  .vi3-btn-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.4);
+    background: none; border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .vi3-btn-text:hover { color: rgba(255,255,255,0.7); }
 
   /* ── MTSS Pyramid ── */
   .mtss-layout {
@@ -1265,7 +1262,8 @@
     .cred-metric:nth-last-child(-n+2) { border-bottom: none; }
     .cred-band { padding: 40px 24px; }
     .vi3-main { grid-template-columns: 1fr; gap: 36px; }
-    .vi3-cards { grid-template-columns: 1fr; }
+    .vi3-video-wrap { width: 100%; max-height: none; }
+    .vi3-signals { gap: 28px; }
     .vi3-tx-window { height: auto; min-height: 72px; }
     .mtss-layout { grid-template-columns: 1fr; gap: 40px; }
     .compare-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -1417,117 +1415,74 @@
         </div>
       </div>
 
-      <!-- Right: transcript window + domain score bars -->
+      <!-- Right: transcript + signals (flat, no card containers) -->
       <div class="vi3-right-col reveal" style="transition-delay:0.12s">
-        <div>
-          <div class="vi3-tx-label">— · Whisper-Synced Transcript</div>
-          <div class="vi3-tx-window" id="vi3-tx-window">
-            <!-- Five stanzas built by JS -->
-          </div>
-          <div class="vi3-dots" id="vi3-dots">
-            <div class="vi3-dot active" id="vi3-dot-0"></div>
-            <div class="vi3-dot" id="vi3-dot-1"></div>
-            <div class="vi3-dot" id="vi3-dot-2"></div>
-            <div class="vi3-dot" id="vi3-dot-3"></div>
-            <div class="vi3-dot" id="vi3-dot-4"></div>
-          </div>
+
+        <!-- Transcript window -->
+        <div class="vi3-tx-label">WHISPER-SYNCED TRANSCRIPT</div>
+        <div class="vi3-tx-window" id="vi3-tx-window">
+          <!-- Five stanzas built by JS -->
         </div>
-        <div class="vi3-score-right">
-          <div class="vi3-score-right-header">
-            <span class="vi3-score-right-label">Live BH Domain Score</span>
-            <div class="vi3-score-pulse"></div>
-          </div>
-          <div class="vi3-sdomain">
-            <span class="vi3-sdomain-name">Emotional Resilience</span>
-            <div class="vi3-sdomain-bar-bg"><div class="vi3-sdomain-bar-fill" id="vb3-er" style="background:var(--coral)"></div></div>
-            <span class="vi3-sdomain-score" id="vs3-er">—</span>
-          </div>
-          <div class="vi3-sdomain">
-            <span class="vi3-sdomain-name">Self-Insight</span>
-            <div class="vi3-sdomain-bar-bg"><div class="vi3-sdomain-bar-fill" id="vb3-si" style="background:var(--blue)"></div></div>
-            <span class="vi3-sdomain-score" id="vs3-si">—</span>
-          </div>
-          <div class="vi3-sdomain">
-            <span class="vi3-sdomain-name">Reflective Growth</span>
-            <div class="vi3-sdomain-bar-bg"><div class="vi3-sdomain-bar-fill" id="vb3-rg" style="background:#5bae82"></div></div>
-            <span class="vi3-sdomain-score" id="vs3-rg">—</span>
-          </div>
+        <div class="vi3-dots" id="vi3-dots">
+          <div class="vi3-dot active" id="vi3-dot-0"></div>
+          <div class="vi3-dot" id="vi3-dot-1"></div>
+          <div class="vi3-dot" id="vi3-dot-2"></div>
+          <div class="vi3-dot" id="vi3-dot-3"></div>
+          <div class="vi3-dot" id="vi3-dot-4"></div>
         </div>
-      </div>
+
+        <!-- Three signal blocks — flat text on navy, always present, body text swaps on fire -->
+        <div class="vi3-signals">
+
+          <div class="vi3-signal-block" id="vi3-card-er">
+            <div class="vi3-signal-eyebrow vi3-eyebrow-er">
+              <span class="vi3-fire-dot"></span>
+              0:03 &middot; EMOTIONAL RESILIENCE
+            </div>
+            <div class="vi3-signal-title">Failure reframing</div>
+            <div class="vi3-signal-body">
+              <span class="vi3-body-pending">Awaiting playback&hellip;</span>
+              <span class="vi3-body-content">"My biggest failure would be not taking enough risk to experience true failure." The model flags this as a resilience marker: failure recast as an unmet aspiration — not a catastrophe. There is no self-blame. The causal arrow runs forward, not backward.</span>
+            </div>
+          </div>
+
+          <div class="vi3-signal-block" id="vi3-card-si">
+            <div class="vi3-signal-eyebrow vi3-eyebrow-si">
+              <span class="vi3-fire-dot"></span>
+              0:07 &middot; SELF-INSIGHT
+            </div>
+            <div class="vi3-signal-title">Avoidance pattern named</div>
+            <div class="vi3-signal-body">
+              <span class="vi3-body-pending">Awaiting playback&hellip;</span>
+              <span class="vi3-body-content">"I tend to stay in my comfort zone and stand behind the yellow caution tape." A spontaneous, original metaphor for her own avoidance behavior. The encoder isn't looking for key words — it's looking for the naming precision that signals genuine self-awareness. This is it.</span>
+            </div>
+          </div>
+
+          <div class="vi3-signal-block" id="vi3-card-rg">
+            <div class="vi3-signal-eyebrow vi3-eyebrow-rg">
+              <span class="vi3-fire-dot"></span>
+              0:11 &middot; REFLECTIVE GROWTH
+            </div>
+            <div class="vi3-signal-title">Present-tense growth commitment</div>
+            <div class="vi3-signal-body">
+              <span class="vi3-body-pending">Awaiting playback&hellip;</span>
+              <span class="vi3-body-content">"Every day I'm trying to expand the barriers of my comfort zone." Present-tense growth orientation fused with a desire to increase risk exposure. She isn't describing past growth — she's narrating an active, ongoing process.</span>
+            </div>
+          </div>
+
+        </div><!-- /vi3-signals -->
+      </div><!-- /vi3-right-col -->
 
     </div>
 
-    <!-- Three analyst cards — ALL present from load; skeleton state → content on signal fire -->
-    <div class="vi3-cards">
-
-      <!-- Card 1: Emotional Resilience — fires at 0:03 -->
-      <div class="vi3-card" id="vi3-card-er">
-        <div class="vi3-card-eyebrow vi3-eyebrow-er">SIGNAL &middot; 0:03 &middot; EMOTIONAL RESILIENCE</div>
-        <div class="vi3-card-body-wrap">
-          <div class="vi3-card-pending">
-            <div class="vi3-pending-title">Awaiting playback</div>
-            <div class="vi3-skel-lines">
-              <div class="vi3-skel-line" style="width:95%"></div>
-              <div class="vi3-skel-line" style="width:88%"></div>
-              <div class="vi3-skel-line" style="width:76%"></div>
-              <div class="vi3-skel-line" style="width:60%"></div>
-            </div>
-          </div>
-          <div class="vi3-card-active">
-            <div class="vi3-card-title">Failure reframing</div>
-            <div class="vi3-card-quote">"My biggest failure would be not taking enough risk to experience true failure."</div>
-            <div class="vi3-card-body">The model flags this as a resilience marker: failure is recast as an unmet aspiration — not a catastrophe. There is no self-blame. The causal arrow runs forward, not backward.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2: Self-Insight — fires at 0:07 -->
-      <div class="vi3-card" id="vi3-card-si">
-        <div class="vi3-card-eyebrow vi3-eyebrow-si">SIGNAL &middot; 0:07 &middot; SELF-INSIGHT</div>
-        <div class="vi3-card-body-wrap">
-          <div class="vi3-card-pending">
-            <div class="vi3-pending-title">Awaiting playback</div>
-            <div class="vi3-skel-lines">
-              <div class="vi3-skel-line" style="width:93%"></div>
-              <div class="vi3-skel-line" style="width:85%"></div>
-              <div class="vi3-skel-line" style="width:90%"></div>
-              <div class="vi3-skel-line" style="width:55%"></div>
-            </div>
-          </div>
-          <div class="vi3-card-active">
-            <div class="vi3-card-title">Avoidance pattern named</div>
-            <div class="vi3-card-quote">"I tend to stay in my comfort zone and stand behind the yellow caution tape."</div>
-            <div class="vi3-card-body">A spontaneous, original metaphor for her own avoidance behavior. The encoder isn't looking for keywords — it's looking for the naming precision that signals genuine self-awareness.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3: Reflective Growth — fires at 0:11 -->
-      <div class="vi3-card" id="vi3-card-rg">
-        <div class="vi3-card-eyebrow vi3-eyebrow-rg">SIGNAL &middot; 0:11 &middot; REFLECTIVE GROWTH</div>
-        <div class="vi3-card-body-wrap">
-          <div class="vi3-card-pending">
-            <div class="vi3-pending-title">Awaiting playback</div>
-            <div class="vi3-skel-lines">
-              <div class="vi3-skel-line" style="width:90%"></div>
-              <div class="vi3-skel-line" style="width:82%"></div>
-              <div class="vi3-skel-line" style="width:88%"></div>
-              <div class="vi3-skel-line" style="width:65%"></div>
-            </div>
-          </div>
-          <div class="vi3-card-active">
-            <div class="vi3-card-title">Present-tense growth commitment</div>
-            <div class="vi3-card-quote">"Every day I'm trying to expand the barriers of my comfort zone."</div>
-            <div class="vi3-card-body">Present-tense growth orientation fused with a desire to increase risk exposure. She isn't describing past growth — she's narrating an active, ongoing process.</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Closing payoff line — present from start at 30% opacity, fades full after playback -->
+    <!-- Closing payoff line — present from load at 40% opacity, fades full after playback -->
     <div class="vi3-closing" id="vi3-closing">
-      In 1 minute 22 seconds, the model heard what a 5-question Likert survey would have missed entirely.
+      In 13 seconds, the model heard what a 5-question Likert survey would have missed entirely.
+    </div>
+
+    <!-- Affordances -->
+    <div class="vi3-affordances">
+      <button class="vi3-btn-ghost" onclick="replayVI3()">↻ Play Again</button>
     </div>
 
   </div>
@@ -2072,26 +2027,24 @@ function vi3UpdateStanza(ct) {
   });
 }
 
-/* Fire signal: illuminate card + fill bar */
+/* Fire signal: illuminate signal block (flat text, no card container) */
 function vi3FireSig(idx) {
   const sig = VI3_SIGNAL_TIMES[idx];
   vi3FiredSigs.add(idx);
   vi3SigNum++;
   vi3SigCount.textContent = vi3SigNum + ' signal' + (vi3SigNum > 1 ? 's' : '') + ' detected';
 
-  /* Illuminate card (footprint stays, only opacity/blur change) */
-  const card = document.getElementById(sig.cardId);
-  if (card) card.classList.add('active');
+  /* Remove .firing from all previous blocks (pulsing dot only on currently-firing block) */
+  VI3_SIGNAL_TIMES.forEach(s => {
+    const b = document.getElementById(s.cardId);
+    if (b) b.classList.remove('firing');
+  });
 
-  /* Fill domain bar */
-  setTimeout(() => {
-    const bar = document.getElementById(sig.barId);
-    const sc  = document.getElementById(sig.scoreId);
-    if (bar) bar.style.width = '100%';
-    if (sc)  sc.textContent  = sig.score + '/4';
-  }, 180);
+  /* Illuminate this block — body text crossfades, title brightens, eyebrow fully visible */
+  const block = document.getElementById(sig.cardId);
+  if (block) { block.classList.add('active'); block.classList.add('firing'); }
 
-  /* Show closing line after third signal */
+  /* Show closing line after all three signals fired */
   if (vi3FiredSigs.size === VI3_SIGNAL_TIMES.length) {
     setTimeout(() => vi3Closing.classList.add('visible'), 800);
   }
@@ -2143,13 +2096,10 @@ function replayVI3() {
     const d = document.getElementById('vi3-dot-' + si); if (!d) return;
     d.classList.remove('active','past'); if (si === 0) d.classList.add('active');
   });
-  ['er','si','rg'].forEach(d => {
-    const b = document.getElementById('vb3-' + d);
-    const s = document.getElementById('vs3-' + d);
-    if (b) b.style.width = '0%'; if (s) s.textContent = '—';
-  });
+  /* Reset signal blocks */
   ['vi3-card-er','vi3-card-si','vi3-card-rg'].forEach(id => {
-    const c = document.getElementById(id); if (c) c.classList.remove('active');
+    const c = document.getElementById(id);
+    if (c) c.classList.remove('active', 'firing');
   });
   vi3UpdateCaption(-1); vi3UpdateStanza(-1);
   vi3Video.currentTime = 0;
@@ -2717,12 +2667,8 @@ vi3Video.addEventListener('seeked', () => {
   VI3_SIGNAL_TIMES.forEach((sig, idx) => {
     if (ct < sig.time && vi3FiredSigs.has(idx)) {
       vi3FiredSigs.delete(idx);
-      const card = document.getElementById(sig.cardId);
-      if (card) card.classList.remove('active');
-      const bar = document.getElementById(sig.barId);
-      if (bar) bar.style.width = '0%';
-      const sc = document.getElementById(sig.scoreId);
-      if (sc) sc.textContent = '—';
+      const block = document.getElementById(sig.cardId);
+      if (block) block.classList.remove('active', 'firing');
     }
   });
   vi3UpdateCaption(ct);

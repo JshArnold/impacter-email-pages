@@ -976,6 +976,18 @@
     max-width: 560px;
     justify-self: end;
   }
+  /* Full-bleed left column — image takes full grid cell */
+  .scene-img-panel--full {
+    justify-self: stretch;
+    max-width: 100%;
+    align-self: center;
+  }
+  .scene-img-panel--full .s-scene-img {
+    width: 100%;
+    max-height: 68vh;
+    object-fit: contain;
+    object-position: center;
+  }
   .s-img-tag {
     font-size: 10px;
     font-weight: 800;
@@ -1631,48 +1643,15 @@
         <span class="s-switcher"><span id="surveysWord">A scale of 1 to 5.</span></span>
       </div>
 
-      <!-- Scene 1 — Likert vs Rubric -->
+      <!-- Scene 1 — Pyramid prominent left, Likert text right -->
       <div class="scene-pane active" data-scene="0">
-        <div class="scene-likert" id="likertCard">
-          <div class="s-head"><span>Question 12 of 47</span><span>↺ Restart</span></div>
-          <h4>I feel hopeful about my future.</h4>
-          <div class="s-q">
-            <div class="s-scale">
-              <span class="s-end">Strongly disagree</span>
-              <span class="s-opt">1</span>
-              <span class="s-opt">2</span>
-              <span class="s-opt selected">3</span>
-              <span class="s-opt">4</span>
-              <span class="s-opt">5</span>
-              <span class="s-end">Strongly agree</span>
-            </div>
-          </div>
-          <div class="s-q">
-            <div class="s-q-text">My friends understand me.</div>
-            <div class="s-scale">
-              <span class="s-opt">1</span>
-              <span class="s-opt">2</span>
-              <span class="s-opt selected">3</span>
-              <span class="s-opt">4</span>
-              <span class="s-opt">5</span>
-            </div>
-          </div>
-          <div class="s-q">
-            <div class="s-q-text">I have someone to talk to when I'm sad.</div>
-            <div class="s-scale">
-              <span class="s-opt">1</span>
-              <span class="s-opt selected">2</span>
-              <span class="s-opt">3</span>
-              <span class="s-opt">4</span>
-              <span class="s-opt">5</span>
-            </div>
-          </div>
-          <div class="s-foot">"3" tells you nothing about why.</div>
-        </div>
-        <div class="scene-img-panel">
-          <div class="s-img-tag">SDCOE MTSS Tier Assignment</div>
+        <div class="scene-img-panel scene-img-panel--full">
           <img src="../images/mtss-pyramid-sdcoe.png" alt="SDCOE MTSS Tier Assignment Matrix" class="s-scene-img">
-          <p class="s-img-caption">A score of 3 routes to Tier 2. A score of 3 also routes to Tier 1. The survey can't tell them apart. The screener can.</p>
+        </div>
+        <div class="scene-callout">
+          <div class="s-num">47</div>
+          <h3>Likert items.<br/>Zero stories.</h3>
+          <p>A score of "3" routes to Tier 2. Another "3" routes to Tier 1. The survey can't tell them apart. The screener can — because it heard what the student actually said.</p>
         </div>
       </div>
 

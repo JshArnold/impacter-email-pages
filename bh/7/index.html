@@ -2170,17 +2170,7 @@ document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #
   /* ── Staged reveal state ── */
   const PAGE_LOAD_TIME = Date.now();
 
-  // 1. Voice Intelligence card: starts at 40% opacity, fades to full after 1.5s
-  if (card) {
-    card.style.transition = 'none';
-    card.style.opacity = '0.4';
-    setTimeout(() => {
-      card.style.transition = 'opacity 0.8s ease';
-      card.style.opacity = '1';
-    }, 1500);
-  }
-
-  // 2. Waveform: bars build left-to-right over 800ms, starting 300ms after load
+  // Waveform: bars build left-to-right over 800ms, starting 300ms after load
   const WAVE_REVEAL_START = PAGE_LOAD_TIME + 300;
   const WAVE_REVEAL_DURATION = 800;
 

@@ -981,169 +981,96 @@
   }
   .surveys-progress .s-dot.active { background: var(--coral); }
 
-  /* Triage card — scene 3 left column */
-  @keyframes tier-pulse {
-    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(243,113,99,0.6); }
-    50%       { opacity: 0.6; box-shadow: 0 0 0 5px rgba(243,113,99,0); }
-  }
-  .s-triage-eyebrow {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
-    margin-bottom: 12px;
-  }
-  .s-triage-card {
-    border: 1px solid rgba(243,113,99,0.3);
-    border-radius: 10px;
-    background: rgba(243,113,99,0.04);
-    overflow: hidden;
-    margin-bottom: 18px;
-  }
-  /* Tier header bar */
-  .s-tc-tier-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 18px;
-    background: rgba(243,113,99,0.1);
-    border-bottom: 1px solid rgba(243,113,99,0.2);
-  }
-  .s-tc-pulse-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #F37163;
-    flex-shrink: 0;
-    animation: tier-pulse 2s ease-in-out infinite;
-  }
-  .s-tc-tier-label {
+  /* Annotated student card — scene 3 left column */
+  .s-anno-eyebrow {
     font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #F89A8E;
-  }
-  /* Name block */
-  .s-tc-name-block {
-    padding: 20px 18px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .s-tc-name {
-    font-family: var(--font-display);
-    font-size: clamp(28px, 3vw, 40px);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: rgba(255,255,255,0.96);
-    line-height: 1.1;
-  }
-  .s-tc-name-sub {
-    font-size: 13px;
-    color: rgba(255,255,255,0.4);
-    margin-top: 5px;
-    letter-spacing: 0.01em;
-  }
-  /* Stats rows */
-  .s-tc-stats {
-    padding: 14px 18px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-  }
-  .s-tc-stat-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-  .s-tc-stat-label {
-    font-size: 12px;
-    color: rgba(255,255,255,0.38);
-    letter-spacing: 0.02em;
-  }
-  .s-tc-stat-val {
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.85);
-  }
-  .s-tc-stat-val.amber { color: #F4C97A; }
-  /* Flagged domains */
-  .s-tc-domains {
-    padding: 14px 18px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .s-tc-section-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.25);
-    margin-bottom: 10px;
-  }
-  .s-tc-domain-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-  .s-tc-domain-row:last-child { margin-bottom: 0; }
-  .s-tc-domain-name {
-    font-size: 12px;
-    color: rgba(255,255,255,0.65);
-    flex: 1;
-    white-space: nowrap;
-  }
-  .s-tc-mini-bar-track {
-    display: flex;
-    gap: 3px;
-    flex-shrink: 0;
-  }
-  .s-tc-mini-seg {
-    width: 18px; height: 5px;
-    border-radius: 2px;
-    background: rgba(255,255,255,0.1);
-  }
-  .s-tc-mini-seg.filled { background: #F37163; }
-  .s-tc-domain-score {
     font-size: 11px;
     font-weight: 700;
-    color: rgba(255,255,255,0.4);
-    width: 28px;
-    text-align: right;
-    flex-shrink: 0;
-  }
-  /* Next step */
-  .s-tc-next {
-    padding: 14px 18px;
-  }
-  .s-tc-next-label {
-    font-size: 10px;
-    font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.25);
-    margin-bottom: 6px;
+    color: var(--coral);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
-  .s-tc-next-val {
-    font-size: 14px;
-    font-weight: 600;
-    color: #F89A8E;
-    line-height: 1.4;
+  .s-anno-rows {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
   }
-  /* Teaching example tag */
-  .s-tc-demo-tag {
+  .s-anno-row {
+    display: grid;
+    grid-template-columns: 250px 52px 1fr;
+    align-items: center;
+  }
+  .s-anno-cell {
+    padding: 16px 20px;
+    border-left: 1px solid rgba(243,113,99,0.35);
+    border-right: 1px solid rgba(243,113,99,0.12);
+  }
+  .s-anno-row:first-child .s-anno-cell { border-top: 1px solid rgba(243,113,99,0.35); border-radius: 6px 0 0 0; }
+  .s-anno-row:last-child  .s-anno-cell { border-bottom: 1px solid rgba(243,113,99,0.35); border-radius: 0 0 0 6px; }
+  .s-anno-row + .s-anno-row .s-anno-cell { border-top: 1px solid rgba(255,255,255,0.06); }
+  .s-anno-cell-name  { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: rgba(255,255,255,0.95); line-height: 1.2; }
+  .s-anno-cell-sub   { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.4); margin-top: 3px; letter-spacing: 0.02em; }
+  .s-anno-cell-tier  { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #F89A8E; line-height: 1.3; }
+  .s-anno-cell-score { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+  .s-anno-cell-level { font-size: 15px; font-weight: 600; color: #F4C97A; margin-top: 3px; }
+  .s-anno-cell-flags { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+  .s-anno-cell-btn {
     display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--coral);
+    border: 1px solid rgba(243,113,99,0.4);
+    border-radius: 4px;
+    padding: 5px 10px;
+    background: rgba(243,113,99,0.08);
+    cursor: pointer;
+  }
+  .s-anno-connector {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: relative;
+  }
+  .s-anno-connector::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, rgba(243,113,99,0.5), rgba(243,113,99,0.2));
+  }
+  .s-anno-connector::after {
+    content: '▸';
+    font-size: 8px;
+    color: rgba(243,113,99,0.7);
+    margin-left: 2px;
+    flex-shrink: 0;
+  }
+  .s-anno-note {
+    padding-left: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.55);
+    font-style: italic;
+  }
+  .s-anno-demo {
+    display: inline-flex;
+    align-items: center;
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 3px;
-    padding: 2px 7px;
-    margin-bottom: 14px;
+    padding: 2px 6px;
+    margin-top: 8px;
+    margin-left: 16px;
   }
 
   /* Credits pills — role tags with accent colors */
@@ -1889,83 +1816,47 @@
       <!-- Scene 3 — tier outcome, two images -->
       <div class="scene-pane" data-scene="2">
         <div class="scene-callout">
-          <div class="s-triage-eyebrow">→ The Counselor's View</div>
+          <div class="s-anno-eyebrow">→ The Counselor's View</div>
+          <div class="s-anno-rows">
 
-          <div class="s-triage-card">
-
-            <!-- Tier status bar -->
-            <div class="s-tc-tier-bar">
-              <div class="s-tc-pulse-dot"></div>
-              <div class="s-tc-tier-label">Tier 2 — Targeted</div>
+            <div class="s-anno-row">
+              <div class="s-anno-cell">
+                <div class="s-anno-cell-name">Percy Purpose</div>
+                <div class="s-anno-cell-sub">11th Grade</div>
+              </div>
+              <div class="s-anno-connector"></div>
+              <div class="s-anno-note">The student,<br/>not a row in a sheet</div>
             </div>
 
-            <!-- Name block -->
-            <div class="s-tc-name-block">
-              <div class="s-tc-name">Percy Purpose</div>
-              <div class="s-tc-name-sub">11th Grade · Attribute Academy</div>
+            <div class="s-anno-row">
+              <div class="s-anno-cell">
+                <div class="s-anno-cell-tier">Tier 2 — Targeted</div>
+                <div class="s-anno-cell-score">Score: 12 / 24</div>
+                <div class="s-anno-cell-level">Developing</div>
+              </div>
+              <div class="s-anno-connector"></div>
+              <div class="s-anno-note">Auto-assigned the<br/>moment the score completes</div>
             </div>
 
-            <!-- Stats -->
-            <div class="s-tc-stats">
-              <div class="s-tc-stat-row">
-                <span class="s-tc-stat-label">Screener Score</span>
-                <span class="s-tc-stat-val">12 / 24</span>
+            <div class="s-anno-row">
+              <div class="s-anno-cell">
+                <div class="s-anno-cell-flags">3 of 6 domains<br/>flagged for review</div>
               </div>
-              <div class="s-tc-stat-row">
-                <span class="s-tc-stat-label">Rubric Level</span>
-                <span class="s-tc-stat-val amber">Developing</span>
-              </div>
-              <div class="s-tc-stat-row">
-                <span class="s-tc-stat-label">Screened</span>
-                <span class="s-tc-stat-val">08 / 01 / 25</span>
-              </div>
+              <div class="s-anno-connector"></div>
+              <div class="s-anno-note">Domain-level evidence,<br/>not a single grade</div>
             </div>
 
-            <!-- Flagged domains -->
-            <div class="s-tc-domains">
-              <div class="s-tc-section-label">Flagged Domains</div>
-              <div class="s-tc-domain-row">
-                <span class="s-tc-domain-name">Self-Insight</span>
-                <div class="s-tc-mini-bar-track">
-                  <div class="s-tc-mini-seg filled"></div>
-                  <div class="s-tc-mini-seg filled"></div>
-                  <div class="s-tc-mini-seg filled"></div>
-                  <div class="s-tc-mini-seg"></div>
-                </div>
-                <span class="s-tc-domain-score">3 / 4</span>
+            <div class="s-anno-row">
+              <div class="s-anno-cell">
+                <div class="s-anno-cell-btn">▸ Listen to responses</div>
               </div>
-              <div class="s-tc-domain-row">
-                <span class="s-tc-domain-name">Relational Awareness</span>
-                <div class="s-tc-mini-bar-track">
-                  <div class="s-tc-mini-seg filled"></div>
-                  <div class="s-tc-mini-seg filled"></div>
-                  <div class="s-tc-mini-seg"></div>
-                  <div class="s-tc-mini-seg"></div>
-                </div>
-                <span class="s-tc-domain-score">2 / 4</span>
-              </div>
-              <div class="s-tc-domain-row">
-                <span class="s-tc-domain-name">Reflective Growth</span>
-                <div class="s-tc-mini-bar-track">
-                  <div class="s-tc-mini-seg filled"></div>
-                  <div class="s-tc-mini-seg filled"></div>
-                  <div class="s-tc-mini-seg filled"></div>
-                  <div class="s-tc-mini-seg"></div>
-                </div>
-                <span class="s-tc-domain-score">3 / 4</span>
-              </div>
-            </div>
-
-            <!-- Next step -->
-            <div class="s-tc-next">
-              <div class="s-tc-next-label">Next Step</div>
-              <div class="s-tc-next-val">Small-group intervention, this week</div>
+              <div class="s-anno-connector"></div>
+              <div class="s-anno-note">One click to the<br/>student's actual words</div>
             </div>
 
           </div>
-
-          <div class="s-tc-demo-tag">Teaching Example</div>
-          <p>This is what the counselor opens. Not a spreadsheet — a student. Action starts at the name, not the number.</p>
+          <div class="s-anno-demo">Teaching Example</div>
+          <p style="margin-top:16px">This is what the counselor opens at 8:30 AM. Not a roster of scores — a roster of students, each one a click away from the language that drove the assignment.</p>
         </div>
         <div class="scene-img-panel scene-img-panel--full">
           <img src="../images/bhs-dashboard-ets.png" alt="Behavioral Health Screener Dashboard" class="s-scene-img">

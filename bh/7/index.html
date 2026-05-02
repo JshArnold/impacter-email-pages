@@ -674,7 +674,7 @@
   /* RIGHT — sticky image, full column width, no padding */
   .mtss-sticky-media {
     position: sticky;
-    top: calc(50vh - 30%);
+    top: 80px;
     order: 2;
   }
   .mtss-img-stack {
@@ -702,7 +702,7 @@
     padding-top: 62.5%;
   }
   .mtss-subsection {
-    min-height: 70vh;
+    min-height: clamp(340px, 40vh, 520px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1402,10 +1402,10 @@
 </section>
 
 <!-- MTSS Scrollytelling -->
-<section class="section section-alt" id="mtss" data-streamer-label="District Summary">
+<section class="section section-alt" id="mtss" data-streamer-label="District Summary" style="padding-top:80px">
   <div class="section-inner">
 
-    <div class="mtss-scroll-wrap">
+    <div class="mtss-scroll-wrap" style="margin-top:0">
 
       <!-- LEFT: scrolling text blocks -->
       <div class="mtss-scroll-content">

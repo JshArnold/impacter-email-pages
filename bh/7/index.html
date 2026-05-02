@@ -967,6 +967,50 @@
     transition: background .3s;
   }
   .surveys-progress .s-dot.active { background: var(--coral); }
+
+  /* Scene image panels */
+  .scene-img-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 560px;
+    justify-self: end;
+  }
+  .s-img-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+  .s-scene-img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+    transform: scale(0.96);
+    transition: transform .6s var(--ease-emphasized);
+  }
+  .scene-pane.active .s-scene-img { transform: scale(1); }
+  .s-img-caption {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: rgba(214,231,241,0.55);
+  }
+  /* Scene 3 dual-image: two equal columns */
+  .scene-pane-dual {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 28px !important;
+    align-items: start;
+  }
+  .scene-pane-dual .scene-img-panel {
+    max-width: 100%;
+    justify-self: stretch;
+  }
+
   @media (max-width: 768px) {
     .surveys-stage { height: 240vh; }
     .scene-pane { grid-template-columns: 1fr; gap: 28px; padding-top: 100px; }
@@ -1587,7 +1631,7 @@
         <span class="s-switcher"><span id="surveysWord">A scale of 1 to 5.</span></span>
       </div>
 
-      <!-- Scene 1 — Likert dies -->
+      <!-- Scene 1 — Likert vs Rubric -->
       <div class="scene-pane active" data-scene="0">
         <div class="scene-likert" id="likertCard">
           <div class="s-head"><span>Question 12 of 47</span><span>↺ Restart</span></div>
@@ -1625,14 +1669,14 @@
           </div>
           <div class="s-foot">"3" tells you nothing about why.</div>
         </div>
-        <div class="scene-callout">
-          <div class="s-num">47</div>
-          <h3>Likert items.<br/>Zero stories.</h3>
-          <p>Forced-choice surveys collapse a student's actual experience into a number that no counselor can act on. The middle of the scale is where the truth gets buried.</p>
+        <div class="scene-img-panel">
+          <div class="s-img-tag">SDCOE Validated Rubric</div>
+          <img src="../images/mtss-rubric-sdcoe.png" alt="SDCOE Behavioral Health Rubric" class="s-scene-img">
+          <p class="s-img-caption">The model scores every response against four engagement levels — Foundational, Developing, Competent, Advanced. No number. A story.</p>
         </div>
       </div>
 
-      <!-- Scene 2 — voice replaces it -->
+      <!-- Scene 2 — voice response -->
       <div class="scene-pane" data-scene="1">
         <div class="scene-voice-media">
           <img src="../images/bh-student.gif" alt="Student responding to behavioral health prompt" />
@@ -1651,20 +1695,16 @@
         </div>
       </div>
 
-      <!-- Scene 3 — outcome -->
-      <div class="scene-pane" data-scene="2">
-        <div class="scene-callout">
-          <div class="s-num">9/24</div>
-          <h3>Tier mapping.<br/>Real-time.</h3>
-          <p>One spoken response yields a rubric-aligned score, three detected behavioral health signals, and an MTSS tier recommendation — before the student stands up.</p>
+      <!-- Scene 3 — tier outcome, two images -->
+      <div class="scene-pane scene-pane-dual" data-scene="2">
+        <div class="scene-img-panel">
+          <div class="s-img-tag">MTSS Tier Matrix</div>
+          <img src="../images/mtss-pyramid-sdcoe.png" alt="SDCOE MTSS Tier Assignment Matrix" class="s-scene-img">
         </div>
-        <div class="scene-voice-text">
-          <div class="s-stat">→ MTSS recommendation</div>
-          <blockquote>
-            Tier 1 — universal support.<br/>
-            Strength-based reflection.<br/>
-            Optional peer-mentor pathway.
-          </blockquote>
+        <div class="scene-img-panel">
+          <div class="s-img-tag">Counselor Dashboard</div>
+          <img src="../images/mtss-dashboard-sdcoe.png" alt="Behavioral Health Screener Dashboard" class="s-scene-img">
+          <p class="s-img-caption">One voice response. One rubric score. Automatic tier assignment — before the student stands up.</p>
         </div>
       </div>
 

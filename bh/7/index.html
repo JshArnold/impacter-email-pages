@@ -1747,9 +1747,11 @@
     position: absolute;
     inset: 0;
     background:
+      linear-gradient(to bottom, #0F1B2E 0%, transparent 18%, transparent 82%, #0F1B2E 100%),
       radial-gradient(ellipse 60% 50% at 20% 50%, rgba(99,142,197,0.18) 0%, transparent 70%),
       radial-gradient(ellipse 50% 40% at 80% 50%, rgba(243,113,99,0.14) 0%, transparent 70%);
     pointer-events: none;
+    z-index: 2;
   }
   #cta-listening::after {
     content: '';
@@ -1757,15 +1759,16 @@
     inset: 0;
     background: url('../images/impacter-chevron-bg.png') center center / contain no-repeat;
     opacity: 0.04;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 28%, black 72%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 28%, black 72%, transparent 100%);
     pointer-events: none;
+    z-index: 1;
   }
   .cta-listening-inner {
     position: relative;
     max-width: 760px;
     margin: 0 auto;
-    z-index: 1;
+    z-index: 3;
   }
   .cta-listening-heading {
     font-size: clamp(2.4rem, 4.5vw, 4.5rem);

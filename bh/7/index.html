@@ -1160,26 +1160,25 @@
 
   /* Credits pills — role tags with accent colors */
   .s-credits-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin: 20px 0 24px;
   }
   .s-credits-list .s-cpill {
-    display: flex;
+    flex: 1 1 auto;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    padding: 14px 16px;
+    padding: 13px 22px;
     border-radius: 999px;
     font-family: var(--font-display);
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    min-width: calc(44% - 5px);
   }
   .s-cpill-coral   { color: #F89A8E; background: rgba(243,113,99,0.15); border: 1px solid rgba(243,113,99,0.35); }
   .s-cpill-blue    { color: #9DBEEA; background: rgba(99,142,197,0.15); border: 1px solid rgba(99,142,197,0.35); }

@@ -782,6 +782,7 @@
     position: relative;
     background: #0A0E14;
     padding: 0;
+    min-width: 900px;
   }
   .surveys-stage {
     position: relative;
@@ -792,14 +793,15 @@
     height: 100vh;
     display: flex; align-items: center;
     overflow: hidden;
-    padding: 0 clamp(20px, 3vw, 40px);
+    padding: 0 40px;
+    min-width: 900px;
   }
   .surveys-headline {
     position: absolute;
-    top: 96px; left: clamp(20px, 3vw, 40px); right: clamp(20px, 3vw, 40px);
+    top: 96px; left: 40px; right: 40px;
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(28px, 3.4vw, 56px);
+    font-size: 48px;
     line-height: 1.2;
     letter-spacing: -0.03em;
     color: #fff;
@@ -828,7 +830,7 @@
     display: grid; grid-template-columns: 2fr 3fr;
     gap: 40px;
     align-items: center;
-    padding: 140px clamp(20px, 3vw, 40px) 20px;
+    padding: 140px 40px 20px;
     opacity: 0;
     transition: opacity .5s var(--ease-emphasized);
     pointer-events: none;
@@ -886,7 +888,7 @@
   .scene-callout .s-num {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(80px, 12vw, 200px);
+    font-size: 160px;
     letter-spacing: -0.05em;
     line-height: 0.85;
     color: rgba(255,255,255,0.06);
@@ -894,7 +896,7 @@
   }
   .scene-callout h3 {
     font-family: var(--font-display);
-    font-weight: 800; font-size: clamp(28px, 3vw, 44px);
+    font-weight: 800; font-size: 40px;
     letter-spacing: -0.025em;
     color: #fff; margin: 0;
     line-height: 1.05;
@@ -913,7 +915,7 @@
   .s-stat-line {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(28px, 3vw, 44px);
+    font-size: 40px;
     letter-spacing: -0.025em;
     line-height: 1.05;
     color: #fff;

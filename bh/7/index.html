@@ -486,11 +486,11 @@
   /* ── Voice Intelligence v5 — Flat Typography Layout ── */
   .vi3-header { max-width: 640px; margin-bottom: 52px; }
 
-  /* 340px fixed video column, rest goes to right column */
+  /* ~420px video column, rest goes to right column */
   .vi3-main {
     display: grid;
-    grid-template-columns: 340px 1fr;
-    gap: 56px;
+    grid-template-columns: 420px 1fr;
+    gap: 64px;
     align-items: start;
   }
 
@@ -498,13 +498,13 @@
 
   .vi3-video-wrap {
     position: relative;
-    width: 340px;
+    width: 420px;
     aspect-ratio: 9/16;
-    max-height: 600px;
+    max-height: 740px;
     border-radius: 16px;
     overflow: hidden;
     background: #000;
-    box-shadow: 0 20px 48px rgba(0,0,0,0.45);
+    box-shadow: 0 24px 56px rgba(0,0,0,0.5);
   }
   .vi3-video-wrap video { width:100%; height:100%; object-fit:cover; }
 
@@ -571,7 +571,7 @@
   .vi3-signals {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 36px;
   }
 
   /* Full-width editorial transcript band — below the main grid */
@@ -647,7 +647,7 @@
 
   /* Eyebrow: "— · 0:03 · EMOTIONAL RESILIENCE" dash-prefix style matching /bh/7 vocab */
   .vi3-signal-eyebrow {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.13em;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.13em;
     text-transform: uppercase;
     margin-bottom: 6px;
     display: flex; align-items: center; gap: 7px;
@@ -678,9 +678,10 @@
 
   /* Signal title */
   .vi3-signal-title {
-    font-size: 17px; font-weight: 600; letter-spacing: -0.01em;
-    color: rgba(255,255,255,0.55);
-    margin-bottom: 8px;
+    font-size: 22px; font-weight: 600; letter-spacing: -0.02em;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 10px;
+    line-height: 1.2;
     transition: color 0.5s ease;
   }
   .vi3-signal-block.active .vi3-signal-title { color: #fff; }
@@ -688,7 +689,7 @@
   /* Signal body — grid overlap: pending ↔ active text, footprint always held by active text */
   .vi3-signal-body {
     display: grid;
-    font-size: 13px; font-weight: 300; line-height: 1.65;
+    font-size: 15px; font-weight: 300; line-height: 1.65;
   }
   .vi3-body-pending,
   .vi3-body-content {
@@ -1265,7 +1266,7 @@
     .cred-metric:nth-child(odd) { padding-left: 0; }
     .cred-metric:nth-last-child(-n+2) { border-bottom: none; }
     .cred-band { padding: 40px 24px; }
-    .vi3-main { grid-template-columns: 1fr; gap: 36px; }
+    .vi3-main { grid-template-columns: 1fr; gap: 40px; }
     .vi3-video-wrap { width: 100%; max-height: none; }
     .vi3-signals { gap: 28px; }
     .vi3-tx-window { height: auto; min-height: 80px; }

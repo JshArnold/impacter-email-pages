@@ -655,71 +655,99 @@
   .analysis-card.card-active.rgrowth-card    { border-color: rgba(147,197,253,0.45); box-shadow: 0 0 24px rgba(147,197,253,0.1); }
   @keyframes cardpulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.015)} }
 
-  /* ── MTSS Pyramid ── */
-  .mtss-layout {
+  /* ── MTSS Scrollytelling ── */
+  .mtss-scroll-wrap {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 80px;
-    align-items: center;
+    align-items: start;
+    margin-top: 64px;
   }
 
-  .mtss-img-wrap {
-    position: relative;
-    border-radius: 20px;
-    overflow: hidden;
-  }
-  .mtss-img-wrap img {
-    width: 100%;
-    display: block;
-    border-radius: 20px;
-  }
-
-  .mtss-tiers { display: flex; flex-direction: column; gap: 24px; }
-
-  .mtss-tier {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    padding: 20px 24px;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    transition: border-color 0.3s;
-  }
-  .mtss-tier:hover { border-color: rgba(243,113,99,0.3); }
-
-  .mtss-tier-badge {
-    flex-shrink: 0;
-    width: 40px; height: 40px;
-    border-radius: 10px;
+  /* LEFT — sticky image stack */
+  .mtss-sticky-media {
+    position: sticky;
+    top: 90px;
+    height: calc(100vh - 110px);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
   }
-  .tier-1 { background: rgba(99,142,197,0.15); color: var(--blue); border: 1px solid rgba(99,142,197,0.2); }
-  .tier-2 { background: rgba(243,113,99,0.12); color: var(--coral); border: 1px solid rgba(243,113,99,0.2); }
-  .tier-3 { background: rgba(214,231,241,0.08); color: var(--accent); border: 1px solid rgba(214,231,241,0.12); }
+  .mtss-sticky-media .mtss-img-stack {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .mtss-sticky-media .mtss-img-stack img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 16px;
+    opacity: 0;
+    transition: opacity 600ms ease-in-out;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.45);
+  }
+  .mtss-sticky-media .mtss-img-stack img.mtss-active {
+    opacity: 1;
+  }
 
-  .mtss-tier-content {}
-  .mtss-tier-title {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 4px;
+  /* RIGHT — scrolling subsections */
+  .mtss-scroll-content {
+    display: flex;
+    flex-direction: column;
+  }
+  .mtss-subsection {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .mtss-subsection:first-child { border-top: none; }
+
+  .mtss-sub-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mtss-sub-eyebrow::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: var(--coral);
+  }
+  .mtss-sub-title {
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
     color: #fff;
+    margin-bottom: 10px;
   }
-  .mtss-tier-sub {
-    font-size: 12px;
-    font-weight: 400;
+  .mtss-sub-sub {
+    font-size: 14px;
+    font-weight: 500;
     color: var(--text-dim);
-    margin-bottom: 6px;
+    margin-bottom: 20px;
+    letter-spacing: 0.01em;
   }
-  .mtss-tier-desc {
-    font-size: 13px;
+  .mtss-sub-body {
+    font-size: 16px;
     font-weight: 400;
-    color: rgba(214,231,241,0.7);
-    line-height: 1.55;
+    color: rgba(214,231,241,0.75);
+    line-height: 1.7;
+    max-width: 480px;
   }
 
   /* ── What Surveys Miss ── */
@@ -1170,7 +1198,10 @@
     .cred-band { padding: 40px 24px; }
     .voice-player-wrap { grid-template-columns: 1fr; gap: 32px; }
     .voice-analysis { grid-template-columns: 1fr; gap: 16px; }
-    .mtss-layout { grid-template-columns: 1fr; gap: 40px; }
+    .mtss-scroll-wrap { grid-template-columns: 1fr; gap: 0; }
+    .mtss-sticky-media { position: relative; top: auto; height: auto; margin-bottom: 32px; }
+    .mtss-sticky-media .mtss-img-stack { position: relative; height: 280px; }
+    .mtss-subsection { min-height: auto; padding: 40px 0; }
     .compare-grid { grid-template-columns: 1fr; gap: 40px; }
     .prompts-grid { grid-template-columns: 1fr 1fr; }
     .bhssa-layout { grid-template-columns: 1fr; gap: 40px; }
@@ -1367,44 +1398,48 @@
   </div>
 </section>
 
-<!-- MTSS Pyramid -->
+<!-- MTSS Scrollytelling -->
 <section class="section section-alt" id="mtss" data-streamer-label="District Summary">
   <div class="section-inner">
-    <div class="section-eyebrow">MTSS Integration</div>
-    <div class="mtss-layout">
-      <div class="mtss-img-wrap reveal">
-        <img src="../images/mtss-pyramid.png" alt="MTSS Three-Tier Pyramid">
+    <div class="section-eyebrow">Co-Developed with SDCOE</div>
+    <h2 class="section-heading reveal" style="max-width:20ch">The system that turns voice into action.</h2>
+    <p class="section-body reveal" style="transition-delay:0.1s">Tier assignment, counselor dashboard, validated rubric — every layer of the screener is built with San Diego County Office of Education and audit-ready out of the box.</p>
+
+    <div class="mtss-scroll-wrap">
+
+      <!-- LEFT: sticky image stack -->
+      <div class="mtss-sticky-media">
+        <div class="mtss-img-stack">
+          <img src="../images/mtss-pyramid-sdcoe.png" alt="SDCOE MTSS Tier Assignment Matrix" class="mtss-active" data-mtss-img="0">
+          <img src="../images/mtss-dashboard-sdcoe.png" alt="Behavioral Health Screener Dashboard" data-mtss-img="1">
+          <img src="../images/mtss-rubric-sdcoe.png" alt="SDCOE Validated Scoring Rubric" data-mtss-img="2">
+        </div>
       </div>
-      <div class="mtss-tiers reveal" style="transition-delay:0.15s">
-        <h2 class="section-heading">Screening that maps to your existing support structure</h2>
-        <p class="section-body">The Behavioral Health Screener doesn't create a new system — it makes your MTSS tiers more precise, more equitable, and faster to activate.</p>
 
-        <div class="mtss-tier">
-          <div class="mtss-tier-badge tier-1">T1</div>
-          <div class="mtss-tier-content">
-            <div class="mtss-tier-title">Tier 1 — Universal Screening</div>
-            <div class="mtss-tier-sub">All students, all grade bands, 3-5 prompts each</div>
-            <div class="mtss-tier-desc">Every student completes voice-based prompts at the start of each semester. AI scoring identifies baseline patterns across all five behavioral health domains at the population level.</div>
-          </div>
+      <!-- RIGHT: scrolling subsections -->
+      <div class="mtss-scroll-content">
+
+        <div class="mtss-subsection" data-mtss-section="0">
+          <div class="mtss-sub-eyebrow">Tier Assignment</div>
+          <div class="mtss-sub-title">Tier assignment is automatic, not interpretive.</div>
+          <div class="mtss-sub-sub">T1 Universal · T2 Targeted · T3 Intensive</div>
+          <p class="mtss-sub-body">Each student's screener score maps directly to one of three MTSS tiers using the SDCOE-validated assignment matrix. No interpretive judgment required at the screening stage — the model surfaces what needs review and routes it where it belongs.</p>
         </div>
 
-        <div class="mtss-tier">
-          <div class="mtss-tier-badge tier-2">T2</div>
-          <div class="mtss-tier-content">
-            <div class="mtss-tier-title">Tier 2 — Targeted Support</div>
-            <div class="mtss-tier-sub">Students flagged by signal patterns, counselor review</div>
-            <div class="mtss-tier-desc">Students with elevated concern scores are surfaced automatically to counseling teams with domain-level evidence — not just a number, but the actual language that triggered the flag.</div>
-          </div>
+        <div class="mtss-subsection" data-mtss-section="1">
+          <div class="mtss-sub-eyebrow">Counselor Dashboard</div>
+          <div class="mtss-sub-title">Every student. Every score. Every flag.</div>
+          <div class="mtss-sub-sub">Individual profiles · Domain signals · Direct evidence</div>
+          <p class="mtss-sub-body">Counselors and site admins see individual student profiles with their tier, screener score, flagged signals, and links to actual student responses — not aggregated abstractions. The student is always one click away from the score.</p>
         </div>
 
-        <div class="mtss-tier">
-          <div class="mtss-tier-badge tier-3">T3</div>
-          <div class="mtss-tier-content">
-            <div class="mtss-tier-title">Tier 3 — Intensive Intervention</div>
-            <div class="mtss-tier-sub">High-need students, case coordination, documentation</div>
-            <div class="mtss-tier-desc">For students with persistent or acute signals, screener data feeds directly into case documentation and helps clinicians track growth across re-screening intervals.</div>
-          </div>
+        <div class="mtss-subsection" data-mtss-section="2">
+          <div class="mtss-sub-eyebrow">Validated Rubric</div>
+          <div class="mtss-sub-title">Every score traces back to language.</div>
+          <div class="mtss-sub-sub">Foundational · Developing · Competent · Advanced</div>
+          <p class="mtss-sub-body">The four-point engagement rubric is co-developed with SDCOE and adapted from Amy Berry's published Engagement Continuum. Every model score is backed by the actual phrases that triggered it — defensible, traceable, audit-ready.</p>
         </div>
+
       </div>
     </div>
   </div>
@@ -2091,6 +2126,37 @@ const revealObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 
 document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ──────────────────────────────
+   MTSS SCROLLYTELLING — image swap on section enter
+────────────────────────────── */
+(function() {
+  const imgs = document.querySelectorAll('.mtss-img-stack img');
+  if (!imgs.length) return;
+
+  function setActive(idx) {
+    imgs.forEach((img, i) => img.classList.toggle('mtss-active', i === idx));
+  }
+
+  // On mobile (sticky disabled) swap image above each subsection too
+  const mq = window.matchMedia('(max-width: 768px)');
+
+  const mtssObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = parseInt(e.target.dataset.mtssSection);
+        setActive(idx);
+        // On mobile, insert the active image above the subsection
+        if (mq.matches) {
+          const stack = document.querySelector('.mtss-img-stack');
+          if (stack) stack.parentElement.style.display = 'none'; // hide sticky on mobile
+        }
+      }
+    });
+  }, { threshold: 0.4 });
+
+  document.querySelectorAll('.mtss-subsection').forEach(el => mtssObs.observe(el));
+})();
 
 /* ──────────────────────────────
    STREAMER OVERLAY — SECTION DETECT

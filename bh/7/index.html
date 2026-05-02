@@ -1161,16 +1161,21 @@
   /* Credits pills — role tags with accent colors */
   .s-credits-list {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 10px;
     margin: 20px 0 24px;
+  }
+  .s-pill-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
   }
   .s-credits-list .s-cpill {
     flex: 1 1 auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 13px 22px;
+    padding: 14px 20px;
     border-radius: 999px;
     font-family: var(--font-display);
     font-size: 15px;
@@ -1178,7 +1183,6 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     white-space: nowrap;
-    min-width: calc(44% - 5px);
   }
   .s-cpill-coral   { color: #F89A8E; background: rgba(243,113,99,0.15); border: 1px solid rgba(243,113,99,0.35); }
   .s-cpill-blue    { color: #9DBEEA; background: rgba(99,142,197,0.15); border: 1px solid rgba(99,142,197,0.35); }
@@ -1891,18 +1895,30 @@
       <div class="scene-pane" data-scene="1">
         <div class="scene-callout">
           <div class="s-credits-list">
-            <span class="s-cpill s-cpill-coral">Counselors</span>
-            <span class="s-cpill s-cpill-blue">School Psychologists</span>
-            <span class="s-cpill s-cpill-green">Wellness Coaches</span>
-            <span class="s-cpill s-cpill-amber">County Office Staff</span>
-            <span class="s-cpill s-cpill-lavender">SELPA Directors</span>
-            <span class="s-cpill s-cpill-coral">Special Education Teachers</span>
-            <span class="s-cpill s-cpill-blue">Social Workers</span>
-            <span class="s-cpill s-cpill-amber">Site Administrators</span>
-            <span class="s-cpill s-cpill-green">District Leadership</span>
-            <span class="s-cpill s-cpill-lavender">Mental Health Specialists</span>
-            <span class="s-cpill s-cpill-blue">Student Support Teams</span>
-            <span class="s-cpill s-cpill-amber">Behavior Specialists</span>
+            <div class="s-pill-row">
+              <span class="s-cpill s-cpill-coral">Counselors</span>
+              <span class="s-cpill s-cpill-blue">School Psychologists</span>
+            </div>
+            <div class="s-pill-row">
+              <span class="s-cpill s-cpill-green">Wellness Coaches</span>
+              <span class="s-cpill s-cpill-amber">County Office Staff</span>
+            </div>
+            <div class="s-pill-row">
+              <span class="s-cpill s-cpill-lavender">SELPA Directors</span>
+              <span class="s-cpill s-cpill-coral">Special Education Teachers</span>
+            </div>
+            <div class="s-pill-row">
+              <span class="s-cpill s-cpill-blue">Social Workers</span>
+              <span class="s-cpill s-cpill-amber">Site Administrators</span>
+            </div>
+            <div class="s-pill-row">
+              <span class="s-cpill s-cpill-green">District Leadership</span>
+              <span class="s-cpill s-cpill-lavender">Mental Health Specialists</span>
+            </div>
+            <div class="s-pill-row">
+              <span class="s-cpill s-cpill-blue">Student Support Teams</span>
+              <span class="s-cpill s-cpill-amber">Behavior Specialists</span>
+            </div>
           </div>
           <p>Built by expert educators at the San Diego County Office of Education. Validated against more than 5 billion words of student voice data over the course of 2 years.</p>
         </div>

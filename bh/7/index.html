@@ -782,7 +782,7 @@
     position: relative;
     background: #0A0E14;
     padding: 0;
-    min-width: 1100px;
+    min-width: 1200px;
   }
   .surveys-stage {
     position: relative;
@@ -794,7 +794,7 @@
     display: flex; align-items: center;
     overflow: hidden;
     padding: 0 40px;
-    min-width: 1100px;
+    min-width: 1200px;
   }
   .surveys-headline {
     position: absolute;
@@ -827,7 +827,7 @@
   }
   .scene-pane {
     position: absolute; inset: 0;
-    display: grid; grid-template-columns: 420px 1fr;
+    display: grid; grid-template-columns: 520px 1fr;
     gap: 40px;
     align-items: center;
     padding: 140px 40px 20px;
@@ -883,7 +883,7 @@
   }
   .scene-callout {
     display: flex; flex-direction: column; gap: 28px;
-    width: 420px;
+    width: 520px;
     flex-shrink: 0;
   }
   .scene-callout .s-num {
@@ -1162,22 +1162,26 @@
 
   /* Credits pills — role tags with accent colors */
   .s-credits-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin: 20px 0 24px;
   }
   .s-credits-list .s-cpill {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    padding: 14px 28px;
+    justify-content: center;
+    text-align: center;
+    padding: 14px 16px;
     border-radius: 999px;
     font-family: var(--font-display);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .s-cpill-coral   { color: #F89A8E; background: rgba(243,113,99,0.15); border: 1px solid rgba(243,113,99,0.35); }
   .s-cpill-blue    { color: #9DBEEA; background: rgba(99,142,197,0.15); border: 1px solid rgba(99,142,197,0.35); }
@@ -1193,18 +1197,20 @@
     max-width: 560px;
     justify-self: end;
   }
-  /* Full-bleed left column — image takes full grid cell */
+  /* Full-bleed right column — image fills full column width */
   .scene-img-panel--full {
     justify-self: stretch;
     max-width: 100%;
     align-self: center;
+    width: 100%;
   }
   .scene-img-panel--full .s-scene-img {
     width: 100%;
-    max-height: 80vh;
-    object-fit: contain;
-    object-position: center;
+    height: auto;
+    display: block;
     border-radius: 16px;
+    max-height: none;
+    object-fit: unset;
   }
   .s-img-tag {
     font-size: 10px;

@@ -655,33 +655,61 @@
   .analysis-card.card-active.rgrowth-card    { border-color: rgba(147,197,253,0.45); box-shadow: 0 0 24px rgba(147,197,253,0.1); }
   @keyframes cardpulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.015)} }
 
-  /* ── MTSS Rows ── */
-  .mtss-rows {
-    display: flex;
-    flex-direction: column;
-    gap: 56px;
-    margin-top: 56px;
-  }
-  .mtss-row {
+  /* ── MTSS Scrollytelling ── */
+  .mtss-scroll-wrap {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 56px;
-    align-items: center;
+    gap: 64px;
+    align-items: start;
+    margin-top: 56px;
   }
-  .mtss-row-img {
+
+  /* LEFT — sticky image, sized to content not viewport */
+  .mtss-sticky-media {
+    position: sticky;
+    top: 90px;
+  }
+  .mtss-img-stack {
+    position: relative;
+    width: 100%;
+  }
+  .mtss-img-stack img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: top center;
     border-radius: 14px;
-    overflow: hidden;
+    opacity: 0;
+    transition: opacity 500ms ease-in-out;
     box-shadow: 0 16px 48px rgba(0,0,0,0.4);
   }
-  .mtss-row-img img {
-    width: 100%;
+  .mtss-img-stack img.mtss-active { opacity: 1; }
+
+  /* Aspect ratio placeholder — drives the sticky container height */
+  .mtss-img-stack::before {
+    content: '';
     display: block;
+    /* 4:3 — fits all three SDCOE images comfortably */
+    padding-top: 75%;
   }
-  .mtss-row-text {
+
+  /* RIGHT — scrolling text */
+  .mtss-scroll-content {
+    display: flex;
+    flex-direction: column;
+  }
+  .mtss-subsection {
+    min-height: 70vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 32px 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
   }
+  .mtss-subsection:first-child { border-top: none; padding-top: 0; }
+
   .mtss-sub-eyebrow {
     font-size: 10px;
     font-weight: 700;
@@ -701,12 +729,12 @@
     background: var(--coral);
   }
   .mtss-sub-title {
-    font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.15;
     letter-spacing: -0.02em;
     color: #fff;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
   .mtss-sub-sub {
     font-size: 13px;
@@ -720,6 +748,7 @@
     font-weight: 400;
     color: rgba(214,231,241,0.75);
     line-height: 1.65;
+    max-width: 440px;
   }
 
   /* ── What Surveys Miss ── */
@@ -1170,8 +1199,12 @@
     .cred-band { padding: 40px 24px; }
     .voice-player-wrap { grid-template-columns: 1fr; gap: 32px; }
     .voice-analysis { grid-template-columns: 1fr; gap: 16px; }
-    .mtss-rows { gap: 40px; }
-    .mtss-row { grid-template-columns: 1fr; gap: 24px; }
+    .mtss-scroll-wrap { grid-template-columns: 1fr; gap: 32px; }
+    .mtss-sticky-media { position: relative; top: auto; }
+    .mtss-img-stack { height: 260px; }
+    .mtss-img-stack::before { display: none; }
+    .mtss-img-stack img { height: 260px; object-fit: contain; }
+    .mtss-subsection { min-height: auto; padding: 28px 0; }
     .compare-grid { grid-template-columns: 1fr; gap: 40px; }
     .prompts-grid { grid-template-columns: 1fr 1fr; }
     .bhssa-layout { grid-template-columns: 1fr; gap: 40px; }
@@ -1375,42 +1408,41 @@
     <h2 class="section-heading reveal" style="max-width:20ch">The system that turns voice into action.</h2>
     <p class="section-body reveal" style="transition-delay:0.1s">Tier assignment, counselor dashboard, validated rubric — every layer of the screener is built with San Diego County Office of Education and audit-ready out of the box.</p>
 
-    <div class="mtss-rows">
+    <div class="mtss-scroll-wrap">
 
-      <div class="mtss-row reveal">
-        <div class="mtss-row-img">
-          <img src="../images/mtss-pyramid-sdcoe.png" alt="SDCOE MTSS Tier Assignment Matrix">
+      <!-- LEFT: sticky image stack -->
+      <div class="mtss-sticky-media">
+        <div class="mtss-img-stack">
+          <img src="../images/mtss-pyramid-sdcoe.png" alt="SDCOE MTSS Tier Assignment Matrix" class="mtss-active" data-mtss-img="0">
+          <img src="../images/mtss-dashboard-sdcoe.png" alt="Behavioral Health Screener Dashboard" data-mtss-img="1">
+          <img src="../images/mtss-rubric-sdcoe.png" alt="SDCOE Validated Scoring Rubric" data-mtss-img="2">
         </div>
-        <div class="mtss-row-text">
+      </div>
+
+      <!-- RIGHT: scrolling text blocks -->
+      <div class="mtss-scroll-content">
+
+        <div class="mtss-subsection" data-mtss-section="0">
           <div class="mtss-sub-eyebrow">Tier Assignment</div>
           <div class="mtss-sub-title">Tier assignment is automatic, not interpretive.</div>
           <div class="mtss-sub-sub">T1 Universal · T2 Targeted · T3 Intensive</div>
           <p class="mtss-sub-body">Each student's screener score maps directly to one of three MTSS tiers using the SDCOE-validated assignment matrix. No interpretive judgment required at the screening stage — the model surfaces what needs review and routes it where it belongs.</p>
         </div>
-      </div>
 
-      <div class="mtss-row reveal" style="transition-delay:0.1s">
-        <div class="mtss-row-img">
-          <img src="../images/mtss-dashboard-sdcoe.png" alt="Behavioral Health Screener Dashboard">
-        </div>
-        <div class="mtss-row-text">
+        <div class="mtss-subsection" data-mtss-section="1">
           <div class="mtss-sub-eyebrow">Counselor Dashboard</div>
           <div class="mtss-sub-title">Every student. Every score. Every flag.</div>
           <div class="mtss-sub-sub">Individual profiles · Domain signals · Direct evidence</div>
           <p class="mtss-sub-body">Counselors and site admins see individual student profiles with their tier, screener score, flagged signals, and links to actual student responses — not aggregated abstractions. The student is always one click away from the score.</p>
         </div>
-      </div>
 
-      <div class="mtss-row reveal" style="transition-delay:0.2s">
-        <div class="mtss-row-img">
-          <img src="../images/mtss-rubric-sdcoe.png" alt="SDCOE Validated Scoring Rubric">
-        </div>
-        <div class="mtss-row-text">
+        <div class="mtss-subsection" data-mtss-section="2">
           <div class="mtss-sub-eyebrow">Validated Rubric</div>
           <div class="mtss-sub-title">Every score traces back to language.</div>
           <div class="mtss-sub-sub">Foundational · Developing · Competent · Advanced</div>
           <p class="mtss-sub-body">The four-point engagement rubric is co-developed with SDCOE and adapted from Amy Berry's published Engagement Continuum. Every model score is backed by the actual phrases that triggered it — defensible, traceable, audit-ready.</p>
         </div>
+
       </div>
 
     </div>
@@ -2098,6 +2130,25 @@ const revealObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 
 document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ──────────────────────────────
+   MTSS SCROLLYTELLING — IMAGE SWAP
+────────────────────────────── */
+(function() {
+  const subsections = document.querySelectorAll('.mtss-subsection');
+  const imgs = document.querySelectorAll('.mtss-img-stack img');
+  if (!subsections.length || !imgs.length) return;
+
+  const mtssSectionObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const idx = parseInt(e.target.dataset.mtssSection, 10);
+      imgs.forEach((img, i) => img.classList.toggle('mtss-active', i === idx));
+    });
+  }, { threshold: 0.4 });
+
+  subsections.forEach(s => mtssSectionObs.observe(s));
+})();
 
 /* ──────────────────────────────
    STREAMER OVERLAY — SECTION DETECT

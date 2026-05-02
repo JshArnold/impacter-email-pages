@@ -981,21 +981,30 @@
   }
   .surveys-progress .s-dot.active { background: var(--coral); }
 
-  /* Credits-roll list — oversized, one role per line */
+  /* Credits pills — role tags with accent colors */
   .s-credits-list {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    flex-wrap: wrap;
+    gap: 10px;
     margin: 20px 0 24px;
   }
-  .s-credits-list div {
+  .s-credits-list .s-cpill {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 16px;
+    border-radius: 999px;
     font-family: var(--font-display);
-    font-size: clamp(22px, 2.6vw, 38px);
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
+  .s-cpill-coral   { color: #F89A8E; background: rgba(243,113,99,0.15); border: 1px solid rgba(243,113,99,0.35); }
+  .s-cpill-blue    { color: #9DBEEA; background: rgba(99,142,197,0.15); border: 1px solid rgba(99,142,197,0.35); }
+  .s-cpill-green   { color: #7BC096; background: rgba(95,168,118,0.15); border: 1px solid rgba(95,168,118,0.35); }
+  .s-cpill-amber   { color: #F4C97A; background: rgba(244,201,122,0.15); border: 1px solid rgba(244,201,122,0.35); }
+  .s-cpill-lavender{ color: #C4B5FD; background: rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.35); }
 
   /* Scene image panels */
   .scene-img-panel {
@@ -1672,7 +1681,7 @@
     <div class="surveys-pin-inner">
 
       <div class="surveys-headline">
-        <span class="s-label">MTSS Integrations</span>
+        <span class="s-label" id="surveysLabel">MTSS Integrations</span>
         <span class="s-switcher"><span id="surveysWord">Tier Assignment In Real Time.</span></span>
       </div>
 
@@ -1691,14 +1700,12 @@
       <!-- Scene 2 — rubric -->
       <div class="scene-pane" data-scene="1">
         <div class="scene-callout">
-          <div class="s-stat" style="margin-bottom:20px">→ DESIGNED BY THE FIELD</div>
-          <h3>From the people<br/>who run MTSS.</h3>
           <div class="s-credits-list">
-            <div>Counselors.</div>
-            <div>School psychologists.</div>
-            <div>Behavioral health leads.</div>
-            <div>County office staff.</div>
-            <div>SELPA directors.</div>
+            <span class="s-cpill s-cpill-coral">Counselors</span>
+            <span class="s-cpill s-cpill-blue">School Psychologists</span>
+            <span class="s-cpill s-cpill-green">Behavioral Health Leads</span>
+            <span class="s-cpill s-cpill-amber">County Office Staff</span>
+            <span class="s-cpill s-cpill-lavender">SELPA Directors</span>
           </div>
           <p>Built by expert educators at the San Diego County Office of Education. Validated against more than 5 billion words of student voice.</p>
         </div>
@@ -2452,8 +2459,10 @@ document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
   const panes = document.querySelectorAll('.scene-pane');
   const dots = document.querySelectorAll('#surveysProgress .s-dot');
   const wordEl = document.getElementById('surveysWord');
+  const labelEl = document.getElementById('surveysLabel');
   const likertCard = document.getElementById('likertCard');
-  const SCENES = ['Tier Assignment In Real Time.', 'A 26-second story.', 'A tier. A plan. Today.'];
+  const SCENES = ['Tier Assignment In Real Time.', 'From the people who run MTSS.', 'A tier. A plan. Today.'];
+  const LABELS = ['MTSS Integrations', 'Designed By The Field', 'MTSS Integrations'];
   if (!stage) return;
   function update() {
     const r = stage.getBoundingClientRect();
@@ -2467,6 +2476,7 @@ document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
     if (wordEl.dataset.scene !== String(scene)) {
       wordEl.dataset.scene = scene;
       wordEl.textContent = SCENES[scene];
+      if (labelEl) labelEl.textContent = LABELS[scene];
     }
     likertCard?.classList.toggle('dying', scene > 0);
   }

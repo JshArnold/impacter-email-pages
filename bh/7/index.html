@@ -1891,6 +1891,45 @@
     .cybhi-grid { grid-template-columns: 1fr; }
     .hero-headline { font-size: 2.2rem; }
   }
+  /* ── #prompts LIGHT CREAM OVERRIDE ── */
+  #prompts { background: #F5F4F3; }
+  #prompts .section-eyebrow { color: var(--coral); }
+  #prompts .section-heading { color: #0F1B2E; }
+  #prompts .section-body { color: #5A6270; }
+
+  /* Grade toggle tabs */
+  #prompts .prompt-tab { color: #5A6270; }
+  #prompts .prompt-tab:hover { background: rgba(15,27,46,0.06); color: #0F1B2E; }
+  #prompts .prompt-tab.active { background: var(--coral); color: #fff; }
+
+  /* Card front — white card on cream bg */
+  #prompts .pc-front {
+    background: #fff;
+    border: 1px solid rgba(15,27,46,0.09);
+  }
+  #prompts .prompt-card:hover .pc-front { border-color: rgba(15,27,46,0.18); }
+  #prompts .prompt-card:hover .pc-front::before { opacity: 0.7; }
+
+  /* Text on front */
+  #prompts .prompt-card h4 { color: #0F1B2E; }
+  #prompts .prompt-card p  { color: rgba(15,27,46,0.55); }
+
+  /* Arrow badge */
+  #prompts .pc-front .pc-arrow {
+    background: rgba(15,27,46,0.05);
+    border: 1px solid rgba(15,27,46,0.12);
+    color: #0F1B2E;
+  }
+
+  /* Comp chips — darker text for cream/white bg */
+  #prompts .prompt-card        .comp { background: rgba(99,142,197,0.12);  color: #3A6FAB; }
+  #prompts .prompt-card.coral  .comp { background: rgba(243,113,99,0.12);  color: #C44035; }
+  #prompts .prompt-card.green  .comp { background: rgba(95,168,118,0.12);  color: #39875A; }
+  #prompts .prompt-card.gold   .comp { background: rgba(224,176,70,0.12);  color: #8A6A10; }
+  #prompts .prompt-card.blue   .comp { background: rgba(99,142,197,0.12);  color: #3A6FAB; }
+  #prompts .prompt-card.purple .comp { background: rgba(178,122,182,0.12); color: #7A3E82; }
+  #prompts .prompt-card.teal   .comp { background: rgba(79,164,122,0.12);  color: #2A7A5E; }
+
   /* ── SURVEYS MISS SECTION ── */
   .surveys-miss-section { background: #F5F4F3; }
   .surveys-miss-section .section-eyebrow { color: var(--coral) !important; }

@@ -981,6 +981,22 @@
   }
   .surveys-progress .s-dot.active { background: var(--coral); }
 
+  /* Credits-roll list — oversized, one role per line */
+  .s-credits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 20px 0 24px;
+  }
+  .s-credits-list div {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.6vw, 38px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: rgba(255,255,255,0.9);
+  }
+
   /* Scene image panels */
   .scene-img-panel {
     display: flex;
@@ -1675,9 +1691,16 @@
       <!-- Scene 2 — rubric -->
       <div class="scene-pane" data-scene="1">
         <div class="scene-callout">
-          <div class="s-num">4</div>
-          <h3>One rubric.<br/>Every score defensible.</h3>
-          <p>Co-developed with SDCOE, adapted from Amy Berry's Engagement Continuum. Foundational. Developing. Competent. Advanced. Every score maps back to the exact language the student used — not an algorithm's guess. An auditable, traceable result a counselor can stand behind in a parent meeting.</p>
+          <div class="s-stat" style="margin-bottom:20px">→ DESIGNED BY THE FIELD</div>
+          <h3>From the people<br/>who run MTSS.</h3>
+          <div class="s-credits-list">
+            <div>Counselors.</div>
+            <div>School psychologists.</div>
+            <div>Behavioral health leads.</div>
+            <div>County office staff.</div>
+            <div>SELPA directors.</div>
+          </div>
+          <p>Built by expert educators at the San Diego County Office of Education. Validated against more than 5 billion words of student voice.</p>
         </div>
         <div class="scene-img-panel scene-img-panel--full">
           <img src="../images/mtss-rubric-correct.png?v=2" alt="SDCOE Behavioral Health Rubric" class="s-scene-img">

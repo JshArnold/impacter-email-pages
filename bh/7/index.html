@@ -1464,7 +1464,7 @@
 
   /* Front face */
   .pc-front {
-    padding: 28px 28px 80px;
+    padding: 28px 28px 60px;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
     isolation: isolate;
@@ -2061,6 +2061,37 @@
     background: rgba(29,27,28,0.05);
     border: 1px solid rgba(29,27,28,0.12);
     color: #1D1B1C;
+  }
+
+  /* ── Signal Depth bars ── */
+  .signal-depth {
+    display: flex; flex-direction: column; gap: 6px;
+    padding-top: 16px; margin-top: 16px;
+    border-top: 1px solid rgba(29,27,28,0.08);
+  }
+  .signal-depth-bars { display: flex; gap: 2px; }
+  .signal-depth-bar {
+    flex: 1; height: 5px; border-radius: 1px;
+    background: rgba(29,27,28,0.08);
+  }
+  .signal-depth-bar.filled {
+    transform: scaleY(0); transform-origin: bottom;
+  }
+  #prompts-grid.sd-animated .signal-depth-bar.filled {
+    animation: sdFill 0.4s ease-out calc(var(--bi) * 50ms) forwards;
+  }
+  #prompts-grid.sd-animated .signal-depth-bar.sd-pulse {
+    animation: sdFill 0.4s ease-out calc(var(--bi) * 50ms) forwards,
+               sdPulse 2s ease-in-out calc(var(--bi) * 50ms + 900ms) infinite;
+  }
+  .signal-depth-label {
+    font-size: 0.6875rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: rgba(29,27,28,0.5); font-weight: 500;
+  }
+  @keyframes sdFill  { to { transform: scaleY(1); } }
+  @keyframes sdPulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
+  @media (prefers-reduced-motion: reduce) {
+    .signal-depth-bar.filled { transform: scaleY(1) !important; animation: none !important; }
   }
 
   /* Comp chips */
@@ -3307,6 +3338,29 @@ const promptsTK2 = [
 ];
 
 const cardColors = ['blue','coral','green','gold','purple','teal'];
+
+// Signal depth per domain
+const signalDepth = {
+  'Self-Insight':           { fill: 9, label: 'DEEP', color: '#638EC5' },
+  'Emotional Resilience':   { fill: 8, label: 'DEEP', color: '#F37163' },
+  'Relational Awareness':   { fill: 7, label: 'RICH', color: '#5FA876' },
+  'Conflict Resolution':    { fill: 8, label: 'DEEP', color: '#E8B547' },
+  'Effective Help-Seeking': { fill: 6, label: 'RICH', color: '#8B6FB8' },
+  'Reflective Growth':      { fill: 9, label: 'DEEP', color: '#45B0A0' },
+};
+function buildSignalBars(domain) {
+  const s = signalDepth[domain] || { fill: 7, label: 'RICH', color: '#638EC5' };
+  const bars = Array.from({length:10}, (_,i) => {
+    if (i < s.fill) {
+      const isLast = i === s.fill - 1;
+      const pulse  = isLast && s.fill >= 7 ? ' sd-pulse' : '';
+      return `<div class="signal-depth-bar filled${pulse}" style="background:${s.color};--bi:${i}"></div>`;
+    }
+    return `<div class="signal-depth-bar"></div>`;
+  }).join('');
+  return `<div class="signal-depth"><div class="signal-depth-bars">${bars}</div><span class="signal-depth-label">SIGNAL DEPTH · ${s.label}</span></div>`;
+}
+
 const cardTitles = {
   'Self-Insight':           'Knowing Yourself',
   'Emotional Resilience':   'When Things Get Hard',
@@ -3323,8 +3377,11 @@ const cardDescs = {
   'Effective Help-Seeking': 'How students describe knowing when to ask for help, and who they trust.',
   'Reflective Growth':      'Describing personal growth, identifying change, setting goals for what\'s next.',
 };
+let promptsBarsAnimated = false;
 function renderPrompts(list) {
   const grid = document.getElementById('prompts-grid');
+  grid.classList.remove('sd-animated');
+  promptsBarsAnimated = false;
   grid.innerHTML = list.map((p, i) => `
     <div class="prompt-card ${cardColors[i % cardColors.length]} in-view" style="transition-delay:${0.05 * i}s">
       <div class="pc-inner">
@@ -3332,6 +3389,7 @@ function renderPrompts(list) {
           <span class="comp">${p.domain}</span>
           <h4>${p.title || cardTitles[p.domain] || p.domain}</h4>
           <p>${p.desc || cardDescs[p.domain] || ''}</p>
+          ${buildSignalBars(p.domain)}
           <span class="pc-arrow">↗</span>
         </div>
         <div class="pc-back" onclick="openModal('${p.url}','${p.domain}')">
@@ -3366,6 +3424,16 @@ function setGrade(grade) {
 
 /* bind video hover for initial static cards */
 document.addEventListener('DOMContentLoaded', bindCardVideos);
+
+/* Signal depth bar animation — trigger once on first viewport entry */
+const promptsSection = document.getElementById('prompts');
+const sdObs = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting && !promptsBarsAnimated) {
+    promptsBarsAnimated = true;
+    document.getElementById('prompts-grid').classList.add('sd-animated');
+  }
+}, { threshold: 0.2 });
+if (promptsSection) sdObs.observe(promptsSection);
 
 /* ──────────────────────────────
    SCROLL PROGRESS

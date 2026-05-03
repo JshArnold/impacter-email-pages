@@ -11,6 +11,7 @@
 <style>
   /* ── Reset & Base ── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { overflow-x: hidden; }
 
   :root {
     --coral: #F37163;
@@ -127,6 +128,9 @@
   @media (max-width: 860px) {
     .nav-links a:not(.nav-cta) { display: none; }
     .main-nav { padding: 10px 12px 10px 18px; }
+  }
+  @media (max-width: 768px) {
+    .main-nav { display: none !important; }
   }
 
   /* ── Hero ── */
@@ -1801,6 +1805,9 @@
     letter-spacing: -0.02em;
     white-space: nowrap;
   }
+  @media (max-width: 768px) {
+    .cta-listening-heading { white-space: normal !important; font-size: clamp(2rem, 8vw, 3rem) !important; }
+  }
   .cta-listening-heading em {
     font-style: italic;
     color: var(--coral);
@@ -2076,12 +2083,18 @@
 
   /* ── Mobile ── */
   @media (max-width: 768px) {
+    html, body { overflow-x: hidden; max-width: 100%; }
     nav { padding: 16px 20px; }
     .hero-content { padding: 0 20px 80px; }
     .section { padding: 64px 20px; }
+    .hero-playbook-btn { display: none; }
+    .vi-main-heading { white-space: normal !important; font-size: clamp(1.6rem, 6vw, 2.4rem) !important; }
+    .surveys-miss-heading { font-size: clamp(1.5rem, 5.5vw, 2rem) !important; white-space: normal !important; }
+    .surveys-pin { display: none; }
     .cred-metrics { grid-template-columns: repeat(2, 1fr); gap: 28px 0; }
-    .cred-metric { padding: 0 20px; border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 20px; }
-    .cred-metric:nth-child(odd) { padding-left: 0; }
+    .cred-metric { padding: 0 20px; border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 20px; text-align: center; }
+    .cred-metric:nth-child(odd) { padding-left: 20px; }
+    .cred-metric:first-child { padding-left: 20px; }
     .cred-metric:nth-last-child(-n+2) { border-bottom: none; }
     .cred-band { padding: 40px 24px; }
     .voice-player-wrap { grid-template-columns: 1fr; gap: 32px; }
@@ -2098,14 +2111,21 @@
     .prompts-grid { grid-template-columns: 1fr 1fr; }
     .bhssa-layout { grid-template-columns: 1fr; gap: 40px; }
     .cybhi-grid { grid-template-columns: 1fr 1fr; }
+    #cybhi .reveal[style*="grid"] { display: block !important; }
+    #cybhi .reveal[style*="grid"] > div { margin-bottom: 16px; }
     .resources-grid { grid-template-columns: 1fr; }
-    .footer-inner { flex-direction: column; align-items: flex-start; }
-    .footer-copy { text-align: left; }
+    #playbook { padding: 60px 20px !important; display: block !important; }
+    #playbook-inner { width: 100% !important; transform: none !important; padding: 0 !important; }
+    #playbook-inner > div[style*="grid"] { display: block !important; }
+    #playbook-inner > div[style*="grid"] > * { margin-bottom: 32px; }
+    .footer-inner { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+    .footer-copy { text-align: center; }
+    .footer-links { flex-direction: column; align-items: center; gap: 10px; }
     .streamer { display: none; }
   #streamer-recall { display: none !important; }
   }
   @media (max-width: 480px) {
-    .prompts-grid { grid-template-columns: 1fr; }
+    .prompts-grid { grid-template-columns: 1fr 1fr; }
     .cybhi-grid { grid-template-columns: 1fr; }
     .hero-headline { font-size: 2.2rem; }
   }
@@ -2353,7 +2373,7 @@
     <p class="hero-sub">Voice-based behavioral health screening for K–12, built so the conversation that identifies the need is the same one that begins the support. Your students, in their own words, at scale.</p>
     <div class="hero-actions">
       <a href="#voice-intelligence" class="btn-primary">Hear It in Action ↓</a>
-      <a href="../playbook.pdf" class="btn-ghost" target="_blank">Download Playbook →</a>
+      <a href="../playbook.pdf" class="btn-ghost hero-playbook-btn" target="_blank">Download Playbook →</a>
     </div>
   </div>
   <!-- Phrase insight card — populated by JS, pitch-deck style -->
@@ -2419,7 +2439,7 @@
 <section class="voice-section section" id="voice-intelligence" data-streamer-label="Live Analysis">
   <div class="section-inner">
     <span class="section-eyebrow" style="color:rgba(214,231,241,0.6)">Voice Intelligence Analysis</span>
-    <h2 class="section-heading" style="color:#fff;max-width:none;white-space:nowrap">Language Carries The Signals That Surveys Miss.</h2>
+    <h2 class="section-heading vi-main-heading" style="color:#fff;max-width:none;white-space:nowrap">Language Carries The Signals That Surveys Miss.</h2>
     <div class="voice-player-wrap">
       <div class="video-player-card">
         <video id="ncgirl" controls preload="metadata" src="../images/nc-girl.mp4" poster="../images/vi-thumbnail.png">
@@ -2776,7 +2796,7 @@
 <section class="section surveys-miss-section" id="surveys-miss">
   <div class="section-inner">
     <span class="section-eyebrow" style="color:var(--coral)">The Difference</span>
-    <h2 class="section-heading reveal">What Surveys Miss. What Voice Reveals.</h2>
+    <h2 class="section-heading reveal surveys-miss-heading">What Surveys Miss. What Voice Reveals.</h2>
     <p class="section-body reveal" style="transition-delay:0.1s">A Likert scale compresses a student's entire motivational architecture into a single number. Authentic voice preserves the behavioral health competencies that make that motivation real and duplicable.</p>
     <div class="sm-split reveal" style="transition-delay:0.2s">
       <!-- LEFT: Traditional Survey -->

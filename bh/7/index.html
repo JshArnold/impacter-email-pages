@@ -2825,8 +2825,8 @@
 
 <!-- CYBHI Funding -->
 <!-- Playbook -->
-<section id="playbook" data-streamer-label="Ready to Launch" style="background:#15294A;padding:clamp(60px,8vw,120px) clamp(20px,3vw,40px);overflow:hidden;">
-  <div style="max-width:1200px;margin:0 auto;">
+<section id="playbook" data-streamer-label="Ready to Launch" style="background:#15294A;padding:clamp(60px,8vw,120px) 0;overflow:hidden;">
+  <div id="playbook-inner" style="width:1160px;margin:0 auto;transform-origin:center top;">
 
     <!-- Full-width header block -->
     <div style="margin-bottom:48px;">
@@ -3465,6 +3465,16 @@ function scaleSurveysLock() {
 }
 scaleSurveysLock();
 window.addEventListener('resize', scaleSurveysLock, { passive: true });
+
+/* Playbook inner — same proportional scale when viewport < 1160px */
+function scalePlaybookInner() {
+  const el = document.getElementById('playbook-inner');
+  if (!el) return;
+  const scale = Math.min(1, window.innerWidth / 1160);
+  el.style.transform = scale < 1 ? `scale(${scale.toFixed(4)})` : '';
+}
+scalePlaybookInner();
+window.addEventListener('resize', scalePlaybookInner, { passive: true });
 
 /* ──────────────────────────────
    SCROLL PROGRESS

@@ -809,6 +809,7 @@
     position: relative;
     flex-shrink: 0;
     overflow: hidden;
+    transform-origin: center center;
   }
   .surveys-headline {
     position: absolute;
@@ -3450,6 +3451,20 @@ const sdObs = new IntersectionObserver((entries) => {
   }
 }, { threshold: 0.2 });
 if (promptsSection) sdObs.observe(promptsSection);
+
+/* ──────────────────────────────
+   SURVEYS LOCK — PROPORTIONAL SCALE
+   Scales the 1360×820 fixed canvas down when viewport < 1360px
+   so it never overflows at high zoom levels
+────────────────────────────── */
+function scaleSurveysLock() {
+  const scale = Math.min(1, window.innerWidth / 1360);
+  document.querySelectorAll('.surveys-lock').forEach(el => {
+    el.style.transform = scale < 1 ? `scale(${scale.toFixed(4)})` : '';
+  });
+}
+scaleSurveysLock();
+window.addEventListener('resize', scaleSurveysLock, { passive: true });
 
 /* ──────────────────────────────
    SCROLL PROGRESS

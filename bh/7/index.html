@@ -1985,8 +1985,62 @@
   }
   .streamer-panel-anim { animation: panel-in 0.22s ease forwards; }
   /* Prompt list panel */
-  .sl-item { display:flex; align-items:center; gap:8px; padding:3px 0; }
-  .sl-dot  { width:6px; height:6px; border-radius:50%; background:rgba(243,113,99,0.4); flex-shrink:0; }
+  /* ── Streamer Card Components ── */
+  #streamer-body { transition: opacity 0.2s ease, transform 0.2s ease; }
+  .sc-ctx { font-size:10px; font-style:italic; color:rgba(139,164,190,0.65); margin-bottom:10px; }
+
+  /* Live Analysis rows */
+  .sc-row { display:flex; align-items:center; gap:7px; margin-bottom:7px; transition:opacity 0.3s ease; }
+  .sc-name { font-size:11px; font-weight:500; color:rgba(214,231,241,0.85); flex:1; min-width:0; }
+  .sc-dots { display:flex; gap:4px; flex-shrink:0; }
+  .sc-dot { width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.12); transition:background 0.2s,transform 0.15s,box-shadow 0.15s,opacity 0.2s; }
+  .sc-score { font-size:10px; color:rgba(255,255,255,0.4); width:22px; text-align:right; flex-shrink:0; }
+
+  /* Tier bar chart */
+  .sc-tier-chart { display:flex; align-items:flex-end; gap:18px; padding:6px 0 4px; justify-content:center; }
+  .sc-tier-col { display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .sc-tier-bar { width:30px; border-radius:3px 3px 0 0; transition:height 0.2s ease; }
+  .sc-tier-num { font-size:13px; font-weight:800; color:#fff; }
+  .sc-tier-lbl { font-size:9px; font-weight:700; color:rgba(255,255,255,0.5); letter-spacing:0.06em; }
+  .sc-tier-sub { font-size:8px; color:rgba(255,255,255,0.3); }
+
+  /* Prompt tile grid */
+  .sc-tile-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:5px; margin-bottom:7px; }
+  .sc-tile { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:8px 4px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:8px; cursor:pointer; opacity:0; }
+  .sc-tile:hover { background:rgba(255,255,255,0.07); }
+  .sc-tile-dot { width:6px; height:6px; border-radius:50%; }
+  .sc-tile-abbr { font-size:9px; font-weight:700; color:rgba(255,255,255,0.7); letter-spacing:0.04em; }
+  .sc-tile-hover-lbl { font-size:10px; color:rgba(139,164,190,0.6); font-style:italic; text-align:center; min-height:14px; }
+
+  /* Model Heard */
+  .sc-mh-quote { font-size:12px; font-style:italic; line-height:1.5; color:rgba(214,231,241,0.85); margin-bottom:9px; min-height:52px; transition:opacity 0.22s ease; }
+  .sc-mh-pill { display:inline-block; padding:3px 9px; border-radius:4px; font-size:10px; font-weight:700; letter-spacing:0.05em; border:1px solid transparent; transition:opacity 0.22s ease,background 0.3s; }
+  .sc-mh-footer { margin-top:9px; font-size:10px; color:rgba(139,164,190,0.45); }
+
+  /* Partnership chain */
+  .sc-chain { display:flex; align-items:center; gap:6px; margin:10px 0 8px; justify-content:center; }
+  .sc-chain-node { font-size:10px; font-weight:700; color:rgba(214,231,241,0.8); letter-spacing:0.04em; white-space:nowrap; }
+  .sc-chain-us { color:var(--coral); }
+  .sc-chain-line { width:0; height:0; border-top:1px dashed rgba(243,113,99,0.4); overflow:hidden; display:inline-block; }
+  .sc-chain-pill { display:block; text-align:center; padding:4px 10px; border-radius:5px; font-size:10px; font-weight:700; letter-spacing:0.06em; color:var(--coral); background:rgba(243,113,99,0.1); border:1px solid rgba(243,113,99,0.2); opacity:0; }
+
+  /* Launch steps */
+  .sc-steps { display:flex; flex-direction:column; gap:6px; margin:4px 0 8px; }
+  .sc-step { display:flex; align-items:center; gap:8px; transition:opacity 0.3s; }
+  .sc-step-bullet { width:10px; height:10px; border-radius:50%; flex-shrink:0; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); transition:background 0.3s,box-shadow 0.3s; }
+  .sc-step-done { background:rgba(99,142,197,0.5) !important; border-color:transparent !important; }
+  .sc-step-active { background:var(--coral) !important; border-color:transparent !important; animation:sc-step-pulse 2s ease-in-out infinite; }
+  @keyframes sc-step-pulse { 0%,100%{box-shadow:0 0 0 2px rgba(243,113,99,0.3),0 0 0 5px rgba(243,113,99,0.1);} 50%{box-shadow:0 0 0 4px rgba(243,113,99,0.2),0 0 0 8px rgba(243,113,99,0.05);} }
+  .sc-step-text { font-size:11px; color:rgba(214,231,241,0.8); }
+  .sc-cta-link { display:block; font-size:11px; color:var(--coral); text-decoration:none; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06); transition:color 0.2s; }
+  .sc-cta-link:hover { color:#fff; }
+
+  /* Checklist */
+  .sc-checklist { display:flex; flex-direction:column; gap:7px; margin:4px 0 6px; }
+  .sc-check-item { display:flex; align-items:center; gap:8px; }
+  .sc-check-ico { color:#4ade80; font-weight:800; font-size:12px; }
+  .sc-check-text { font-size:12px; color:rgba(255,255,255,0.65); }
+  .sc-foot-text { font-size:10px; color:rgba(139,164,190,0.45); margin-top:6px; font-style:italic; }
   .sl-name { font-size:12px; font-weight:500; color:rgba(214,231,241,0.8); }
   /* Model heard quote transition */
   #smh-quote, #smh-pill { transition: opacity 0.2s ease; }
@@ -2931,105 +2985,7 @@
       <button onclick="dismissStreamer()" aria-label="Dismiss" class="streamer-close-btn" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.3);font-size:14px;line-height:1;padding:2px 4px;border-radius:4px;transition:color 0.2s;">✕</button>
     </div>
   </div>
-  <div class="streamer-context" id="streamer-context">Behavioral Health Screener</div>
-
-  <!-- Domain scores panel (default) -->
-  <div id="streamer-domains">
-    <div class="streamer-domain">
-      <span class="sd-name">Emotional Resilience</span>
-      <div class="sd-score" id="sd-er">
-        <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
-      </div>
-    </div>
-    <div class="streamer-domain">
-      <span class="sd-name">Self-Insight</span>
-      <div class="sd-score" id="sd-si">
-        <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
-      </div>
-    </div>
-    <div class="streamer-domain">
-      <span class="sd-name">Reflective Growth</span>
-      <div class="sd-score" id="sd-rg">
-        <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div>
-      </div>
-    </div>
-    <div class="streamer-domain">
-      <span class="sd-name">Relational Awareness</span>
-      <div class="sd-score" id="sd-ra">
-        <div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot lit"></div><div class="sd-dot"></div>
-      </div>
-    </div>
-    <div class="streamer-domain">
-      <span class="sd-name">Effective Help-Seeking</span>
-      <div class="sd-score" id="sd-hs">
-        <div class="sd-dot lit-blue"></div><div class="sd-dot lit-blue"></div><div class="sd-dot"></div><div class="sd-dot"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MTSS panel -->
-  <div id="streamer-mtss" style="display:none;">
-    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(74,222,128,0.08);border-radius:8px;border:1px solid rgba(74,222,128,0.15);">
-        <span style="font-size:11px;color:rgba(255,255,255,0.6);">Tier 1 — Universal</span>
-        <span style="font-size:13px;font-weight:800;color:#4ade80;">118</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(251,191,36,0.08);border-radius:8px;border:1px solid rgba(251,191,36,0.15);">
-        <span style="font-size:11px;color:rgba(255,255,255,0.6);">Tier 2 — Targeted</span>
-        <span style="font-size:13px;font-weight:800;color:#fbbf24;">37</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:rgba(243,113,99,0.08);border-radius:8px;border:1px solid rgba(243,113,99,0.15);">
-        <span style="font-size:11px;color:rgba(255,255,255,0.6);">Tier 3 — Intensive</span>
-        <span style="font-size:13px;font-weight:800;color:#F37163;">12</span>
-      </div>
-    </div>
-    <div style="margin-top:12px;font-size:10px;color:rgba(255,255,255,0.25);font-style:italic;">167 students · EDCOE pilot window</div>
-  </div>
-
-  <!-- District summary panel -->
-  <div id="streamer-district" style="display:none;">
-    <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
-      <div style="display:flex;justify-content:space-between;"><span style="font-size:11px;color:rgba(255,255,255,0.5);">Students screened</span><span style="font-size:14px;font-weight:900;color:#fff;">127</span></div>
-      <div style="display:flex;justify-content:space-between;"><span style="font-size:11px;color:rgba(255,255,255,0.5);">Flagged for review</span><span style="font-size:14px;font-weight:900;color:#fbbf24;">12</span></div>
-      <div style="display:flex;justify-content:space-between;"><span style="font-size:11px;color:rgba(255,255,255,0.5);">Urgent signals</span><span style="font-size:14px;font-weight:900;color:#F37163;">2</span></div>
-      <div style="display:flex;justify-content:space-between;"><span style="font-size:11px;color:rgba(255,255,255,0.5);">Avg. days to support</span><span style="font-size:14px;font-weight:900;color:#4ade80;">1.4</span></div>
-    </div>
-    <div style="margin-top:12px;font-size:10px;color:rgba(255,255,255,0.25);font-style:italic;">EDCOE Pilot · This window</div>
-  </div>
-
-  <!-- Prompts panel (light theme) -->
-  <div id="streamer-prompts" style="display:none;">
-    <div style="display:flex;flex-direction:column;margin-top:4px;">
-      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Self-Insight</span></div>
-      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Emotional Resilience</span></div>
-      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Relational Awareness</span></div>
-      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Conflict Resolution</span></div>
-      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Effective Help-Seeking</span></div>
-      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Reflective Growth</span></div>
-    </div>
-    <div style="margin-top:10px;font-size:10px;color:rgba(139,164,190,0.6);font-style:italic;">Click any tile above to begin</div>
-  </div>
-
-  <!-- Model Heard panel -->
-  <div id="streamer-model-heard" style="display:none;">
-    <div style="margin-top:4px;">
-      <div id="smh-quote" style="font-size:12px;font-style:italic;line-height:1.55;color:rgba(214,231,241,0.85);margin-bottom:10px;min-height:52px;"></div>
-      <div id="smh-pill" style="display:inline-block;padding:3px 9px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.05em;background:rgba(243,113,99,0.15);color:#F37163;"></div>
-    </div>
-    <div style="margin-top:10px;font-size:10px;color:rgba(139,164,190,0.6);font-style:italic;">What the model caught</div>
-  </div>
-
-  <!-- Playbook panel -->
-  <div id="streamer-launch" style="display:none;">
-    <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
-      <div style="display:flex;gap:8px;align-items:center;"><span style="color:#4ade80;font-weight:800;">✓</span><span style="font-size:12px;color:rgba(255,255,255,0.65);">Practitioners trained</span></div>
-      <div style="display:flex;gap:8px;align-items:center;"><span style="color:#4ade80;font-weight:800;">✓</span><span style="font-size:12px;color:rgba(255,255,255,0.65);">CYBHI enrolled</span></div>
-      <div style="display:flex;gap:8px;align-items:center;"><span style="color:#4ade80;font-weight:800;">✓</span><span style="font-size:12px;color:rgba(255,255,255,0.65);">Consent collected</span></div>
-      <div style="display:flex;gap:8px;align-items:center;"><span style="color:#4ade80;font-weight:800;">✓</span><span style="font-size:12px;color:rgba(255,255,255,0.65);">Data governance confirmed</span></div>
-    </div>
-    <div style="margin-top:12px;font-size:10px;color:rgba(255,255,255,0.25);font-style:italic;">Implementation guide available</div>
-  </div>
-
+  <div id="streamer-body" style="margin-top:4px;"></div>
   <div class="streamer-footer">IMPACTER · Human Skills Analytics</div>
 </div>
 
@@ -3572,26 +3528,267 @@ document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 })();
 
 /* ──────────────────────────────
-   STREAMER OVERLAY — SECTION DETECT
+   STREAMER — Live Instrument Cards
 ────────────────────────────── */
-const streamer = document.getElementById('streamer');
-const streamerLabel = document.getElementById('streamer-label');
-const streamerContext = document.getElementById('streamer-context');
+let _scTimers = [];
+function _scClear() { _scTimers.forEach(t => { clearInterval(t); clearTimeout(t); }); _scTimers = []; }
 
-const SECTION_LABELS = {
-  'voice-intelligence': { label: 'Live Analysis', context: 'Scoring this response in real time…' },
-  'mtss': { label: 'District Summary', context: 'Viewing MTSS integration overview' },
-  'prompts': { label: 'Screening in Progress', context: '6 domain prompts ready' },
-  'bhssa': { label: 'State Validation', context: 'BHSSA-002 · California BHSOAC' },
-  'funding': { label: 'CYBHI Breakdown', context: 'CPT 96127 reimbursement data' },
-  'resources': { label: 'Get Started', context: 'Schedule a district walkthrough' },
+/* Card 1 – LIVE ANALYSIS (voice-intelligence) */
+function cardLiveAnalysis() {
+  const domains = [
+    { name:'Emotional Resilience', fill:4, color:'#F37163' },
+    { name:'Self-Insight',         fill:4, color:'#638EC5' },
+    { name:'Reflective Growth',    fill:4, color:'#45B0A0' },
+    { name:'Relational Awareness', fill:3, color:'#638EC5' },
+    { name:'Help-Seeking',         fill:2, color:'#8B6FB8' },
+  ];
+  const rows = domains.map((d,i) => `
+    <div class="sc-row" id="scr${i}" style="opacity:${i<3?'1':'0.45'}">
+      <span class="sc-name">${d.name}</span>
+      <div class="sc-dots">
+        ${Array.from({length:4},(_,j) => `<div class="sc-dot${j<d.fill?' sc-lit':''}" id="scd${i}_${j}" style="${j<d.fill?`background:${d.color}`:''}"></div>`).join('')}
+      </div>
+      <span class="sc-score">${d.fill}/4</span>
+    </div>`).join('');
+  return `<div class="sc-ctx">Madison · Failure prompt</div>${rows}`;
+}
+function activateLiveAnalysis() {
+  const FILLS = [4,4,4,3,2];
+  const COLORS = ['#F37163','#638EC5','#45B0A0','#638EC5','#8B6FB8'];
+  let active = 0, travel = 0;
+  function setActive(idx) {
+    for (let i=0;i<5;i++) {
+      const r = document.getElementById('scr'+i);
+      if (r) r.style.opacity = i===idx ? '1' : '0.45';
+    }
+  }
+  setActive(active);
+  const tPulse = setInterval(() => {
+    // Reset dots on active row
+    for (let j=0;j<4;j++) {
+      const d = document.getElementById(`scd${active}_${j}`);
+      if (!d) return;
+      d.style.transform = 'scale(1)'; d.style.boxShadow = '';
+      d.style.opacity = j < FILLS[active] ? '1' : '0.15';
+    }
+    if (travel < FILLS[active]) {
+      const d = document.getElementById(`scd${active}_${travel}`);
+      if (d) { d.style.transform='scale(1.45)'; d.style.boxShadow=`0 0 7px ${COLORS[active]}`; d.style.opacity='1'; }
+    }
+    travel = (travel+1) % 5;
+  }, 280);
+  _scTimers.push(tPulse);
+  const tRot = setInterval(() => {
+    travel = 0; active = (active+1)%3; setActive(active);
+  }, 4000);
+  _scTimers.push(tRot);
+}
+
+/* Card 2 – TIER ASSIGNMENT (surveys) */
+function cardTierBars() {
+  return `
+    <div class="sc-ctx">Auto-assigned · live</div>
+    <div class="sc-tier-chart">
+      <div class="sc-tier-col">
+        <span class="sc-tier-num" id="t1n">118</span>
+        <div class="sc-tier-bar" id="t1b" style="height:72px;background:#4ade80;"></div>
+        <span class="sc-tier-lbl">T1</span>
+        <span class="sc-tier-sub">Universal</span>
+      </div>
+      <div class="sc-tier-col">
+        <span class="sc-tier-num" id="t2n">37</span>
+        <div class="sc-tier-bar" id="t2b" style="height:32px;background:#fbbf24;"></div>
+        <span class="sc-tier-lbl">T2</span>
+        <span class="sc-tier-sub">Targeted</span>
+      </div>
+      <div class="sc-tier-col">
+        <span class="sc-tier-num" id="t3n">12</span>
+        <div class="sc-tier-bar" id="t3b" style="height:12px;background:#F37163;"></div>
+        <span class="sc-tier-lbl">T3</span>
+        <span class="sc-tier-sub">Intensive</span>
+      </div>
+    </div>
+    <div class="sc-foot-text">EDCOE · 167 students</div>`;
+}
+function activateTierBars() {
+  const BASE = [72,32,12], IDS = ['t1b','t2b','t3b'];
+  const tPulse = setInterval(() => {
+    IDS.forEach((id,i) => {
+      const el = document.getElementById(id); if (!el) return;
+      el.style.transition='height 0.2s ease'; el.style.height=(BASE[i]+4)+'px';
+      setTimeout(()=>{ const e=document.getElementById(id); if(e) e.style.height=BASE[i]+'px'; },220);
+    });
+  },5000);
+  _scTimers.push(tPulse);
+  let tick=0;
+  const tTick = setInterval(() => {
+    tick++;
+    const pairs=[['t1n',118],['t2n',37],['t3n',12]];
+    const [id,base]=pairs[tick%3];
+    const el=document.getElementById(id);
+    if(el) el.textContent=base+(tick%3===0?tick%5:tick%3===1?tick%3:tick%2);
+  },9000);
+  _scTimers.push(tTick);
+}
+
+/* Card 3 – 6 PROMPTS READY (prompts) */
+const TILE_DATA = [
+  {abbr:'S-I',color:'#638EC5',full:'Self-Insight'},
+  {abbr:'E-R',color:'#F37163',full:'Emotional Resilience'},
+  {abbr:'R-A',color:'#5FA876',full:'Relational Awareness'},
+  {abbr:'C-R',color:'#E8B547',full:'Conflict Resolution'},
+  {abbr:'H-S',color:'#8B6FB8',full:'Help-Seeking'},
+  {abbr:'R-G',color:'#45B0A0',full:'Reflective Growth'},
+];
+function cardPromptTiles() {
+  const tiles = TILE_DATA.map((d,i) => `
+    <div class="sc-tile" id="sct${i}"
+      onmouseenter="document.getElementById('sc-tlbl').textContent='${d.full}';this.style.borderColor='${d.color}';this.style.boxShadow='0 0 0 1px ${d.color}';"
+      onmouseleave="document.getElementById('sc-tlbl').textContent='Hover to explore';this.style.borderColor='rgba(255,255,255,0.1)';this.style.boxShadow='';"
+      onclick="(function(){const c=document.querySelectorAll('.prompt-card');if(c[${i}])c[${i}].scrollIntoView({behavior:'smooth',block:'center'});})()">
+      <div class="sc-tile-dot" style="background:${d.color}"></div>
+      <span class="sc-tile-abbr">${d.abbr}</span>
+    </div>`).join('');
+  return `<div class="sc-ctx">Click any tile to begin</div><div class="sc-tile-grid">${tiles}</div><div id="sc-tlbl" class="sc-tile-hover-lbl">Hover to explore</div>`;
+}
+function activatePromptTiles() {
+  document.querySelectorAll('.sc-tile').forEach((el,i) => {
+    el.style.opacity='0'; el.style.transform='scale(0.7)';
+    const t = setTimeout(()=>{
+      el.style.transition='opacity 0.2s ease,transform 0.25s cubic-bezier(0.2,1.4,0.5,1),border-color 0.15s,box-shadow 0.15s';
+      el.style.opacity='1'; el.style.transform='scale(1)';
+    }, i*80);
+    _scTimers.push(t);
+  });
+}
+
+/* Card 4 – WHAT THE MODEL HEARD (surveys-miss) */
+const MH_QUOTES = [
+  {q:'"I don\'t really have anyone to talk to about it..."',            pill:'HELP-SEEKING · LOW SIGNAL',       color:'#F37163'},
+  {q:'"Every day I\'m trying to expand the barriers of my comfort zone."',pill:'REFLECTIVE GROWTH · HIGH SIGNAL',color:'#45B0A0'},
+  {q:'"I tend to stay behind the yellow caution tape..."',               pill:'SELF-INSIGHT · MEDIUM SIGNAL',   color:'#638EC5'},
+  {q:'"I knew I was wrong before she even said it."',                    pill:'CONFLICT RES. · MED SIGNAL',     color:'#E8B547'},
+];
+function cardModelHeard() {
+  return `<div class="sc-ctx">Voice signal detection</div>
+    <div id="sc-mhq" class="sc-mh-quote"></div>
+    <div id="sc-mhp" class="sc-mh-pill"></div>
+    <div class="sc-mh-footer"><span id="sc-mhc">1/4</span> · Rotating across 528 voices</div>`;
+}
+function activateModelHeard() {
+  let idx=0;
+  function show(i) {
+    const q=document.getElementById('sc-mhq'),p=document.getElementById('sc-mhp'),c=document.getElementById('sc-mhc');
+    if(!q||!p||!c) return;
+    q.style.opacity='0'; p.style.opacity='0';
+    setTimeout(()=>{
+      const d=MH_QUOTES[i];
+      q.textContent=d.q; p.textContent=d.pill;
+      p.style.color=d.color; p.style.background='rgba(255,255,255,0.12)'; p.style.borderColor='transparent';
+      c.textContent=`${i+1}/4`;
+      q.style.opacity='1'; p.style.opacity='1';
+      setTimeout(()=>{ if(document.getElementById('sc-mhp')){ p.style.transition='background 0.35s'; p.style.background=d.color+'22'; p.style.borderColor=d.color+'44'; }},100);
+    },220);
+  }
+  show(idx);
+  const t=setInterval(()=>{ idx=(idx+1)%4; show(idx); },5000);
+  _scTimers.push(t);
+}
+
+/* Card 5 – STATE SELECTED (bhssa) */
+function cardStateSelected() {
+  return `<div class="sc-ctx">BHSSA-002 · BHSOAC + SCCOE</div>
+    <div class="sc-chain">
+      <div class="sc-chain-node">SCCOE</div>
+      <div class="sc-chain-line" id="scl1"></div>
+      <div class="sc-chain-node">Stanford</div>
+      <div class="sc-chain-line" id="scl2"></div>
+      <div class="sc-chain-node sc-chain-us">IMPACTER</div>
+    </div>
+    <div class="sc-chain-pill" id="sc-cpill">BHSSA-002 · APRIL 2026</div>
+    <div class="sc-foot-text">Statewide BH evaluation</div>`;
+}
+function activateStateSelected() {
+  const l1=document.getElementById('scl1'),l2=document.getElementById('scl2'),pill=document.getElementById('sc-cpill');
+  if(!l1||!l2||!pill) return;
+  l1.style.width='0'; l2.style.width='0'; pill.style.opacity='0';
+  const t1=setTimeout(()=>{ l1.style.transition='width 0.35s ease'; l1.style.width='24px'; },200);
+  const t2=setTimeout(()=>{ l2.style.transition='width 0.35s ease'; l2.style.width='24px'; },580);
+  const t3=setTimeout(()=>{
+    pill.style.transition='opacity 0.3s ease,box-shadow 0.3s ease';
+    pill.style.opacity='1'; pill.style.boxShadow='0 0 0 2px rgba(243,113,99,0.4)';
+    setTimeout(()=>{ const p=document.getElementById('sc-cpill'); if(p) p.style.boxShadow='0 0 0 1px rgba(243,113,99,0.2)'; },600);
+  },950);
+  [t1,t2,t3].forEach(t=>_scTimers.push(t));
+}
+
+/* Card 6 – READY TO LAUNCH / stepper (playbook) */
+const LAUNCH_STEPS=['Pre-check · devices ready','Facilitator login','Share student steps','Students complete screener','Counselor monitors live','Wrap & review'];
+function cardLaunchSequence() {
+  return `<div class="sc-ctx">30-minute launch sequence</div>
+    <div class="sc-steps">
+      ${LAUNCH_STEPS.map((s,i)=>`<div class="sc-step" id="scstep${i}"><div class="sc-step-bullet" id="scbullet${i}"></div><span class="sc-step-text">${s}</span></div>`).join('')}
+    </div>
+    <a href="../playbook.pdf" target="_blank" rel="noopener" class="sc-cta-link">→ Download full playbook (PDF)</a>`;
+}
+function activateLaunchSequence() {
+  let active=0;
+  function setStep(i) {
+    for(let j=0;j<6;j++){
+      const b=document.getElementById('scbullet'+j),s=document.getElementById('scstep'+j);
+      if(!b||!s) return;
+      if(j<i){ b.className='sc-step-bullet sc-step-done'; s.style.opacity='0.45'; }
+      else if(j===i){ b.className='sc-step-bullet sc-step-active'; s.style.opacity='1'; }
+      else{ b.className='sc-step-bullet'; s.style.opacity='0.3'; }
+    }
+  }
+  setStep(active);
+  const t=setInterval(()=>{ active=(active+1)%6; setStep(active); },4000);
+  _scTimers.push(t);
+}
+
+/* Card 7 – READY TO LAUNCH checklist (cta-listening, stats) */
+function cardReadyToLaunch() {
+  const items=['Practitioners trained','CYBHI enrolled','Consent collected','Data governance confirmed'];
+  return `<div class="sc-ctx">Implementation guide available</div>
+    <div class="sc-checklist">
+      ${items.map((s,i)=>`<div class="sc-check-item" id="sc-chk${i}" style="opacity:0;transform:translateX(-6px)"><span class="sc-check-ico">✓</span><span class="sc-check-text">${s}</span></div>`).join('')}
+    </div>
+    <div id="sc-chkfoot" class="sc-foot-text" style="opacity:0">Implementation guide available</div>`;
+}
+function activateReadyToLaunch() {
+  for(let i=0;i<4;i++){
+    const t=setTimeout(()=>{
+      const el=document.getElementById('sc-chk'+i); if(!el) return;
+      el.style.transition='opacity 0.25s ease,transform 0.25s ease';
+      el.style.opacity='1'; el.style.transform='translateX(0)';
+    },150+i*120);
+    _scTimers.push(t);
+  }
+  const tf=setTimeout(()=>{ const el=document.getElementById('sc-chkfoot'); if(el){el.style.transition='opacity 0.3s ease';el.style.opacity='1';}},800);
+  _scTimers.push(tf);
+}
+
+/* Section → card map */
+const SC_MAP = {
+  'voice-intelligence': { label:'LIVE ANALYSIS',       html:cardLiveAnalysis,    activate:activateLiveAnalysis    },
+  'surveys':            { label:'TIER ASSIGNMENT',      html:cardTierBars,        activate:activateTierBars        },
+  'prompts':            { label:'6 PROMPTS READY',      html:cardPromptTiles,     activate:activatePromptTiles,    bg:'cream' },
+  'surveys-miss':       { label:'WHAT THE MODEL HEARD', html:cardModelHeard,      activate:activateModelHeard,     bg:'cream' },
+  'bhssa':              { label:'STATE SELECTED',       html:cardStateSelected,   activate:activateStateSelected   },
+  'playbook':           { label:'READY TO LAUNCH',      html:cardLaunchSequence,  activate:activateLaunchSequence  },
+  'cta-listening':      { label:'READY TO LAUNCH',      html:cardReadyToLaunch,   activate:activateReadyToLaunch   },
+  'stats':              { label:'PILOT OUTCOMES',       html:cardReadyToLaunch,   activate:activateReadyToLaunch   },
 };
 
+const streamer   = document.getElementById('streamer');
+const streamerLbl = document.getElementById('streamer-label');
 let streamerDismissed = false;
+let _lastSection = null;
 const recallPill = document.getElementById('streamer-recall');
 
 function dismissStreamer() {
-  streamerDismissed = true;
+  streamerDismissed = true; _scClear();
   streamer.classList.remove('visible');
   recallPill.style.display = 'flex';
 }
@@ -3599,112 +3796,44 @@ function recallStreamer() {
   streamerDismissed = false;
   recallPill.style.display = 'none';
   streamer.classList.add('visible');
+  if (_lastSection) setStreamerState(_lastSection);
 }
 
-// Panel swap logic
-const PANELS = {
-  domains:      document.getElementById('streamer-domains'),
-  mtss:         document.getElementById('streamer-mtss'),
-  district:     document.getElementById('streamer-district'),
-  launch:       document.getElementById('streamer-launch'),
-  prompts:      document.getElementById('streamer-prompts'),
-  'model-heard':document.getElementById('streamer-model-heard'),
-};
-
-function showPanel(name) {
-  Object.entries(PANELS).forEach(([k, el]) => {
-    if (!el) return;
-    if (k === name) {
-      el.style.display = '';
-      el.classList.remove('streamer-panel-anim');
-      void el.offsetWidth; // reflow to retrigger animation
-      el.classList.add('streamer-panel-anim');
-    } else {
-      el.style.display = 'none';
-    }
-  });
-}
-
-// Section → streamer state map
-const SECTION_STATES = {
-  'voice-intelligence': { label: 'LIVE ANALYSIS',       context: 'NC Portrait · Adaptability',     panel: 'domains',      bg: 'navy'  },
-  'surveys':            { label: 'TIER ASSIGNMENT',      context: 'Auto-assigned on score complete', panel: 'mtss',         bg: 'navy'  },
-  'dashboard':          { label: 'DISTRICT SUMMARY',     context: 'EDCOE Pilot · This window',       panel: 'district',     bg: 'navy'  },
-  'playbook':           { label: 'READY TO LAUNCH',      context: 'Implementation guide available',  panel: 'launch',       bg: 'navy'  },
-  'stats':              { label: 'PILOT OUTCOMES',       context: '97% participation · EDCOE',       panel: 'district',     bg: 'navy'  },
-  'bhssa':              { label: 'STATE SELECTED',       context: 'BHSSA-002 · BHSOAC + SCCOE',      panel: 'domains',      bg: 'navy'  },
-  'cta-listening':      { label: 'READY TO LAUNCH',      context: 'Implementation guide available',  panel: 'launch',       bg: 'navy'  },
-  'prompts':            { label: '6 PROMPTS READY',      context: 'Click any tile to begin',         panel: 'prompts',      bg: 'cream' },
-  'surveys-miss':       { label: 'WHAT THE MODEL HEARD', context: 'Voice signal detection',          panel: 'model-heard',  bg: 'cream' },
-};
-
-// Model Heard — rotating quotes (dark card, coral pills)
-const SMH_QUOTES = [
-  { quote: '"I don\'t really have anyone to talk to about it..."',               pill: 'HELP-SEEKING · LOW SIGNAL'       },
-  { quote: '"Every day I\'m trying to expand the barriers of my comfort zone."', pill: 'REFLECTIVE GROWTH · HIGH SIGNAL' },
-  { quote: '"I tend to stay behind the yellow caution tape..."',                  pill: 'SELF-INSIGHT · MEDIUM SIGNAL'    },
-];
-let smhIdx = 0, smhTimer = null;
-function startModelHeard() {
-  const q = document.getElementById('smh-quote'), p = document.getElementById('smh-pill');
-  if (!q || !p) return;
-  function show(idx) {
-    const d = SMH_QUOTES[idx];
-    q.style.opacity = '0'; p.style.opacity = '0';
-    setTimeout(() => {
-      q.textContent = d.quote; p.textContent = d.pill;
-      q.style.opacity = '1'; p.style.opacity = '1';
-    }, 220);
-  }
-  show(smhIdx);
-  smhTimer = setInterval(() => { smhIdx = (smhIdx + 1) % SMH_QUOTES.length; show(smhIdx); }, 6000);
-}
-function stopModelHeard() { if (smhTimer) { clearInterval(smhTimer); smhTimer = null; } }
-
-function setStreamerState(state) {
-  // Cream/navy background context
-  streamer.dataset.sectionBg = state.bg || 'navy';
-  // Label + context fade
-  streamerLabel.style.opacity = '0';
-  streamerContext.style.opacity = '0';
+function setStreamerState(sectionId) {
+  const cfg = SC_MAP[sectionId]; if (!cfg) return;
+  _lastSection = sectionId; _scClear();
+  streamer.dataset.sectionBg = cfg.bg || 'navy';
+  const body = document.getElementById('streamer-body');
+  body.style.opacity = '0'; body.style.transform = 'translateY(4px)';
+  streamerLbl.style.opacity = '0';
   setTimeout(() => {
-    streamerLabel.textContent  = state.label;
-    streamerContext.textContent = state.context;
-    streamerLabel.style.opacity = '1';
-    streamerContext.style.opacity = '1';
-  }, 150);
-  // Panel swap
-  showPanel(state.panel);
-  // Continuous animations
-  if (state.panel === 'model-heard') { stopModelHeard(); startModelHeard(); }
-  else stopModelHeard();
+    streamerLbl.textContent = cfg.label; streamerLbl.style.opacity = '1';
+    body.innerHTML = cfg.html();
+    body.style.transition = 'opacity 0.2s ease,transform 0.2s ease';
+    body.style.opacity = '1'; body.style.transform = 'translateY(0)';
+    if (cfg.activate) cfg.activate();
+  }, 180);
 }
 
 const streamerSectionObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      const state = SECTION_STATES[e.target.id];
-      if (state) setStreamerState(state);
-    }
-  });
+  entries.forEach(e => { if (e.isIntersecting && SC_MAP[e.target.id]) setStreamerState(e.target.id); });
 }, { threshold: 0.25 });
 
-// Show/hide streamer after hero (respects dismissed state)
 const heroSection = document.querySelector('.hero');
 const heroObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (!e.isIntersecting && !streamerDismissed) {
       streamer.classList.add('visible');
+      if (_lastSection) setStreamerState(_lastSection);
     } else if (e.isIntersecting) {
       streamer.classList.remove('visible');
       recallPill.style.display = 'none';
-      streamerDismissed = false; // reset on return to hero
+      streamerDismissed = false; _scClear();
     }
   });
 }, { threshold: 0.1 });
 heroObs.observe(heroSection);
 
-// Observe all sections
 document.querySelectorAll('#stats, #voice-intelligence, #surveys, #prompts, #surveys-miss, #bhssa, #playbook, #cta-listening').forEach(sec => {
   streamerSectionObs.observe(sec);
 });

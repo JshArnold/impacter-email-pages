@@ -1291,6 +1291,11 @@
     display: flex;
     align-items: flex-start;
   }
+  /* Image cards only (not video card 3): pull left boundary inward so image scales
+     proportionally shorter and no longer clips at the bottom */
+  .scene-img-panel--full:not(.scene-vid-panel) {
+    padding-left: 52px;
+  }
   .scene-img-panel--full .s-scene-img {
     width: 100%;
     height: auto;

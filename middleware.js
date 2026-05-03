@@ -16,7 +16,8 @@ export default function middleware(request) {
       pathname.startsWith('/bh/images/') ||
       pathname.startsWith('/bh/audio/') ||
       pathname === '/bh/cybhi-fee-schedule.pdf' ||
-      pathname === '/bh/playbook.pdf'
+      pathname === '/bh/playbook.pdf' ||
+      pathname === '/bh/sample-report.pdf'
 
     if (!allowed) {
       return new Response('Not Found', {

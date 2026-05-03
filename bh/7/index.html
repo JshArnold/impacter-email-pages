@@ -2368,9 +2368,10 @@
     #playbook-inner { width: 100% !important; transform: none !important; padding: 0 !important; }
 
     /* ── Hero ── */
-    /* Hide "Hear It in Action", keep Download Playbook */
+    /* Hide both CTA buttons from hero on mobile */
     .btn-primary { display: none !important; }
-    /* Stack the remaining button and give it breathing room above waveform */
+    .btn-ghost   { display: none !important; }
+    /* Collapse hero-actions row */
     .hero-actions { flex-direction: column; align-items: flex-start; gap: 0; }
     .hero-content { padding-bottom: 120px !important; }
 
@@ -2390,11 +2391,15 @@
       font-size: clamp(2rem, 9vw, 3rem) !important;
     }
 
+    /* ── CTA chevron — shift background up so it sits behind the text block ── */
+    #cta-listening::after { background-position: center 25% !important; }
+
     /* ── Playbook — hide cover image, stack cards full-width ── */
     #playbook-inner > div:nth-child(2) {
       grid-template-columns: 1fr !important;
     }
-    #playbook-inner > div:nth-child(2) > div:first-child { display: none !important; }
+    /* Cover image: show it — with 1fr grid it stacks above the cards naturally */
+    #playbook-inner > div:nth-child(2) > div:first-child { display: block !important; }
     #playbook-inner > div:nth-child(2) > div:last-child { width: 100%; }
     #playbook-inner > div:nth-child(2) > div:last-child > div {
       grid-template-columns: 1fr 1fr !important;
@@ -3000,7 +3005,7 @@
     <h2 class="section-heading reveal" style="color:#fff;transition-delay:0.05s">Zero Net Cost For School Districts.</h2>
     <p class="section-body reveal" style="transition-delay:0.1s;margin-bottom:48px">California's multi-payer fee schedule turns behavioral health screening from a budget line into a sustainable funding mechanism. Universal screening for all students now generates revenue rather than consuming it across the board.</p>
 
-    <div class="reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px;transition-delay:0.15s">
+    <div class="reveal cybhi-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px;transition-delay:0.15s">
 
       <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px">
         <div style="font-size:clamp(2.4rem,4vw,3.4rem);font-weight:800;font-family:var(--font-display);color:var(--coral);line-height:1;margin-bottom:14px">$4.81</div>

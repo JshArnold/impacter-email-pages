@@ -2036,7 +2036,7 @@
   .sc-step-done { background:rgba(99,142,197,0.5) !important; border-color:transparent !important; }
   .sc-step-active { background:var(--coral) !important; border-color:transparent !important; animation:sc-step-pulse 2s ease-in-out infinite; }
   @keyframes sc-step-pulse { 0%,100%{box-shadow:0 0 0 2px rgba(243,113,99,0.3),0 0 0 5px rgba(243,113,99,0.1);} 50%{box-shadow:0 0 0 4px rgba(243,113,99,0.2),0 0 0 8px rgba(243,113,99,0.05);} }
-  .sc-step-text { font-size:11px; color:rgba(214,231,241,0.8); }
+  .sc-step-text { font-size:13px; color:rgba(214,231,241,0.8); }
   .sc-cta-link { display:block; font-size:11px; color:var(--coral); text-decoration:none; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06); transition:color 0.2s; }
   .sc-cta-link:hover { color:#fff; }
 
@@ -3778,7 +3778,7 @@ function activateStateSelected() {
 }
 
 /* Card 6 – READY TO LAUNCH / stepper (playbook) */
-const LAUNCH_STEPS=['Pre-check · devices ready','Facilitator login','Share student steps','Students complete screener','Counselor monitors live','Wrap & review'];
+const LAUNCH_STEPS=['Pre-check · devices ready','Facilitator login','Students complete screener','Counselor monitors live'];
 function cardLaunchSequence() {
   return `<div class="sc-ctx">30-minute launch sequence</div>
     <div class="sc-steps">
@@ -3789,7 +3789,7 @@ function cardLaunchSequence() {
 function activateLaunchSequence() {
   let active=0;
   function setStep(i) {
-    for(let j=0;j<6;j++){
+    for(let j=0;j<LAUNCH_STEPS.length;j++){
       const b=document.getElementById('scbullet'+j),s=document.getElementById('scstep'+j);
       if(!b||!s) return;
       if(j<i){ b.className='sc-step-bullet sc-step-done'; s.style.opacity='0.45'; }
@@ -3798,7 +3798,7 @@ function activateLaunchSequence() {
     }
   }
   setStep(active);
-  const t=setInterval(()=>{ active=(active+1)%6; setStep(active); },4000);
+  const t=setInterval(()=>{ active=(active+1)%LAUNCH_STEPS.length; setStep(active); },4000);
   _scTimers.push(t);
 }
 

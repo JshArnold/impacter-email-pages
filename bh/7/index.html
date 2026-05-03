@@ -15,7 +15,7 @@
   :root {
     --coral: #F37163;
     --blue: #638EC5;
-    --navy: #0F1B2E;
+    --navy: #15294A;
     --navy-mid: #0d2035;
     --navy-light: #162840;
     --accent: #D6E7F1;
@@ -28,7 +28,7 @@
     --radius-lg: 14px;
     --radius-pill: 999px;
     --color-coral: #F37163;
-    --surface-inverse-deep: #0F1B2E;
+    --surface-inverse-deep: #15294A;
     --gutter: 48px;
   }
 
@@ -306,7 +306,7 @@
   /* ── Stats Strip ── */
   /* ── Credibility Band (single unified section) ── */
   .cred-band {
-    background: #FAF6F0;
+    background: #15294A;
     padding: 52px 40px;
     border-top: none;
     border-bottom: none;
@@ -343,7 +343,7 @@
   }
   .cred-metric {
     padding: 0 44px;
-    border-right: 1px solid rgba(0,0,0,0.1);
+    border-right: 1px solid rgba(255,255,255,0.1);
     text-align: left;
   }
   .cred-metric:first-child { padding-left: 36px; }
@@ -352,7 +352,7 @@
     font-size: clamp(2.4rem, 4vw, 4rem);
     font-weight: 700;
     letter-spacing: -0.04em;
-    color: #8a9ab0;
+    color: #fff;
     line-height: 1;
     margin-bottom: 10px;
   }
@@ -364,14 +364,14 @@
   }
   .cred-lbl {
     font-size: 0.9rem;
-    color: #7a8fa3;
+    color: rgba(214,231,241,0.65);
     line-height: 1.4;
     max-width: 160px;
   }
   .cred-lbl em {
     font-style: normal;
     font-size: 0.8rem;
-    color: #9eaab8;
+    color: rgba(214,231,241,0.4);
     display: block;
     margin-top: 2px;
   }
@@ -379,7 +379,7 @@
   .cred-districts {
     font-size: 1rem;
     font-weight: 500;
-    color: #9eaab8;
+    color: rgba(214,231,241,0.5);
     letter-spacing: 0.04em;
     text-align: center;
     line-height: 1.8;
@@ -781,7 +781,7 @@
 
   .surveys-pin {
     position: relative;
-    background: #1E3A6E;
+    background: #1F3F66;
     padding: 0;
   }
   .surveys-stage {
@@ -1649,13 +1649,13 @@
   }
   .bhssa-validation strong { color: #fff; }
 
-  /* ── BHSSA deep navy ── */
-  #bhssa { background: #0F1B2E; }
+  /* ── BHSSA brand blue ── */
+  #bhssa { background: #1F3F66; }
   #bhssa .section-eyebrow { color: var(--coral); }
-  #bhssa .bhssa-badge { background: rgba(99,142,197,0.18); border-color: rgba(99,142,197,0.3); color: #8FB8E8; }
+  #bhssa .bhssa-badge { background: rgba(99,142,197,0.2); border-color: rgba(99,142,197,0.35); color: #A8CAEA; }
   #bhssa .section-heading { color: #fff; }
   #bhssa .bhssa-validation { background: rgba(243,113,99,0.1); border-left-color: var(--coral); }
-  #bhssa .bhssa-validation p { color: rgba(255,255,255,0.7); }
+  #bhssa .bhssa-validation p { color: rgba(214,231,241,0.75); }
   #bhssa .bhssa-validation strong { color: #fff; }
 
   /* ── CYBHI Funding ── */
@@ -1738,7 +1738,7 @@
   /* ── CTA Listening ── */
   #cta-listening {
     position: relative;
-    background: #0F1B2E;
+    background: #15294A;
     overflow: hidden;
     padding: 120px 40px;
     text-align: center;
@@ -1748,7 +1748,7 @@
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(to bottom, #0F1B2E 0%, transparent 18%, transparent 82%, #0F1B2E 100%),
+      linear-gradient(to bottom, #15294A 0%, transparent 18%, transparent 82%, #15294A 100%),
       radial-gradient(ellipse 60% 50% at 20% 50%, rgba(99,142,197,0.18) 0%, transparent 70%),
       radial-gradient(ellipse 50% 40% at 80% 50%, rgba(243,113,99,0.14) 0%, transparent 70%);
     pointer-events: none;
@@ -1995,50 +1995,50 @@
     .cybhi-grid { grid-template-columns: 1fr; }
     .hero-headline { font-size: 2.2rem; }
   }
-  /* ── #prompts DEEP NAVY ── */
-  #prompts { background: #0F1B2E; }
+  /* ── #prompts LIGHT ── */
+  #prompts { background: #FAFAF9; }
   #prompts .section-eyebrow { color: var(--coral); }
-  #prompts .section-heading { color: #fff; }
-  #prompts .section-body { color: rgba(255,255,255,0.6); }
+  #prompts .section-heading { color: #1D1B1C; }
+  #prompts .section-body { color: #5A6270; }
 
   /* Grade toggle tabs */
-  #prompts .prompt-tab { color: rgba(255,255,255,0.6); border: 1.5px solid rgba(255,255,255,0.14); }
-  #prompts .prompt-tab:hover { background: rgba(255,255,255,0.07); color: #fff; border-color: rgba(255,255,255,0.3); }
+  #prompts .prompt-tab { color: #5A6270; border: 1.5px solid rgba(15,27,46,0.18); }
+  #prompts .prompt-tab:hover { background: rgba(15,27,46,0.06); color: #1D1B1C; border-color: rgba(15,27,46,0.3); }
   #prompts .prompt-tab.active { background: var(--coral); color: #fff; border-color: transparent; }
 
-  /* Card front — dark card on navy bg */
+  /* Card front — white card on light bg */
   #prompts .pc-front {
-    background: #162236;
-    border: 1px solid rgba(255,255,255,0.08);
+    background: #fff;
+    border: 1px solid rgba(15,27,46,0.09);
   }
-  #prompts .prompt-card:hover .pc-front { border-color: rgba(255,255,255,0.18); }
+  #prompts .prompt-card:hover .pc-front { border-color: rgba(15,27,46,0.18); }
   #prompts .prompt-card:hover .pc-front::before { opacity: 0.7; }
 
   /* Text on front */
-  #prompts .prompt-card h4 { color: #fff; }
-  #prompts .prompt-card p  { color: rgba(255,255,255,0.5); }
+  #prompts .prompt-card h4 { color: #1D1B1C; }
+  #prompts .prompt-card p  { color: rgba(15,27,46,0.55); }
 
   /* Arrow badge */
   #prompts .pc-front .pc-arrow {
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.7);
+    background: rgba(15,27,46,0.05);
+    border: 1px solid rgba(15,27,46,0.12);
+    color: #1D1B1C;
   }
 
-  /* Comp chips — light tints on dark bg */
-  #prompts .prompt-card        .comp { background: rgba(99,142,197,0.18);  color: #8FB8E8; }
-  #prompts .prompt-card.coral  .comp { background: rgba(243,113,99,0.18);  color: #F5A097; }
-  #prompts .prompt-card.green  .comp { background: rgba(95,168,118,0.18);  color: #7FCC99; }
-  #prompts .prompt-card.gold   .comp { background: rgba(224,176,70,0.18);  color: #E8C96A; }
-  #prompts .prompt-card.blue   .comp { background: rgba(99,142,197,0.18);  color: #8FB8E8; }
-  #prompts .prompt-card.purple .comp { background: rgba(178,122,182,0.18); color: #D4A0D8; }
-  #prompts .prompt-card.teal   .comp { background: rgba(79,164,122,0.18);  color: #7FD4B0; }
+  /* Comp chips */
+  #prompts .prompt-card        .comp { background: rgba(99,142,197,0.12);  color: #3A6FAB; }
+  #prompts .prompt-card.coral  .comp { background: rgba(243,113,99,0.12);  color: #C44035; }
+  #prompts .prompt-card.green  .comp { background: rgba(95,168,118,0.12);  color: #39875A; }
+  #prompts .prompt-card.gold   .comp { background: rgba(224,176,70,0.12);  color: #8A6A10; }
+  #prompts .prompt-card.blue   .comp { background: rgba(99,142,197,0.12);  color: #3A6FAB; }
+  #prompts .prompt-card.purple .comp { background: rgba(178,122,182,0.12); color: #7A3E82; }
+  #prompts .prompt-card.teal   .comp { background: rgba(79,164,122,0.12);  color: #2A7A5E; }
 
   /* ── SURVEYS MISS SECTION ── */
-  .surveys-miss-section { background: #EFE9E2; }
+  .surveys-miss-section { background: #F4F2F0; }
   .surveys-miss-section .section-eyebrow { color: var(--coral) !important; }
-  .surveys-miss-section .section-heading { color: #0A0A0A; max-width: none; white-space: nowrap; }
-  .surveys-miss-section .section-body { color: rgba(10,10,10,0.6); }
+  .surveys-miss-section .section-heading { color: #1D1B1C; max-width: none; white-space: nowrap; }
+  .surveys-miss-section .section-body { color: #5A6270; }
 
   .sm-split {
     display: grid; grid-template-columns: 1fr 1fr; gap: 0;

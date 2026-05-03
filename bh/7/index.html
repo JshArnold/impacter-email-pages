@@ -1452,7 +1452,7 @@
     transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
     border-radius: 14px;
   }
-  .prompt-card.pc-flipped .pc-inner { transform: rotateY(180deg); }
+  .prompt-card:hover .pc-inner { transform: rotateY(180deg); }
 
   /* Both faces */
   .pc-front, .pc-back {
@@ -3349,13 +3349,11 @@ const cardDescs = {
 };
 let promptsBarsAnimated = false;
 function renderPrompts(list) {
-  _currentPromptList = list;
-  _flippedCardIdx = null;
   const grid = document.getElementById('prompts-grid');
   grid.classList.remove('sd-animated');
   promptsBarsAnimated = false;
   grid.innerHTML = list.map((p, i) => `
-    <div class="prompt-card ${cardColors[i % cardColors.length]} in-view" style="transition-delay:${0.05 * i}s;cursor:pointer;" onclick="if(!this.classList.contains('pc-flipped'))flipCard(${i})" onmouseenter="if(typeof _flippedCardIdx!=='undefined'&&_flippedCardIdx!==null&&_flippedCardIdx!==${i})unflipAll()">
+    <div class="prompt-card ${cardColors[i % cardColors.length]} in-view" style="transition-delay:${0.05 * i}s">
       <div class="pc-inner">
         <div class="pc-front">
           <span class="comp">${p.domain}</span>
@@ -3364,13 +3362,17 @@ function renderPrompts(list) {
           ${buildSignalBars(p.domain)}
           <span class="pc-arrow">↗</span>
         </div>
-        <div class="pc-back">
-          <iframe class="pc-va-iframe" src="" allow="camera;microphone;autoplay;encrypted-media;fullscreen" allowfullscreen></iframe>
-          <button class="pc-back-close" onclick="event.stopPropagation();unflipAll()">✕</button>
+        <div class="pc-back" onclick="openModal('${p.url}','${p.domain}')">
+          <video class="pc-vid" muted loop playsinline preload="none"><source src="${p.vid || '/bh/images/prompt-1.mp4'}" type="video/mp4"></video>
+          <div class="pc-back-overlay">
+            <div class="pc-back-label">${p.domain}</div>
+            <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
+          </div>
         </div>
       </div>
     </div>
   `).join('');
+  bindCardVideos();
   // Re-trigger animation immediately if section is already in view (e.g. grade switch)
   requestAnimationFrame(() => {
     const sec = document.getElementById('prompts');
@@ -3383,45 +3385,13 @@ function renderPrompts(list) {
   });
 }
 
-/* ── Prompt card flip system ── */
-let _flippedCardIdx = null;
-let _currentPromptList = [];
-
-function flipCard(idx) {
-  const cards = document.querySelectorAll('#prompts-grid .prompt-card');
-  if (_flippedCardIdx !== null && _flippedCardIdx !== idx) {
-    const cur = cards[_flippedCardIdx];
-    if (cur) {
-      cur.classList.remove('pc-flipped');
-      const iframe = cur.querySelector('.pc-va-iframe');
-      if (iframe) iframe.src = '';
-    }
-  }
-  if (_flippedCardIdx === idx) {
-    const card = cards[idx];
-    if (card) {
-      card.classList.remove('pc-flipped');
-      const iframe = card.querySelector('.pc-va-iframe');
-      if (iframe) iframe.src = '';
-    }
-    _flippedCardIdx = null;
-    return;
-  }
-  const card = cards[idx];
-  if (!card) return;
-  card.classList.add('pc-flipped');
-  const iframe = card.querySelector('.pc-va-iframe');
-  if (iframe && _currentPromptList[idx]) iframe.src = _currentPromptList[idx].url;
-  _flippedCardIdx = idx;
-}
-
-function unflipAll() {
-  document.querySelectorAll('#prompts-grid .prompt-card').forEach(c => {
-    c.classList.remove('pc-flipped');
-    const iframe = c.querySelector('.pc-va-iframe');
-    if (iframe) iframe.src = '';
+function bindCardVideos() {
+  document.querySelectorAll('.prompt-card').forEach(card => {
+    const vid = card.querySelector('.pc-vid');
+    if (!vid) return;
+    card.addEventListener('mouseenter', () => vid.play().catch(() => {}));
+    card.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
   });
-  _flippedCardIdx = null;
 }
 
 let currentGrade = '3-12';
@@ -3688,7 +3658,7 @@ function cardPromptTiles() {
     <div class="sc-tile" id="sct${i}"
       onmouseenter="document.getElementById('sc-tlbl').textContent='${d.full}';this.style.borderColor='${d.color}';this.style.boxShadow='0 0 0 1px ${d.color}';"
       onmouseleave="document.getElementById('sc-tlbl').textContent='Hover to explore';this.style.borderColor='rgba(255,255,255,0.1)';this.style.boxShadow='';"
-      onclick="flipCard(${i})">
+      onclick="(function(){const c=document.querySelectorAll('.prompt-card');if(c[${i}])c[${i}].scrollIntoView({behavior:'smooth',block:'center'});})()">
       <div class="sc-tile-dot" style="background:${d.color}"></div>
       <span class="sc-tile-abbr">${d.abbr}</span>
     </div>`).join('');

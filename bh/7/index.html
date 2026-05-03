@@ -2892,6 +2892,42 @@
 </section>
 
 <!-- CYBHI Funding -->
+<section id="cybhi" data-streamer-label="CYBHI Reimbursement" style="background:#1F3F66; padding:clamp(60px,8vw,100px) 0;">
+  <div class="section-inner">
+
+    <div class="section-eyebrow reveal" style="color:var(--coral)">CYBHI Reimbursement Model</div>
+    <h2 class="reveal" style="font-family:var(--font-display);font-size:clamp(2rem,4.5vw,3.5rem);font-weight:800;color:#fff;margin:0 0 20px;letter-spacing:-0.02em;line-height:1.1;transition-delay:0.05s">Zero net cost for school districts.</h2>
+    <p class="reveal" style="color:rgba(214,231,241,0.7);font-size:16px;line-height:1.65;max-width:620px;margin:0 0 48px;transition-delay:0.1s">California's multi-payer fee schedule turns behavioral health screening from a budget line into a sustainable funding mechanism. Universal screening generates revenue rather than consuming it.</p>
+
+    <div class="reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px;transition-delay:0.15s">
+
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px">
+        <div style="font-size:clamp(2.4rem,4vw,3.4rem);font-weight:800;font-family:var(--font-display);color:var(--coral);line-height:1;margin-bottom:14px">$4.81</div>
+        <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:10px;font-family:var(--font-display)">Per administration</div>
+        <p style="font-size:13px;color:rgba(214,231,241,0.6);line-height:1.65;margin:0">CPT Code 96127 with diagnosis code Z13.89 through CYBHI's multi-payer fee schedule — reimbursed in full through third-party administrators.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px">
+        <div style="font-size:clamp(2.4rem,4vw,3.4rem);font-weight:800;font-family:var(--font-display);color:var(--coral);line-height:1;margin-bottom:14px">$0</div>
+        <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:10px;font-family:var(--font-display)">Net cost to districts</div>
+        <p style="font-size:13px;color:rgba(214,231,241,0.6);line-height:1.65;margin:0">Full reimbursement means the screening pays for itself. For districts running universal screening at scale, this generates surplus revenue.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px">
+        <div style="font-size:clamp(2.4rem,4vw,3.4rem);font-weight:800;font-family:var(--font-display);color:var(--coral);line-height:1;margin-bottom:14px">3</div>
+        <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:10px;font-family:var(--font-display)">Eligible practitioner types</div>
+        <p style="font-size:13px;color:rgba(214,231,241,0.6);line-height:1.65;margin:0">School Psychologists, School Social Workers, and School Counselors can administer and generate reimbursement. No new hires required.</p>
+      </div>
+
+    </div>
+
+    <div class="reveal" style="display:flex;align-items:baseline;gap:16px;padding:18px 22px;border-left:3px solid var(--coral);background:rgba(243,113,99,0.07);border-radius:0 8px 8px 0;transition-delay:0.2s">
+      <p style="color:rgba(214,231,241,0.7);font-size:13px;line-height:1.6;margin:0">Eligible practitioners administer the screener; districts receive full reimbursement through third-party administrators. <a href="https://www.dhcs.ca.gov/Documents/BHIN/BHIN-22-059.pdf" target="_blank" rel="noopener" style="color:var(--coral);text-decoration:none;font-weight:600;white-space:nowrap">View the official CYBHI fee schedule →</a></p>
+    </div>
+
+  </div>
+</section>
+
 <!-- Playbook -->
 <section id="playbook" data-streamer-label="Ready to Launch" style="background:#15294A;padding:clamp(60px,8vw,120px) 0;overflow:hidden;display:flex;justify-content:center;">
   <div id="playbook-inner" style="width:1160px;flex-shrink:0;transform-origin:center top;padding:0 40px;box-sizing:border-box;">
@@ -3790,6 +3826,7 @@ const SC_MAP = {
   'prompts':            { label:'6 PROMPTS READY',      html:cardPromptTiles,     activate:activatePromptTiles,    bg:'cream' },
   'surveys-miss':       { label:'WHAT THE MODEL HEARD', html:cardModelHeard,      activate:activateModelHeard,     bg:'cream' },
   'bhssa':              { label:'STATE SELECTED',       html:cardStateSelected,   activate:activateStateSelected   },
+  'cybhi':              { label:'NEXT STEPS',           html:cardNextSteps,       activate:activateNextSteps       },
   'playbook':           { label:'NEXT STEPS',           html:cardNextSteps,       activate:activateNextSteps       },
   'cta-listening':      { label:'NEXT STEPS',           html:cardNextSteps,       activate:activateNextSteps       },
   'stats':              { label:'NEXT STEPS',           html:cardNextSteps,       activate:activateNextSteps       },

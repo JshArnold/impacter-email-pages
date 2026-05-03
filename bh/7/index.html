@@ -1958,49 +1958,27 @@
     letter-spacing: 0.04em;
   }
 
-  /* ── DUAL-THEME SYSTEM ── */
+  /* ── CREAM SECTION OVERRIDE — heavier shadow/opacity when floating over light bg ── */
   .streamer {
-    --s-label: #F37163;
-    --s-divider: rgba(255,255,255,0.06);
-    --s-context-color: rgba(139,164,190,0.65);
-    --s-footer-color: rgba(139,164,190,0.4);
-    --s-text: rgba(214,231,241,0.8);
     transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1), opacity 0.4s ease,
-                background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+                box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
   }
-  .streamer[data-theme="light"] {
-    --s-label: #638EC5;
-    --s-divider: rgba(29,27,28,0.08);
-    --s-context-color: rgba(29,27,28,0.5);
-    --s-footer-color: rgba(29,27,28,0.3);
-    --s-text: rgba(29,27,28,0.88);
-    background: rgba(255,252,245,0.97);
-    border-color: rgba(99,142,197,0.22);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(99,142,197,0.08);
-  }
-  .streamer-label  { color: var(--s-label) !important; transition: color 0.3s; }
-  .streamer-pulse  { background: var(--s-label) !important; }
-  .streamer-header { border-color: var(--s-divider) !important; }
-  .streamer-context { color: var(--s-context-color) !important; }
-  .sd-name { color: var(--s-text) !important; }
-  .streamer-footer { border-color: var(--s-divider) !important; color: var(--s-footer-color) !important; }
-  .streamer[data-theme="light"] .streamer-pulse { animation-name: pulse-blue; }
-  .streamer[data-theme="light"] .sd-dot         { background: rgba(29,27,28,0.1); }
-  .streamer[data-theme="light"] .sd-dot.lit      { background: #638EC5; }
-  .streamer[data-theme="light"] .streamer-close-btn { color: rgba(29,27,28,0.35) !important; }
-  @keyframes pulse-blue {
-    0%, 100% { opacity:1; box-shadow: 0 0 0 0 rgba(99,142,197,0.4); }
-    50% { opacity:0.7; box-shadow: 0 0 0 6px rgba(99,142,197,0); }
+  .streamer[data-section-bg="cream"] {
+    background: rgba(20,32,54,0.96);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-color: rgba(243,113,99,0.22);
+    box-shadow: 0 16px 48px rgba(20,32,54,0.18), 0 4px 12px rgba(20,32,54,0.10);
   }
   @keyframes panel-in {
     from { opacity:0; transform:translateY(5px); }
     to   { opacity:1; transform:translateY(0); }
   }
   .streamer-panel-anim { animation: panel-in 0.22s ease forwards; }
-  /* Prompt list (light) */
+  /* Prompt list panel */
   .sl-item { display:flex; align-items:center; gap:8px; padding:3px 0; }
-  .sl-dot  { width:6px; height:6px; border-radius:50%; background:rgba(99,142,197,0.3); flex-shrink:0; }
-  .sl-name { font-size:12px; font-weight:500; color:var(--s-text); }
+  .sl-dot  { width:6px; height:6px; border-radius:50%; background:rgba(243,113,99,0.4); flex-shrink:0; }
+  .sl-name { font-size:12px; font-weight:500; color:rgba(214,231,241,0.8); }
   /* Model heard quote transition */
   #smh-quote, #smh-pill { transition: opacity 0.2s ease; }
 
@@ -2992,16 +2970,16 @@
       <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Effective Help-Seeking</span></div>
       <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Reflective Growth</span></div>
     </div>
-    <div style="margin-top:10px;font-size:10px;color:var(--s-context-color);font-style:italic;">Click any tile above to begin</div>
+    <div style="margin-top:10px;font-size:10px;color:rgba(139,164,190,0.6);font-style:italic;">Click any tile above to begin</div>
   </div>
 
-  <!-- Model Heard panel (light theme) -->
+  <!-- Model Heard panel -->
   <div id="streamer-model-heard" style="display:none;">
     <div style="margin-top:4px;">
-      <div id="smh-quote" style="font-size:12px;font-style:italic;line-height:1.55;color:var(--s-text);margin-bottom:10px;min-height:52px;"></div>
-      <div id="smh-pill" style="display:inline-block;padding:3px 9px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.05em;"></div>
+      <div id="smh-quote" style="font-size:12px;font-style:italic;line-height:1.55;color:rgba(214,231,241,0.85);margin-bottom:10px;min-height:52px;"></div>
+      <div id="smh-pill" style="display:inline-block;padding:3px 9px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.05em;background:rgba(243,113,99,0.15);color:#F37163;"></div>
     </div>
-    <div style="margin-top:10px;font-size:10px;color:var(--s-context-color);font-style:italic;">What the model caught</div>
+    <div style="margin-top:10px;font-size:10px;color:rgba(139,164,190,0.6);font-style:italic;">What the model caught</div>
   </div>
 
   <!-- Playbook panel -->
@@ -3541,22 +3519,22 @@ function showPanel(name) {
 
 // Section → streamer state map
 const SECTION_STATES = {
-  'voice-intelligence': { label: 'LIVE ANALYSIS',    context: 'NC Portrait · Adaptability',        panel: 'domains',      theme: 'dark'  },
-  'surveys':            { label: 'TIER ASSIGNMENT',  context: 'Auto-assigned on score complete',    panel: 'mtss',         theme: 'dark'  },
-  'dashboard':          { label: 'DISTRICT SUMMARY', context: 'EDCOE Pilot · This window',          panel: 'district',     theme: 'dark'  },
-  'playbook':           { label: 'READY TO LAUNCH',  context: 'Implementation guide available',     panel: 'launch',       theme: 'dark'  },
-  'stats':              { label: 'PILOT OUTCOMES',   context: '97% participation · EDCOE',          panel: 'district',     theme: 'dark'  },
-  'bhssa':              { label: 'STATE SELECTED',   context: 'BHSSA-002 · BHSOAC + SCCOE',         panel: 'domains',      theme: 'dark'  },
-  'cta-listening':      { label: 'READY TO LAUNCH',  context: 'Implementation guide available',     panel: 'launch',       theme: 'dark'  },
-  'prompts':            { label: '6 PROMPTS READY',  context: 'Click any tile to begin',            panel: 'prompts',      theme: 'light' },
-  'surveys-miss':       { label: 'WHAT THE MODEL HEARD', context: 'Voice signal detection',         panel: 'model-heard',  theme: 'light' },
+  'voice-intelligence': { label: 'LIVE ANALYSIS',       context: 'NC Portrait · Adaptability',     panel: 'domains',      bg: 'navy'  },
+  'surveys':            { label: 'TIER ASSIGNMENT',      context: 'Auto-assigned on score complete', panel: 'mtss',         bg: 'navy'  },
+  'dashboard':          { label: 'DISTRICT SUMMARY',     context: 'EDCOE Pilot · This window',       panel: 'district',     bg: 'navy'  },
+  'playbook':           { label: 'READY TO LAUNCH',      context: 'Implementation guide available',  panel: 'launch',       bg: 'navy'  },
+  'stats':              { label: 'PILOT OUTCOMES',       context: '97% participation · EDCOE',       panel: 'district',     bg: 'navy'  },
+  'bhssa':              { label: 'STATE SELECTED',       context: 'BHSSA-002 · BHSOAC + SCCOE',      panel: 'domains',      bg: 'navy'  },
+  'cta-listening':      { label: 'READY TO LAUNCH',      context: 'Implementation guide available',  panel: 'launch',       bg: 'navy'  },
+  'prompts':            { label: '6 PROMPTS READY',      context: 'Click any tile to begin',         panel: 'prompts',      bg: 'cream' },
+  'surveys-miss':       { label: 'WHAT THE MODEL HEARD', context: 'Voice signal detection',          panel: 'model-heard',  bg: 'cream' },
 };
 
-// Model Heard — rotating quotes
+// Model Heard — rotating quotes (dark card, coral pills)
 const SMH_QUOTES = [
-  { quote: '"I don\'t really have anyone to talk to about it..."',            pill: 'HELP-SEEKING · LOW SIGNAL',       bg: 'rgba(99,142,197,0.12)',  color: '#3A6FAB' },
-  { quote: '"Every day I\'m trying to expand the barriers of my comfort zone."', pill: 'REFLECTIVE GROWTH · HIGH SIGNAL', bg: 'rgba(95,168,118,0.12)',  color: '#39875A' },
-  { quote: '"I tend to stay behind the yellow caution tape..."',               pill: 'SELF-INSIGHT · MEDIUM SIGNAL',    bg: 'rgba(224,176,70,0.12)',  color: '#8A6A10' },
+  { quote: '"I don\'t really have anyone to talk to about it..."',               pill: 'HELP-SEEKING · LOW SIGNAL'       },
+  { quote: '"Every day I\'m trying to expand the barriers of my comfort zone."', pill: 'REFLECTIVE GROWTH · HIGH SIGNAL' },
+  { quote: '"I tend to stay behind the yellow caution tape..."',                  pill: 'SELF-INSIGHT · MEDIUM SIGNAL'    },
 ];
 let smhIdx = 0, smhTimer = null;
 function startModelHeard() {
@@ -3567,7 +3545,6 @@ function startModelHeard() {
     q.style.opacity = '0'; p.style.opacity = '0';
     setTimeout(() => {
       q.textContent = d.quote; p.textContent = d.pill;
-      p.style.background = d.bg; p.style.color = d.color;
       q.style.opacity = '1'; p.style.opacity = '1';
     }, 220);
   }
@@ -3577,8 +3554,8 @@ function startModelHeard() {
 function stopModelHeard() { if (smhTimer) { clearInterval(smhTimer); smhTimer = null; } }
 
 function setStreamerState(state) {
-  // Theme swap
-  streamer.dataset.theme = state.theme || 'dark';
+  // Cream/navy background context
+  streamer.dataset.sectionBg = state.bg || 'navy';
   // Label + context fade
   streamerLabel.style.opacity = '0';
   streamerContext.style.opacity = '0';

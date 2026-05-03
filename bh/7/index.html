@@ -392,6 +392,10 @@
     margin: 0 12px;
     opacity: 0.5;
   }
+  .cred-district-name {
+    white-space: nowrap;
+    opacity: 1;
+  }
 
   /* ── Logo marquee (below credibility band) ── */
   .logo-marquee-bar {
@@ -2131,6 +2135,19 @@
     .footer-links { flex-direction: column; align-items: center; gap: 10px; }
     .streamer { display: none; }
   #streamer-recall { display: none !important; }
+    /* Section headings — smaller on mobile */
+    .section-heading { font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important; }
+    /* Trust bar district names — prevent mid-name line breaks */
+    .cred-districts { font-size: 0.8rem; line-height: 2; }
+    /* CTA buttons — stack full-width */
+    .cta-listening-actions { flex-direction: column; align-items: stretch; }
+    .cta-listening-btn { text-align: center; justify-content: center; padding: 14px 24px; }
+    /* Prompt cards — tighter padding on mobile */
+    .pc-front { padding: 20px 20px 60px !important; }
+    #prompts .pc-front { padding: 20px 20px 60px !important; }
+    /* Playbook outer grid — stack image above cards on mobile */
+    #playbook-inner > div[style*="grid"] { display: flex !important; flex-direction: column !important; gap: 32px !important; }
+    #playbook-inner > div[style*="grid"] > * { margin-bottom: 0 !important; }
   }
   @media (max-width: 480px) {
     .prompts-grid { grid-template-columns: 1fr 1fr; }
@@ -2425,17 +2442,17 @@
 
     <!-- Row 3: district names -->
     <div class="cred-districts">
-      San Diego COE
+      <span class="cred-district-name">San Diego COE</span>
       <span>·</span>
-      Vista USD
+      <span class="cred-district-name">Vista USD</span>
       <span>·</span>
-      CA BHSOAC
+      <span class="cred-district-name">CA BHSOAC</span>
       <span>·</span>
-      Santa Clara COE
+      <span class="cred-district-name">Santa Clara COE</span>
       <span>·</span>
-      San Diego USD
+      <span class="cred-district-name">San Diego USD</span>
       <span>·</span>
-      El Dorado COE
+      <span class="cred-district-name">El Dorado COE</span>
     </div>
 
   </div>

@@ -1452,7 +1452,8 @@
     transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
     border-radius: 14px;
   }
-  .prompt-card:hover .pc-inner { transform: rotateY(180deg); }
+  .prompt-card:hover .pc-inner,
+  .prompt-card.pc-force-flip .pc-inner { transform: rotateY(180deg); }
 
   /* Both faces */
   .pc-front, .pc-back {
@@ -3390,7 +3391,7 @@ function bindCardVideos() {
     const vid = card.querySelector('.pc-vid');
     if (!vid) return;
     card.addEventListener('mouseenter', () => vid.play().catch(() => {}));
-    card.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
+    card.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; card.classList.remove('pc-force-flip'); });
   });
 }
 
@@ -3658,7 +3659,7 @@ function cardPromptTiles() {
     <div class="sc-tile" id="sct${i}"
       onmouseenter="document.getElementById('sc-tlbl').textContent='${d.full}';this.style.borderColor='${d.color}';this.style.boxShadow='0 0 0 1px ${d.color}';"
       onmouseleave="document.getElementById('sc-tlbl').textContent='Hover to explore';this.style.borderColor='rgba(255,255,255,0.1)';this.style.boxShadow='';"
-      onclick="(function(){const c=document.querySelectorAll('.prompt-card');if(c[${i}])c[${i}].scrollIntoView({behavior:'smooth',block:'center'});})()">
+      onclick="(function(){const c=document.querySelectorAll('.prompt-card');if(!c[${i}])return;c[${i}].classList.add('pc-force-flip');const v=c[${i}].querySelector('.pc-vid');if(v)v.play().catch(()=>{});c[${i}].scrollIntoView({behavior:'smooth',block:'center'});})()">
       <div class="sc-tile-dot" style="background:${d.color}"></div>
       <span class="sc-tile-abbr">${d.abbr}</span>
     </div>`).join('');

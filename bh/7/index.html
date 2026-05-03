@@ -1800,6 +1800,7 @@
     margin: 0 auto;
     z-index: 3;
   }
+  .cta-logo-mobile { display: none; }
   .cta-listening-heading {
     font-size: clamp(2.4rem, 4.5vw, 4.5rem);
     font-weight: 800;
@@ -2137,8 +2138,17 @@
   #streamer-recall { display: none !important; }
     /* Section headings — smaller on mobile */
     .section-heading { font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important; }
-    /* Trust bar district names — prevent mid-name line breaks */
-    .cred-districts { font-size: 0.8rem; line-height: 2; }
+    /* Trust bar district names — single column, centered, no dots */
+    .cred-districts { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.85rem; }
+    .cred-districts > span { display: none; } /* hide dot separators */
+    .cred-district-name { white-space: nowrap; opacity: 0.65; margin: 0; }
+    /* Hero — move content up on mobile */
+    .hero { align-items: flex-start !important; }
+    .hero-content { padding-top: 100px !important; }
+    /* Prompt heading — hide forced br, let text wrap naturally */
+    .prompts-h2 br { display: none; }
+    /* Prompt cards — hide circle arrow (fix specificity) */
+    .pc-front .pc-arrow { display: none !important; }
     /* CTA buttons — stack full-width */
     .cta-listening-actions { flex-direction: column; align-items: stretch; }
     .cta-listening-btn { text-align: center; justify-content: center; padding: 14px 24px; }
@@ -2148,6 +2158,10 @@
     /* Playbook outer grid — stack image above cards on mobile */
     #playbook-inner > div[style*="grid"] { display: flex !important; flex-direction: column !important; gap: 32px !important; }
     #playbook-inner > div[style*="grid"] > * { margin-bottom: 0 !important; }
+    /* CTA section — show logo at top, hide footer logo */
+    .cta-logo-mobile { display: flex; justify-content: center; margin-bottom: 32px; }
+    .cta-logo-mobile img { height: 36px; width: auto; filter: brightness(0) invert(1); opacity: 0.7; }
+    .footer-logo { display: none; }
   }
   @media (max-width: 480px) {
     .prompts-grid { grid-template-columns: 1fr 1fr; }
@@ -2701,7 +2715,7 @@
 <section class="section" id="prompts" data-streamer-label="Screening in Progress">
   <div class="section-inner">
     <div class="section-eyebrow">Sample Questions</div>
-    <h2 class="section-heading reveal">Experience The Prompts To Hear<br>The Conversations They Open.</h2>
+    <h2 class="section-heading reveal prompts-h2">Experience The Prompts To Hear<br>The Conversations They Open.</h2>
     <p class="section-body reveal" style="transition-delay:0.1s">Each question explores one of six behavioral health domains. From emotional resilience to reflective growth, in the student's own words.</p>
 
     <div class="prompts-tabs reveal" style="transition-delay:0.15s">
@@ -2985,7 +2999,7 @@
     <div style="margin-bottom:48px;">
       <div class="section-eyebrow" style="color:#F37163;">Implementation Playbook</div>
       <h2 style="font-family:var(--font-display);font-weight:800;font-size:clamp(2rem,3.5vw,2.8rem);letter-spacing:-0.03em;line-height:1.05;color:#fff;margin:12px 0 0;">Seven Implementation Models.<br>Built From Real Schools.</h2>
-      <p style="font-family:var(--font-display);font-weight:300;font-size:18px;line-height:1.65;color:rgba(232,234,240,0.6);margin:20px 0 0;">Every model below has been run in a real school — by a real counselor, teacher, or administrator,<br>with the schedules, device counts, and staffing they actually had on the day they launched.</p>
+      <p style="font-family:var(--font-display);font-weight:300;font-size:18px;line-height:1.65;color:rgba(232,234,240,0.6);margin:20px 0 0;">Every model below has been run in a real school — by a real counselor, teacher, or administrator — with the schedules, device counts, and staffing they actually had on the day they launched.</p>
     </div>
 
     <!-- Two-column: image left, info+cards right -->
@@ -3051,6 +3065,9 @@
 <!-- CTA Section -->
 <section id="cta-listening">
   <div class="cta-listening-inner">
+    <div class="cta-logo-mobile">
+      <img src="../images/impacter-pathway-nav.svg" alt="IMPACTER Pathway">
+    </div>
     <h2 class="cta-listening-heading">Ready To Start <em>Listening?</em></h2>
     <p class="cta-listening-body">Your students have something important to say. IMPACTER creates the conditions where they can say it — and the infrastructure to act on what you hear.</p>
     <div class="cta-listening-actions">

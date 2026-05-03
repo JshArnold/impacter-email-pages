@@ -493,9 +493,17 @@
   }
 
   /* ── Voice Intelligence — ported from /bh/ ── */
-  .voice-section { background: var(--surface-inverse-deep); padding: 96px var(--gutter); }
+  .voice-section { background: #0E1A2E; padding: 96px var(--gutter); }
   .voice-section .section-h2 { color: #fff; }
   .voice-section .section-body { color: rgba(255,255,255,0.5); }
+
+  /* Panels inside Voice Intelligence — lifted off the near-black bg */
+  .voice-section .transcript-panel,
+  .voice-section .analysis-card,
+  .voice-section .live-score-panel {
+    background: #15263F;
+    border-color: rgba(255,255,255,0.1);
+  }
   .voice-player-wrap {
     display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px;
     margin-top: 48px; align-items: stretch;

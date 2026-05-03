@@ -2088,6 +2088,14 @@
     .hero-content { padding: 0 20px 80px; }
     .section { padding: 64px 20px; }
     .hero-playbook-btn { display: none; }
+    /* Hide arrow circle on prompt cards — unnecessary on mobile */
+    .pc-arrow { display: none; }
+    /* Reduce prompts heading size so it wraps cleanly */
+    #prompts .section-heading { font-size: clamp(1.5rem, 7vw, 2rem) !important; }
+    /* CTA section — reduce top padding */
+    #cta-listening { padding-top: 40px !important; }
+    /* Footer — ensure logo is on its own line, centered */
+    .footer-logo { width: 100%; display: flex; justify-content: center; margin-bottom: 4px; }
     .vi-main-heading { white-space: normal !important; font-size: clamp(1.6rem, 6vw, 2.4rem) !important; }
     .surveys-miss-heading { font-size: clamp(1.5rem, 5.5vw, 2rem) !important; white-space: normal !important; }
     .surveys-pin { display: none; }
@@ -2795,7 +2803,7 @@
 <section class="section surveys-miss-section" id="surveys-miss">
   <div class="section-inner">
     <span class="section-eyebrow" style="color:var(--coral)">The Difference</span>
-    <h2 class="section-heading reveal surveys-miss-heading">What Surveys Miss. What Voice Reveals.</h2>
+    <h2 class="section-heading reveal surveys-miss-heading">What Surveys Miss.<br>What Voice Reveals.</h2>
     <p class="section-body reveal" style="transition-delay:0.1s">A Likert scale compresses a student's entire motivational architecture into a single number. Authentic voice preserves the behavioral health competencies that make that motivation real and duplicable.</p>
     <div class="sm-split reveal" style="transition-delay:0.2s">
       <!-- LEFT: Traditional Survey -->

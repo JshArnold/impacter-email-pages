@@ -306,7 +306,7 @@
   /* ── Stats Strip ── */
   /* ── Credibility Band (single unified section) ── */
   .cred-band {
-    background: #F4EDE3;
+    background: #FAF6F0;
     padding: 52px 40px;
     border-top: none;
     border-bottom: none;
@@ -781,7 +781,7 @@
 
   .surveys-pin {
     position: relative;
-    background: #0A0E14;
+    background: #1E3A6E;
     padding: 0;
   }
   .surveys-stage {
@@ -1649,13 +1649,14 @@
   }
   .bhssa-validation strong { color: #fff; }
 
-  /* ── BHSSA cream override ── */
-  #bhssa { background: #F4EDE3; }
-  #bhssa .bhssa-badge { background: rgba(99,142,197,0.12); border-color: rgba(99,142,197,0.25); color: #3A6FAB; }
-  #bhssa .section-heading { color: #0F1B2E; }
-  #bhssa .bhssa-validation { background: rgba(243,113,99,0.07); border-left-color: var(--coral); }
-  #bhssa .bhssa-validation p { color: rgba(15,27,46,0.75); }
-  #bhssa .bhssa-validation strong { color: #0F1B2E; }
+  /* ── BHSSA deep navy ── */
+  #bhssa { background: #0F1B2E; }
+  #bhssa .section-eyebrow { color: var(--coral); }
+  #bhssa .bhssa-badge { background: rgba(99,142,197,0.18); border-color: rgba(99,142,197,0.3); color: #8FB8E8; }
+  #bhssa .section-heading { color: #fff; }
+  #bhssa .bhssa-validation { background: rgba(243,113,99,0.1); border-left-color: var(--coral); }
+  #bhssa .bhssa-validation p { color: rgba(255,255,255,0.7); }
+  #bhssa .bhssa-validation strong { color: #fff; }
 
   /* ── CYBHI Funding ── */
   .cybhi-inner {
@@ -1994,50 +1995,50 @@
     .cybhi-grid { grid-template-columns: 1fr; }
     .hero-headline { font-size: 2.2rem; }
   }
-  /* ── #prompts LIGHT CREAM OVERRIDE ── */
-  #prompts { background: #F4EDE3; }
+  /* ── #prompts DEEP NAVY ── */
+  #prompts { background: #0F1B2E; }
   #prompts .section-eyebrow { color: var(--coral); }
-  #prompts .section-heading { color: #0F1B2E; }
-  #prompts .section-body { color: #5A6270; }
+  #prompts .section-heading { color: #fff; }
+  #prompts .section-body { color: rgba(255,255,255,0.6); }
 
   /* Grade toggle tabs */
-  #prompts .prompt-tab { color: #5A6270; border: 1.5px solid rgba(15,27,46,0.18); }
-  #prompts .prompt-tab:hover { background: rgba(15,27,46,0.06); color: #0F1B2E; border-color: rgba(15,27,46,0.3); }
+  #prompts .prompt-tab { color: rgba(255,255,255,0.6); border: 1.5px solid rgba(255,255,255,0.14); }
+  #prompts .prompt-tab:hover { background: rgba(255,255,255,0.07); color: #fff; border-color: rgba(255,255,255,0.3); }
   #prompts .prompt-tab.active { background: var(--coral); color: #fff; border-color: transparent; }
 
-  /* Card front — white card on cream bg */
+  /* Card front — dark card on navy bg */
   #prompts .pc-front {
-    background: #fff;
-    border: 1px solid rgba(15,27,46,0.09);
+    background: #162236;
+    border: 1px solid rgba(255,255,255,0.08);
   }
-  #prompts .prompt-card:hover .pc-front { border-color: rgba(15,27,46,0.18); }
+  #prompts .prompt-card:hover .pc-front { border-color: rgba(255,255,255,0.18); }
   #prompts .prompt-card:hover .pc-front::before { opacity: 0.7; }
 
   /* Text on front */
-  #prompts .prompt-card h4 { color: #0F1B2E; }
-  #prompts .prompt-card p  { color: rgba(15,27,46,0.55); }
+  #prompts .prompt-card h4 { color: #fff; }
+  #prompts .prompt-card p  { color: rgba(255,255,255,0.5); }
 
   /* Arrow badge */
   #prompts .pc-front .pc-arrow {
-    background: rgba(15,27,46,0.05);
-    border: 1px solid rgba(15,27,46,0.12);
-    color: #0F1B2E;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.7);
   }
 
-  /* Comp chips — darker text for cream/white bg */
-  #prompts .prompt-card        .comp { background: rgba(99,142,197,0.12);  color: #3A6FAB; }
-  #prompts .prompt-card.coral  .comp { background: rgba(243,113,99,0.12);  color: #C44035; }
-  #prompts .prompt-card.green  .comp { background: rgba(95,168,118,0.12);  color: #39875A; }
-  #prompts .prompt-card.gold   .comp { background: rgba(224,176,70,0.12);  color: #8A6A10; }
-  #prompts .prompt-card.blue   .comp { background: rgba(99,142,197,0.12);  color: #3A6FAB; }
-  #prompts .prompt-card.purple .comp { background: rgba(178,122,182,0.12); color: #7A3E82; }
-  #prompts .prompt-card.teal   .comp { background: rgba(79,164,122,0.12);  color: #2A7A5E; }
+  /* Comp chips — light tints on dark bg */
+  #prompts .prompt-card        .comp { background: rgba(99,142,197,0.18);  color: #8FB8E8; }
+  #prompts .prompt-card.coral  .comp { background: rgba(243,113,99,0.18);  color: #F5A097; }
+  #prompts .prompt-card.green  .comp { background: rgba(95,168,118,0.18);  color: #7FCC99; }
+  #prompts .prompt-card.gold   .comp { background: rgba(224,176,70,0.18);  color: #E8C96A; }
+  #prompts .prompt-card.blue   .comp { background: rgba(99,142,197,0.18);  color: #8FB8E8; }
+  #prompts .prompt-card.purple .comp { background: rgba(178,122,182,0.18); color: #D4A0D8; }
+  #prompts .prompt-card.teal   .comp { background: rgba(79,164,122,0.18);  color: #7FD4B0; }
 
   /* ── SURVEYS MISS SECTION ── */
-  .surveys-miss-section { background: #F4EDE3; }
+  .surveys-miss-section { background: #EFE9E2; }
   .surveys-miss-section .section-eyebrow { color: var(--coral) !important; }
-  .surveys-miss-section .section-heading { color: #0F1B2E; max-width: none; white-space: nowrap; }
-  .surveys-miss-section .section-body { color: #5A6270; }
+  .surveys-miss-section .section-heading { color: #0A0A0A; max-width: none; white-space: nowrap; }
+  .surveys-miss-section .section-body { color: rgba(10,10,10,0.6); }
 
   .sm-split {
     display: grid; grid-template-columns: 1fr 1fr; gap: 0;

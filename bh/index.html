@@ -2363,7 +2363,47 @@
     #playbook { padding: 60px 20px !important; display: block !important; }
     #playbook-inner { width: 100% !important; transform: none !important; padding: 0 !important; }
 
+    /* ── Hero ── */
+    /* Hide "Hear It in Action", keep Download Playbook */
+    .btn-primary { display: none !important; }
+    /* Stack the remaining button and give it breathing room above waveform */
+    .hero-actions { flex-direction: column; align-items: flex-start; gap: 0; }
+    .hero-content { padding-bottom: 120px !important; }
+
+    /* ── Credibility metrics — center numbers + labels ── */
+    .cred-metric { text-align: center; }
+    .cred-lbl { max-width: none; }
+
+    /* ── CYBHI — single column (3-col overflows viewport) ── */
+    .cybhi-grid { grid-template-columns: 1fr !important; }
+
+    /* ── "What Surveys Miss." forced break ── */
+    .sm-break { display: inline; }
+
+    /* ── CTA heading — "Listening?" overflows on narrow screens ── */
+    .cta-listening-heading {
+      white-space: normal !important;
+      font-size: clamp(2rem, 9vw, 3rem) !important;
+    }
+
+    /* ── Playbook — hide cover image, stack cards full-width ── */
+    #playbook-inner > div:nth-child(2) {
+      grid-template-columns: 1fr !important;
+    }
+    #playbook-inner > div:nth-child(2) > div:first-child { display: none !important; }
+    #playbook-inner > div:nth-child(2) > div:last-child { width: 100%; }
+    #playbook-inner > div:nth-child(2) > div:last-child > div {
+      grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* ── Footer — hide logo, stack links as column ── */
+    .footer-logo { display: none !important; }
+    .footer-links { flex-direction: column; align-items: center; gap: 12px; }
+
   }
+
+  /* Hide mobile-only line-break on desktop */
+  .sm-break { display: none; }
 
 </style>
 </head>
@@ -2828,7 +2868,7 @@
 <section class="section surveys-miss-section" id="surveys-miss">
   <div class="section-inner">
     <span class="section-eyebrow" style="color:var(--coral)">The Difference</span>
-    <h2 class="section-heading reveal">What Surveys Miss. What Voice Reveals.</h2>
+    <h2 class="section-heading reveal">What Surveys Miss.<br class="sm-break"> What Voice Reveals.</h2>
     <p class="section-body reveal" style="transition-delay:0.1s">A Likert scale compresses a student's entire motivational architecture into a single number. Authentic voice preserves the behavioral health competencies that make that motivation real and duplicable.</p>
     <div class="sm-split reveal" style="transition-delay:0.2s">
       <!-- LEFT: Traditional Survey -->

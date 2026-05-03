@@ -2048,7 +2048,7 @@
   #prompts .pc-front {
     background: #fff;
     border: 1px solid rgba(15,27,46,0.09);
-    padding-bottom: 96px; /* extra room for signal depth bars above arrow */
+    padding-bottom: 80px; /* extra room for signal depth bars above arrow */
   }
   #prompts .prompt-card:hover .pc-front { border-color: rgba(15,27,46,0.18); }
   #prompts .prompt-card:hover .pc-front::before { opacity: 0.7; }
@@ -3340,21 +3340,21 @@ const promptsTK2 = [
 
 const cardColors = ['blue','coral','green','gold','purple','teal'];
 
-// Signal depth per domain
+// Signal depth per domain (8 bars total, fills 4–8)
 const signalDepth = {
-  'Self-Insight':           { fill: 9, label: 'DEEP', color: '#638EC5' },
-  'Emotional Resilience':   { fill: 8, label: 'DEEP', color: '#F37163' },
-  'Relational Awareness':   { fill: 7, label: 'RICH', color: '#5FA876' },
-  'Conflict Resolution':    { fill: 8, label: 'DEEP', color: '#E8B547' },
-  'Effective Help-Seeking': { fill: 6, label: 'RICH', color: '#8B6FB8' },
-  'Reflective Growth':      { fill: 9, label: 'DEEP', color: '#45B0A0' },
+  'Self-Insight':           { fill: 8, label: 'DEEP', color: '#638EC5' },
+  'Emotional Resilience':   { fill: 7, label: 'DEEP', color: '#F37163' },
+  'Relational Awareness':   { fill: 6, label: 'RICH', color: '#5FA876' },
+  'Conflict Resolution':    { fill: 7, label: 'DEEP', color: '#E8B547' },
+  'Effective Help-Seeking': { fill: 5, label: 'RICH', color: '#8B6FB8' },
+  'Reflective Growth':      { fill: 8, label: 'DEEP', color: '#45B0A0' },
 };
 function buildSignalBars(domain) {
-  const s = signalDepth[domain] || { fill: 7, label: 'RICH', color: '#638EC5' };
-  const bars = Array.from({length:10}, (_,i) => {
+  const s = signalDepth[domain] || { fill: 6, label: 'RICH', color: '#638EC5' };
+  const bars = Array.from({length:8}, (_,i) => {
     if (i < s.fill) {
       const isLast = i === s.fill - 1;
-      const pulse  = isLast && s.fill >= 7 ? ' sd-pulse' : '';
+      const pulse  = isLast && s.fill >= 6 ? ' sd-pulse' : '';
       return `<div class="signal-depth-bar filled${pulse}" style="background:${s.color};--bi:${i}"></div>`;
     }
     return `<div class="signal-depth-bar"></div>`;
@@ -3404,6 +3404,16 @@ function renderPrompts(list) {
     </div>
   `).join('');
   bindCardVideos();
+  // Re-trigger animation immediately if section is already in view (e.g. grade switch)
+  requestAnimationFrame(() => {
+    const sec = document.getElementById('prompts');
+    if (!sec) return;
+    const r = sec.getBoundingClientRect();
+    if (r.top < window.innerHeight * 0.8 && r.bottom > 0 && !promptsBarsAnimated) {
+      promptsBarsAnimated = true;
+      document.getElementById('prompts-grid').classList.add('sd-animated');
+    }
+  });
 }
 
 function bindCardVideos() {

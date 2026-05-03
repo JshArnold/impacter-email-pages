@@ -1452,7 +1452,7 @@
     transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
     border-radius: 14px;
   }
-  .prompt-card:hover .pc-inner { transform: rotateY(180deg); }
+  .prompt-card.pc-flipped .pc-inner { transform: rotateY(180deg); }
 
   /* Both faces */
   .pc-front, .pc-back {
@@ -2041,6 +2041,19 @@
   .sc-check-ico { color:#4ade80; font-weight:800; font-size:12px; }
   .sc-check-text { font-size:12px; color:rgba(255,255,255,0.65); }
   .sc-foot-text { font-size:10px; color:rgba(139,164,190,0.45); margin-top:6px; font-style:italic; }
+
+  /* VideoAsk inline iframe on flipped card back */
+  .pc-va-iframe { width:100%; height:100%; border:none; display:block; border-radius:14px; }
+  .pc-back-close { position:absolute; top:8px; right:8px; z-index:10; width:26px; height:26px; border-radius:50%; background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.25); color:rgba(255,255,255,0.85); font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; padding:0; }
+
+  /* Next Steps CTA rows */
+  .sc-next-actions { display:flex; flex-direction:column; gap:7px; margin:4px 0 6px; }
+  .sc-next-row { display:flex; justify-content:space-between; align-items:center; padding:11px 14px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.09); border-radius:8px; text-decoration:none; color:rgba(255,255,255,0.8); font-size:13px; font-weight:600; font-family:var(--font-display); transition:background 0.15s,border-color 0.15s; }
+  .sc-next-row:hover { background:rgba(255,255,255,0.09); border-color:rgba(255,255,255,0.18); }
+  .sc-next-highlight { color:#F37163 !important; background:rgba(243,113,99,0.12) !important; border-color:rgba(243,113,99,0.25) !important; }
+  .sc-next-highlight:hover { background:rgba(243,113,99,0.18) !important; border-color:rgba(243,113,99,0.4) !important; }
+  .sc-next-arrow { color:rgba(255,255,255,0.4); font-size:14px; }
+  .sc-next-highlight .sc-next-arrow { color:rgba(243,113,99,0.7); }
   .sl-name { font-size:12px; font-weight:500; color:rgba(214,231,241,0.8); }
   /* Model heard quote transition */
   #smh-quote, #smh-pill { transition: opacity 0.2s ease; }
@@ -3336,11 +3349,13 @@ const cardDescs = {
 };
 let promptsBarsAnimated = false;
 function renderPrompts(list) {
+  _currentPromptList = list;
+  _flippedCardIdx = null;
   const grid = document.getElementById('prompts-grid');
   grid.classList.remove('sd-animated');
   promptsBarsAnimated = false;
   grid.innerHTML = list.map((p, i) => `
-    <div class="prompt-card ${cardColors[i % cardColors.length]} in-view" style="transition-delay:${0.05 * i}s">
+    <div class="prompt-card ${cardColors[i % cardColors.length]} in-view" style="transition-delay:${0.05 * i}s;cursor:pointer;" onclick="if(!this.classList.contains('pc-flipped'))flipCard(${i})" onmouseenter="if(typeof _flippedCardIdx!=='undefined'&&_flippedCardIdx!==null&&_flippedCardIdx!==${i})unflipAll()">
       <div class="pc-inner">
         <div class="pc-front">
           <span class="comp">${p.domain}</span>
@@ -3349,17 +3364,13 @@ function renderPrompts(list) {
           ${buildSignalBars(p.domain)}
           <span class="pc-arrow">↗</span>
         </div>
-        <div class="pc-back" onclick="openModal('${p.url}','${p.domain}')">
-          <video class="pc-vid" muted loop playsinline preload="none"><source src="${p.vid || '/bh/images/prompt-1.mp4'}" type="video/mp4"></video>
-          <div class="pc-back-overlay">
-            <div class="pc-back-label">${p.domain}</div>
-            <div class="pc-back-cta">▶&nbsp; Try this prompt</div>
-          </div>
+        <div class="pc-back">
+          <iframe class="pc-va-iframe" src="" allow="camera;microphone;autoplay;encrypted-media;fullscreen" allowfullscreen></iframe>
+          <button class="pc-back-close" onclick="event.stopPropagation();unflipAll()">✕</button>
         </div>
       </div>
     </div>
   `).join('');
-  bindCardVideos();
   // Re-trigger animation immediately if section is already in view (e.g. grade switch)
   requestAnimationFrame(() => {
     const sec = document.getElementById('prompts');
@@ -3372,13 +3383,45 @@ function renderPrompts(list) {
   });
 }
 
-function bindCardVideos() {
-  document.querySelectorAll('.prompt-card').forEach(card => {
-    const vid = card.querySelector('.pc-vid');
-    if (!vid) return;
-    card.addEventListener('mouseenter', () => vid.play().catch(() => {}));
-    card.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
+/* ── Prompt card flip system ── */
+let _flippedCardIdx = null;
+let _currentPromptList = [];
+
+function flipCard(idx) {
+  const cards = document.querySelectorAll('#prompts-grid .prompt-card');
+  if (_flippedCardIdx !== null && _flippedCardIdx !== idx) {
+    const cur = cards[_flippedCardIdx];
+    if (cur) {
+      cur.classList.remove('pc-flipped');
+      const iframe = cur.querySelector('.pc-va-iframe');
+      if (iframe) iframe.src = '';
+    }
+  }
+  if (_flippedCardIdx === idx) {
+    const card = cards[idx];
+    if (card) {
+      card.classList.remove('pc-flipped');
+      const iframe = card.querySelector('.pc-va-iframe');
+      if (iframe) iframe.src = '';
+    }
+    _flippedCardIdx = null;
+    return;
+  }
+  const card = cards[idx];
+  if (!card) return;
+  card.classList.add('pc-flipped');
+  const iframe = card.querySelector('.pc-va-iframe');
+  if (iframe && _currentPromptList[idx]) iframe.src = _currentPromptList[idx].url;
+  _flippedCardIdx = idx;
+}
+
+function unflipAll() {
+  document.querySelectorAll('#prompts-grid .prompt-card').forEach(c => {
+    c.classList.remove('pc-flipped');
+    const iframe = c.querySelector('.pc-va-iframe');
+    if (iframe) iframe.src = '';
   });
+  _flippedCardIdx = null;
 }
 
 let currentGrade = '3-12';
@@ -3645,7 +3688,7 @@ function cardPromptTiles() {
     <div class="sc-tile" id="sct${i}"
       onmouseenter="document.getElementById('sc-tlbl').textContent='${d.full}';this.style.borderColor='${d.color}';this.style.boxShadow='0 0 0 1px ${d.color}';"
       onmouseleave="document.getElementById('sc-tlbl').textContent='Hover to explore';this.style.borderColor='rgba(255,255,255,0.1)';this.style.boxShadow='';"
-      onclick="(function(){const c=document.querySelectorAll('.prompt-card');if(c[${i}])c[${i}].scrollIntoView({behavior:'smooth',block:'center'});})()">
+      onclick="flipCard(${i})">
       <div class="sc-tile-dot" style="background:${d.color}"></div>
       <span class="sc-tile-abbr">${d.abbr}</span>
     </div>`).join('');
@@ -3747,26 +3790,26 @@ function activateLaunchSequence() {
   _scTimers.push(t);
 }
 
-/* Card 7 – READY TO LAUNCH checklist (cta-listening, stats) */
-function cardReadyToLaunch() {
-  const items=['Practitioners trained','CYBHI enrolled','Consent collected','Data governance confirmed'];
-  return `<div class="sc-ctx">Implementation guide available</div>
-    <div class="sc-checklist">
-      ${items.map((s,i)=>`<div class="sc-check-item" id="sc-chk${i}" style="opacity:0;transform:translateX(-6px)"><span class="sc-check-ico">✓</span><span class="sc-check-text">${s}</span></div>`).join('')}
-    </div>
-    <div id="sc-chkfoot" class="sc-foot-text" style="opacity:0">Implementation guide available</div>`;
+/* Card 7 – NEXT STEPS CTA (cta-listening, playbook, stats) */
+const NEXT_ACTIONS = [
+  { label:'Try the screener', url:'https://sdcoe.impacterpathway.com/fu58vkone?preview', external:true, highlight:true },
+  { label:'Read the playbook', url:'#playbook', external:false },
+  { label:'Talk to us', url:'mailto:josh@impacterpathway.com', external:false },
+];
+function cardNextSteps() {
+  const rows = NEXT_ACTIONS.map((a,i)=>`
+    <a href="${a.url}" ${a.external?'target="_blank" rel="noopener"':''} class="sc-next-row${a.highlight?' sc-next-highlight':''}" id="sc-nr${i}" style="opacity:0;transform:translateY(5px)">${a.label}<span class="sc-next-arrow">→</span></a>`).join('');
+  return `<div class="sc-ctx">Ready when you are</div><div class="sc-next-actions">${rows}</div>`;
 }
-function activateReadyToLaunch() {
-  for(let i=0;i<4;i++){
+function activateNextSteps() {
+  for(let i=0;i<NEXT_ACTIONS.length;i++){
     const t=setTimeout(()=>{
-      const el=document.getElementById('sc-chk'+i); if(!el) return;
-      el.style.transition='opacity 0.25s ease,transform 0.25s ease';
-      el.style.opacity='1'; el.style.transform='translateX(0)';
-    },150+i*120);
+      const el=document.getElementById('sc-nr'+i); if(!el) return;
+      el.style.transition='opacity 0.22s ease,transform 0.22s ease';
+      el.style.opacity='1'; el.style.transform='translateY(0)';
+    },100+i*100);
     _scTimers.push(t);
   }
-  const tf=setTimeout(()=>{ const el=document.getElementById('sc-chkfoot'); if(el){el.style.transition='opacity 0.3s ease';el.style.opacity='1';}},800);
-  _scTimers.push(tf);
 }
 
 /* Section → card map */
@@ -3776,9 +3819,9 @@ const SC_MAP = {
   'prompts':            { label:'6 PROMPTS READY',      html:cardPromptTiles,     activate:activatePromptTiles,    bg:'cream' },
   'surveys-miss':       { label:'WHAT THE MODEL HEARD', html:cardModelHeard,      activate:activateModelHeard,     bg:'cream' },
   'bhssa':              { label:'STATE SELECTED',       html:cardStateSelected,   activate:activateStateSelected   },
-  'playbook':           { label:'READY TO LAUNCH',      html:cardLaunchSequence,  activate:activateLaunchSequence  },
-  'cta-listening':      { label:'READY TO LAUNCH',      html:cardReadyToLaunch,   activate:activateReadyToLaunch   },
-  'stats':              { label:'PILOT OUTCOMES',       html:cardReadyToLaunch,   activate:activateReadyToLaunch   },
+  'playbook':           { label:'NEXT STEPS',           html:cardNextSteps,       activate:activateNextSteps       },
+  'cta-listening':      { label:'NEXT STEPS',           html:cardNextSteps,       activate:activateNextSteps       },
+  'stats':              { label:'NEXT STEPS',           html:cardNextSteps,       activate:activateNextSteps       },
 };
 
 const streamer   = document.getElementById('streamer');

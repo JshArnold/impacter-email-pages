@@ -2,7 +2,13 @@
   "trailingSlash": true,
   "redirects": [
     {
-      "source": "/((?!bh/7/).*)",
+      "source": "/bh/",
+      "has": [{ "type": "host", "value": "pages.impacterpathway.com" }],
+      "destination": "/bh/7/",
+      "permanent": false
+    },
+    {
+      "source": "/((?!bh/).*)",
       "has": [{ "type": "host", "value": "pages.impacterpathway.com" }],
       "destination": "/bh/7/",
       "permanent": false

@@ -2767,79 +2767,59 @@
       <p style="font-family:var(--font-display);font-weight:300;font-size:18px;line-height:1.65;color:rgba(232,234,240,0.6);max-width:72ch;margin:20px 0 0;">Every model below has been run in a real school — by a real counselor, teacher, or administrator, with the schedules, device counts, and staffing they actually had on the day they launched.</p>
     </div>
 
-    <!-- Two-column: image + info -->
-    <div style="display:grid;grid-template-columns:0.9fr 1.1fr;gap:80px;align-items:center;margin-bottom:64px;">
+    <!-- Two-column: image + info + cards all in right column -->
+    <div style="display:grid;grid-template-columns:0.9fr 1.1fr;gap:80px;align-items:start;">
       <!-- Cover image -->
       <div style="border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.5);transition:transform .4s ease,box-shadow .4s ease;" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 44px 100px rgba(0,0,0,0.65)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 30px 80px rgba(0,0,0,0.5)'">
         <img src="../images/playbook-cover.png" alt="BHS Implementation Playbook" style="display:block;width:100%;">
       </div>
-      <!-- Info -->
-      <div>
-        <h3 style="font-family:var(--font-display);font-weight:800;font-size:clamp(26px,2.8vw,40px);letter-spacing:-0.025em;line-height:1.05;color:#fff;margin:0 0 20px;">One blueprint.<br>Every constraint.</h3>
-        <p style="font-family:var(--font-display);font-weight:300;font-size:17px;line-height:1.65;color:rgba(232,234,240,0.65);max-width:52ch;margin:0 0 32px;">Every model in the playbook includes the logistics, the scripts, and the 30-minute quick-launch sequence. From homeroom block to mobile cart to home — pick the one that fits your reality, and you can be screening by tomorrow.</p>
-        <a href="../playbook.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:#F37163;color:#fff;font-family:var(--font-display);font-weight:700;font-size:15px;padding:16px 28px;border-radius:999px;text-decoration:none;box-shadow:0 8px 32px rgba(243,113,99,0.35);transition:transform .25s,box-shadow .25s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 40px rgba(243,113,99,0.5)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 32px rgba(243,113,99,0.35)'">Download Playbook (PDF) →</a>
+      <!-- Info + cards -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div>
+          <h3 style="font-family:var(--font-display);font-weight:800;font-size:clamp(22px,2.4vw,34px);letter-spacing:-0.025em;line-height:1.05;color:#fff;margin:0 0 12px;">One blueprint. Every constraint.</h3>
+          <p style="font-family:var(--font-display);font-weight:300;font-size:15px;line-height:1.6;color:rgba(232,234,240,0.65);margin:0;">Pick the model that fits your reality — every one comes with logistics, scripts, and a 30-minute launch sequence.</p>
+        </div>
+        <!-- 2×4 compact cards -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
+            <div style="font-family:var(--font-display);font-weight:700;font-size:13px;color:#fff;margin-bottom:3px;">Class period block</div>
+            <div style="font-size:11px;color:#F37163;font-weight:600;">Universal coverage · 20–30 min.</div>
+          </div>
+          <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
+            <div style="font-family:var(--font-display);font-weight:700;font-size:13px;color:#fff;margin-bottom:3px;">Mobile assessment cart</div>
+            <div style="font-size:11px;color:#F37163;font-weight:600;">Pop-up flexibility · K–12.</div>
+          </div>
+          <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
+            <div style="font-family:var(--font-display);font-weight:700;font-size:13px;color:#fff;margin-bottom:3px;">Small-group testing</div>
+            <div style="font-size:11px;color:#F37163;font-weight:600;">Quiet, controlled environment.</div>
+          </div>
+          <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
+            <div style="font-family:var(--font-display);font-weight:700;font-size:13px;color:#fff;margin-bottom:3px;">Push-in mini-stations</div>
+            <div style="font-size:11px;color:#F37163;font-weight:600;">Support / IEP-friendly.</div>
+          </div>
+          <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
+            <div style="font-family:var(--font-display);font-weight:700;font-size:13px;color:#fff;margin-bottom:3px;">Pull-out targeted</div>
+            <div style="font-size:11px;color:#F37163;font-weight:600;">IEP/504 · multilingual · tech anxiety.</div>
+          </div>
+          <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
+            <div style="font-family:var(--font-display);font-weight:700;font-size:13px;color:#fff;margin-bottom:3px;">Family-assisted remote</div>
+            <div style="font-size:11px;color:#F37163;font-weight:600;">Homebound · absences · home share.</div>
+          </div>
+          <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
+            <div style="font-family:var(--font-display);font-weight:700;font-size:13px;color:#fff;margin-bottom:3px;">Student-guided window</div>
+            <div style="font-size:11px;color:#F37163;font-weight:600;">Self-paced · multi-day window.</div>
+          </div>
+          <!-- CTA slot -->
+          <a href="../playbook.pdf" target="_blank" rel="noopener" style="padding:12px 14px;background:rgba(243,113,99,0.08);border:1px solid rgba(243,113,99,0.25);border-radius:10px;text-decoration:none;display:flex;flex-direction:column;justify-content:center;gap:4px;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='rgba(243,113,99,0.5)';this.style.background='rgba(243,113,99,0.14)'" onmouseout="this.style.borderColor='rgba(243,113,99,0.25)';this.style.background='rgba(243,113,99,0.08)'">
+            <div style="font-family:var(--font-display);font-weight:700;font-size:13px;color:#F37163;">All 7 models →</div>
+            <div style="font-size:11px;color:rgba(232,234,240,0.5);">Download full playbook (PDF)</div>
+          </a>
+        </div>
+        <!-- Download button -->
+        <div>
+          <a href="../playbook.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:#F37163;color:#fff;font-family:var(--font-display);font-weight:700;font-size:15px;padding:16px 28px;border-radius:999px;text-decoration:none;box-shadow:0 8px 32px rgba(243,113,99,0.35);transition:transform .25s,box-shadow .25s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 40px rgba(243,113,99,0.5)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 32px rgba(243,113,99,0.35)'">Download Playbook (PDF) →</a>
+        </div>
       </div>
-    </div>
-
-    <!-- 4×2 deployment model cards grid -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
-
-      <!-- Card 1 -->
-      <div style="padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;transition:border-color .25s,background .25s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
-        <div style="font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;margin-bottom:4px;">Class period block</div>
-        <div style="font-size:12px;color:#F37163;font-weight:600;margin-bottom:10px;">Universal coverage · 20–30 min.</div>
-        <div style="font-size:13px;color:rgba(232,234,240,0.6);line-height:1.55;">All students in one familiar space, devices ready. Homeroom or advisory works perfectly — minimal schedule disruption, maximum participation.</div>
-      </div>
-
-      <!-- Card 2 -->
-      <div style="padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;transition:border-color .25s,background .25s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
-        <div style="font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;margin-bottom:4px;">Mobile assessment cart</div>
-        <div style="font-size:12px;color:#F37163;font-weight:600;margin-bottom:10px;">Pop-up flexibility · K–12.</div>
-        <div style="font-size:13px;color:rgba(232,234,240,0.6);line-height:1.55;">Limited devices become an asset. A rolling cart turns any space into a screening center — classroom corner, hallway alcove, even an outdoor table.</div>
-      </div>
-
-      <!-- Card 3 -->
-      <div style="padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;transition:border-color .25s,background .25s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
-        <div style="font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;margin-bottom:4px;">Small-group testing</div>
-        <div style="font-size:12px;color:#F37163;font-weight:600;margin-bottom:10px;">Quiet, controlled environment.</div>
-        <div style="font-size:13px;color:rgba(232,234,240,0.6);line-height:1.55;">Wellness centers, libraries, and labs become screening sanctuaries. For students who share more authentically in calmer, structured spaces.</div>
-      </div>
-
-      <!-- Card 4 -->
-      <div style="padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;transition:border-color .25s,background .25s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
-        <div style="font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;margin-bottom:4px;">Push-in mini-stations</div>
-        <div style="font-size:12px;color:#F37163;font-weight:600;margin-bottom:10px;">Support / IEP-friendly.</div>
-        <div style="font-size:13px;color:rgba(232,234,240,0.6);line-height:1.55;">Specialized support in the classroom. Four to six recording stations operate alongside regular instruction — accommodations without disruption.</div>
-      </div>
-
-      <!-- Card 5 -->
-      <div style="padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;transition:border-color .25s,background .25s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
-        <div style="font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;margin-bottom:4px;">Pull-out targeted</div>
-        <div style="font-size:12px;color:#F37163;font-weight:600;margin-bottom:10px;">Personalized care.</div>
-        <div style="font-size:13px;color:rgba(232,234,240,0.6);line-height:1.55;">Individualized attention for IEP/504 accommodations, multilingual learners, or students with tech anxiety. Fifteen to twenty minutes per student.</div>
-      </div>
-
-      <!-- Card 6 -->
-      <div style="padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;transition:border-color .25s,background .25s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
-        <div style="font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;margin-bottom:4px;">Family-assisted remote</div>
-        <div style="font-size:12px;color:#F37163;font-weight:600;margin-bottom:10px;">Home connection.</div>
-        <div style="font-size:13px;color:rgba(232,234,240,0.6);line-height:1.55;">For absences, homebound learners, or students who share more authentically at home. Flexible submission window with a step-by-step family flyer.</div>
-      </div>
-
-      <!-- Card 7 -->
-      <div style="padding:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;transition:border-color .25s,background .25s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='rgba(255,255,255,0.03)'">
-        <div style="font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;margin-bottom:4px;">Student-guided window</div>
-        <div style="font-size:12px;color:#F37163;font-weight:600;margin-bottom:10px;">Self-paced completion.</div>
-        <div style="font-size:13px;color:rgba(232,234,240,0.6);line-height:1.55;">Mature secondary students choose when and where to complete. Library pod, counselor office, or home — multi-day window with reminders and tracking.</div>
-      </div>
-
-      <!-- Card 8 — CTA slot -->
-      <a href="../playbook.pdf" target="_blank" rel="noopener" style="padding:20px;background:rgba(243,113,99,0.08);border:1px solid rgba(243,113,99,0.25);border-radius:12px;text-decoration:none;display:flex;flex-direction:column;justify-content:center;gap:12px;transition:border-color .25s,background .25s;" onmouseover="this.style.borderColor='rgba(243,113,99,0.5)';this.style.background='rgba(243,113,99,0.14)'" onmouseout="this.style.borderColor='rgba(243,113,99,0.25)';this.style.background='rgba(243,113,99,0.08)'">
-        <div style="font-family:var(--font-display);font-weight:700;font-size:14px;color:#F37163;">All seven models.</div>
-        <div style="font-size:13px;color:rgba(232,234,240,0.6);line-height:1.55;">Full logistics, staffing guides, scripts, and 30-minute launch sequences for every model in one place.</div>
-        <div style="font-family:var(--font-display);font-weight:700;font-size:13px;color:#F37163;">Download the playbook →</div>
-      </a>
-
     </div>
   </div>
 </section>

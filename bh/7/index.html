@@ -11,7 +11,6 @@
 <style>
   /* ── Reset & Base ── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { overflow-x: hidden; }
 
   :root {
     --coral: #F37163;
@@ -128,9 +127,6 @@
   @media (max-width: 860px) {
     .nav-links a:not(.nav-cta) { display: none; }
     .main-nav { padding: 10px 12px 10px 18px; }
-  }
-  @media (max-width: 768px) {
-    .main-nav { display: none !important; }
   }
 
   /* ── Hero ── */
@@ -391,10 +387,6 @@
   .cred-districts span {
     margin: 0 12px;
     opacity: 0.5;
-  }
-  .cred-district-name {
-    white-space: nowrap;
-    opacity: 1;
   }
 
   /* ── Logo marquee (below credibility band) ── */
@@ -1635,7 +1627,7 @@
     width: 100%;
     border-radius: 16px;
     display: block;
-    filter: none;
+    filter: blur(0.4px) contrast(1.02);
     image-rendering: auto;
   }
   .bhssa-badge {
@@ -1808,9 +1800,6 @@
     margin: 0 0 28px;
     letter-spacing: -0.02em;
     white-space: nowrap;
-  }
-  @media (max-width: 768px) {
-    .cta-listening-heading { white-space: normal !important; font-size: clamp(2rem, 8vw, 3rem) !important; }
   }
   .cta-listening-heading em {
     font-style: italic;
@@ -2087,26 +2076,12 @@
 
   /* ── Mobile ── */
   @media (max-width: 768px) {
-    html, body { overflow-x: hidden; max-width: 100%; }
     nav { padding: 16px 20px; }
     .hero-content { padding: 0 20px 80px; }
     .section { padding: 64px 20px; }
-    .hero-playbook-btn { display: none; }
-    /* Hide arrow circle on prompt cards — unnecessary on mobile */
-    .pc-arrow { display: none; }
-    /* Reduce prompts heading size so it wraps cleanly */
-    #prompts .section-heading { font-size: clamp(1.5rem, 7vw, 2rem) !important; }
-    /* CTA section — reduce top padding */
-    #cta-listening { padding-top: 40px !important; }
-    /* Footer — ensure logo is on its own line, centered */
-    .footer-logo { width: 100%; display: flex; justify-content: center; margin-bottom: 4px; }
-    .vi-main-heading { white-space: normal !important; font-size: clamp(1.6rem, 6vw, 2.4rem) !important; }
-    .surveys-miss-heading { font-size: clamp(1.5rem, 5.5vw, 2rem) !important; white-space: normal !important; }
-    .surveys-pin { display: none; }
     .cred-metrics { grid-template-columns: repeat(2, 1fr); gap: 28px 0; }
-    .cred-metric { padding: 0 20px; border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 20px; text-align: center; }
-    .cred-metric:nth-child(odd) { padding-left: 20px; }
-    .cred-metric:first-child { padding-left: 20px; }
+    .cred-metric { padding: 0 20px; border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 20px; }
+    .cred-metric:nth-child(odd) { padding-left: 0; }
     .cred-metric:nth-last-child(-n+2) { border-bottom: none; }
     .cred-band { padding: 40px 24px; }
     .voice-player-wrap { grid-template-columns: 1fr; gap: 32px; }
@@ -2123,51 +2098,14 @@
     .prompts-grid { grid-template-columns: 1fr 1fr; }
     .bhssa-layout { grid-template-columns: 1fr; gap: 40px; }
     .cybhi-grid { grid-template-columns: 1fr 1fr; }
-    #cybhi .reveal[style*="grid"] { display: block !important; }
-    #cybhi .reveal[style*="grid"] > div { margin-bottom: 16px; }
     .resources-grid { grid-template-columns: 1fr; }
-    #playbook { padding: 60px 20px !important; display: block !important; }
-    #playbook-inner { width: 100% !important; transform: none !important; padding: 0 !important; }
-    #playbook-inner > div[style*="grid"] { display: block !important; }
-    #playbook-inner > div[style*="grid"] > * { margin-bottom: 32px; }
-    .footer-inner { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
-    .footer-copy { text-align: center; }
-    .footer-links { flex-direction: column; align-items: center; gap: 10px; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+    .footer-copy { text-align: left; }
     .streamer { display: none; }
   #streamer-recall { display: none !important; }
-    /* Section headings — smaller on mobile */
-    .section-heading { font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important; }
-    /* Trust bar district names — single column, centered, no dots */
-    .cred-districts { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.85rem; }
-    .cred-districts > span { display: none; } /* hide dot separators */
-    .cred-district-name { white-space: nowrap; opacity: 0.65; margin: 0; }
-    /* Hero — move content up on mobile */
-    .hero { align-items: flex-start !important; }
-    .hero-content { padding-top: 100px !important; }
-    /* Prompt heading — hide forced br, let text wrap naturally */
-    .prompts-h2 br { display: none; }
-    /* Prompt cards — hide circle arrow (fix specificity) */
-    .pc-front .pc-arrow { display: none !important; }
-    /* CTA buttons — stack full-width */
-    .cta-listening-actions { flex-direction: column; align-items: stretch; }
-    .cta-listening-btn { text-align: center; justify-content: center; padding: 14px 24px; }
-    /* Prompt cards — tighter padding on mobile */
-    .pc-front { padding: 20px 20px 60px !important; }
-    #prompts .pc-front { padding: 20px 20px 60px !important; }
-    /* Prompt card description — clamp to 3 lines with ellipsis */
-    .prompt-card p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    /* Survey comparison — stack vertically on mobile, no black line */
-    .sm-split { grid-template-columns: 1fr; border-radius: 16px; }
-    .sm-right { border-radius: 0 0 16px 16px; }
-    /* Playbook outer grid — stack image above cards on mobile */
-    #playbook-inner > div[style*="grid"] { display: flex !important; flex-direction: column !important; gap: 32px !important; }
-    #playbook-inner > div[style*="grid"] > * { margin-bottom: 0 !important; }
-    /* CTA section — background watermark starts at top on mobile */
-    #cta-listening::after { background-position: center top; -webkit-mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%); mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%); }
-    .footer-logo { display: none; }
   }
   @media (max-width: 480px) {
-    .prompts-grid { grid-template-columns: 1fr 1fr; }
+    .prompts-grid { grid-template-columns: 1fr; }
     .cybhi-grid { grid-template-columns: 1fr; }
     .hero-headline { font-size: 2.2rem; }
   }
@@ -2414,7 +2352,8 @@
     <h1 class="hero-headline">What If Just Listening<br>Was Where Authentic<br><em>Student Support Began?</em></h1>
     <p class="hero-sub">Voice-based behavioral health screening for K–12, built so the conversation that identifies the need is the same one that begins the support. Your students, in their own words, at scale.</p>
     <div class="hero-actions">
-      <a href="../playbook.pdf" class="btn-ghost hero-playbook-btn" target="_blank">Download Playbook →</a>
+      <a href="#voice-intelligence" class="btn-primary">Hear It in Action ↓</a>
+      <a href="../playbook.pdf" class="btn-ghost" target="_blank">Download Playbook →</a>
     </div>
   </div>
   <!-- Phrase insight card — populated by JS, pitch-deck style -->
@@ -2459,17 +2398,17 @@
 
     <!-- Row 3: district names -->
     <div class="cred-districts">
-      <span class="cred-district-name">San Diego COE</span>
+      San Diego COE
       <span>·</span>
-      <span class="cred-district-name">Vista USD</span>
+      Vista USD
       <span>·</span>
-      <span class="cred-district-name">CA BHSOAC</span>
+      CA BHSOAC
       <span>·</span>
-      <span class="cred-district-name">Santa Clara COE</span>
+      Santa Clara COE
       <span>·</span>
-      <span class="cred-district-name">San Diego USD</span>
+      San Diego USD
       <span>·</span>
-      <span class="cred-district-name">El Dorado COE</span>
+      El Dorado COE
     </div>
 
   </div>
@@ -2480,7 +2419,7 @@
 <section class="voice-section section" id="voice-intelligence" data-streamer-label="Live Analysis">
   <div class="section-inner">
     <span class="section-eyebrow" style="color:rgba(214,231,241,0.6)">Voice Intelligence Analysis</span>
-    <h2 class="section-heading vi-main-heading" style="color:#fff;max-width:none;white-space:nowrap">Language Carries The Signals That Surveys Miss.</h2>
+    <h2 class="section-heading" style="color:#fff;max-width:none;white-space:nowrap">Language Carries The Signals That Surveys Miss.</h2>
     <div class="voice-player-wrap">
       <div class="video-player-card">
         <video id="ncgirl" controls preload="metadata" src="../images/nc-girl.mp4" poster="../images/vi-thumbnail.png">
@@ -2718,7 +2657,7 @@
 <section class="section" id="prompts" data-streamer-label="Screening in Progress">
   <div class="section-inner">
     <div class="section-eyebrow">Sample Questions</div>
-    <h2 class="section-heading reveal prompts-h2">Experience The Prompts To Hear <br>The Conversations They Open.</h2>
+    <h2 class="section-heading reveal">Experience The Prompts To Hear<br>The Conversations They Open.</h2>
     <p class="section-body reveal" style="transition-delay:0.1s">Each question explores one of six behavioral health domains. From emotional resilience to reflective growth, in the student's own words.</p>
 
     <div class="prompts-tabs reveal" style="transition-delay:0.15s">
@@ -2837,7 +2776,7 @@
 <section class="section surveys-miss-section" id="surveys-miss">
   <div class="section-inner">
     <span class="section-eyebrow" style="color:var(--coral)">The Difference</span>
-    <h2 class="section-heading reveal surveys-miss-heading">What Surveys Miss.<br>What Voice Reveals.</h2>
+    <h2 class="section-heading reveal">What Surveys Miss. What Voice Reveals.</h2>
     <p class="section-body reveal" style="transition-delay:0.1s">A Likert scale compresses a student's entire motivational architecture into a single number. Authentic voice preserves the behavioral health competencies that make that motivation real and duplicable.</p>
     <div class="sm-split reveal" style="transition-delay:0.2s">
       <!-- LEFT: Traditional Survey -->
@@ -3002,7 +2941,7 @@
     <div style="margin-bottom:48px;">
       <div class="section-eyebrow" style="color:#F37163;">Implementation Playbook</div>
       <h2 style="font-family:var(--font-display);font-weight:800;font-size:clamp(2rem,3.5vw,2.8rem);letter-spacing:-0.03em;line-height:1.05;color:#fff;margin:12px 0 0;">Seven Implementation Models.<br>Built From Real Schools.</h2>
-      <p style="font-family:var(--font-display);font-weight:300;font-size:18px;line-height:1.65;color:rgba(232,234,240,0.6);margin:20px 0 0;">Every model below has been run in a real school — by a real counselor, teacher, or administrator — with the schedules, device counts, and staffing they actually had on the day they launched.</p>
+      <p style="font-family:var(--font-display);font-weight:300;font-size:18px;line-height:1.65;color:rgba(232,234,240,0.6);margin:20px 0 0;">Every model below has been run in a real school — by a real counselor, teacher, or administrator,<br>with the schedules, device counts, and staffing they actually had on the day they launched.</p>
     </div>
 
     <!-- Two-column: image left, info+cards right -->

@@ -1,3 +1,15 @@
 {
-  "trailingSlash": true
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/bh",
+      "destination": "/bh/7/",
+      "permanent": false
+    },
+    {
+      "source": "/bh/",
+      "destination": "/bh/7/",
+      "permanent": false
+    }
+  ]
 }

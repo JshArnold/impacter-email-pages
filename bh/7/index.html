@@ -3355,7 +3355,7 @@ function buildSignalBars(domain) {
   const bars = Array.from({length:8}, (_,i) => {
     if (i < s.fill) {
       const isLast = i === s.fill - 1;
-      const pulse  = isLast && s.fill >= 6 ? ' sd-pulse' : '';
+      const pulse  = isLast ? ' sd-pulse' : '';
       return `<div class="signal-depth-bar filled${pulse}" style="background:${s.color};--bi:${i}"></div>`;
     }
     return `<div class="signal-depth-bar"></div>`;

@@ -6,13 +6,5 @@
       "has": [{ "type": "host", "value": "pages.impacterpathway.com" }],
       "destination": "/bh/7/"
     }
-  ],
-  "redirects": [
-    {
-      "source": "/((?!bh/).*)",
-      "has": [{ "type": "host", "value": "pages.impacterpathway.com" }],
-      "destination": "/bh/",
-      "permanent": false
-    }
   ]
 }

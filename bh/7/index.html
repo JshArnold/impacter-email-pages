@@ -3948,29 +3948,10 @@ function activateNextSteps() {
   }
 }
 
-/* Card — SAMPLE REPORT (MTSS scene 2 + bridge row linger) */
-function cardSampleReport() {
-  return `<div style="padding:2px 0;">
-    <a href="/bh/sample-report.pdf" target="_blank" rel="noopener" style="display:block;background:linear-gradient(150deg,#1c6b3a 0%,#0f4023 100%);border-radius:10px;overflow:hidden;margin-bottom:10px;padding:14px;text-decoration:none;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-      <div style="font-size:9px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.5);margin-bottom:6px;text-transform:uppercase;font-family:var(--font-display);">Behavioral Health Academy</div>
-      <div style="font-size:13px;font-weight:800;color:#fff;font-family:var(--font-display);line-height:1.2;margin-bottom:12px;">Student Wellness<br>Voice Report</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
-        <div style="background:rgba(0,0,0,.22);border-radius:5px;padding:6px 8px;"><div style="font-size:12px;font-weight:800;color:#fff;font-family:var(--font-display);">1,390</div><div style="font-size:9px;color:rgba(255,255,255,.45);font-family:var(--font-display);">Students</div></div>
-        <div style="background:rgba(0,0,0,.22);border-radius:5px;padding:6px 8px;"><div style="font-size:12px;font-weight:800;color:#fff;font-family:var(--font-display);">6,296</div><div style="font-size:9px;color:rgba(255,255,255,.45);font-family:var(--font-display);">Responses</div></div>
-        <div style="background:rgba(0,0,0,.22);border-radius:5px;padding:6px 8px;"><div style="font-size:12px;font-weight:800;color:#fff;font-family:var(--font-display);">388K</div><div style="font-size:9px;color:rgba(255,255,255,.45);font-family:var(--font-display);">Words</div></div>
-        <div style="background:rgba(0,0,0,.22);border-radius:5px;padding:6px 8px;"><div style="font-size:12px;font-weight:800;color:#fff;font-family:var(--font-display);">468K</div><div style="font-size:9px;color:rgba(255,255,255,.45);font-family:var(--font-display);">Data Points</div></div>
-      </div>
-    </a>
-    <a href="/bh/sample-report.pdf" target="_blank" rel="noopener" style="display:block;text-align:center;font-size:11px;font-weight:700;color:rgba(255,255,255,.65);text-decoration:none;padding:3px 0;letter-spacing:.04em;font-family:var(--font-display);" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">Download full report →</a>
-  </div>`;
-}
-function activateSampleReport() {}
-
 /* Section → card map */
 const SC_MAP = {
   'voice-intelligence': { label:'LIVE ANALYSIS',       html:cardLiveAnalysis,    activate:activateLiveAnalysis    },
   'surveys':            { label:'TIER ASSIGNMENT',      html:cardTierBars,        activate:activateTierBars        },
-  'surveys-report':    { label:'SAMPLE REPORT',         html:cardSampleReport,    activate:activateSampleReport    },
   'prompts':            { label:'6 PROMPTS READY',      html:cardPromptTiles,     activate:activatePromptTiles,    bg:'cream' },
   'surveys-miss':       { label:'WHAT THE MODEL HEARD', html:cardModelHeard,      activate:activateModelHeard,     bg:'cream' },
   'bhssa':              { label:'STATE SELECTED',       html:cardStateSelected,   activate:activateStateSelected   },
@@ -4037,23 +4018,6 @@ document.querySelectorAll('#stats, #voice-intelligence, #surveys, #prompts, #sur
   streamerSectionObs.observe(sec);
 });
 
-/* ── MTSS scene-2 → swap streamer to Sample Report card ── */
-(function() {
-  let _sceneReportActive = false;
-  function checkSurveyScene() {
-    const wordEl = document.getElementById('surveysWord');
-    if (!wordEl) return;
-    const scene = parseInt(wordEl.dataset.scene || '0', 10);
-    if (scene === 2 && !_sceneReportActive) {
-      _sceneReportActive = true;
-      setStreamerState('surveys-report');
-    } else if (scene !== 2 && _sceneReportActive) {
-      _sceneReportActive = false;
-      setStreamerState('surveys');
-    }
-  }
-  document.addEventListener('scroll', checkSurveyScene, { passive: true });
-})();
 
 /* ──────────────────────────────
    KARAOKE — reset on video end/seek

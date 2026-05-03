@@ -1800,7 +1800,6 @@
     margin: 0 auto;
     z-index: 3;
   }
-  .cta-logo-mobile { display: none; }
   .cta-listening-heading {
     font-size: clamp(2.4rem, 4.5vw, 4.5rem);
     font-weight: 800;
@@ -2155,12 +2154,16 @@
     /* Prompt cards — tighter padding on mobile */
     .pc-front { padding: 20px 20px 60px !important; }
     #prompts .pc-front { padding: 20px 20px 60px !important; }
+    /* Prompt card description — clamp to 3 lines with ellipsis */
+    .prompt-card p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    /* Survey comparison — stack vertically on mobile, no black line */
+    .sm-split { grid-template-columns: 1fr; border-radius: 16px; }
+    .sm-right { border-radius: 0 0 16px 16px; }
     /* Playbook outer grid — stack image above cards on mobile */
     #playbook-inner > div[style*="grid"] { display: flex !important; flex-direction: column !important; gap: 32px !important; }
     #playbook-inner > div[style*="grid"] > * { margin-bottom: 0 !important; }
-    /* CTA section — show logo at top, hide footer logo */
-    .cta-logo-mobile { display: flex; justify-content: center; margin-bottom: 32px; }
-    .cta-logo-mobile img { height: 36px; width: auto; filter: brightness(0) invert(1); opacity: 0.7; }
+    /* CTA section — background watermark starts at top on mobile */
+    #cta-listening::after { background-position: center top; -webkit-mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%); mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%); }
     .footer-logo { display: none; }
   }
   @media (max-width: 480px) {
@@ -2715,7 +2718,7 @@
 <section class="section" id="prompts" data-streamer-label="Screening in Progress">
   <div class="section-inner">
     <div class="section-eyebrow">Sample Questions</div>
-    <h2 class="section-heading reveal prompts-h2">Experience The Prompts To Hear<br>The Conversations They Open.</h2>
+    <h2 class="section-heading reveal prompts-h2">Experience The Prompts To Hear <br>The Conversations They Open.</h2>
     <p class="section-body reveal" style="transition-delay:0.1s">Each question explores one of six behavioral health domains. From emotional resilience to reflective growth, in the student's own words.</p>
 
     <div class="prompts-tabs reveal" style="transition-delay:0.15s">
@@ -3065,9 +3068,6 @@
 <!-- CTA Section -->
 <section id="cta-listening">
   <div class="cta-listening-inner">
-    <div class="cta-logo-mobile">
-      <img src="../images/impacter-pathway-nav.svg" alt="IMPACTER Pathway">
-    </div>
     <h2 class="cta-listening-heading">Ready To Start <em>Listening?</em></h2>
     <p class="cta-listening-body">Your students have something important to say. IMPACTER creates the conditions where they can say it — and the infrastructure to act on what you hear.</p>
     <div class="cta-listening-actions">

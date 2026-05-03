@@ -1921,8 +1921,9 @@
     color: var(--text-dim);
     margin-bottom: 14px;
     font-style: italic;
-    transition: opacity 0.4s;
+    transition: opacity 0.2s ease;
   }
+  .streamer-label { transition: opacity 0.2s ease, color 0.3s; }
 
   .streamer-domain {
     display: flex;
@@ -1956,6 +1957,52 @@
     color: rgba(139,164,190,0.4);
     letter-spacing: 0.04em;
   }
+
+  /* ── DUAL-THEME SYSTEM ── */
+  .streamer {
+    --s-label: #F37163;
+    --s-divider: rgba(255,255,255,0.06);
+    --s-context-color: rgba(139,164,190,0.65);
+    --s-footer-color: rgba(139,164,190,0.4);
+    --s-text: rgba(214,231,241,0.8);
+    transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1), opacity 0.4s ease,
+                background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .streamer[data-theme="light"] {
+    --s-label: #638EC5;
+    --s-divider: rgba(29,27,28,0.08);
+    --s-context-color: rgba(29,27,28,0.5);
+    --s-footer-color: rgba(29,27,28,0.3);
+    --s-text: rgba(29,27,28,0.88);
+    background: rgba(255,252,245,0.97);
+    border-color: rgba(99,142,197,0.22);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(99,142,197,0.08);
+  }
+  .streamer-label  { color: var(--s-label) !important; transition: color 0.3s; }
+  .streamer-pulse  { background: var(--s-label) !important; }
+  .streamer-header { border-color: var(--s-divider) !important; }
+  .streamer-context { color: var(--s-context-color) !important; }
+  .sd-name { color: var(--s-text) !important; }
+  .streamer-footer { border-color: var(--s-divider) !important; color: var(--s-footer-color) !important; }
+  .streamer[data-theme="light"] .streamer-pulse { animation-name: pulse-blue; }
+  .streamer[data-theme="light"] .sd-dot         { background: rgba(29,27,28,0.1); }
+  .streamer[data-theme="light"] .sd-dot.lit      { background: #638EC5; }
+  .streamer[data-theme="light"] .streamer-close-btn { color: rgba(29,27,28,0.35) !important; }
+  @keyframes pulse-blue {
+    0%, 100% { opacity:1; box-shadow: 0 0 0 0 rgba(99,142,197,0.4); }
+    50% { opacity:0.7; box-shadow: 0 0 0 6px rgba(99,142,197,0); }
+  }
+  @keyframes panel-in {
+    from { opacity:0; transform:translateY(5px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .streamer-panel-anim { animation: panel-in 0.22s ease forwards; }
+  /* Prompt list (light) */
+  .sl-item { display:flex; align-items:center; gap:8px; padding:3px 0; }
+  .sl-dot  { width:6px; height:6px; border-radius:50%; background:rgba(99,142,197,0.3); flex-shrink:0; }
+  .sl-name { font-size:12px; font-weight:500; color:var(--s-text); }
+  /* Model heard quote transition */
+  #smh-quote, #smh-pill { transition: opacity 0.2s ease; }
 
   /* ── Reveal animations ── */
   .reveal {
@@ -2866,7 +2913,7 @@
     <span class="streamer-label" id="streamer-label">Live Analysis</span>
     <div style="display:flex;align-items:center;gap:8px;">
       <div class="streamer-pulse"></div>
-      <button onclick="dismissStreamer()" aria-label="Dismiss" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.3);font-size:14px;line-height:1;padding:2px 4px;border-radius:4px;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.8)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">✕</button>
+      <button onclick="dismissStreamer()" aria-label="Dismiss" class="streamer-close-btn" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.3);font-size:14px;line-height:1;padding:2px 4px;border-radius:4px;transition:color 0.2s;">✕</button>
     </div>
   </div>
   <div class="streamer-context" id="streamer-context">Behavioral Health Screener</div>
@@ -2933,6 +2980,28 @@
       <div style="display:flex;justify-content:space-between;"><span style="font-size:11px;color:rgba(255,255,255,0.5);">Avg. days to support</span><span style="font-size:14px;font-weight:900;color:#4ade80;">1.4</span></div>
     </div>
     <div style="margin-top:12px;font-size:10px;color:rgba(255,255,255,0.25);font-style:italic;">EDCOE Pilot · This window</div>
+  </div>
+
+  <!-- Prompts panel (light theme) -->
+  <div id="streamer-prompts" style="display:none;">
+    <div style="display:flex;flex-direction:column;margin-top:4px;">
+      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Self-Insight</span></div>
+      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Emotional Resilience</span></div>
+      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Relational Awareness</span></div>
+      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Conflict Resolution</span></div>
+      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Effective Help-Seeking</span></div>
+      <div class="sl-item"><span class="sl-dot"></span><span class="sl-name">Reflective Growth</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:10px;color:var(--s-context-color);font-style:italic;">Click any tile above to begin</div>
+  </div>
+
+  <!-- Model Heard panel (light theme) -->
+  <div id="streamer-model-heard" style="display:none;">
+    <div style="margin-top:4px;">
+      <div id="smh-quote" style="font-size:12px;font-style:italic;line-height:1.55;color:var(--s-text);margin-bottom:10px;min-height:52px;"></div>
+      <div id="smh-pill" style="display:inline-block;padding:3px 9px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.05em;"></div>
+    </div>
+    <div style="margin-top:10px;font-size:10px;color:var(--s-context-color);font-style:italic;">What the model caught</div>
   </div>
 
   <!-- Playbook panel -->
@@ -3448,42 +3517,92 @@ function recallStreamer() {
 
 // Panel swap logic
 const PANELS = {
-  domains: document.getElementById('streamer-domains'),
-  mtss: document.getElementById('streamer-mtss'),
-  district: document.getElementById('streamer-district'),
-  launch: document.getElementById('streamer-launch'),
+  domains:      document.getElementById('streamer-domains'),
+  mtss:         document.getElementById('streamer-mtss'),
+  district:     document.getElementById('streamer-district'),
+  launch:       document.getElementById('streamer-launch'),
+  prompts:      document.getElementById('streamer-prompts'),
+  'model-heard':document.getElementById('streamer-model-heard'),
 };
 
 function showPanel(name) {
   Object.entries(PANELS).forEach(([k, el]) => {
-    if (el) el.style.display = k === name ? '' : 'none';
+    if (!el) return;
+    if (k === name) {
+      el.style.display = '';
+      el.classList.remove('streamer-panel-anim');
+      void el.offsetWidth; // reflow to retrigger animation
+      el.classList.add('streamer-panel-anim');
+    } else {
+      el.style.display = 'none';
+    }
   });
 }
 
 // Section → streamer state map
 const SECTION_STATES = {
-  'voice-intelligence': { label: 'LIVE ANALYSIS', context: 'NC Portrait · Adaptability', panel: 'domains' },
-  'rubric':             { label: 'SCORING PREVIEW', context: 'Engagement Rubric · 4-point scale', panel: 'domains' },
-  'mtss':               { label: 'MTSS ROUTING', context: 'Auto-assigned on score complete', panel: 'mtss' },
-  'dashboard':          { label: 'DISTRICT SUMMARY', context: 'EDCOE Pilot · This window', panel: 'district' },
-  'playbook':           { label: 'READY TO LAUNCH', context: 'Implementation guide available', panel: 'launch' },
-  'stats':              { label: 'PILOT OUTCOMES', context: '97% participation · EDCOE', panel: 'district' },
-  'bhssa':              { label: 'STATE SELECTED', context: 'BHSSA-002 · BHSOAC + SCCOE', panel: 'domains' },
-  'prompts':            { label: 'SAMPLE SCREENER', context: 'Try any domain prompt', panel: 'domains' },
+  'voice-intelligence': { label: 'LIVE ANALYSIS',    context: 'NC Portrait · Adaptability',        panel: 'domains',      theme: 'dark'  },
+  'surveys':            { label: 'TIER ASSIGNMENT',  context: 'Auto-assigned on score complete',    panel: 'mtss',         theme: 'dark'  },
+  'dashboard':          { label: 'DISTRICT SUMMARY', context: 'EDCOE Pilot · This window',          panel: 'district',     theme: 'dark'  },
+  'playbook':           { label: 'READY TO LAUNCH',  context: 'Implementation guide available',     panel: 'launch',       theme: 'dark'  },
+  'stats':              { label: 'PILOT OUTCOMES',   context: '97% participation · EDCOE',          panel: 'district',     theme: 'dark'  },
+  'bhssa':              { label: 'STATE SELECTED',   context: 'BHSSA-002 · BHSOAC + SCCOE',         panel: 'domains',      theme: 'dark'  },
+  'cta-listening':      { label: 'READY TO LAUNCH',  context: 'Implementation guide available',     panel: 'launch',       theme: 'dark'  },
+  'prompts':            { label: '6 PROMPTS READY',  context: 'Click any tile to begin',            panel: 'prompts',      theme: 'light' },
+  'surveys-miss':       { label: 'WHAT THE MODEL HEARD', context: 'Voice signal detection',         panel: 'model-heard',  theme: 'light' },
 };
+
+// Model Heard — rotating quotes
+const SMH_QUOTES = [
+  { quote: '"I don\'t really have anyone to talk to about it..."',            pill: 'HELP-SEEKING · LOW SIGNAL',       bg: 'rgba(99,142,197,0.12)',  color: '#3A6FAB' },
+  { quote: '"Every day I\'m trying to expand the barriers of my comfort zone."', pill: 'REFLECTIVE GROWTH · HIGH SIGNAL', bg: 'rgba(95,168,118,0.12)',  color: '#39875A' },
+  { quote: '"I tend to stay behind the yellow caution tape..."',               pill: 'SELF-INSIGHT · MEDIUM SIGNAL',    bg: 'rgba(224,176,70,0.12)',  color: '#8A6A10' },
+];
+let smhIdx = 0, smhTimer = null;
+function startModelHeard() {
+  const q = document.getElementById('smh-quote'), p = document.getElementById('smh-pill');
+  if (!q || !p) return;
+  function show(idx) {
+    const d = SMH_QUOTES[idx];
+    q.style.opacity = '0'; p.style.opacity = '0';
+    setTimeout(() => {
+      q.textContent = d.quote; p.textContent = d.pill;
+      p.style.background = d.bg; p.style.color = d.color;
+      q.style.opacity = '1'; p.style.opacity = '1';
+    }, 220);
+  }
+  show(smhIdx);
+  smhTimer = setInterval(() => { smhIdx = (smhIdx + 1) % SMH_QUOTES.length; show(smhIdx); }, 6000);
+}
+function stopModelHeard() { if (smhTimer) { clearInterval(smhTimer); smhTimer = null; } }
+
+function setStreamerState(state) {
+  // Theme swap
+  streamer.dataset.theme = state.theme || 'dark';
+  // Label + context fade
+  streamerLabel.style.opacity = '0';
+  streamerContext.style.opacity = '0';
+  setTimeout(() => {
+    streamerLabel.textContent  = state.label;
+    streamerContext.textContent = state.context;
+    streamerLabel.style.opacity = '1';
+    streamerContext.style.opacity = '1';
+  }, 150);
+  // Panel swap
+  showPanel(state.panel);
+  // Continuous animations
+  if (state.panel === 'model-heard') { stopModelHeard(); startModelHeard(); }
+  else stopModelHeard();
+}
 
 const streamerSectionObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       const state = SECTION_STATES[e.target.id];
-      if (state) {
-        streamerLabel.textContent = state.label;
-        streamerContext.textContent = state.context;
-        showPanel(state.panel);
-      }
+      if (state) setStreamerState(state);
     }
   });
-}, { threshold: 0.3 });
+}, { threshold: 0.25 });
 
 // Show/hide streamer after hero (respects dismissed state)
 const heroSection = document.querySelector('.hero');
@@ -3501,7 +3620,7 @@ const heroObs = new IntersectionObserver((entries) => {
 heroObs.observe(heroSection);
 
 // Observe all sections
-document.querySelectorAll('[data-streamer-label], #stats, #voice-intelligence, #rubric, #mtss, #dashboard, #prompts, #bhssa, #playbook').forEach(sec => {
+document.querySelectorAll('#stats, #voice-intelligence, #surveys, #prompts, #surveys-miss, #bhssa, #playbook, #cta-listening').forEach(sec => {
   streamerSectionObs.observe(sec);
 });
 

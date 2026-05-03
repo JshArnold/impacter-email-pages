@@ -3466,12 +3466,23 @@ function scaleSurveysLock() {
 scaleSurveysLock();
 window.addEventListener('resize', scaleSurveysLock, { passive: true });
 
-/* Playbook inner — same proportional scale when viewport < 1160px */
+/* Playbook inner — same proportional scale when viewport < 1160px
+   Height compensation: transform doesn't affect layout height, so we
+   apply negative margin-bottom = naturalHeight * (1 - scale) to close the gap */
+let _pbNatH = 0;
 function scalePlaybookInner() {
   const el = document.getElementById('playbook-inner');
   if (!el) return;
+  // Cache natural height once at scale=1
+  if (!_pbNatH) { el.style.transform = ''; _pbNatH = el.offsetHeight; }
   const scale = Math.min(1, window.innerWidth / 1160);
-  el.style.transform = scale < 1 ? `scale(${scale.toFixed(4)})` : '';
+  if (scale < 1) {
+    el.style.transform = `scale(${scale.toFixed(4)})`;
+    el.style.marginBottom = `-${Math.round(_pbNatH * (1 - scale))}px`;
+  } else {
+    el.style.transform = '';
+    el.style.marginBottom = '';
+  }
 }
 scalePlaybookInner();
 window.addEventListener('resize', scalePlaybookInner, { passive: true });
